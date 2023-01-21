@@ -23,7 +23,7 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.ctre.phoenix.motorcontrol.can.*;
+// import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -46,26 +46,18 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  */
 public class Robot extends TimedRobot {
 
-    // Ball Intake Motors
-    public static CANSparkMax intakeMotor1 = new CANSparkMax(RobotMap.intakeMotor1CanID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax intakeMotor2 = new CANSparkMax(RobotMap.intakeMotor2CanID, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    // Ball Feeder Motor
-    public static CANSparkMax feederMotor = new CANSparkMax(RobotMap.feederMotorCanID, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    // Climber Motors
-    public static TalonFX climberMotorLeft = new TalonFX(RobotMap.climberMotorLCanID);
-    public static TalonFX climberMotorRight = new TalonFX(RobotMap.climberMotorRCanID);
-
     // Thrower Motors
-    public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
-    public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
+    // public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
+    // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
 
     // Driver Base Motors
-    public static TalonFX leftDriveMotor1 = new TalonFX(RobotMap.leftDriveMotorCanID1);
-    public static TalonFX leftDriveMotor2 = new TalonFX(RobotMap.leftDriveMotorCanID2);
-    public static TalonFX rightDriveMotor1 = new TalonFX(RobotMap.rightDriveMotorCanID1);
-    public static TalonFX rightDriveMotor2 = new TalonFX(RobotMap.rightDriveMotorCanID2); 
+    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
+
+    public static CANSparkMax TowerArmMotorLeft = new CANSparkMax(RobotMap.TowerArmMotorLeftID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax TowerArmMotorRight = new CANSparkMax(RobotMap.TowerArmMotorRightID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     // Lidar Light Distance Measure
     public static LidarLite distance;
@@ -83,11 +75,9 @@ public class Robot extends TimedRobot {
     public static Controllers oi;
     public static Log log;
     public static InternalData internalData;
-    public static BallThrower ballThrower;
-    public static BallIntake ballIntake;
     public static WestCoastDrive driveBase;
+    public static TowerArm robotArm;
     public static PixyVision pixyVision;
-    public static VerticalClimber verticalClimber;
     public static LimeLight limeLight;
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -98,8 +88,9 @@ public class Robot extends TimedRobot {
     // Global Robot Variables
     public int RobotID = 0;
 
-    public static DigitalInput rightClimbLimit;
-	public static DigitalInput leftClimbLimit;
+    //public static DigitalInput rightClimbLimit;
+	//public static DigitalInput leftClimbLimit;
+
     public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,BallSeek,TargetSeek, PixyTargetSeek};
     public static enum allianceColor{Red,Blue};
@@ -132,10 +123,7 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
-        ballThrower = new BallThrower();
-        ballIntake = new BallIntake();
         driveBase = new WestCoastDrive();
-        verticalClimber = new VerticalClimber();
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));
@@ -147,8 +135,8 @@ public class Robot extends TimedRobot {
         // limeLight = new LimeLight();
 
         // Limit switches on the climbers
-        rightClimbLimit = new DigitalInput(0);
-        leftClimbLimit = new DigitalInput(1);
+        // rightClimbLimit = new DigitalInput(0);
+        // leftClimbLimit = new DigitalInput(1);
 
         // Instantiate the compress, CANID 2, Rev Robotics PCM
         compressor = new Compressor(2, PneumaticsModuleType.REVPH);
@@ -208,9 +196,6 @@ public class Robot extends TimedRobot {
                     } else if (selectedAutoFunction == 1) {
                         autonomous = new AutoTwoBallLeft();
                         SmartDashboard.putString("AutoCommand","Two Ball");
-                    } else if (selectedAutoFunction == 2) {
-                        autonomous = new AutoTwoBallStraight();
-                        SmartDashboard.putString("AutoCommand","Two Ball");
                     }
                 break;
                 case 1:
@@ -225,9 +210,6 @@ public class Robot extends TimedRobot {
                     } else if (selectedAutoFunction == 1) {
                         autonomous = new AutoTwoBallRight();
                         SmartDashboard.putString("AutoCommand","Two Ball");
-                    } else if (selectedAutoFunction == 2) {
-                        autonomous = new AutoTwoBallStraight();
-                        SmartDashboard.putString("AutoCommand","Two Ball");
                     }
                     break;
                 case 3:
@@ -241,9 +223,6 @@ public class Robot extends TimedRobot {
             if (selectedAutoFunction == 0) {
                 autonomous = new AutoOneBall();
                 SmartDashboard.putString("AutoCommand","One Ball");
-            } else if (selectedAutoFunction == 1) {
-                autonomous = new AutoTwoBallStraight();
-                SmartDashboard.putString("AutoCommand","One Ball+");
             }
         }    
 

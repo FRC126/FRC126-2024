@@ -330,8 +330,8 @@ public class LimeLight extends SubsystemBase {
             // an autoThrow command to throw the balls.
 
             // TODO Need to set RPM based on targetArea.
-            throwCommand = new AutoThrow(14000);
-            Robot.isThrowCommand = true;
+            //throwCommand = new AutoThrow(14000);
+            //Robot.isThrowCommand = true;
         }
 
         dashboardData();

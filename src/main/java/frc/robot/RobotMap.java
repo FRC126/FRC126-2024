@@ -33,10 +33,13 @@ public class RobotMap {
 	public static int xboxLStick = 9; // Left stick button
 	public static int xboxRStick = 10; // Right stick button
 
-    // Neo Motor Can Bus ID's
-    public static int intakeMotor1CanID = 6;
-	public static int intakeMotor2CanID = 7;
-	public static int feederMotorCanID = 8;
+    // Tower Arm Can Bus ID's
+	public static int TowerArmMotorLeftID = 10;
+	public static int TowerArmMotorRightID = 11;
+
+	//Motor Inversions
+	public static int TowerArmMotorLeftInversion;
+	public static int TowerArmMotorRightInversion;
 	
 	// Driver Motor Can ID's
 	public static int leftDriveMotorCanID1 = 20;
@@ -44,56 +47,30 @@ public class RobotMap {
 	public static int rightDriveMotorCanID1 = 22;
 	public static int rightDriveMotorCanID2 = 23;
 
-	// Thrower Motor Can ID's
-	public static int throwerMotorCanID1 = 9;
-	public static int throwerMotorCanID2 = 10;
-
-	// Climber Motor Can ID's
-	public static int climberMotorLCanID = 11;
-	public static int climberMotorRCanID = 12;
-	
 	//Motor Inversions
-	public static int intakeMotor1Inversion;
-	public static int intakeMotor2Inversion;
-	public static int feederMotorInversion;
-
-	public static int left1Inversion;
+    public static int left1Inversion;
 	public static int left2Inversion;
 	public static int right1Inversion;
 	public static int right2Inversion;
-	public static int throwerMotor1Inversion;
-	public static int throwerMotor2Inversion;
-	public static int climberMotorLInversion;
-	public static int climberMotorRInversion;
 
 	//Position Calibrations
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 
-			// 2022 DriveBase
-			intakeMotor1Inversion = 1; // Motor inversions
-			intakeMotor2Inversion = 1;
-			feederMotorInversion = -1;
-			climberMotorLInversion = 1;
-			climberMotorRInversion = -1;
+			// 2023 DriveBase
+			TowerArmMotorLeftInversion = 1; // Motor inversions
+			TowerArmMotorRightInversion = -1;
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = -1;
 			right2Inversion    = -1;
-			throwerMotor1Inversion = -1;
-			throwerMotor2Inversion = 1;
 		} else { 
-			// 2022 Breadboard
-			intakeMotor1Inversion = 1; // Motor inversions
-			intakeMotor2Inversion = 1;
-			feederMotorInversion = 1;
-			climberMotorLInversion = 1;
-			climberMotorRInversion = 1;
+			// 2023 Breadboard
+			TowerArmMotorLeftInversion = 1; // Motor inversions
+			TowerArmMotorRightInversion = -1;
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = 1;
 			right2Inversion    = 1;
-			throwerMotor1Inversion = -1;
-			throwerMotor2Inversion = 1;
 		}
 	}
 

@@ -7,32 +7,31 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2022 Code       
+    Team 126 2023 Code       
 	Go get em gaels!
 
 ***********************************/
 
 package frc.robot.commands;
 
-import frc.robot.JoystickWrapper;
 import frc.robot.Robot;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.*;	
+import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class ClimberControl extends CommandBase {
-    static boolean intakeExtended=false;
-	static int intakeRPM=0;
+public class ArmControl extends CommandBase {
 	JoystickWrapper driveJoystick;
-
+	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public ClimberControl(VerticalClimber subsystem) {
+    public ArmControl(TowerArm subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.05);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
     }
 
 	/**********************************************************************************
@@ -45,47 +44,39 @@ public class ClimberControl extends CommandBase {
 	/**********************************************************************************
 	 * Called every tick (20ms)
 	 **********************************************************************************/
-
-	 @Override
+	
+	@SuppressWarnings("static-access")
+	@Override
 	public void execute() {
+        double speed=0;
+
 		if (Robot.internalData.isAuto()) {
 			// Ignore user controls during Autonomous
 			return;
 		}
 
-		//////////////////////////////////////////////////////////////
-		// Climber Controls
-
-		Robot.verticalClimber.getRightPos();
-		Robot.verticalClimber.getLeftPos();
-		
-        if (driveJoystick.isAButton()) {
-            // Extend the Climber while the A Button is pressed
-		    Robot.verticalClimber.RaiseClimber();
-        }  else if (driveJoystick.isBButton()) {
-            // Retact the Climber while the B Button is pressed
-		    Robot.verticalClimber.LowerClimber();
-        } else if (driveJoystick.getPovLeft()) {
-			// Lower just the left climber, don't stop at 0
-		    Robot.verticalClimber.LowerLeftClimber(false);
-        } else if (driveJoystick.getPovRight()) {
-			// Lower just the right climber, don't stop at 0
-		    Robot.verticalClimber.LowerRightClimber(false);
+     	if (driveJoystick.isAButton()) {
+            speed=0.3;
+			// Arm Up
+		} else if (driveJoystick.isBButton()) {
+            speed=-0.3;
+			// Arm Down
 		} else {
-			// If none of the climber buttons are pressed, stop moving the climber
-		    Robot.verticalClimber.StopClimber();
-		}
+            // Arm Stop
+            speed=0;
+        }
 
-		if(driveJoystick.isStartButton()) {
-			// Reset the climber encoders
-			Robot.verticalClimber.ResetClimberEncoder();
-		}
+		// Log the Joystick X,Y Axis to the SmartDashboard.
+		//SmartDashboard.putNumber("JoyStick A Button",driveJoystick.isAButton());
+		//SmartDashboard.putNumber("JoyStick X Axis",driveJoystick.isBButton());
+
+        Robot.robotArm.MoveArm(speed);
 	}
 
 	/**********************************************************************************
-     * Returns true if command finished
+	 * Returns true if command finished
 	 **********************************************************************************/
-	
+
 	@Override
 	public boolean isFinished() {
 		return false;
@@ -94,8 +85,9 @@ public class ClimberControl extends CommandBase {
 	/**********************************************************************************
 	 * Called once after isFinished returns true
 	 **********************************************************************************/
-	
-    @Override
+
+	 @Override
 	public void end(boolean isInterrupted) {
 	}  
+    
 }

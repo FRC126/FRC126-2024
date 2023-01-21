@@ -24,10 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  **********************************************************************************/
 
 public class DriverControl extends CommandBase {
-	static int delay=0;
-	static boolean turnAround=false;
-	static double startAngle;
-	static double shiftDuration = 0;
 	JoystickWrapper driveJoystick;
 	
 	/**********************************************************************************
@@ -61,73 +57,17 @@ public class DriverControl extends CommandBase {
         double FB = driveJoystick.getLeftStickY();
         double LR = driveJoystick.getRightStickX() * -1 ;
 
-		if (driveJoystick.getLeftTrigger() > .1) {
+		if (driveJoystick.getLeftTrigger() > .3) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
-		if (driveJoystick.isLShoulderButton()) {
-			// Shift Down Drive Train
-		    if (delay <= 0 ) {
-				Robot.driveBase.shiftDown();
-				delay=0;
-				shiftDuration = 10;
-			}
-			SmartDashboard.putBoolean("Shift Down",true);
-		} else {
-			SmartDashboard.putBoolean("Shift Down",false);
-		}
-
-		if (driveJoystick.isRShoulderButton()) {
-			// Shift Up Drive Train
-		    if (delay <= 0 ) {
-				Robot.driveBase.shiftUp();
-				delay=0;
-				shiftDuration = 10;
-			}	
-			SmartDashboard.putBoolean("Shift Up",true);
-		} else {
-			SmartDashboard.putBoolean("Shift Up",false);
-		}
-
-		//Disable power drop during shifting for now
-		//if(shiftDuration > 0) {
-		//	Robot.driveBase.limitSpeedForShift();
-		//	shiftDuration--;
-		//} else {
-		//	Robot.driveBase.delimitSpeed();
-		//	shiftDuration = 0;
+		//if (driveJoystick.isRStickPressButton()) {
+		//	LR = LR *.5;
 		//}
-
-		if (driveJoystick.isXButton()) {
-			// Turn 180 degrees after X Button is pressed
-			if (turnAround == false) {
-				startAngle = Robot.internalData.getGyroAngle();
-			    turnAround=true;
-			}
-		}
-
-		if (turnAround == true) {
-			// If we are supposed to turn around, check the current gyro
-			// angle and see if we have reached our desired position,
-			// if not, keep turning
-			double currAngle = Robot.internalData.getGyroAngle();
-			if(currAngle < startAngle + 155) {
-				LR=-0.3;
-			} else {
-				LR=0;
-				turnAround=false;
-			}
-		}
-
-		if (driveJoystick.isRStickPressButton()) {
-			LR = LR *.5;
-		}
-		if (driveJoystick.isLStickPressButton()) {
-			FB = FB *.5;
-		}
-
-		delay--;
+		//if (driveJoystick.isLStickPressButton()) {
+		//	FB = FB *.5;
+		//}
 
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);

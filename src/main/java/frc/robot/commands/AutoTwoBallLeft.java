@@ -16,7 +16,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
  
 /**********************************************************************************
@@ -25,7 +25,7 @@ import frc.robot.Robot;
 public class AutoTwoBallLeft extends SequentialCommandGroup {
     public AutoTwoBallLeft() {
         // TODO Target RPM for throw after picking up second ball
-        int throwRPM=14000;
+        //int throwRPM=14000;
 
         /**********************************************************************************
          **********************************************************************************/
@@ -33,25 +33,25 @@ public class AutoTwoBallLeft extends SequentialCommandGroup {
         addCommands(
             new ParallelCommandGroup(
                 // Shift the Transmission to Low
-                new InstantCommand(Robot.driveBase::shiftDown, Robot.driveBase),
+                //new InstantCommand(Robot.driveBase::shiftDown, Robot.driveBase),
 
                 // Extend the Intake
-                new InstantCommand(Robot.ballIntake::ExtendIntake, Robot.ballIntake),
+                //new InstantCommand(Robot.ballIntake::ExtendIntake, Robot.ballIntake),
 
                 //Backup to throw the ball
-                new DriveWork(-0.4, 0, 65),
+                new DriveWork(-0.4, 0, 65)
 
                 // Throw the Ball
-                new ThrowerWork(throwRPM, 0, true, false)
+                //new ThrowerWork(throwRPM, 0, true, false)
             ),    
 
       
             new ParallelCommandGroup(
                 // Stop the trower
-                new InstantCommand(Robot.ballThrower::ThrowerIntakeStop, Robot.ballThrower),
+                //new InstantCommand(Robot.ballThrower::ThrowerIntakeStop, Robot.ballThrower),
 
                 // Turn by degrees
-                new InstantCommand(Robot.ballIntake::IntakeRun, Robot.ballIntake),
+                //new InstantCommand(Robot.ballIntake::IntakeRun, Robot.ballIntake),
                 
                 new TurnDegrees(-0.45, 90, 200)
                 ),    
@@ -72,18 +72,18 @@ public class AutoTwoBallLeft extends SequentialCommandGroup {
             ),
 
             new ParallelCommandGroup(
-                new IntakeWork(true, 50),
+                //new IntakeWork(true, 50),
 
                 // Drive forward to the target
                 new DriveWork(.40, 0, 30)
-            ),
+            )
 
             // Throw the ball
-            new ThrowerWorkStop(throwRPM+1000, 0, true),
+            //new ThrowerWorkStop(throwRPM+1000, 0, true),
 
             // Stop the trower
-            new InstantCommand(Robot.ballThrower::ThrowerIntakeStop, Robot.ballThrower),
-            new ThrowerWork(0, 0, false, true)
+            //new InstantCommand(Robot.ballThrower::ThrowerIntakeStop, Robot.ballThrower),
+            //new ThrowerWork(0, 0, false, true)
         );
     }       
 
@@ -93,11 +93,11 @@ public class AutoTwoBallLeft extends SequentialCommandGroup {
 
      @Override
     public void end(boolean isInterrupted) {
-        Robot.ballIntake.IntakeStop();
-        Robot.ballIntake.RetractIntake();
+        //Robot.ballIntake.IntakeStop();
+        //Robot.ballIntake.RetractIntake();
         Robot.driveBase.Drive(0,0);
-        Robot.ballThrower.ThrowerIntakeStop();
-        Robot.ballThrower.throwerRPM(0);
+        //Robot.ballThrower.ThrowerIntakeStop();
+        //Robot.ballThrower.throwerRPM(0);
     }  
     
 }
