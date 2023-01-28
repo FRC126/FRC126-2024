@@ -115,6 +115,7 @@ public class Robot extends TimedRobot {
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
+    int selectedAutoBalance;
 	
     private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
@@ -180,8 +181,9 @@ public class Robot extends TimedRobot {
         autoPosition.addOption("Right Position",2);
         SmartDashboard.putData("Auto Position",autoPosition);
 
-        autoBalance.setDefaultOption("Do NOT Balance",0);
+        autoBalance.setDefaultOption("Do Nothing",0);
         autoBalance.addOption("Balance",1);
+        autoBalance.addOption("Leave Saftey Zone",2);
         SmartDashboard.putData("Auto Choices",autoBalance);
 
         Log.print(0, "Robot", "Robot Init Complete");
@@ -193,7 +195,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         Log.print(0, "Robot", "Robot Autonomous Init");
-        boolean newAutos=true;
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -205,45 +206,75 @@ public class Robot extends TimedRobot {
 		} catch(NullPointerException e) {
 			selectedAutoFunction = 0;
 		}
+		try {
+			selectedAutoBalance = (int)autoBalance.getSelected();
+		} catch(NullPointerException e) {
+			selectedAutoBalance = 0;
+		}
 
-        if (newAutos) {
-            switch (selectedAutoPosition) {
-                case 0:
-                    if (selectedAutoFunction == 0) {
-                        //autonomous = new AutoOneBall();
-                        SmartDashboard.putString("AutoCommand","One Ball");
-                    } else if (selectedAutoFunction == 1) {
-                        //autonomous = new AutoTwoBallLeft();
-                        SmartDashboard.putString("AutoCommand","Two Ball");
-                    }
+        switch (selectedAutoPosition) {
+            case 0:
+            {
+                // Left Position
+                if ( selectedAutoBalance==1 ) { selectedAutoBalance=0; }
+                switch (selectedAutoFunction) {
+                    case 0:
+                        //autonomous = new AutoConeLow(selectedAutoBalance);    
+                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        break;
+                    case 1:
+                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        break;
+                    case 2:
+                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        break;
+                    case 3:
+                        break;    
+                }
                 break;
-                case 1:
-                    // Far Left Position, always do one ball Auto
-                    //autonomous = new AutoOneBall();    
-                    SmartDashboard.putString("AutoCommand","One Ball");
-                break;
-                case 2:
-                    if (selectedAutoFunction == 0) {
-                        //autonomous = new AutoOneBall();
-                        SmartDashboard.putString("AutoCommand","One Ball");
-                    } else if (selectedAutoFunction == 1) {
-                        autonomous = new AutoTwoBallRight();
-                        SmartDashboard.putString("AutoCommand","Two Ball");
-                    }
-                    break;
-                case 3:
-                    // Far Right Position, always do one ball Auto
-                    //autonomous = new AutoOneBall();    
-                    break;
+            }
+            case 1:
+            {
+                // Center Position
+                switch (selectedAutoFunction) {
+                    case 0:
+                        //autonomous = new AutoConeLow(selectedAutoBalance);    
+                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        break;
+                    case 1:
+                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        break;
+                    case 2:
+                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        break;
+                    case 3:
+                        //autonomous = new AutoBalance();    
+                        break;    
+                }
+            }
+            break;
+            case 2:
+            {
+                // Right Position
+                if ( selectedAutoBalance==1 ) { selectedAutoBalance=0; }
+                switch (selectedAutoFunction) {
+                    case 0:
+                        //autonomous = new AutoConeLow(selectedAutoBalance);    
+                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        break;
+                    case 1:
+                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        break;
+                    case 2:
+                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        break;
+                    case 3:
+                        break;    
+                }
+            }
+            break;
 
-            }
-        } else {
-            // Position doesn't matter right now.
-            if (selectedAutoFunction == 0) {
-                //autonomous = new AutoOneBall();
-                SmartDashboard.putString("AutoCommand","One Ball");
-            }
-        }    
+        }
 
         autonomous.schedule();
     }
