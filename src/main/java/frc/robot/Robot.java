@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static WestCoastDrive driveBase;
     public static TowerArm robotArm;
+    public static Grabber robotGrabber;
     public static PixyVision pixyVision;
     public static LimeLight limeLight;
 	public static UsbCamera driveCam;
@@ -135,6 +136,8 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
         driveBase = new WestCoastDrive();
+        robotArm = new TowerArm();
+        robotGrabber = new Grabber();
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));
