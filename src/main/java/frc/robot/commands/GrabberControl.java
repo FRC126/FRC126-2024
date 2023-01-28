@@ -15,24 +15,26 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.LidarLite;
+import frc.robot.subsystems.*;	
+import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class DistanceMeasure extends CommandBase {
-
+public class GrabberControl extends CommandBase {
+	JoystickWrapper driveJoystick;
+	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-	public DistanceMeasure(LidarLite subsystem) {
-		// Use requires() here to declare subsystem dependencies
-        addRequirements(subsystem);
-    }     
+    public GrabberControl(Grabber subsystem) {
+		addRequirements(subsystem);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+    }
 
 	/**********************************************************************************
-	 * Run before command starts 1st iteration
 	 **********************************************************************************/
 	
 	@Override
@@ -40,18 +42,42 @@ public class DistanceMeasure extends CommandBase {
 	}    
 
 	/**********************************************************************************
+	 * Called every tick (20ms)
 	 **********************************************************************************/
 	
+	@SuppressWarnings("static-access")
 	@Override
 	public void execute() {
-		Robot.distance.measureDistance();
-    }
+        double speed=0;
+
+		if (Robot.internalData.isAuto()) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+
+     	if (driveJoystick.isAButton()) {
+            speed=0.3;
+			// Arm Up
+		} else if (driveJoystick.isBButton()) {
+            speed=-0.3;
+			// Arm Down
+		} else {
+            // Arm Stop
+            speed=0;
+        }
+
+		// Log the Joystick X,Y Axis to the SmartDashboard.
+		//SmartDashboard.putNumber("JoyStick A Button",driveJoystick.isAButton());
+		//SmartDashboard.putNumber("JoyStick X Axis",driveJoystick.isBButton());
+
+        Robot.robotArm.MoveArm(speed);
+	}
 
 	/**********************************************************************************
 	 * Returns true if command finished
 	 **********************************************************************************/
 
-	 @Override
+	@Override
 	public boolean isFinished() {
 		return false;
 	}
@@ -63,4 +89,5 @@ public class DistanceMeasure extends CommandBase {
 	 @Override
 	public void end(boolean isInterrupted) {
 	}  
+    
 }

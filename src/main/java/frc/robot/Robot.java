@@ -11,7 +11,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2022 Code       
+    Team 126 2023 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -202,21 +202,21 @@ public class Robot extends TimedRobot {
             switch (selectedAutoPosition) {
                 case 0:
                     if (selectedAutoFunction == 0) {
-                        autonomous = new AutoOneBall();
+                        //autonomous = new AutoOneBall();
                         SmartDashboard.putString("AutoCommand","One Ball");
                     } else if (selectedAutoFunction == 1) {
-                        autonomous = new AutoTwoBallLeft();
+                        //autonomous = new AutoTwoBallLeft();
                         SmartDashboard.putString("AutoCommand","Two Ball");
                     }
                 break;
                 case 1:
                     // Far Left Position, always do one ball Auto
-                    autonomous = new AutoOneBall();    
+                    //autonomous = new AutoOneBall();    
                     SmartDashboard.putString("AutoCommand","One Ball");
                 break;
                 case 2:
                     if (selectedAutoFunction == 0) {
-                        autonomous = new AutoOneBall();
+                        //autonomous = new AutoOneBall();
                         SmartDashboard.putString("AutoCommand","One Ball");
                     } else if (selectedAutoFunction == 1) {
                         autonomous = new AutoTwoBallRight();
@@ -225,14 +225,14 @@ public class Robot extends TimedRobot {
                     break;
                 case 3:
                     // Far Right Position, always do one ball Auto
-                    autonomous = new AutoOneBall();    
+                    //autonomous = new AutoOneBall();    
                     break;
 
             }
         } else {
             // Position doesn't matter right now.
             if (selectedAutoFunction == 0) {
-                autonomous = new AutoOneBall();
+                //autonomous = new AutoOneBall();
                 SmartDashboard.putString("AutoCommand","One Ball");
             }
         }    
