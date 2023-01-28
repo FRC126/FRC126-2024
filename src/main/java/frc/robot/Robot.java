@@ -118,7 +118,8 @@ public class Robot extends TimedRobot {
 	
     private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
-
+    private final SendableChooser<Integer> autoBalance = new SendableChooser<>();
+    
  	  /************************************************************************
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -167,17 +168,21 @@ public class Robot extends TimedRobot {
 		server.setSource(driveCam);
 
         // Dashboard Cooser for the Autonomous mode move
-        autoFunction.setDefaultOption("One_Ball (default)",0);
-        autoFunction.addOption("Two Ball Position",1);
-        autoFunction.addOption("Two Ball Stragiht",2);
+        autoFunction.setDefaultOption("Floor Cone",0);
+        autoFunction.addOption("Mid Cone",1);
+        autoFunction.addOption("High Cone",2);
+        autoFunction.addOption("No Cone",3);
         SmartDashboard.putData("Auto Choices",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
-        autoPosition.setDefaultOption("Far Left (default)",0);
-        autoPosition.addOption("Middle Left",1);
-        autoPosition.addOption("Middle Right",2);
-        autoPosition.addOption("Far Right",3);
+        autoPosition.setDefaultOption("Left Position",0);
+        autoPosition.addOption("Center Position",1);
+        autoPosition.addOption("Right Position",2);
         SmartDashboard.putData("Auto Position",autoPosition);
+
+        autoBalance.setDefaultOption("Do NOT Balance",0);
+        autoBalance.addOption("Balance",1);
+        SmartDashboard.putData("Auto Choices",autoBalance);
 
         Log.print(0, "Robot", "Robot Init Complete");
     }
