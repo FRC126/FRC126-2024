@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2022 Code       
+    Team 126 2023 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -19,9 +19,10 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -43,11 +44,10 @@ public class WestCoastDrive extends SubsystemBase {
 		rightSpeed = 0;
 
 		// Do we want brake mode on for the drive motors?
-		//Robot.leftDriveMotor1.setNeutralMode(NeutralMode.Brake);
-		//Robot.leftDriveMotor2.setNeutralMode(NeutralMode.Brake);
-		//Robot.rightDriveMotor1.setNeutralMode(NeutralMode.Brake);
-		//Robot.rightDriveMotor2.setNeutralMode(NeutralMode.Brake);
-
+		//Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		//Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		//Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		//Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -60,11 +60,11 @@ public class WestCoastDrive extends SubsystemBase {
 
 	 public double getMeanRPM() {
 		// Need to use encoder for Neo motors
-		//left1RPM = Math.abs(Robot.leftDriveMotor1.getSelectedSensorVelocity() / 3.41);
-		//left2RPM = Math.abs(Robot.leftDriveMotor2.getSelectedSensorVelocity() / 3.41);
-		//right1RPM = Math.abs(Robot.rightDriveMotor1.getSelectedSensorVelocity() / 3.41);
-		//right2RPM = Math.abs(Robot.rightDriveMotor2.getSelectedSensorVelocity() / 3.41);
-		left1RPM=left2RPM=right1RPM=right2RPM=0;
+		left1RPM = Math.abs(Robot.left1DriveEncoder.getVelocity());
+		left2RPM = Math.abs(Robot.left2DriveEncoder.getVelocity());
+		right2RPM = Math.abs(Robot.right1DriveEncoder.getVelocity());
+		right1RPM = Math.abs(Robot.right2DriveEncoder.getVelocity());
+
 		return((left1RPM + left2RPM + right1RPM + right2RPM) / 4);
 	}
 
@@ -91,17 +91,20 @@ public class WestCoastDrive extends SubsystemBase {
 		} else if(limiter > 1) {
 			limiter = 1;
 		}
+		
 		previousLimiter = (4 * previousLimiter + limiter) / 5;
 		if(Robot.internalData.getVoltage() < Robot.voltageThreshold) {
-			leftSpeed *= previousLimiter;
-			rightSpeed *= previousLimiter;
+			//leftSpeed *= previousLimiter;
+			//rightSpeed *= previousLimiter;
 		}
+		SmartDashboard.putNumber("Drive Limiter", limiter);
 
 		//SmartDashboard.putNumber("drive fb", fb);
 		//SmartDashboard.putNumber("drive rot", rot);
 		//SmartDashboard.putNumber("Left Speed", leftSpeed);
         //SmartDashboard.putNumber("Right Speed", rightSpeed);
 
+		// TODO Disable second motor while testing!!!
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
 		//Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
 
@@ -114,11 +117,8 @@ public class WestCoastDrive extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.leftDriveMotor1.setSelectedSensorPosition(0);
-		//Robot.leftDriveMotor2.setSelectedSensorPosition(0);
-
-        //Robot.rightDriveMotor1.setSelectedSensorPosition(0);
-		//Robot.rightDriveMotor2.setSelectedSensorPosition(0);
+		Robot.leftDriveEncoder.reset();
+        Robot.rightDriveEncoder.reset();
 	}
 
     /************************************************************************
@@ -126,27 +126,28 @@ public class WestCoastDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double ticksPerRotation=2048;
-		double wheelDiameter = 6.45; // 6.4 inches, 20.25" diameter
+		double wheelDiameter = 6;
 		double gearRatio = 3.41;
 		
 		// Need to use encoders for the NEOs
-		// double left1 = Math.abs(Robot.leftDriveMotor1.getSelectedSensorPosition() * RobotMap.left1Inversion);
-		// double left2 = Math.abs(Robot.leftDriveMotor2.getSelectedSensorPosition() * RobotMap.left2Inversion);
+		double left = Robot.leftDriveEncoder.getAbsolutePosition();
+        double right = Robot.rightDriveEncoder.getAbsolutePosition();	
 
-        // double right1 = Math.abs(Robot.rightDriveMotor1.getSelectedSensorPosition() * RobotMap.right1Inversion);
-		// double right2 = Math.abs(Robot.rightDriveMotor2.getSelectedSensorPosition() * RobotMap.right2Inversion);
-
-		double left1 = 0;
-		double left2 = 0;
-        double right1 = 0;
-		double right2 = 0;
+		double left1 = Robot.left1DriveEncoder.getPosition();
+		double left2 = Robot.left2DriveEncoder.getPosition();
+		double right1 = Robot.right1DriveEncoder.getPosition();
+		double right2 = Robot.right2DriveEncoder.getPosition();
 
 		// Get the absolute value of the average of all the encoders.
-		double avg = (left1 + left2 + right1+ right2) / 4;
+		double avg = (left + right) / 2;
 
-		double distance = ((avg / ticksPerRotation) / gearRatio) * (wheelDiameter *3.1459);
+		double avg2 = (left1 + left2 + right1 + right2) / 4;
+
+		double distance = ((avg / ticksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
+		double distance2 = ((avg2 / ticksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
 
 		SmartDashboard.putNumber("Drive Distance",distance);
+		SmartDashboard.putNumber("Drive 2 Distance",distance2);
 
 		return(distance);
 	}

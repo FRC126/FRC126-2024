@@ -17,7 +17,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Robot;
+//import frc.robot.Robot;
  
 /**********************************************************************************
  **********************************************************************************/
@@ -86,17 +86,4 @@ public class AutoTwoBallRight extends SequentialCommandGroup {
             //new ThrowerWork(0, 0, false, true)
         );
     }       
-
-    /******************************************************************************************
-     * Called once after isFinished returns true
-     ******************************************************************************************/
-/*
-    public void end(boolean isInterrupted) {
-        //Robot.ballIntake.IntakeStop();
-        //Robot.ballIntake.RetractIntake();
-        Robot.driveBase.Drive(0,0);
-        //Robot.ballThrower.ThrowerIntakeStop();
-        //Robot.ballThrower.throwerRPM(0);
-    }  
- */   
 }

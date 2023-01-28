@@ -31,12 +31,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+
 // import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -55,7 +58,15 @@ public class Robot extends TimedRobot {
     public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
+    public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
+    public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
 
+    public static SparkMaxAbsoluteEncoder left1DriveEncoder = Robot.leftDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    public static SparkMaxAbsoluteEncoder left2DriveEncoder = Robot.leftDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    public static SparkMaxAbsoluteEncoder right1DriveEncoder = Robot.rightDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    public static SparkMaxAbsoluteEncoder right2DriveEncoder = Robot.rightDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+
+    
     public static CANSparkMax TowerArmMotorLeft = new CANSparkMax(RobotMap.TowerArmMotorLeftID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax TowerArmMotorRight = new CANSparkMax(RobotMap.TowerArmMotorRightID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
