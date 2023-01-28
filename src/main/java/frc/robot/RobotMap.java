@@ -34,18 +34,18 @@ public class RobotMap {
 	public static int xboxRStick = 10; // Right stick button
 
     // Tower Arm Can Bus ID's
-	public static int TowerArmMotorLeftID = 10;
-	public static int TowerArmMotorRightID = 11;
+	public static int TowerArmMotorLeftID = 20;
+	public static int TowerArmMotorRightID = 21;
 
 	//Motor Inversions
 	public static int TowerArmMotorLeftInversion;
 	public static int TowerArmMotorRightInversion;
 	
 	// Driver Motor Can ID's
-	public static int leftDriveMotorCanID1 = 20;
-	public static int leftDriveMotorCanID2 = 21;
-	public static int rightDriveMotorCanID1 = 22;
-	public static int rightDriveMotorCanID2 = 23;
+	public static int leftDriveMotorCanID1 = 10;
+	public static int leftDriveMotorCanID2 = 11;
+	public static int rightDriveMotorCanID1 = 12;
+	public static int rightDriveMotorCanID2 = 13;
 
 	//Motor Inversions
     public static int left1Inversion;

@@ -90,8 +90,7 @@ public class AutoTwoBallRight extends SequentialCommandGroup {
     /******************************************************************************************
      * Called once after isFinished returns true
      ******************************************************************************************/
-
-     @Override
+/*
     public void end(boolean isInterrupted) {
         //Robot.ballIntake.IntakeStop();
         //Robot.ballIntake.RetractIntake();
@@ -99,5 +98,5 @@ public class AutoTwoBallRight extends SequentialCommandGroup {
         //Robot.ballThrower.ThrowerIntakeStop();
         //Robot.ballThrower.throwerRPM(0);
     }  
-    
+ */   
 }

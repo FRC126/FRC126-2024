@@ -103,10 +103,10 @@ public class WestCoastDrive extends SubsystemBase {
         //SmartDashboard.putNumber("Right Speed", rightSpeed);
 
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
-		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
+		//Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
 
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
-		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+		//Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
 	}
 
     /************************************************************************
