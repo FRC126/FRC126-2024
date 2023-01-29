@@ -64,17 +64,11 @@ public class DriverControl extends CommandBase {
 		}
 
 		if (driveJoystick.getRightTrigger() > .3) {
-			Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		    Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		    Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		    Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			Robot.driveBase.brakesOn();
 		} else {
-			Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-
+			Robot.driveBase.brakesOff();
 		}	
+
 		//if (driveJoystick.isRStickPressButton()) {
 		//	LR = LR *.5;
 		//}
@@ -87,13 +81,22 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.brakesOff();
 		}
 
+		if (driveJoystick.isAButton()) {
+			Robot.driveBase.doAutoBalance();
+		} else {
+			Robot.driveBase.stopAutoBalance();
+		}
+
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);
+
 		SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
 		SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
-		if (Robot.targetType == Robot.targetTypes.TargetSeek) {
+		if (Robot.isAutoBalance) {
+			// Don't do anything during autobalance
+		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input
 			Robot.driveBase.Drive(Robot.robotDrive,Robot.robotTurn);
 		} else {

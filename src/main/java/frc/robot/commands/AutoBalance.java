@@ -16,7 +16,7 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-//import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -55,21 +55,31 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	
     public void execute() {
         pitch = Robot.ahrs.getPitch();
+        double speed=0;
+
+        SmartDashboard.putNumber("NavX Pitch",pitch);
+        SmartDashboard.putNumber("Balance Count",balanceCount);
 
         if ( pitch > balanceThresholdMax) {
             // Still pointup, Drive forward
             Robot.driveBase.brakesOff();
-            double speed=0.15;
+            speed=0.15;
             if ( pitch > 10) {
-                speed=0.3;
+                speed=0.25;
             }
             Robot.driveBase.Drive(speed, 0);
             balanceCount=0;
+            SmartDashboard.putNumber("Balance Speed",speed);
         } else if (pitch < balanceThresholdMin) {
             // Pointing down, Drive backwards
             Robot.driveBase.brakesOff();
-            Robot.driveBase.Drive(-0.15, 0);
+            speed=-0.15;
+            if ( pitch < -10) {
+                speed=0.25;
+            }
+            Robot.driveBase.Drive(speed, 0);
             balanceCount=0;
+            SmartDashboard.putNumber("Balance Speed",speed);
         } else {
             // Reached target
             balanceCount++;

@@ -87,6 +87,7 @@ public class Robot extends TimedRobot {
     public static boolean shootNow = false;
     public static boolean pickupNow = false;
     public static boolean isThrowCommand=false;
+    public static boolean isAutoBalance=false;
     public static targetTypes targetType = Robot.targetTypes.NoTarget;
     public static int objectId=1;
 

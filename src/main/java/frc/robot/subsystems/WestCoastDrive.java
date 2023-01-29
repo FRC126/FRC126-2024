@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -32,6 +33,7 @@ public class WestCoastDrive extends SubsystemBase {
 	double leftMultiplier, rightMultiplier, leftSpeed, rightSpeed, fbSlowDown, rotSlowDown, limiter, left1RPM, left2RPM, right1RPM, right2RPM;
 	double previousLimiter = 1;
 	double fbLast=0;
+    public static SequentialCommandGroup balanceCommand;
 		
 	/************************************************************************
 	 ************************************************************************/
@@ -185,5 +187,26 @@ public class WestCoastDrive extends SubsystemBase {
 		SmartDashboard.putNumber("Drive 2 Distance",distance2);
 
 		return(distance);
+	}
+
+   /************************************************************************
+	 ************************************************************************/
+
+	public void doAutoBalance() {
+		if (Robot.isAutoBalance) {
+			return;
+		}	
+        //balanceCommand = new Command(AutoBalance());
+        Robot.isAutoBalance = true;
+	}
+
+   /************************************************************************
+	 ************************************************************************/
+
+    public void stopAutoBalance() {
+		if (!Robot.isAutoBalance) {
+			return;
+		}	
+
 	}
 }
