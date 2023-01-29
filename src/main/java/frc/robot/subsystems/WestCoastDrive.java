@@ -31,6 +31,7 @@ public class WestCoastDrive extends SubsystemBase {
 
 	double leftMultiplier, rightMultiplier, leftSpeed, rightSpeed, fbSlowDown, rotSlowDown, limiter, left1RPM, left2RPM, right1RPM, right2RPM;
 	double previousLimiter = 1;
+	double fbLast=0;
 		
 	/************************************************************************
 	 ************************************************************************/
@@ -92,13 +93,20 @@ public class WestCoastDrive extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void Drive(double fb, double rot_in) { 
+	public void Drive(double fbIn, double rotIn) { 
 
-		double rot = rot_in;
+		double rot = rotIn;
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning
-		    rot = rot_in *.6;
+		    rot = rotIn *.3;
 		}
+
+		// Soft start for high throttle
+		double fb = fbIn;
+		if ( fbIn > .5 && fbIn > fbLast) {
+			fb = fbLast+.05;
+    	}
+		fbLast=fb;
 
 		leftMultiplier = fb + (rot);
 		rightMultiplier = fb - (rot);
@@ -114,22 +122,29 @@ public class WestCoastDrive extends SubsystemBase {
 		
 		previousLimiter = (4 * previousLimiter + limiter) / 5;
 		if(Robot.internalData.getVoltage() < Robot.voltageThreshold) {
-			//leftSpeed *= previousLimiter;
-			//rightSpeed *= previousLimiter;
+			leftSpeed *= previousLimiter;
+			rightSpeed *= previousLimiter;
 		}
-		SmartDashboard.putNumber("Drive Limiter", limiter);
+		SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
 
-		//SmartDashboard.putNumber("drive fb", fb);
-		//SmartDashboard.putNumber("drive rot", rot);
+		SmartDashboard.putNumber("drive fb", fb);
+		SmartDashboard.putNumber("drive rot", rot);
+		
 		//SmartDashboard.putNumber("Left Speed", leftSpeed);
         //SmartDashboard.putNumber("Right Speed", rightSpeed);
 
+		double left1 = Robot.left1DriveEncoder.getPosition();
+		SmartDashboard.putNumber("Neo Sensor POS", left1);
+
+		double left2 = Robot.left1DriveEncoder.getVelocity();
+		SmartDashboard.putNumber("Neo Sensor VELOCITY", left2);
+
 		// TODO Disable second motor while testing!!!
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
-		//Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
+		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
 
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
-		//Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
 	}
 
     /************************************************************************

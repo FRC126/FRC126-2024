@@ -19,6 +19,7 @@ import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -55,13 +56,25 @@ public class DriverControl extends CommandBase {
 
 		// Get stick inputs
         double FB = driveJoystick.getLeftStickY();
-        double LR = driveJoystick.getRightStickX() * -1 ;
+        double LR = driveJoystick.getRightStickX();
 
 		if (driveJoystick.getLeftTrigger() > .3) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
+		if (driveJoystick.getRightTrigger() > .3) {
+			Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		    Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		    Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		    Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		} else {
+			Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+
+		}	
 		//if (driveJoystick.isRStickPressButton()) {
 		//	LR = LR *.5;
 		//}
