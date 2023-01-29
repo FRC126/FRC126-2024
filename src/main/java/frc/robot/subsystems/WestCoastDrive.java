@@ -20,7 +20,7 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
 
@@ -54,6 +54,26 @@ public class WestCoastDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void periodic() {}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public void brakesOn() {
+		Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void brakesOff() {
+		Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}
 
 	/************************************************************************
 	 ************************************************************************/

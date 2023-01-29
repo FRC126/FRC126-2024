@@ -40,6 +40,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DriverStation;
+
+// Navx-MXP Libraries and Connection Library
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -72,6 +77,9 @@ public class Robot extends TimedRobot {
 
     // Lidar Light Distance Measure
     public static LidarLite distance;
+
+    // NavX-MXP
+    public static AHRS ahrs;
 
     // Automation Variables
     public static double robotTurn = 0;
@@ -154,6 +162,13 @@ public class Robot extends TimedRobot {
         // rightClimbLimit = new DigitalInput(0);
         // leftClimbLimit = new DigitalInput(1);
 
+        
+        try {
+            ahrs = new AHRS(SPI.Port.kMXP);
+        } catch (RuntimeException ex) {
+            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+        }
+    
         // Instantiate the compress, CANID 2, Rev Robotics PCM
         compressor = new Compressor(2, PneumaticsModuleType.REVPH);
         compressor.enableDigital();

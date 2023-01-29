@@ -69,6 +69,11 @@ public class DriverControl extends CommandBase {
 		//	FB = FB *.5;
 		//}
 
+		if ( FB > .2 || FB < -0.2 || LR > .2 || LR < -0.2 ) {
+			// Turn off the brakes if operator is using the joysticks
+			Robot.driveBase.brakesOff();
+		}
+
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);
