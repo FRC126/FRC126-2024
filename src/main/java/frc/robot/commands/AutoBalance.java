@@ -59,7 +59,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         if ( pitch > balanceThresholdMax) {
             // Still pointup, Drive forward
             Robot.driveBase.brakesOff();
-            Robot.driveBase.Drive(0.15, 0);
+            double speed=0.15;
+            if ( pitch > 10) {
+                speed=0.3;
+            }
+            Robot.driveBase.Drive(speed, 0);
             balanceCount=0;
         } else if (pitch < balanceThresholdMin) {
             // Pointing down, Drive backwards
