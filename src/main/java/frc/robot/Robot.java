@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
     public static boolean isAutoClimbBalance=false;
     public static boolean isAutoMoveLeft=false;
     public static boolean isAutoMoveRight=false;
+    public static boolean isAutoMoveSide=false;
 
     // Subsystems
     public static Controllers oi;
