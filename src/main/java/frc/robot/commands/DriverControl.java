@@ -81,10 +81,29 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.brakesOff();
 		}
 
+		if (driveJoystick.isXButton()) {
+			Robot.driveBase.stopAutoBalance();
+			Robot.driveBase.stopAutoClimbBalance();
+		}
+		
 		if (driveJoystick.isAButton()) {
 			Robot.driveBase.doAutoBalance();
+		}
+
+		if (driveJoystick.isBButton()) {
+			Robot.driveBase.doAutoClimbBalance();
+		}
+
+		if (driveJoystick.getPovLeft()) {
+			Robot.driveBase.doAutoMoveLeft();
 		} else {
-			Robot.driveBase.stopAutoBalance();
+			Robot.driveBase.stopAutoMoveLeft();
+		}
+
+		if (driveJoystick.getPovRight()) {
+			Robot.driveBase.doAutoMoveRight();
+		} else {
+			Robot.driveBase.stopAutoMoveRight();
 		}
 
 		// Log the Joystick X,Y Axis to the SmartDashboard.
@@ -94,7 +113,10 @@ public class DriverControl extends CommandBase {
 		SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
 		SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
-		if (Robot.isAutoBalance) {
+		if (Robot.isAutoBalance || 
+		    Robot.isAutoClimbBalance || 
+			Robot.isAutoMoveLeft ||
+		    Robot.isAutoMoveRight) {
 			// Don't do anything during autobalance
 		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input

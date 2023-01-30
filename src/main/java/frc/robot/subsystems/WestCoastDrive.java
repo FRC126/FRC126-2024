@@ -18,12 +18,12 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -33,8 +33,11 @@ public class WestCoastDrive extends SubsystemBase {
 	double leftMultiplier, rightMultiplier, leftSpeed, rightSpeed, fbSlowDown, rotSlowDown, limiter, left1RPM, left2RPM, right1RPM, right2RPM;
 	double previousLimiter = 1;
 	double fbLast=0;
-    public static SequentialCommandGroup balanceCommand;
-		
+    public static CommandBase balanceCommand;
+    public static CommandBase climbBalanceCommand;
+	public static CommandBase moveLeftCommand;
+	public static CommandBase moveRightCommand;
+			
 	/************************************************************************
 	 ************************************************************************/
 
@@ -112,8 +115,19 @@ public class WestCoastDrive extends SubsystemBase {
 
 		leftMultiplier = fb + (rot);
 		rightMultiplier = fb - (rot);
+
 		leftSpeed = leftMultiplier / 1.0;
 		rightSpeed = rightMultiplier / 1.0;
+
+		if (leftSpeed > 0) {
+			// Handle the difference between forward and backwards in the motors
+			leftSpeed = leftSpeed *.95;
+		}
+
+		if (rightSpeed < 0) {
+			// Handle the difference between forward and backwards in the motors
+			rightSpeed = rightSpeed *.95;
+		}
 
 		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
 		if(limiter < 0) {
@@ -141,7 +155,6 @@ public class WestCoastDrive extends SubsystemBase {
 		double left2 = Robot.left1DriveEncoder.getVelocity();
 		SmartDashboard.putNumber("Neo Sensor VELOCITY", left2);
 
-		// TODO Disable second motor while testing!!!
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
 		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
 
@@ -196,8 +209,9 @@ public class WestCoastDrive extends SubsystemBase {
 		if (Robot.isAutoBalance) {
 			return;
 		}	
-        //balanceCommand = new Command(AutoBalance());
         Robot.isAutoBalance = true;
+        balanceCommand = new AutoBalance();
+		balanceCommand.schedule();
 	}
 
    /************************************************************************
@@ -207,6 +221,81 @@ public class WestCoastDrive extends SubsystemBase {
 		if (!Robot.isAutoBalance) {
 			return;
 		}	
-
+		Robot.isAutoBalance=false;
+        balanceCommand.cancel();
+		Drive(0,0);
 	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void doAutoClimbBalance() {
+		if (Robot.isAutoClimbBalance) {
+			return;
+		}	
+        Robot.isAutoClimbBalance = true;
+        climbBalanceCommand = new AutoClimbBalance();
+		climbBalanceCommand.schedule();
+	}
+
+   /************************************************************************
+	 ************************************************************************/
+
+    public void stopAutoClimbBalance() {
+		if (!Robot.isAutoClimbBalance) {
+			return;
+		}	
+		Robot.isAutoClimbBalance=false;
+        climbBalanceCommand.cancel();
+		Drive(0,0);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void doAutoMoveLeft() {
+		if (Robot.isAutoMoveLeft) {
+			return;
+		}	
+        Robot.isAutoMoveLeft = true;
+        moveLeftCommand = new AutoMoveLeft();
+		moveLeftCommand.schedule();
+	}
+
+   /************************************************************************
+	 ************************************************************************/
+
+    public void stopAutoMoveLeft() {
+		if (!Robot.isAutoMoveLeft) {
+			return;
+		}	
+		Robot.isAutoMoveLeft=false;
+        moveLeftCommand.cancel();
+		Drive(0,0);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void doAutoMoveRight() {
+		if (Robot.isAutoMoveRight) {
+			return;
+		}	
+        Robot.isAutoMoveRight = true;
+        moveRightCommand = new AutoMoveRight();
+		moveRightCommand.schedule();
+	}
+
+   /************************************************************************
+	 ************************************************************************/
+
+    public void stopAutoMoveRight() {
+		if (!Robot.isAutoMoveRight) {
+			return;
+		}	
+		Robot.isAutoMoveRight=false;
+        moveRightCommand.cancel();
+		Drive(0,0);
+	}
+
 }

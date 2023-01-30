@@ -86,10 +86,15 @@ public class Robot extends TimedRobot {
 	public static double robotDrive = 0;
     public static boolean shootNow = false;
     public static boolean pickupNow = false;
-    public static boolean isThrowCommand=false;
-    public static boolean isAutoBalance=false;
     public static targetTypes targetType = Robot.targetTypes.NoTarget;
     public static int objectId=1;
+
+    // Auto Routines
+    public static boolean isThrowCommand=false;
+    public static boolean isAutoBalance=false;
+    public static boolean isAutoClimbBalance=false;
+    public static boolean isAutoMoveLeft=false;
+    public static boolean isAutoMoveRight=false;
 
     // Subsystems
     public static Controllers oi;

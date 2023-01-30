@@ -21,9 +21,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**********************************************************************************
  **********************************************************************************/
 
- public class AutoBalance extends CommandBase {
+ public class AutoClimbBalance extends CommandBase {
     
     double pitch, xAxis, last_pitch, xAxisStart;
+    boolean climbed=false;
     int iters;
     int balanceCount=0;
     static final double balanceThresholdMin=-5;
@@ -32,10 +33,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public AutoBalance() {
+    public AutoClimbBalance() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        iters=200;
+        iters=300;
         balanceCount=0;
         pitch = Robot.ahrs.getPitch();
         xAxisStart = Robot.ahrs.getRawGyroX();
@@ -64,30 +65,38 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("NavX GyroX",xAxis);
         SmartDashboard.putNumber("NavX GyroX Start",xAxisStart);
         SmartDashboard.putNumber("Balance Count",balanceCount);
+        SmartDashboard.putBoolean("Climbed",climbed);
 
-        if ( pitch > balanceThresholdMax) {
-            // Pointing up, Drive forward
-            speed=0.2;
-            if ( pitch > 10) {
-                speed=0.3;
+        if (!climbed) {
+            speed=0.3;
+            if (pitch > 8) {
+                climbed=true;
             }
-            balanceCount=0;
-        } else if (pitch < balanceThresholdMin) {
-            // Pointing down, Drive backwards
-            speed=-0.2;
-            if ( pitch < -10) {
-                speed=0.3;
-            }
-            balanceCount=0;
         } else {
-            // Reached target
-            balanceCount++;
-        }    
+            if ( pitch > balanceThresholdMax) {
+                // Pointing up, Drive forward
+                speed=0.2;
+                if ( pitch > 10) {
+                    speed=0.3;
+                }
+                balanceCount=0;
+            } else if (pitch < balanceThresholdMin) {
+                // Pointing down, Drive backwards
+                speed=-0.2;
+                if ( pitch < -10) {
+                    speed=0.3;
+                }
+                balanceCount=0;
+            } else {
+                // Reached target
+                balanceCount++;
+            }    
 
-        if (xAxis < xAxisStart-1) {
-            rotate=.1;
-        } else if (xAxis > xAxisStart+1) {
-            rotate=-1;
+            if (xAxis < xAxisStart-1) {
+                rotate=.1;
+            } else if (xAxis > xAxisStart+1) {
+                rotate=-1;
+            }
         }
 
         SmartDashboard.putNumber("Balance Speed",speed);
@@ -122,7 +131,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void end(boolean isInteruppted) {
         Robot.driveBase.Drive(0, 0);
-        Robot.isAutoBalance=false;
+        Robot.isAutoClimbBalance=false;
     }
 }
 
