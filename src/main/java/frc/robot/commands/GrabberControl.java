@@ -24,14 +24,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  **********************************************************************************/
 
 public class GrabberControl extends CommandBase {
-	JoystickWrapper driveJoystick;
+	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
     public GrabberControl(Grabber subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
 
 	/**********************************************************************************
@@ -48,29 +48,25 @@ public class GrabberControl extends CommandBase {
 	@SuppressWarnings("static-access")
 	@Override
 	public void execute() {
-        double speed=0;
-
 		if (Robot.internalData.isAuto()) {
 			// Ignore user controls during Autonomous
 			return;
 		}
 
-     	if (driveJoystick.isAButton()) {
-            speed=0.3;
-			// Arm Up
-		} else if (driveJoystick.isBButton()) {
-            speed=-0.3;
-			// Arm Down
+		if (Robot.isAutoBalance || 
+		    Robot.isAutoClimbBalance || 
+			Robot.isAutoMoveLeft ||
+		    Robot.isAutoMoveRight) {
+		    return;
+		}			
+
+		if (operatorJoystick.getPovLeft()) {
+			Robot.robotGrabber.MoveGrabber(.25);
+		} else if (operatorJoystick.getPovRight()) {
+			Robot.robotGrabber.MoveGrabber(-0.25);
 		} else {
-            // Arm Stop
-            speed=0;
-        }
-
-		// Log the Joystick X,Y Axis to the SmartDashboard.
-		//SmartDashboard.putNumber("JoyStick A Button",driveJoystick.isAButton());
-		//SmartDashboard.putNumber("JoyStick X Axis",driveJoystick.isBButton());
-
-        Robot.robotArm.MoveArm(speed);
+			Robot.robotGrabber.MoveGrabber(0);
+		}
 	}
 
 	/**********************************************************************************
@@ -88,6 +84,7 @@ public class GrabberControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
+		Robot.robotGrabber.MoveGrabber(0);
 	}  
     
 }

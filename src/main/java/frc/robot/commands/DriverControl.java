@@ -19,7 +19,7 @@ import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -58,48 +58,50 @@ public class DriverControl extends CommandBase {
         double FB = driveJoystick.getLeftStickY();
         double LR = driveJoystick.getRightStickX();
 
+		// Slow down the driver controls when the left trigger is pressed
 		if (driveJoystick.getLeftTrigger() > .3) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
+		// Apply motor braking when the right trigger is pressed
 		if (driveJoystick.getRightTrigger() > .3) {
 			Robot.driveBase.brakesOn();
 		} else {
 			Robot.driveBase.brakesOff();
 		}	
 
-		//if (driveJoystick.isRStickPressButton()) {
-		//	LR = LR *.5;
-		//}
-		//if (driveJoystick.isLStickPressButton()) {
-		//	FB = FB *.5;
-		//}
-
-		if ( FB > .2 || FB < -0.2 || LR > .2 || LR < -0.2 ) {
-			// Turn off the brakes if operator is using the joysticks
+		// Turn off the brakes if operator is using the joysticks	  
+		if ( FB > .1 || FB < -0.1 || LR > .1 || LR < -0.1 ) {
 			Robot.driveBase.brakesOff();
 		}
 
+		// Cancel running auto's
 		if (driveJoystick.isXButton()) {
 			Robot.driveBase.stopAutoBalance();
 			Robot.driveBase.stopAutoClimbBalance();
+			Robot.driveBase.stopAutoMoveLeft();
+			Robot.driveBase.stopAutoMoveRight();
 		}
-		
+
+		// Auto balance the robot
 		if (driveJoystick.isAButton()) {
 			Robot.driveBase.doAutoBalance();
 		}
 
+		// Climb then auto balance the robot
 		if (driveJoystick.isBButton()) {
 			Robot.driveBase.doAutoClimbBalance();
 		}
 
+	    // Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			Robot.driveBase.doAutoMoveLeft();
 		} else {
 			Robot.driveBase.stopAutoMoveLeft();
 		}
 
+		// Shift the Robot right
 		if (driveJoystick.getPovRight()) {
 			Robot.driveBase.doAutoMoveRight();
 		} else {
@@ -117,7 +119,7 @@ public class DriverControl extends CommandBase {
 		    Robot.isAutoClimbBalance || 
 			Robot.isAutoMoveLeft ||
 		    Robot.isAutoMoveRight) {
-			// Don't do anything during autobalance
+			// Don't do anything during auto commands
 		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input
 			Robot.driveBase.Drive(Robot.robotDrive,Robot.robotTurn);

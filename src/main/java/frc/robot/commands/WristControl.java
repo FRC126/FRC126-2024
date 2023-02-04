@@ -23,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
-public class ArmControl extends CommandBase {
+public class WristControl extends CommandBase {
 	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public ArmControl(TowerArm subsystem) {
+    public WristControl(Wrist subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
@@ -60,18 +60,14 @@ public class ArmControl extends CommandBase {
 		    return;
 		}			
 
-		// Get stick inputs
+  		// Get stick inputs
 		double UD = operatorJoystick.getLeftStickY();
 		
 		if ( UD < .15 && UD > -0.15 ) {
 			UD=0;
 		}
 
-		// Log the Joystick X,Y Axis to the SmartDashboard.
-		//SmartDashboard.putNumber("JoyStick A Button",operatorJoystick.isAButton());
-		//SmartDashboard.putNumber("JoyStick X Axis",operatorJoystick.isBButton());
-
-        Robot.robotArm.MoveArm(UD);
+        Robot.robotWrist.MoveWrist(UD);
 	}
 
 	/**********************************************************************************
@@ -89,7 +85,7 @@ public class ArmControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-        Robot.robotArm.MoveArm(0);
+        Robot.robotWrist.MoveWrist(0);
 	}  
     
 }

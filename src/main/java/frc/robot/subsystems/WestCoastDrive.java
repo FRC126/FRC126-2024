@@ -50,10 +50,7 @@ public class WestCoastDrive extends SubsystemBase {
 		rightSpeed = 0;
 
 		// Do we want brake mode on for the drive motors?
-		//Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		// brakesOn();
 	}
 
 	/************************************************************************

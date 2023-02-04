@@ -63,8 +63,7 @@ public class TowerArm extends SubsystemBase {
 
         //TODO Check encoders to if we are at limits.
 
-		Robot.TowerArmMotorLeft.set(speed * RobotMap.TowerArmMotorLeftInversion);
-		Robot.TowerArmMotorRight.set(speed * RobotMap.TowerArmMotorRightInversion);
+		Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
 	}
 
     /************************************************************************
@@ -72,8 +71,7 @@ public class TowerArm extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.TowerArmMotorLeft.setSelectedSensorPosition(0);
-		//Robot.TowerArmMotorRight.setSelectedSensorPosition(0);
+		//Robot.TowerArmMotor.setSelectedSensorPosition(0);
 	}
 
 }

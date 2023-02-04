@@ -26,18 +26,18 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Grabber extends SubsystemBase {
+public class Wrist extends SubsystemBase {
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Grabber() {
+	public Wrist() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new GrabberControl(this));
+		setDefaultCommand(new WristControl(this));
 
 		// Do we want brake mode on for the motors?
-		//Robot.GrabberMotor.setNeutralMode(NeutralMode.Brake);
+		//Robot.WristMotor.setNeutralMode(NeutralMode.Brake);
 	}
 
 	/************************************************************************
@@ -52,7 +52,7 @@ public class Grabber extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveGrabber(double speed) { 
+	public void MoveWrist(double speed) { 
 
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning in teleop
@@ -62,7 +62,7 @@ public class Grabber extends SubsystemBase {
 
         //TODO Check encoders to if we are at limits.
 
-		Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+		Robot.WristMotor.set(speed * RobotMap.WristMotorInversion);
 	}
 
     /************************************************************************
@@ -70,7 +70,7 @@ public class Grabber extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.GrabberMotor.setSelectedSensorPosition(0);
+		//Robot.WristMotor.setSelectedSensorPosition(0);
 	}
 
 }
