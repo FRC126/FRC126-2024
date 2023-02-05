@@ -106,6 +106,9 @@ public class WestCoastDrive extends SubsystemBase {
 		// Soft start for high throttle
 		double fb = fbIn;
 		if ( fbIn > .5 && fbIn > fbLast) {
+			if (fbLast<.5) {
+				fbLast=0.5;
+			}
 			fb = fbLast+.05;
     	}
 		fbLast=fb;
@@ -206,6 +209,7 @@ public class WestCoastDrive extends SubsystemBase {
 		if (Robot.isAutoBalance) {
 			return;
 		}	
+        Robot.robotArm.MoveArm(0);
         Robot.isAutoBalance = true;
         balanceCommand = new AutoBalance();
 		balanceCommand.schedule();
@@ -231,6 +235,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoClimbBalance = true;
+        Robot.robotArm.MoveArm(0);
         climbBalanceCommand = new AutoClimbBalance();
 		climbBalanceCommand.schedule();
 	}
@@ -255,6 +260,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveLeft = true;
+        Robot.robotArm.MoveArm(0);
         moveLeftCommand = new AutoMoveLeft();
 		moveLeftCommand.schedule();
 	}
@@ -279,6 +285,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveRight = true;
+        Robot.robotArm.MoveArm(0);
         moveRightCommand = new AutoMoveRight();
 		moveRightCommand.schedule();
 	}
