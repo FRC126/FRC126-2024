@@ -76,12 +76,21 @@ public class Robot extends TimedRobot {
 
     // Tower Arm Motor
     public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // TODO: TOWER ENCODER
+    // TODO: TOWER UPPER LIMIT SWITCH
+    // TODO: TOWER LOWER LIMIT SWITCH
 
     // Wrist Motor
     public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.WristMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // TODO: Wrist ENCODER
+    // TODO: Wrist UPPER LIMIT SWITCH
+    // TODO: Wrist LOWER LIMIT SWITCH
 
     // Grabber Motor
     public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // TODO: grabber ENCODER
+    // TODO: grabber UPPER LIMIT SWITCH
+    // TODO: grabber LOWER LIMIT SWITCH
 
     // Lidar Light Distance Measure
     public static LidarLite distance;
