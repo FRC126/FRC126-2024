@@ -35,7 +35,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 // import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -58,22 +58,30 @@ public class Robot extends TimedRobot {
     // public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
     // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
 
-    // Driver Base Motors
+    // Drive Base Motors
     public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
 
+    // Drive base encoders
     public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
     public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
 
+    // Drive motor encoder test
     public static SparkMaxAbsoluteEncoder left1DriveEncoder = Robot.leftDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     public static SparkMaxAbsoluteEncoder left2DriveEncoder = Robot.leftDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     public static SparkMaxAbsoluteEncoder right1DriveEncoder = Robot.rightDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     public static SparkMaxAbsoluteEncoder right2DriveEncoder = Robot.rightDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
 
-    public static CANSparkMax TowerArmMotorLeft = new CANSparkMax(RobotMap.TowerArmMotorLeftID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax TowerArmMotorRight = new CANSparkMax(RobotMap.TowerArmMotorRightID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // Tower Arm Motor
+    public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    // Wrist Motor
+    public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.WristMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    // Grabber Motor
+    public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     // Lidar Light Distance Measure
     public static LidarLite distance;
@@ -104,6 +112,7 @@ public class Robot extends TimedRobot {
     public static WestCoastDrive driveBase;
     public static TowerArm robotArm;
     public static Grabber robotGrabber;
+    public static Wrist robotWrist;
     public static PixyVision pixyVision;
     public static LimeLight limeLight;
 	public static UsbCamera driveCam;
@@ -155,6 +164,7 @@ public class Robot extends TimedRobot {
         driveBase = new WestCoastDrive();
         robotArm = new TowerArm();
         robotGrabber = new Grabber();
+        robotWrist = new Wrist();
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));

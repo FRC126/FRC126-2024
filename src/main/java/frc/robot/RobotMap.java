@@ -33,13 +33,18 @@ public class RobotMap {
 	public static int xboxLStick = 9; // Left stick button
 	public static int xboxRStick = 10; // Right stick button
 
-    // Tower Arm Can Bus ID's
-	public static int TowerArmMotorLeftID = 20;
-	public static int TowerArmMotorRightID = 21;
+    // Tower Arm Can Bus ID
+	public static int TowerArmMotorID = 20;
+	public static int TowerArmMotorInversion;
 
-	//Motor Inversions
-	public static int TowerArmMotorLeftInversion;
-	public static int TowerArmMotorRightInversion;
+	// Wrist Can Bus ID
+	public static int WristMotorID = 21;
+	public static int WristMotorInversion;
+
+	// Wrist Can Bus ID
+	public static int GrabberMotorID = 22;
+	public static int GrabberMotorInversion;
+	
 	
 	// Driver Motor Can ID's
 	public static int leftDriveMotorCanID1 = 10;
@@ -57,16 +62,18 @@ public class RobotMap {
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 
 			// 2023 DriveBase
-			TowerArmMotorLeftInversion = 1; // Motor inversions
-			TowerArmMotorRightInversion = -1;
+			TowerArmMotorInversion = 1; // Motor inversions
+			WristMotorInversion = 1; // Motor inversions
+			GrabberMotorInversion = 1; // Motor inversions
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = -1;
 			right2Inversion    = -1;
 		} else { 
 			// 2023 Breadboard
-			TowerArmMotorLeftInversion = 1; // Motor inversions
-			TowerArmMotorRightInversion = -1;
+			TowerArmMotorInversion = 1; // Motor inversions
+			WristMotorInversion = 1; // Motor inversions
+			GrabberMotorInversion = 1; // Motor inversions
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = 1;

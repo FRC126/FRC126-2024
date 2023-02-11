@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -50,10 +51,7 @@ public class WestCoastDrive extends SubsystemBase {
 		rightSpeed = 0;
 
 		// Do we want brake mode on for the drive motors?
-		//Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		// brakesOn();
 	}
 
 	/************************************************************************
@@ -149,17 +147,20 @@ public class WestCoastDrive extends SubsystemBase {
 		//SmartDashboard.putNumber("Left Speed", leftSpeed);
         //SmartDashboard.putNumber("Right Speed", rightSpeed);
 
-		double left1 = Robot.left1DriveEncoder.getPosition();
-		SmartDashboard.putNumber("Neo Sensor POS", left1);
-
-		double left2 = Robot.left1DriveEncoder.getVelocity();
-		SmartDashboard.putNumber("Neo Sensor VELOCITY", left2);
+		putNumber("Left1", Robot.left1DriveEncoder);
+		putNumber("Left2", Robot.left2DriveEncoder);
+		putNumber("Right1", Robot.right1DriveEncoder);
+		putNumber("Right2", Robot.right1DriveEncoder);
 
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
 		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
 
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
 		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+	}
+
+	private void putNumber(String name, SparkMaxAbsoluteEncoder encoder) {
+		SmartDashboard.putNumber(name + " Neo POS ", encoder.getPosition());
 	}
 
     /************************************************************************

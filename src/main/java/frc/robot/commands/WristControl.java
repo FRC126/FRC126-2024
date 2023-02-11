@@ -23,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
-public class GrabberControl extends CommandBase {
+public class WristControl extends CommandBase {
 	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public GrabberControl(Grabber subsystem) {
+    public WristControl(Wrist subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
@@ -59,13 +59,14 @@ public class GrabberControl extends CommandBase {
 		    return;
 		}			
 
-		if (operatorJoystick.getPovLeft()) {
-			Robot.robotGrabber.MoveGrabber(.25);
-		} else if (operatorJoystick.getPovRight()) {
-			Robot.robotGrabber.MoveGrabber(-0.25);
-		} else {
-			Robot.robotGrabber.MoveGrabber(0);
+  		// Get stick inputs
+		double UD = operatorJoystick.getLeftStickY();
+		
+		if ( UD < .15 && UD > -0.15 ) {
+			UD=0;
 		}
+
+        Robot.robotWrist.MoveWrist(UD);
 	}
 
 	/**********************************************************************************
@@ -83,7 +84,7 @@ public class GrabberControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-		Robot.robotGrabber.MoveGrabber(0);
+        Robot.robotWrist.MoveWrist(0);
 	}  
     
 }

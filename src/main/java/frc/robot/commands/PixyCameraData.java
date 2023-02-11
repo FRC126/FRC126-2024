@@ -43,7 +43,6 @@ public class PixyCameraData extends CommandBase {
 	}
 
 	// Called every tick (20ms)
-	@SuppressWarnings("static-access")
 	@Override
 	public void execute() {
         //Turn on the LED's on the PixyCam 

@@ -24,14 +24,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  **********************************************************************************/
 
 public class ArmControl extends CommandBase {
-	JoystickWrapper driveJoystick;
+	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
     public ArmControl(TowerArm subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
 
 	/**********************************************************************************
@@ -45,32 +45,32 @@ public class ArmControl extends CommandBase {
 	 * Called every tick (20ms)
 	 **********************************************************************************/
 	
-	@SuppressWarnings("static-access")
 	@Override
 	public void execute() {
-        double speed=0;
-
 		if (Robot.internalData.isAuto()) {
 			// Ignore user controls during Autonomous
 			return;
 		}
 
-     	if (driveJoystick.isAButton()) {
-            speed=0.3;
-			// Arm Up
-		} else if (driveJoystick.isBButton()) {
-            speed=-0.3;
-			// Arm Down
-		} else {
-            // Arm Stop
-            speed=0;
-        }
+		if (Robot.isAutoBalance || 
+		    Robot.isAutoClimbBalance || 
+			Robot.isAutoMoveLeft ||
+		    Robot.isAutoMoveRight) {
+		    return;
+		}			
+
+		// Get stick inputs
+		double UD = operatorJoystick.getLeftStickY();
+		
+		if ( UD < .15 && UD > -0.15 ) {
+			UD=0;
+		}
 
 		// Log the Joystick X,Y Axis to the SmartDashboard.
-		//SmartDashboard.putNumber("JoyStick A Button",driveJoystick.isAButton());
-		//SmartDashboard.putNumber("JoyStick X Axis",driveJoystick.isBButton());
+		//SmartDashboard.putNumber("JoyStick A Button",operatorJoystick.isAButton());
+		//SmartDashboard.putNumber("JoyStick X Axis",operatorJoystick.isBButton());
 
-        Robot.robotArm.MoveArm(speed);
+        Robot.robotArm.MoveArm(UD);
 	}
 
 	/**********************************************************************************
@@ -88,6 +88,7 @@ public class ArmControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
+        Robot.robotArm.MoveArm(0);
 	}  
     
 }
