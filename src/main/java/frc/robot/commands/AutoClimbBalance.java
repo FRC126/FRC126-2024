@@ -38,8 +38,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         // eg. requires(chassis);
         iters=300;
         balanceCount=0;
-        pitch = Robot.ahrs.getPitch();
-        xAxisStart = Robot.ahrs.getRawGyroX();
+        pitch = Robot.navxMXP.getPitch();
+        xAxisStart = Robot.navxMXP.getRawGyroX();
     }
 
 	/**********************************************************************************
@@ -56,8 +56,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void execute() {
-        pitch = Robot.ahrs.getPitch();
-        xAxis = Robot.ahrs.getRawGyroX();
+        pitch = Robot.navxMXP.getPitch();
+        xAxis = Robot.navxMXP.getRawGyroX();
         double speed=0;
         double rotate=0;
 

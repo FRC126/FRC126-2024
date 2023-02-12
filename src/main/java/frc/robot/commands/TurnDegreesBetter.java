@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void initialize() {
         // Save the starting angle for the turn
         Robot.internalData.resetGyro();
-        Robot.ahrs.reset();
+        Robot.navxMXP.zeroYaw();
         startAngle = 0;
         //startAngle=Robot.internalData.getGyroAngle();
         Robot.driveBase.brakesOff();
@@ -58,7 +58,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double driveLr=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.ahrs.getRawGyroX();      
+        double currentDegrees = Robot.navxMXP.getRawGyroX();      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 

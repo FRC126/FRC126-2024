@@ -26,15 +26,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Extension extends SubsystemBase {
+public class ArmExtension extends SubsystemBase {
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Extension() {
+	public ArmExtension() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ExtensionControl(this));
+		setDefaultCommand(new ArmExtensionControl(this));
+
+		resetEncoders();
 
 		// Do we want brake mode on for the motors?
 		//Robot.WristMotor.setNeutralMode(NeutralMode.Brake);
@@ -52,7 +54,7 @@ public class Extension extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveExtension(double speed) { 
+	public void MoveArmExtension(double speed) { 
 
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning in teleop
@@ -62,7 +64,7 @@ public class Extension extends SubsystemBase {
 
         //TODO Check encoders to if we are at limits.
 
-		Robot.WristMotor.set(speed * RobotMap.ExtensionMotorInversion);
+		Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
 	}
 
     /************************************************************************
@@ -70,7 +72,7 @@ public class Extension extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.WristMotor.setSelectedSensorPosition(0);
+		Robot.ArmExtensionRelativeEncoder.setPosition(0);
 	}
 
 }

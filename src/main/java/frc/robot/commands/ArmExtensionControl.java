@@ -15,55 +15,76 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.*;	
+import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
- public class AutoMoveSide extends CommandBase {  
-    int direction;
+public class ArmExtensionControl extends CommandBase {
+	JoystickWrapper operatorJoystick;
+	
+	/**********************************************************************************
+	 **********************************************************************************/
+	
+    public ArmExtensionControl(ArmExtension subsystem) {
+		addRequirements(subsystem);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
+    }
+
+	/**********************************************************************************
+	 **********************************************************************************/
+	
+	@Override
+	public void initialize() {
+	}    
+
+	/**********************************************************************************
+	 * Called every tick (20ms)
+	 **********************************************************************************/
+	
+	@Override
+	public void execute() {
+		if (Robot.internalData.isAuto()) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+
+		if (Robot.isAutoBalance || 
+		    Robot.isAutoClimbBalance || 
+			Robot.isAutoMoveLeft ||
+		    Robot.isAutoMoveRight) {
+		    return;
+		}			
+
+  		// Get stick inputs
+		double UD = operatorJoystick.getLeftStickY();
+		
+		if ( UD < .15 && UD > -0.15 ) {
+			UD=0;
+		}
+
+        Robot.robotArmExtension.MoveArmExtension(UD);
+	}
+
+	/**********************************************************************************
+	 * Returns true if command finished
+	 **********************************************************************************/
+
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
+
+	/**********************************************************************************
+	 * Called once after isFinished returns true
+	 **********************************************************************************/
+
+	 @Override
+	public void end(boolean isInterrupted) {
+        Robot.robotArmExtension.MoveArmExtension(0);
+	}  
     
-
-	/**********************************************************************************
-	 **********************************************************************************/
-	
-    public AutoMoveSide(int directionIn) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        direction=directionIn;
-    }
-
-	/**********************************************************************************
-     * Called just before this Command runs the first time
-	 **********************************************************************************/
-	
-    public void initialize() {
-        Robot.driveBase.resetEncoders();       
-    }
-
-	/**********************************************************************************
-     * Called repeatedly when this Command is scheduled to run
-	 **********************************************************************************/
-	
-    public void execute() {
-     }
-
-	/**********************************************************************************
-     * Make this return true when this Command no longer needs to run execute()
-	 **********************************************************************************/
-	
-    public boolean isFinished() {
-        return false;
-    }
-
-	/**********************************************************************************
-     * Called once after isFinished returns true
-	 **********************************************************************************/
-	
-    public void end(boolean isInteruppted) {
-        Robot.driveBase.Drive(0, 0);
-        Robot.isAutoMoveSide=false;
-    }
 }
-

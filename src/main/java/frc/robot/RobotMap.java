@@ -38,8 +38,8 @@ public class RobotMap {
 	public static int TowerArmMotorInversion;
 
 	// Extension Can Bus ID
-	public static int ExtensionMotorID = 26;
-	public static int ExtensionMotorInversion;
+	public static int ArmExtensionMotorID = 26;
+	public static int ArmExtensionMotorInversion;
 
 	// Grabber Can Bus ID
 	public static int GrabberMotorID = 27;

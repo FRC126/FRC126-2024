@@ -52,8 +52,7 @@ public class WestCoastDrive extends SubsystemBase {
 		leftSpeed = 0;
 		rightSpeed = 0;
 
-		// Do we want brake mode on for the drive motors?
-		// brakesOn();
+		resetEncoders();
 	}
 
 	/************************************************************************
@@ -114,38 +113,42 @@ public class WestCoastDrive extends SubsystemBase {
 		    rot = rotIn *.3;
 		}
 
+		// Soft start code
 		if (fbIn==0) {
+			// No movement, so fb and last to zero
 		    fb=0;
 			fbLast=0;
 		} else if (fbIn > 0) {
-			// Soft start for high throttle
+			// Soft start for throttle forward
 			if ( fbIn > fbLast) {
-				fb = fbLast+.05;
-			} else {
-				fb = fbIn;
-			} 
+				fb = fbLast + 0.05;
+			}			
 			fbLast=fb;
 		} else {
-			fbLast=0;
-			fb=fbIn;
+			// Soft start for throttle reverse
+			if ( fbIn < fbLast) {
+				fb = fbLast - 0.05;
+			}			
+			fbLast=fb;
 		}
-		
+
+		// Calculate the speed of the wheels including any turning
 		leftMultiplier = fb + (rot);
 		rightMultiplier = fb - (rot);
-
 		leftSpeed = leftMultiplier / 1.0;
 		rightSpeed = rightMultiplier / 1.0;
 
+		// Handle the difference between forward and backwards in the motors
 		if (leftSpeed > 0) {
-			// Handle the difference between forward and backwards in the motors
 			rightSpeed = rightSpeed *.95;
 		}
 
+		// Handle the difference between forward and backwards in the motors
 		if (rightSpeed < 0) {
-			// Handle the difference between forward and backwards in the motors
 			leftSpeed = leftSpeed *.95;
 		}
 
+		// Don't let the motors brown out the robot
 		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
 		if(limiter < 0) {
 			limiter = 0;
@@ -158,6 +161,7 @@ public class WestCoastDrive extends SubsystemBase {
 			leftSpeed *= previousLimiter;
 			rightSpeed *= previousLimiter;
 		}
+
 		SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
 
 		SmartDashboard.putNumber("drive fb", fb);
@@ -171,9 +175,9 @@ public class WestCoastDrive extends SubsystemBase {
 		SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
 		SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 
+        // Set the Drive Motor Speeds
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
 		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
-
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
 		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
 	}
@@ -196,33 +200,31 @@ public class WestCoastDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public double getDistanceInches() {
-		double ticksPerRotation = 2048;
-		double relativeTicksPerRotation=42;
+		double relativeTicksPerRotation=1;
 		double wheelDiameter = 6;
 		double gearRatio = 3.41;
 		
 		// Need to use encoders for the NEOs
-		double left = Robot.leftDriveEncoder.getAbsolutePosition();
-        double right = Robot.rightDriveEncoder.getAbsolutePosition();	
+		// double ticksPerRotation = 2048;
+		// double left = Robot.leftDriveEncoder.getAbsolutePosition();
+        // double right = Robot.rightDriveEncoder.getAbsolutePosition();	
+		// Get the absolute value of the average of all the encoders.
+		// double avg = (left + right) / 2;
+		// double distance = ((avg / ticksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
+		// SmartDashboard.putNumber("Drive Distance",distance);
 
 		double left1 = Robot.left1RelativeEncoder.getPosition();
 		double left2 = Robot.left2RelativeEncoder.getPosition();
 		double right1 = Robot.right1RelativeEncoder.getPosition();
 		double right2 = Robot.right2RelativeEncoder.getPosition();
 
-		// Get the absolute value of the average of all the encoders.
-		double avg = (left + right) / 2;
-
 		double avg2 = (left1 + left2 + right1 + right2) / 4;
-
-		double distance = ((avg / ticksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
-		
+	
 		double distance2 = ((avg2 / relativeTicksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
 
-		SmartDashboard.putNumber("Drive Distance",distance);
 		SmartDashboard.putNumber("Drive 2 Distance",distance2);
 
-		return(distance);
+		return(distance2);
 	}
 
    /************************************************************************
@@ -232,7 +234,7 @@ public class WestCoastDrive extends SubsystemBase {
 		if (Robot.isAutoBalance) {
 			return;
 		}	
-        Robot.robotArm.MoveArm(0);
+        Robot.robotTowerArm.MoveArm(0);
         Robot.isAutoBalance = true;
         balanceCommand = new AutoBalance();
 		balanceCommand.schedule();
@@ -258,7 +260,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoClimbBalance = true;
-        Robot.robotArm.MoveArm(0);
+        Robot.robotTowerArm.MoveArm(0);
         climbBalanceCommand = new AutoClimbBalance();
 		climbBalanceCommand.schedule();
 	}
@@ -283,7 +285,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveLeft = true;
-        Robot.robotArm.MoveArm(0);
+        Robot.robotTowerArm.MoveArm(0);
         moveLeftCommand = new AutoMoveLeft();
 		moveLeftCommand.schedule();
 	}
@@ -308,7 +310,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveRight = true;
-        Robot.robotArm.MoveArm(0);
+        Robot.robotTowerArm.MoveArm(0);
         moveRightCommand = new AutoMoveRight();
 		moveRightCommand.schedule();
 	}

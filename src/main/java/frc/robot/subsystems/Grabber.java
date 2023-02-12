@@ -36,6 +36,8 @@ public class Grabber extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new GrabberControl(this));
 
+		resetEncoders();
+
 		// Do we want brake mode on for the motors?
 		//Robot.GrabberMotor.setNeutralMode(NeutralMode.Brake);
 	}
@@ -70,7 +72,7 @@ public class Grabber extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.GrabberMotor.setSelectedSensorPosition(0);
+		Robot.GrabberRelativeEncoder.setPosition(0);
 	}
 
 }

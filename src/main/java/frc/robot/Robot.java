@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+//import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
     // public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
     // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Drive Base Motors
     public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -75,30 +76,36 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Tower Arm Motor
     public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // TODO: TOWER ENCODER
+    public static RelativeEncoder TowerArmRelativeEncoder = Robot.TowerArmMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
     // TODO: TOWER UPPER LIMIT SWITCH
     // TODO: TOWER LOWER LIMIT SWITCH
 
-    // Wrist Motor // TODO may need to change type to brushless.
-    public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.ExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // TODO: Wrist ENCODER
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ArmExtension Motor
+    public static CANSparkMax ArmExtensionMotor = new CANSparkMax(RobotMap.ArmExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static RelativeEncoder ArmExtensionRelativeEncoder = Robot.ArmExtensionMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
     // TODO: Wrist UPPER LIMIT SWITCH
     // TODO: Wrist LOWER LIMIT SWITCH
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Grabber Motor
     public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // TODO: grabber ENCODER
+    public static RelativeEncoder GrabberRelativeEncoder = Robot.GrabberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
     // TODO: grabber UPPER LIMIT SWITCH
     // TODO: grabber LOWER LIMIT SWITCH
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Lidar Light Distance Measure
     public static LidarLite distance;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
-    public static AHRS ahrs;
+    public static AHRS navxMXP;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static double robotTurn = 0;
 	public static double robotDrive = 0;
@@ -107,6 +114,7 @@ public class Robot extends TimedRobot {
     public static targetTypes targetType = Robot.targetTypes.NoTarget;
     public static int objectId=1;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isThrowCommand=false;
     public static boolean isAutoBalance=false;
@@ -115,14 +123,15 @@ public class Robot extends TimedRobot {
     public static boolean isAutoMoveRight=false;
     public static boolean isAutoMoveSide=false;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
     public static Controllers oi;
     public static Log log;
     public static InternalData internalData;
     public static WestCoastDrive driveBase;
-    public static TowerArm robotArm;
+    public static TowerArm robotTowerArm;
     public static Grabber robotGrabber;
-    public static Extension robotExtension;
+    public static ArmExtension robotArmExtension;
     public static PixyVision pixyVision;
     public static LimeLight limeLight;
 	public static UsbCamera driveCam;
@@ -133,9 +142,6 @@ public class Robot extends TimedRobot {
 
     // Global Robot Variables
     public int RobotID = 0;
-
-    //public static DigitalInput rightClimbLimit;
-	//public static DigitalInput leftClimbLimit;
 
     public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,BallSeek,TargetSeek, PixyTargetSeek};
@@ -172,9 +178,9 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
         driveBase = new WestCoastDrive();
-        robotArm = new TowerArm();
+        robotTowerArm = new TowerArm();
         robotGrabber = new Grabber();
-        robotExtension = new Extension();
+        robotArmExtension = new ArmExtension();
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));
@@ -191,7 +197,7 @@ public class Robot extends TimedRobot {
 
         
         try {
-            ahrs = new AHRS(SPI.Port.kMXP);
+            navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }

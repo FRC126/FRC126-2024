@@ -19,14 +19,16 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class TowerArm extends SubsystemBase {
+
+	static double armRetractedPos=-0.25;
+	static double armExtendedPos=1;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -34,11 +36,13 @@ public class TowerArm extends SubsystemBase {
 	public TowerArm() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ArmControl(this));
+		setDefaultCommand(new TowerArmControl(this));
 
-		// Do we want brake mode on for the motors?
-		//Robot.TowerArmMotorLeft.setNeutralMode(NeutralMode.Brake);
-		//Robot.TowerArmMotorRight.setNeutralMode(NeutralMode.Brake);
+		resetEncoders();
+
+		// Set brake mode for the tower arm motor
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
 	}
 
 	/************************************************************************
@@ -53,15 +57,27 @@ public class TowerArm extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveArm(double speed) { 
+	public void MoveArm(double speedIn) { 
+
+		double speed=speedIn;
 
 		if (Robot.internalData.isTeleop()) {
-    		// Slow down the turning in teleop
+    		// TODO
 		}
 
-		//SmartDashboard.putNumber("arm speed", speed);
-
         //TODO Check encoders to if we are at limits.
+		double pos=Robot.TowerArmRelativeEncoder.getPosition();
+
+		if ( speed < 0) { 
+			if (pos<armRetractedPos) { speed = 0; }
+		}
+
+		if ( speed > 0) { 
+			if (pos > armExtendedPos) { speed = 0; }
+		}
+
+		SmartDashboard.putNumber("Tower Arm Pos", pos);
+		SmartDashboard.putNumber("Tower Arm Speed", speed);
 
 		Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
 	}
@@ -71,7 +87,7 @@ public class TowerArm extends SubsystemBase {
 
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
-		//Robot.TowerArmMotor.setSelectedSensorPosition(0);
+		Robot.TowerArmRelativeEncoder.setPosition(0);
 	}
 
 }
