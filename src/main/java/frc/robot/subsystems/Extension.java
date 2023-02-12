@@ -26,15 +26,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Wrist extends SubsystemBase {
+public class Extension extends SubsystemBase {
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Wrist() {
+	public Extension() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new WristControl(this));
+		setDefaultCommand(new ExtensionControl(this));
 
 		// Do we want brake mode on for the motors?
 		//Robot.WristMotor.setNeutralMode(NeutralMode.Brake);
@@ -62,7 +62,7 @@ public class Wrist extends SubsystemBase {
 
         //TODO Check encoders to if we are at limits.
 
-		Robot.WristMotor.set(speed * RobotMap.WristMotorInversion);
+		Robot.WristMotor.set(speed * RobotMap.ExtensionMotorInversion);
 	}
 
     /************************************************************************
