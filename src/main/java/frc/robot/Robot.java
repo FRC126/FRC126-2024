@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     // TODO: TOWER UPPER LIMIT SWITCH
     // TODO: TOWER LOWER LIMIT SWITCH
 
-    // Wrist Motor
+    // Wrist Motor // TODO may need to change type to brushless.
     public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.WristMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     // TODO: Wrist ENCODER
     // TODO: Wrist UPPER LIMIT SWITCH
