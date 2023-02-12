@@ -23,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
-public class WristControl extends CommandBase {
+public class ExtensionControl extends CommandBase {
 	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public WristControl(Wrist subsystem) {
+    public ExtensionControl(Extension subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
@@ -66,7 +66,7 @@ public class WristControl extends CommandBase {
 			UD=0;
 		}
 
-        Robot.robotWrist.MoveWrist(UD);
+        Robot.robotExtension.MoveExtension(UD);
 	}
 
 	/**********************************************************************************
@@ -84,7 +84,7 @@ public class WristControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-        Robot.robotWrist.MoveWrist(0);
+        Robot.robotExtension.MoveExtension(0);
 	}  
     
 }

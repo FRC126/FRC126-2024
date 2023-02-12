@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
     // TODO: TOWER LOWER LIMIT SWITCH
 
     // Wrist Motor // TODO may need to change type to brushless.
-    public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.WristMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax WristMotor = new CANSparkMax(RobotMap.ExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     // TODO: Wrist ENCODER
     // TODO: Wrist UPPER LIMIT SWITCH
     // TODO: Wrist LOWER LIMIT SWITCH
@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
     public static WestCoastDrive driveBase;
     public static TowerArm robotArm;
     public static Grabber robotGrabber;
-    public static Wrist robotWrist;
+    public static Extension robotExtension;
     public static PixyVision pixyVision;
     public static LimeLight limeLight;
 	public static UsbCamera driveCam;
@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
         driveBase = new WestCoastDrive();
         robotArm = new TowerArm();
         robotGrabber = new Grabber();
-        robotWrist = new Wrist();
+        robotExtension = new Extension();
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));

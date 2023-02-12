@@ -52,7 +52,7 @@ public class Extension extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveWrist(double speed) { 
+	public void MoveExtension(double speed) { 
 
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning in teleop
