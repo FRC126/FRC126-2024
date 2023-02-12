@@ -103,17 +103,17 @@ public class WestCoastDrive extends SubsystemBase {
 
 	public void Drive(double fbIn, double rotIn) { 
 
+		double fb=fbIn;
+		double rot = rotIn;
+
 		SmartDashboard.putNumber("fbIn", fbIn);
         SmartDashboard.putNumber("rotIn", rotIn);
 
-		double rot = rotIn;
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning
 		    rot = rotIn *.3;
 		}
 
-		double fb;
-		
 		if (fbIn==0) {
 		    fb=0;
 			fbLast=0;
@@ -232,6 +232,7 @@ public class WestCoastDrive extends SubsystemBase {
 		if (Robot.isAutoBalance) {
 			return;
 		}	
+        Robot.robotArm.MoveArm(0);
         Robot.isAutoBalance = true;
         balanceCommand = new AutoBalance();
 		balanceCommand.schedule();
@@ -257,6 +258,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoClimbBalance = true;
+        Robot.robotArm.MoveArm(0);
         climbBalanceCommand = new AutoClimbBalance();
 		climbBalanceCommand.schedule();
 	}
@@ -281,6 +283,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveLeft = true;
+        Robot.robotArm.MoveArm(0);
         moveLeftCommand = new AutoMoveLeft();
 		moveLeftCommand.schedule();
 	}
@@ -305,6 +308,7 @@ public class WestCoastDrive extends SubsystemBase {
 			return;
 		}	
         Robot.isAutoMoveRight = true;
+        Robot.robotArm.MoveArm(0);
         moveRightCommand = new AutoMoveRight();
 		moveRightCommand.schedule();
 	}
