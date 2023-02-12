@@ -45,7 +45,6 @@ public class GrabberControl extends CommandBase {
 	 * Called every tick (20ms)
 	 **********************************************************************************/
 	
-	@SuppressWarnings("static-access")
 	@Override
 	public void execute() {
 		if (Robot.internalData.isAuto()) {
