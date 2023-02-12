@@ -32,7 +32,7 @@ public class DriverControl extends CommandBase {
 	
     public DriverControl(WestCoastDrive subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
     }
 
 	/**********************************************************************************
@@ -58,13 +58,13 @@ public class DriverControl extends CommandBase {
         double LR = driveJoystick.getRightStickX();
 
 		// Slow down the driver controls when the left trigger is pressed
-		if (driveJoystick.getLeftTrigger() > .3) {
+		if (driveJoystick.getLeftTrigger() > .6) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
 		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .3) {
+		if (driveJoystick.getRightTrigger() > .6) {
 			Robot.driveBase.brakesOn();
 		} else {
 			Robot.driveBase.brakesOff();
@@ -75,6 +75,7 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.brakesOff();
 		}
 
+		/*
 		// Cancel running auto's
 		if (driveJoystick.isXButton()) {
 			Robot.driveBase.stopAutoBalance();
@@ -106,7 +107,8 @@ public class DriverControl extends CommandBase {
 		} else {
 			Robot.driveBase.stopAutoMoveRight();
 		}
-
+        */
+		
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);

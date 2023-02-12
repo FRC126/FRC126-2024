@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.RelativeEncoder;
 
 // import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
@@ -68,11 +70,10 @@ public class Robot extends TimedRobot {
     public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
     public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
 
-    // Drive motor encoder test
-    public static SparkMaxAbsoluteEncoder left1DriveEncoder = Robot.leftDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    public static SparkMaxAbsoluteEncoder left2DriveEncoder = Robot.leftDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    public static SparkMaxAbsoluteEncoder right1DriveEncoder = Robot.rightDriveMotor1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    public static SparkMaxAbsoluteEncoder right2DriveEncoder = Robot.rightDriveMotor2.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
 
     // Tower Arm Motor
     public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);

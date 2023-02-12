@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void initialize() {
         // Save the starting angle for the turn
         Robot.internalData.resetGyro();
+        Robot.ahrs.reset();
         startAngle = 0;
         //startAngle=Robot.internalData.getGyroAngle();
         Robot.driveBase.brakesOff();
@@ -57,13 +58,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double driveLr=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.internalData.getGyroAngle();        
+        double currentDegrees = Robot.ahrs.getRawGyroX();      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 100;
-        if ( tmp > .45) { tmp=.45; }
-        if ( tmp < .20) { tmp=.20; }
+        if ( tmp > .2) { tmp=.2; }
+        if ( tmp < .1) { tmp=.1; }
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle

@@ -47,10 +47,10 @@ public class RobotMap {
 	
 	
 	// Driver Motor Can ID's
-	public static int leftDriveMotorCanID1 = 10;
-	public static int leftDriveMotorCanID2 = 11;
-	public static int rightDriveMotorCanID1 = 12;
-	public static int rightDriveMotorCanID2 = 13;
+	public static int leftDriveMotorCanID1 = 12;
+	public static int leftDriveMotorCanID2 = 13;
+	public static int rightDriveMotorCanID1 = 10;
+	public static int rightDriveMotorCanID2 = 11;
 
 	//Motor Inversions
     public static int left1Inversion;

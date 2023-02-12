@@ -27,7 +27,7 @@ public class AutoMoveLeft extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double speed=0.25;
+        double speed=0.15;
         double angle=30;
 
         addCommands(
