@@ -20,21 +20,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
- public class DriveWork extends CommandBase {
-    double driveFb;
-    double driveLr;
-    double targetAngle;
-    int iters;
-
+ public class FinishAuto extends CommandBase {
+    
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public DriveWork(double fb, double lr, int iters_in) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        driveFb = fb;
-        driveLr = lr;
-        iters = iters_in;
+    public FinishAuto() {
     }
 
 	/**********************************************************************************
@@ -42,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	 **********************************************************************************/
 	
     public void initialize() {
-        targetAngle = Robot.navxMXP.getAngle();
     }
 
 	/**********************************************************************************
@@ -50,34 +40,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	 **********************************************************************************/
 	
     public void execute() {
-        iters--;
-        boolean useGyro=false;
-
-        if(driveLr == 0 && useGyro == true) {
-            if(Robot.navxMXP.getAngle() - targetAngle > 1) {
-                Robot.driveBase.Drive(driveFb, -0.1);
-            }
-            else if(Robot.navxMXP.getAngle() - targetAngle < -1) {
-                Robot.driveBase.Drive(driveFb, 0.1);
-            } else {
-                Robot.driveBase.Drive(driveFb, 0);
-            }
-        } else {
-            Robot.driveBase.Drive(driveFb, driveLr);            
-        }
      }
 
 	/**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
 	 **********************************************************************************/
 	
-    // Make this return true when this Command no longer needs to run execute()
     public boolean isFinished() {
-        if (iters <= 0) {
-            Robot.driveBase.Drive(0, 0);
-            return true;
-        }
-        return false;
+        return true;
     }
 
 	/**********************************************************************************
@@ -85,7 +55,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.Drive(0, 0);
+        Robot.stopAutoCommand();
     }
-
 }
+

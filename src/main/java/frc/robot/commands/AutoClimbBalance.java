@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         iters=300;
         balanceCount=0;
         pitch = Robot.navxMXP.getPitch();
-        xAxisStart = Robot.navxMXP.getRawGyroX();
+        xAxisStart = Robot.navxMXP.getAngle();
     }
 
 	/**********************************************************************************
@@ -48,7 +48,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void initialize() {
         Robot.driveBase.resetEncoders();
-        
     }
 
 	/**********************************************************************************
@@ -57,7 +56,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void execute() {
         pitch = Robot.navxMXP.getPitch();
-        xAxis = Robot.navxMXP.getRawGyroX();
+        xAxis = Robot.navxMXP.getAngle();
         double speed=0;
         double rotate=0;
 
@@ -130,8 +129,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.Drive(0, 0);
-        Robot.isAutoClimbBalance=false;
+        Robot.driveBase.cancel();
     }
 }
 

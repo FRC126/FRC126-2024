@@ -75,4 +75,11 @@ public class Grabber extends SubsystemBase {
 		Robot.GrabberRelativeEncoder.setPosition(0);
 	}
 
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void cancel() {
+        MoveGrabber(0); 
+	}
+
 }

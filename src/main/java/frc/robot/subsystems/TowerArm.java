@@ -27,8 +27,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TowerArm extends SubsystemBase {
 
-	static double armRetractedPos=-0.25;
-	static double armExtendedPos=1;
+	public static double armRetractedPos=-5;
+	public static double armPickupPos=-0;
+	public static double armExtendedHighPos=25;
+	public static double armExtendedMidPos=50;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -73,7 +75,7 @@ public class TowerArm extends SubsystemBase {
 		}
 
 		if ( speed > 0) { 
-			if (pos > armExtendedPos) { speed = 0; }
+			if (pos > armExtendedHighPos) { speed = 0; }
 		}
 
 		SmartDashboard.putNumber("Tower Arm Pos", pos);
@@ -88,6 +90,20 @@ public class TowerArm extends SubsystemBase {
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
 		Robot.TowerArmRelativeEncoder.setPosition(0);
+	}
+
+    /************************************************************************
+	 *************************************************************************/
+
+	 public void cancel() {
+        MoveArm(0);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public double getPos() {
+		return(Robot.TowerArmRelativeEncoder.getPosition());
 	}
 
 }

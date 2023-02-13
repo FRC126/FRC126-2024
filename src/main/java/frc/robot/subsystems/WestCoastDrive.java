@@ -27,6 +27,7 @@ import com.revrobotics.CANSparkMax;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
 //import com.revrobotics.SparkMaxRelativeEncoder;
 //import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -36,10 +37,7 @@ public class WestCoastDrive extends SubsystemBase {
 	double leftMultiplier, rightMultiplier, leftSpeed, rightSpeed, fbSlowDown, rotSlowDown, limiter, left1RPM, left2RPM, right1RPM, right2RPM;
 	double previousLimiter = 1;
 	double fbLast=0;
-    public static CommandBase balanceCommand;
-    public static CommandBase climbBalanceCommand;
-	public static CommandBase moveLeftCommand;
-	public static CommandBase moveRightCommand;
+	public static SequentialCommandGroup autoCommand;
 			
 	/************************************************************************
 	 ************************************************************************/
@@ -200,7 +198,6 @@ public class WestCoastDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public double getDistanceInches() {
-		double relativeTicksPerRotation=1;
 		double wheelDiameter = 6;
 		double gearRatio = 3.41;
 		
@@ -220,111 +217,17 @@ public class WestCoastDrive extends SubsystemBase {
 
 		double avg2 = (left1 + left2 + right1 + right2) / 4;
 	
-		double distance2 = ((avg2 / relativeTicksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
+		double distance2 = (avg2 / gearRatio) * (wheelDiameter * 3.1459);
 
 		SmartDashboard.putNumber("Drive 2 Distance",distance2);
 
 		return(distance2);
 	}
 
-   /************************************************************************
-	 ************************************************************************/
+    /************************************************************************
+	 *************************************************************************/
 
-	public void doAutoBalance() {
-		if (Robot.isAutoBalance) {
-			return;
-		}	
-        Robot.robotTowerArm.MoveArm(0);
-        Robot.isAutoBalance = true;
-        balanceCommand = new AutoBalance();
-		balanceCommand.schedule();
+	public void cancel() {
+        Drive(0,0); 
 	}
-
-   /************************************************************************
-	 ************************************************************************/
-
-    public void stopAutoBalance() {
-		if (!Robot.isAutoBalance) {
-			return;
-		}	
-		Robot.isAutoBalance=false;
-        balanceCommand.cancel();
-		Drive(0,0);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	 public void doAutoClimbBalance() {
-		if (Robot.isAutoClimbBalance) {
-			return;
-		}	
-        Robot.isAutoClimbBalance = true;
-        Robot.robotTowerArm.MoveArm(0);
-        climbBalanceCommand = new AutoClimbBalance();
-		climbBalanceCommand.schedule();
-	}
-
-   /************************************************************************
-	 ************************************************************************/
-
-    public void stopAutoClimbBalance() {
-		if (!Robot.isAutoClimbBalance) {
-			return;
-		}	
-		Robot.isAutoClimbBalance=false;
-        climbBalanceCommand.cancel();
-		Drive(0,0);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	 public void doAutoMoveLeft() {
-		if (Robot.isAutoMoveLeft) {
-			return;
-		}	
-        Robot.isAutoMoveLeft = true;
-        Robot.robotTowerArm.MoveArm(0);
-        moveLeftCommand = new AutoMoveLeft();
-		moveLeftCommand.schedule();
-	}
-
-   /************************************************************************
-	 ************************************************************************/
-
-    public void stopAutoMoveLeft() {
-		if (!Robot.isAutoMoveLeft) {
-			return;
-		}	
-		Robot.isAutoMoveLeft=false;
-        moveLeftCommand.cancel();
-		Drive(0,0);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
-	 public void doAutoMoveRight() {
-		if (Robot.isAutoMoveRight) {
-			return;
-		}	
-        Robot.isAutoMoveRight = true;
-        Robot.robotTowerArm.MoveArm(0);
-        moveRightCommand = new AutoMoveRight();
-		moveRightCommand.schedule();
-	}
-
-   /************************************************************************
-	 ************************************************************************/
-
-    public void stopAutoMoveRight() {
-		if (!Robot.isAutoMoveRight) {
-			return;
-		}	
-		Robot.isAutoMoveRight=false;
-        moveRightCommand.cancel();
-		Drive(0,0);
-	}
-
 }

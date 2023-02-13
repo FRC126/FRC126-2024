@@ -45,8 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void initialize() {
-        Robot.internalData.resetGyro();
-        targetAngle = Robot.internalData.getGyroAngle();
+        targetAngle = Robot.navxMXP.getAngle();
         Robot.driveBase.resetEncoders();
         Robot.driveBase.brakesOff();
     }
@@ -84,10 +83,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         // Try to keep the robot straight using the gyro
         if (driveFb != 0) {       
-            if(Robot.internalData.getGyroAngle() - targetAngle > 0.5) {
+            if(Robot.navxMXP.getAngle() - targetAngle > 0.5) {
                 // We are drifiting to the left, correct
                 Robot.driveBase.Drive(driveFb, 0.05);
-            } else if (Robot.internalData.getGyroAngle() - targetAngle < -0.5) {
+            } else if (Robot.navxMXP.getAngle() - targetAngle < -0.5) {
                 // We are drifiting to the right, correct
                 Robot.driveBase.Drive(driveFb, -0.05);
             } else {

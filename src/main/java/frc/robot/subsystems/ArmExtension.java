@@ -75,4 +75,11 @@ public class ArmExtension extends SubsystemBase {
 		Robot.ArmExtensionRelativeEncoder.setPosition(0);
 	}
 
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void cancel() {
+        MoveArmExtension(0); 
+	}
+
 }

@@ -52,10 +52,7 @@ public class GrabberControl extends CommandBase {
 			return;
 		}
 
-		if (Robot.isAutoBalance || 
-		    Robot.isAutoClimbBalance || 
-			Robot.isAutoMoveLeft ||
-		    Robot.isAutoMoveRight) {
+		if (Robot.isAutoCommand) {
 		    return;
 		}			
 

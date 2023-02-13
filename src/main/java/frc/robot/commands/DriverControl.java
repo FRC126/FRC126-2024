@@ -75,37 +75,48 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.brakesOff();
 		}
 
-		/*
-		// Cancel running auto's
-		if (driveJoystick.isXButton()) {
-			Robot.driveBase.stopAutoBalance();
-			Robot.driveBase.stopAutoClimbBalance();
-			Robot.driveBase.stopAutoMoveLeft();
-			Robot.driveBase.stopAutoMoveRight();
-		}
-
-		// Auto balance the robot
 		if (driveJoystick.isAButton()) {
-			Robot.driveBase.doAutoBalance();
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoDriveTest();
+				Robot.autoCommand.schedule();
+			};
 		}
 
-		// Climb then auto balance the robot
-		if (driveJoystick.isBButton()) {
-			Robot.driveBase.doAutoClimbBalance();
+		if (driveJoystick.isXButton()) {
+			Robot.stopAutoCommand();
 		}
 
 	    // Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
-			Robot.driveBase.doAutoMoveLeft();
-		} else {
-			Robot.driveBase.stopAutoMoveLeft();
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoMoveLeft();
+				Robot.autoCommand.schedule();
+			}	
 		}
 
 		// Shift the Robot right
 		if (driveJoystick.getPovRight()) {
-			Robot.driveBase.doAutoMoveRight();
-		} else {
-			Robot.driveBase.stopAutoMoveRight();
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoMoveRight();
+				Robot.autoCommand.schedule();
+	        }			
+		}
+
+		/*
+		// Auto balance the robot
+		if (driveJoystick.isAButton()) {
+			if ( Robot.driveBase.doAutoCommand() ) {
+				Robot.autoCommand=new AutoBalance();
+				Robot.autoCommand.schedule();
+			}	
+		}
+
+		// Climb then auto balance the robot
+		if (driveJoystick.isBButton()) {
+			if ( Robot.driveBase.doAutoCommand() ) {
+				Robot.autoCommand=new AutoClimbBalance();
+				Robot.autoCommand.schedule();
+			}	
 		}
         */
 		
@@ -116,10 +127,7 @@ public class DriverControl extends CommandBase {
 		SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
 		SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
-		if (Robot.isAutoBalance || 
-		    Robot.isAutoClimbBalance || 
-			Robot.isAutoMoveLeft ||
-		    Robot.isAutoMoveRight) {
+		if (Robot.isAutoCommand) {
 			// Don't do anything during auto commands
 		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input

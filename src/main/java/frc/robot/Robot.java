@@ -39,8 +39,8 @@ import com.revrobotics.RelativeEncoder;
 import frc.robot.subsystems.*;
 //import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+//import edu.wpi.first.wpilibj.Compressor;
+//import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -87,15 +87,15 @@ public class Robot extends TimedRobot {
     // ArmExtension Motor
     public static CANSparkMax ArmExtensionMotor = new CANSparkMax(RobotMap.ArmExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder ArmExtensionRelativeEncoder = Robot.ArmExtensionMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    // TODO: Wrist UPPER LIMIT SWITCH
-    // TODO: Wrist LOWER LIMIT SWITCH
+    // TODO: ArmExtension UPPER LIMIT SWITCH
+    // TODO: ArmExtension LOWER LIMIT SWITCH
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Grabber Motor
     public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder GrabberRelativeEncoder = Robot.GrabberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    // TODO: grabber UPPER LIMIT SWITCH
-    // TODO: grabber LOWER LIMIT SWITCH
+    // TODO: Grabber UPPER LIMIT SWITCH
+    // TODO: Grabber LOWER LIMIT SWITCH
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Lidar Light Distance Measure
@@ -117,11 +117,10 @@ public class Robot extends TimedRobot {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isThrowCommand=false;
-    public static boolean isAutoBalance=false;
-    public static boolean isAutoClimbBalance=false;
-    public static boolean isAutoMoveLeft=false;
-    public static boolean isAutoMoveRight=false;
-    public static boolean isAutoMoveSide=false;
+    public static boolean isAutoCommand=false;
+
+    public static SequentialCommandGroup autoCommand;
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
@@ -132,13 +131,15 @@ public class Robot extends TimedRobot {
     public static TowerArm robotTowerArm;
     public static Grabber robotGrabber;
     public static ArmExtension robotArmExtension;
-    public static PixyVision pixyVision;
-    public static LimeLight limeLight;
+
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
     public static boolean intakeRunning=false;
     public static boolean throwerRunning=false;
+
+    public static PixyVision pixyVision;
+    public static LimeLight limeLight;
 
     // Global Robot Variables
     public int RobotID = 0;
@@ -148,7 +149,7 @@ public class Robot extends TimedRobot {
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
 
-    public static Compressor compressor;
+    //public static Compressor compressor;
 
     // For use with limelight class
     public static double ThrowerRPM=0;
@@ -203,12 +204,12 @@ public class Robot extends TimedRobot {
         }
     
         // Instantiate the compress, CANID 2, Rev Robotics PCM
-        compressor = new Compressor(2, PneumaticsModuleType.REVPH);
-        compressor.enableDigital();
+        //compressor = new Compressor(2, PneumaticsModuleType.REVPH);
+        //compressor.enableDigital();
 
         // Initialize the built in gyro
-        internalData.initGyro();
-        internalData.resetGyro();
+        // internalData.initGyro();
+        // internalData.resetGyro();
 
         // Start the camera server for the drive camera
         driveCam = CameraServer.startAutomaticCapture();
@@ -243,6 +244,11 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         Log.print(0, "Robot", "Robot Autonomous Init");
+
+        Robot.robotTowerArm.cancel();
+		Robot.robotGrabber.cancel();
+		Robot.robotArmExtension.cancel();
+		Robot.driveBase.cancel();
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -346,6 +352,11 @@ public class Robot extends TimedRobot {
             // Cancel the auto command if it was created
 	          autonomous.cancel();
         }
+
+        Robot.robotTowerArm.cancel();
+		Robot.robotGrabber.cancel();
+		Robot.robotArmExtension.cancel();
+		Robot.driveBase.cancel();
     }
 
  	  /************************************************************************
@@ -362,6 +373,11 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
+
+		Robot.robotTowerArm.cancel();
+		Robot.robotGrabber.cancel();
+		Robot.robotArmExtension.cancel();
+		Robot.driveBase.cancel();
     }  
 
  	  /************************************************************************
@@ -371,4 +387,37 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         CommandScheduler.getInstance().run();
     }
+
+    /************************************************************************
+	 ************************************************************************/
+
+    static public boolean doAutoCommand() {
+		
+		if (Robot.isAutoCommand) {
+			return false;
+		}	
+		Robot.robotTowerArm.cancel();
+		Robot.robotGrabber.cancel();
+		Robot.robotArmExtension.cancel();
+		Robot.driveBase.cancel();
+
+	    Robot.isAutoCommand = true;
+
+		return true;
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	static public void stopAutoCommand() {
+		if (Robot.isAutoCommand) {
+            Robot.autoCommand.cancel();
+		}	
+		Robot.isAutoCommand=false;
+
+		Robot.robotTowerArm.cancel();
+		Robot.robotGrabber.cancel();
+		Robot.robotArmExtension.cancel();
+		Robot.driveBase.cancel();
+	}		
 }
