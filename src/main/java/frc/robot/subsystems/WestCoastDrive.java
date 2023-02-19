@@ -62,20 +62,16 @@ public class WestCoastDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void brakesOn() {
-		Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.leftLeadMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.rightLeadMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
 	 public void brakesOff() {
-		Robot.leftDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.leftDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.rightDriveMotor1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.rightDriveMotor2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.leftLeadMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.rightLeadMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 	}
 
 	/************************************************************************
@@ -174,10 +170,8 @@ public class WestCoastDrive extends SubsystemBase {
 		SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 
         // Set the Drive Motor Speeds
-		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
-		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
-        Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
-		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+		Robot.leftLeadMotor.set(leftSpeed * RobotMap.left1Inversion);
+        Robot.rightLeadMotor.set(rightSpeed * RobotMap.right1Inversion);
 	}
 
     /************************************************************************

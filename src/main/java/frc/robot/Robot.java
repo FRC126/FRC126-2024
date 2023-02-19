@@ -34,6 +34,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 //import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 // import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
@@ -62,19 +63,28 @@ public class Robot extends TimedRobot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Drive Base Motors
-    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
+    public static CANSparkMax leftLeadMotor = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightLeadMotor = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax leftFollowMotor = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rightFollowMotor = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
+
+    static {
+        leftFollowMotor.follow(leftLeadMotor);
+        rightFollowMotor.follow(rightLeadMotor);
+    }
+
+    private SparkMaxPIDController m_leftMotorPidController;
+    private SparkMaxPIDController m_rightMotorPidController;
+    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
     // Drive base encoders
     public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
     public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
 
-    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder left1RelativeEncoder = Robot.leftLeadMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder left2RelativeEncoder = Robot.leftFollowMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right1RelativeEncoder = Robot.rightLeadMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right2RelativeEncoder = Robot.rightFollowMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Tower Arm Motor
@@ -182,6 +192,9 @@ public class Robot extends TimedRobot {
         robotTowerArm = new TowerArm();
         robotGrabber = new Grabber();
         robotArmExtension = new ArmExtension();
+
+        setupPidController(leftLeadMotor.getPIDController(), "Left");
+        setupPidController(rightLeadMotor.getPIDController(), "Right");
 
         // create the lidarlite class on DIO 5
         // distance = new LidarLite(new DigitalInput(5));
@@ -365,6 +378,81 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         CommandScheduler.getInstance().run();
+
+        setPid(leftLeadMotor.getPIDController(), "Left");
+        setPid(rightLeadMotor.getPIDController(), "Right");
+    }
+
+    private void setupPidController(SparkMaxPIDController pidController, String leftRight) {
+        kP = 0.1;
+        kI = 1e-4;
+        kD = 1;
+        kIz = 0;
+        kFF = 0;
+        kMaxOutput = 1;
+        kMinOutput = -1;
+
+        // set PID coefficients
+        pidController.setP(kP);
+        pidController.setI(kI);
+        pidController.setD(kD);
+        pidController.setIZone(kIz);
+        pidController.setFF(kFF);
+        pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+        // display PID coefficients on SmartDashboard
+        SmartDashboard.putNumber("P Gain " + leftRight, kP);
+        SmartDashboard.putNumber("I Gain " + leftRight, kI);
+        SmartDashboard.putNumber("D Gain " + leftRight, kD);
+        SmartDashboard.putNumber("I Zone " + leftRight, kIz);
+        SmartDashboard.putNumber("Feed Forward " + leftRight, kFF);
+        SmartDashboard.putNumber("Max Output " + leftRight, kMaxOutput);
+        SmartDashboard.putNumber("Min Output " + leftRight, kMinOutput);
+        SmartDashboard.putNumber("Set Rotations " + leftRight, 0);
+    }
+
+    private void setPid(SparkMaxPIDController pidController, String leftRight) {
+        // read PID coefficients from SmartDashboard
+        double p = SmartDashboard.getNumber("P Gain " + leftRight, 0);
+        double i = SmartDashboard.getNumber("I Gain " + leftRight, 0);
+        double d = SmartDashboard.getNumber("D Gain " + leftRight, 0);
+        double iz = SmartDashboard.getNumber("I Zone " + leftRight, 0);
+        double ff = SmartDashboard.getNumber("Feed Forward " + leftRight, 0);
+        double max = SmartDashboard.getNumber("Max Output " + leftRight, 0);
+        double min = SmartDashboard.getNumber("Min Output " + leftRight, 0);
+        double rotations = SmartDashboard.getNumber("Set Rotations " + leftRight, 0);
+
+        // if PID coefficients on SmartDashboard have changed, write new values to
+        // controller
+        if ((p != kP)) {
+            pidController.setP(p);
+            kP = p;
+        }
+        if ((i != kI)) {
+            pidController.setI(i);
+            kI = i;
+        }
+        if ((d != kD)) {
+            pidController.setD(d);
+            kD = d;
+        }
+        if ((iz != kIz)) {
+            pidController.setIZone(iz);
+            kIz = iz;
+        }
+        if ((ff != kFF)) {
+            pidController.setFF(ff);
+            kFF = ff;
+        }
+        if ((max != kMaxOutput) || (min != kMinOutput)) {
+            pidController.setOutputRange(min, max);
+            kMinOutput = min;
+            kMaxOutput = max;
+        }
+
+        pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+
+        SmartDashboard.putNumber("SetPoint " + leftRight, rotations);
     }
 
  	  /************************************************************************
