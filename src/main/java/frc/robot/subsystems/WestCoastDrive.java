@@ -18,15 +18,9 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
-//import com.revrobotics.CANSparkMaxLowLevel;
-//import com.revrobotics.SparkMaxAbsoluteEncoder;
-//import com.revrobotics.SparkMaxAbsoluteEncoder;
-//import com.revrobotics.SparkMaxRelativeEncoder;
-//import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**********************************************************************************
@@ -170,7 +164,7 @@ public class WestCoastDrive extends SubsystemBase {
 			leftSpeed = leftSpeed *.95;
 		}
         */
-		
+
 		// Don't let the motors brown out the robot
 		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
 		if(limiter < 0) {

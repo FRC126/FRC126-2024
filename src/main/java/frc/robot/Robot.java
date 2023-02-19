@@ -98,10 +98,6 @@ public class Robot extends TimedRobot {
     // TODO: Grabber LOWER LIMIT SWITCH
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Lidar Light Distance Measure
-    public static LidarLite distance;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
 
@@ -183,9 +179,6 @@ public class Robot extends TimedRobot {
         robotTowerArm = new TowerArm();
         robotGrabber = new Grabber();
         robotArmExtension = new ArmExtension();
-
-        // create the lidarlite class on DIO 5
-        // distance = new LidarLite(new DigitalInput(5));
 
         // Not using the PIXY right now
         //pixyVision = new PixyVision();

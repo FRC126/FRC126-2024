@@ -27,7 +27,6 @@ public class AutoMoveRight extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double speed=0.25;
         double angle=30;
 
         addCommands(
