@@ -24,20 +24,23 @@ import frc.robot.subsystems.*;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoPickupCube extends SequentialCommandGroup {
-    public AutoPickupCube() {
+public class AutoPlaceConeLow extends SequentialCommandGroup {
+    public AutoPlaceConeLow() {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new MoveArmExtension(ArmExtension.armExtendedPickupPos, 250),
+            new MoveTowerArm(TowerArm.armExtendedLowPos, 250),
 
-            new MoveGrabber(Grabber.grabberCubePos, 250),
+            new MoveGrabber(Grabber.grabberOpenPos, 250),
 
-            new MoveArmExtension(ArmExtension.armRetractedPos, 250),
+            new DriveDistance(-12, 150),
+
+            new MoveGrabber(Grabber.grabberConePos, 250),
 
             new MoveTowerArm(TowerArm.armRetractedPos, 250),
 
-            new FinishAuto()        );
+            new FinishAuto()        
+        );
     }       
 }

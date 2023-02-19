@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**********************************************************************************
  **********************************************************************************/
 
- public class MoveTowerArm extends CommandBase {
+ public class MoveGrabber extends CommandBase {
     double target;
     int iters;
     int targetReached=0;
@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public MoveTowerArm(double targetIn, int iters_in ) {
+    public MoveGrabber(double targetIn, int iters_in ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         target = targetIn;
@@ -49,20 +49,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void execute() {
 
-        double curPos=Robot.robotTowerArm.getPos();
+        double curPos=Robot.robotGrabber.getPos();
         double targetPos=target;
 
         if (curPos < targetPos - 1) { 
-            Robot.robotTowerArm.MoveArm(.3);
+            Robot.robotGrabber.MoveGrabber(.3);
             targetReached=0;
         } else if (curPos > targetPos + 1) { 
-            Robot.robotTowerArm.MoveArm(-0.3);
+            Robot.robotGrabber.MoveGrabber(-0.3);
             targetReached=0;
         } else {
-            Robot.robotTowerArm.MoveArm(0);
+            Robot.robotGrabber.MoveGrabber(0);
             targetReached++;
         }
-
     }
 
 	/**********************************************************************************
@@ -74,7 +73,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         if (targetReached > 2 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
-            Robot.robotTowerArm.cancel();
+            Robot.robotGrabber.cancel();
             return true;
         }
 
@@ -86,6 +85,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.robotTowerArm.cancel();
+        Robot.robotGrabber.cancel();
     }
 }

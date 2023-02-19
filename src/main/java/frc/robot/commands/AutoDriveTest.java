@@ -30,11 +30,11 @@ public class AutoDriveTest extends SequentialCommandGroup {
         addCommands(
             new DriveDistance(12, 250),
 
-            new TurnDegreesBetter(180, 150),
+            //new TurnDegreesBetter(180, 150),
 
-            new DriveDistance(12, 250),
+            new DriveDistance(-12, 250),
 
-            new TurnDegreesBetter(180, 150),
+            //new TurnDegreesBetter(180, 150),
             
             new FinishAuto()
         );

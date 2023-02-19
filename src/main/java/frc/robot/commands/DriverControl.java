@@ -26,7 +26,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriverControl extends CommandBase {
 	JoystickWrapper driveJoystick;
-	
+	boolean driveStraight=false;
+	double straightDegrees = 0;
+
 	/**********************************************************************************
 	 **********************************************************************************/
 	
@@ -66,14 +68,19 @@ public class DriverControl extends CommandBase {
 		// Apply motor braking when the right trigger is pressed
 		if (driveJoystick.getRightTrigger() > .6) {
 			Robot.driveBase.brakesOn();
+			if (driveStraight != true) {
+                // Get the current angle from the Navx 
+				straightDegrees = Robot.navxMXP.getAngle();      
+				driveStraight = true;
+			}
 		} else {
 			Robot.driveBase.brakesOff();
 		}	
 
 		// Turn off the brakes if operator is using the joysticks	  
-		if ( FB > .1 || FB < -0.1 || LR > .1 || LR < -0.1 ) {
-			Robot.driveBase.brakesOff();
-		}
+		//if ( FB > .1 || FB < -0.1 || LR > .1 || LR < -0.1 ) {
+		//	Robot.driveBase.brakesOff();
+		//}
 
 		if (driveJoystick.isAButton()) {
 			if ( Robot.doAutoCommand() ) {
@@ -87,6 +94,7 @@ public class DriverControl extends CommandBase {
 		}
 
 	    // Shift the Robot Left
+		/*
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoMoveLeft();
@@ -101,6 +109,7 @@ public class DriverControl extends CommandBase {
 				Robot.autoCommand.schedule();
 	        }			
 		}
+        */
 
 		/*
 		// Auto balance the robot
@@ -134,7 +143,7 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.Drive(Robot.robotDrive,Robot.robotTurn);
 		} else {
 			// Set drivebase speed based on user input
-			Robot.driveBase.Drive(FB,LR);
+			Robot.driveBase.Drive(FB,LR, driveStraight, straightDegrees);
 		}
 	}
 

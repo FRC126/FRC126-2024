@@ -47,17 +47,13 @@ public class ArmExtensionControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}
 
-		if (Robot.isAutoCommand) {
-		    return;
-		}			
-
   		// Get stick inputs
-		double UD = operatorJoystick.getLeftStickY();
+		double UD = operatorJoystick.getRightStickY();
 		
 		if ( UD < .15 && UD > -0.15 ) {
 			UD=0;

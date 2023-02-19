@@ -19,14 +19,19 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class ArmExtension extends SubsystemBase {
+
+	public static double armRetractedPos=0;
+	public static double armExtendedPlacePos=500;
+	public static double armExtendedPickupPos=250;
+	public static double armExtendedPickupFloorPos=500;
+	public static double armExtendedMaxPos=-750;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -38,8 +43,8 @@ public class ArmExtension extends SubsystemBase {
 
 		resetEncoders();
 
-		// Do we want brake mode on for the motors?
-		//Robot.WristMotor.setNeutralMode(NeutralMode.Brake);
+		// Brake mode on for the motor
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -54,17 +59,28 @@ public class ArmExtension extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveArmExtension(double speed) { 
+	public void MoveArmExtension(double speedIn) { 
+		double speed = speedIn;
 
-		if (Robot.internalData.isTeleop()) {
-    		// Slow down the turning in teleop
+        //  Check encoders to if we are at limits.
+		double pos = getPos();
+		
+		if ( speed < 0) { 
+			if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
-		//SmartDashboard.putNumber("arm speed", speed);
+		if ( speed > 0) { 
+			if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+		}
 
-        //TODO Check encoders to if we are at limits.
+		SmartDashboard.putNumber("Arm Extension Pos", pos);
+		SmartDashboard.putNumber("Arm Extension Speed", speed);
 
 		Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
+
+		if (speed == 0) {
+			Robot.ArmExtensionMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		}
 	}
 
     /************************************************************************
@@ -73,6 +89,14 @@ public class ArmExtension extends SubsystemBase {
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
 		Robot.ArmExtensionRelativeEncoder.setPosition(0);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getPos() {
+		// Need to use encoders for the NEOs
+		return(Robot.ArmExtensionRelativeEncoder.getPosition());
 	}
 
 	/************************************************************************

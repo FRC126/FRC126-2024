@@ -95,10 +95,17 @@ public class WestCoastDrive extends SubsystemBase {
 	}
 
 	/************************************************************************
+	 ************************************************************************/
+
+	 public void Drive(double fbIn, double rotIn) { 
+        Drive(fbIn, rotIn, false, 0);
+	}		
+
+	/************************************************************************
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void Drive(double fbIn, double rotIn) { 
+	public void Drive(double fbIn, double rotIn, boolean driveStraight, double straightDegrees) { 
 
 		double fb=fbIn;
 		double rot = rotIn;
@@ -130,12 +137,29 @@ public class WestCoastDrive extends SubsystemBase {
 			fbLast=fb;
 		}
 
+		// If driveStraight is enable, keep the same heading
+		if (driveStraight) {
+			double degrees = Robot.navxMXP.getAngle();
+
+            if(degrees - straightDegrees > 0.5) {
+                // We are drifiting to the left, correct
+				rot=0.5;
+            } else if (degrees - straightDegrees < -0.5) {
+                // We are drifiting to the right, correct
+                rot=-0.5;
+            } else {
+                // Drive straight
+                rot=0;
+			}	
+        }    			
+
 		// Calculate the speed of the wheels including any turning
 		leftMultiplier = fb + (rot);
 		rightMultiplier = fb - (rot);
 		leftSpeed = leftMultiplier / 1.0;
 		rightSpeed = rightMultiplier / 1.0;
 
+		/*
 		// Handle the difference between forward and backwards in the motors
 		if (leftSpeed > 0) {
 			rightSpeed = rightSpeed *.95;
@@ -145,7 +169,8 @@ public class WestCoastDrive extends SubsystemBase {
 		if (rightSpeed < 0) {
 			leftSpeed = leftSpeed *.95;
 		}
-
+        */
+		
 		// Don't let the motors brown out the robot
 		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
 		if(limiter < 0) {

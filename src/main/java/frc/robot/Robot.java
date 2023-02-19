@@ -121,7 +121,6 @@ public class Robot extends TimedRobot {
 
     public static SequentialCommandGroup autoCommand;
 
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
     public static Controllers oi;
@@ -135,14 +134,16 @@ public class Robot extends TimedRobot {
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
-    public static boolean intakeRunning=false;
-    public static boolean throwerRunning=false;
+    //public static boolean intakeRunning=false;
+    //public static boolean throwerRunning=false;
 
     public static PixyVision pixyVision;
     public static LimeLight limeLight;
 
     // Global Robot Variables
     public int RobotID = 0;
+
+    public static boolean ignoreEncoders=false;
 
     public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,BallSeek,TargetSeek, PixyTargetSeek};

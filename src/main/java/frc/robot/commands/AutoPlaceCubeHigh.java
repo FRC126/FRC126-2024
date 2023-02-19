@@ -15,7 +15,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.subsystems.*;
+
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import frc.robot.Robot;
  
@@ -28,19 +30,26 @@ public class AutoPlaceCubeHigh extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new MoveTowerArm(3, 150),
+            new DriveDistance(-24, 150),
 
-            // TODO Extend the arm
+            new ParallelCommandGroup(
+                new MoveTowerArm(TowerArm.armExtendedHighPos, 250),
+                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 250)
+            ),
 
-            // TODO open grabber
+            new DriveDistance(24, 150),
 
-            new DriveDistance(-8,150),
+            new MoveGrabber(Grabber.grabberOpenPos, 250),
 
-            // TODO Retract the arm
+            new DriveDistance(-24, 150),
 
-            new MoveTowerArm(1, 150),
-          
-            new FinishAuto()
-        );
+            new ParallelCommandGroup(
+                new MoveArmExtension(ArmExtension.armRetractedPos , 250),
+                new MoveGrabber(Grabber.grabberConePos, 250)
+            ),    
+
+            new MoveTowerArm(TowerArm.armRetractedPos, 250),
+
+            new FinishAuto()        );
     }       
 }

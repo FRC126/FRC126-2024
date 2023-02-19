@@ -19,15 +19,19 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class Grabber extends SubsystemBase {
 
+	public static double grabberClosedPos=0;
+	public static double grabberOpenPos=500;
+	public static double grabberConePos=150;
+	public static double grabberCubePos=400;
+	
 	/************************************************************************
 	 ************************************************************************/
 
@@ -38,8 +42,8 @@ public class Grabber extends SubsystemBase {
 
 		resetEncoders();
 
-		// Do we want brake mode on for the motors?
-		//Robot.GrabberMotor.setNeutralMode(NeutralMode.Brake);
+		// Brake mode on for the motor
+		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -54,17 +58,28 @@ public class Grabber extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveGrabber(double speed) { 
-
-		if (Robot.internalData.isTeleop()) {
-    		// Slow down the turning in teleop
+	public void MoveGrabber(double speedIn) { 
+		double speed = speedIn;
+		
+        //  Check encoders to if we are at limits.
+		double pos=getPos();
+		
+		if ( speed < 0) { 
+			if (pos < grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
-		//SmartDashboard.putNumber("arm speed", speed);
+		if ( speed > 0) { 
+			if (pos > grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
+		}
 
-        //TODO Check encoders to if we are at limits.
+		SmartDashboard.putNumber("Grabber Pos", pos);
+		SmartDashboard.putNumber("Grabber Speed", speed);
 
 		Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+
+		if (speed == 0) {
+			Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		}
 	}
 
     /************************************************************************
@@ -73,6 +88,14 @@ public class Grabber extends SubsystemBase {
 	public void resetEncoders() {
 		// Need to use encoders for the NEOs
 		Robot.GrabberRelativeEncoder.setPosition(0);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getPos() {
+		// Need to use encoders for the NEOs
+		return(Robot.GrabberRelativeEncoder.getPosition());
 	}
 
 	/************************************************************************

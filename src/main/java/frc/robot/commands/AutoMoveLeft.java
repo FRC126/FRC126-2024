@@ -39,7 +39,7 @@ public class AutoMoveLeft extends SequentialCommandGroup {
 
             new TurnDegreesBetter((angle * -1), 150),
 
-            new DriveDistance(7,150),
+            new DriveDistance(7, 150),
             
             new FinishAuto()
         );

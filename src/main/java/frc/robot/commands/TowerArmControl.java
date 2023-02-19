@@ -47,14 +47,10 @@ public class TowerArmControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}
-
-		if (Robot.isAutoCommand) {
-		    return;
-		}			
 
 		// Get stick inputs
 		double UD = operatorJoystick.getLeftStickY();
@@ -64,7 +60,16 @@ public class TowerArmControl extends CommandBase {
 		}
 
 		if ( operatorJoystick.isBackButton()) {
+			Robot.ignoreEncoders=true;
+		} else {
+			Robot.ignoreEncoders=false;
+		}	
+
+		if ( operatorJoystick.isStartButton()) {
+			// Reset all the arm encoders at once
 			Robot.robotTowerArm.resetEncoders();
+			Robot.robotArmExtension.resetEncoders();
+			Robot.robotGrabber.resetEncoders();
 		}
 
 		// Log the Joystick X,Y Axis to the SmartDashboard.
