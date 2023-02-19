@@ -60,13 +60,13 @@ public class DriverControl extends CommandBase {
         double LR = driveJoystick.getRightStickX();
 
 		// Slow down the driver controls when the left trigger is pressed
-		if (driveJoystick.getLeftTrigger() > .6) {
+		if (driveJoystick.getLeftTrigger() > .5) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
 		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .6) {
+		if (driveJoystick.getRightTrigger() > .5) {
 			Robot.driveBase.brakesOn();
 			if (driveStraight != true) {
                 // Get the current angle from the Navx 
@@ -74,15 +74,11 @@ public class DriverControl extends CommandBase {
 				driveStraight = true;
 			}
 		} else {
+			driveStraight = false;
 			Robot.driveBase.brakesOff();
 		}	
 
-		// Turn off the brakes if operator is using the joysticks	  
-		//if ( FB > .1 || FB < -0.1 || LR > .1 || LR < -0.1 ) {
-		//	Robot.driveBase.brakesOff();
-		//}
-
-
+		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
 		}

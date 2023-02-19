@@ -65,6 +65,16 @@ public class ArmExtension extends SubsystemBase {
         //  Check encoders to if we are at limits.
 		double pos = getPos();
 		
+		SmartDashboard.putBoolean("AE Bottom Limit", Robot.armExtensionBottomLimit.get());
+		if ( Robot.armExtensionBottomLimit.get() == false ) {
+			// Arm at max extension
+		}
+
+		SmartDashboard.putBoolean("AE Top Limit", Robot.armExtensionTopLimit.get());
+		if ( Robot.armExtensionTopLimit.get() == false ) {
+			// Arm in the minimum extension
+		}
+
 		if ( speed < 0) { 
 			if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}

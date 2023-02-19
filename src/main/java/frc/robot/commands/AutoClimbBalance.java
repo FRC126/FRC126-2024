@@ -94,7 +94,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             if (xAxis < xAxisStart-1) {
                 rotate=.1;
             } else if (xAxis > xAxisStart+1) {
-                rotate=-1;
+                rotate=-.1;
             }
         }
 

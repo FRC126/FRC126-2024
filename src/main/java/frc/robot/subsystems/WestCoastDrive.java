@@ -134,13 +134,19 @@ public class WestCoastDrive extends SubsystemBase {
 		// If driveStraight is enable, keep the same heading
 		if (driveStraight) {
 			double degrees = Robot.navxMXP.getAngle();
+		    double tmp = degrees - straightDegrees;
 
-            if(degrees - straightDegrees > 0.5) {
+			SmartDashboard.putNumber("NavX GyroX",degrees);
+			SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
+	
+            if(tmp > 0.5) {
                 // We are drifiting to the left, correct
-				rot=0.5;
+				rot=0.1;
+				if (tmp > 2) { rot=0.2; }
             } else if (degrees - straightDegrees < -0.5) {
                 // We are drifiting to the right, correct
-                rot=-0.5;
+                rot=-0.1;
+				if (tmp<-2) { rot=-0.2; }
             } else {
                 // Drive straight
                 rot=0;
@@ -194,9 +200,9 @@ public class WestCoastDrive extends SubsystemBase {
 
         // Set the Drive Motor Speeds
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
-		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
+		//Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
-		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+		//Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
 	}
 
     /************************************************************************

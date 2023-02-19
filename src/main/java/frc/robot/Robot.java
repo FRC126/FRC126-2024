@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
@@ -80,22 +81,20 @@ public class Robot extends TimedRobot {
     // Tower Arm Motor
     public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder TowerArmRelativeEncoder = Robot.TowerArmMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    // TODO: TOWER UPPER LIMIT SWITCH
-    // TODO: TOWER LOWER LIMIT SWITCH
+    public static DigitalInput towerArmRetracedLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // ArmExtension Motor
     public static CANSparkMax ArmExtensionMotor = new CANSparkMax(RobotMap.ArmExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder ArmExtensionRelativeEncoder = Robot.ArmExtensionMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    // TODO: ArmExtension UPPER LIMIT SWITCH
-    // TODO: ArmExtension LOWER LIMIT SWITCH
+    public static DigitalInput armExtensionBottomLimit;
+    public static DigitalInput armExtensionTopLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Grabber Motor
     public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder GrabberRelativeEncoder = Robot.GrabberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    // TODO: Grabber UPPER LIMIT SWITCH
-    // TODO: Grabber LOWER LIMIT SWITCH
+    public static DigitalInput grabberRetracedLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -176,21 +175,26 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
         driveBase = new WestCoastDrive();
+
+        // Initilize Tower Arm
         robotTowerArm = new TowerArm();
+        towerArmRetracedLimit = new DigitalInput(2);
+
+        // Initilize Grabber    
         robotGrabber = new Grabber();
+        grabberRetracedLimit = new DigitalInput(3);
+        
+        // Initilize Arm Extension    
         robotArmExtension = new ArmExtension();
+		armExtensionBottomLimit = new DigitalInput(0);
+		armExtensionTopLimit = new DigitalInput(1);
 
         // Not using the PIXY right now
         //pixyVision = new PixyVision();
 
         // Not using the limelight right now
         // limeLight = new LimeLight();
-
-        // Limit switches on the climbers
-        // rightClimbLimit = new DigitalInput(0);
-        // leftClimbLimit = new DigitalInput(1);
-
-        
+       
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {

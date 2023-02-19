@@ -61,8 +61,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double rotate=0;
 
         SmartDashboard.putNumber("NavX Pitch",pitch);
-        SmartDashboard.putNumber("NavX GyroX",xAxis);
-        SmartDashboard.putNumber("NavX GyroX Start",xAxisStart);
         SmartDashboard.putNumber("Balance Count",balanceCount);
 
         if ( pitch > balanceThresholdMax) {
@@ -84,19 +82,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             balanceCount++;
         }    
 
-        if (xAxis < xAxisStart-1) {
-            rotate=.1;
-        } else if (xAxis > xAxisStart+1) {
-            rotate=-1;
-        }
-
         SmartDashboard.putNumber("Balance Speed",speed);
         if (speed == 0) {
             Robot.driveBase.brakesOn();
         } else {
             Robot.driveBase.brakesOff();
         }
-        Robot.driveBase.Drive(speed, rotate);
+        Robot.driveBase.Drive(speed, rotate, true, xAxisStart);
 
      }
 
