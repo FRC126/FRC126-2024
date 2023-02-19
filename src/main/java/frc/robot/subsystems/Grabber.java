@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Grabber extends SubsystemBase {
 
 	public static double grabberClosedPos=0;
-	public static double grabberOpenPos=500;
-	public static double grabberConePos=150;
-	public static double grabberCubePos=400;
+	public static double grabberOpenPos=-331;
+	public static double grabberConePos=-50;
+	public static double grabberCubePos=-280;
 	
 	/************************************************************************
 	 ************************************************************************/
@@ -64,11 +64,11 @@ public class Grabber extends SubsystemBase {
         //  Check encoders to if we are at limits.
 		double pos=getPos();
 		
-		if ( speed < 0) { 
+		if ( speed > 0) { 
 			if (pos < grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
-		if ( speed > 0) { 
+		if ( speed < 0) { 
 			if (pos > grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 

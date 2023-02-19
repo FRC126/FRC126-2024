@@ -53,9 +53,9 @@ public class GrabberControl extends CommandBase {
 		}
 
 		if (operatorJoystick.getLeftTrigger() > .5) {
-			Robot.robotGrabber.MoveGrabber(.25);
+			Robot.robotGrabber.MoveGrabber(.99);
 		} else if (operatorJoystick.getRightTrigger() > .5) {
-			Robot.robotGrabber.MoveGrabber(-0.25);
+			Robot.robotGrabber.MoveGrabber(-0.99);
 		} else {
 			Robot.robotGrabber.MoveGrabber(0);
 		}

@@ -66,7 +66,7 @@ public class ArmExtension extends SubsystemBase {
 		double pos = getPos();
 		
 		if ( speed < 0) { 
-			if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+			if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
 		if ( speed > 0) { 

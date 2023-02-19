@@ -63,7 +63,7 @@ public class RobotMap {
 			// 2023 DriveBase
 			TowerArmMotorInversion = 1; // Motor inversions
 			GrabberMotorInversion = 1; // Motor inversions
-			GrabberMotorInversion = 1; // Motor inversions
+			ArmExtensionMotorInversion = 1; // Motor inversions
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = -1;
@@ -72,7 +72,7 @@ public class RobotMap {
 			// 2023 Breadboard
 			TowerArmMotorInversion = 1; // Motor inversions
 			GrabberMotorInversion = 1; // Motor inversions
-			GrabberMotorInversion = 1; // Motor inversions
+			ArmExtensionMotorInversion = 1; // Motor inversions
 			left1Inversion     = 1;
 			left2Inversion     = 1;
 			right1Inversion    = 1;
