@@ -90,6 +90,13 @@ public class DriverControl extends CommandBase {
 			};
 		}
 
+		if (driveJoystick.isBButton()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoPlaceConeMid();
+				Robot.autoCommand.schedule();
+			};
+		}
+
 	    // Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {

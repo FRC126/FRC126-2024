@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Grabber extends SubsystemBase {
 
 	public static double grabberClosedPos=0;
-	public static double grabberOpenPos=-331;
-	public static double grabberConePos=-50;
-	public static double grabberCubePos=-280;
+	public static double grabberOpenPos=331;
+	public static double grabberConePos=50;
+	public static double grabberCubePos=280;
 	
 	/************************************************************************
 	 ************************************************************************/
@@ -65,11 +65,11 @@ public class Grabber extends SubsystemBase {
 		double pos=getPos();
 		
 		if ( speed > 0) { 
-			if (pos < grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
+			if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
 		if ( speed < 0) { 
-			if (pos > grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
+			if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 		}
 
 		SmartDashboard.putNumber("Grabber Pos", pos);
@@ -95,7 +95,7 @@ public class Grabber extends SubsystemBase {
 
 	 public double getPos() {
 		// Need to use encoders for the NEOs
-		return(Robot.GrabberRelativeEncoder.getPosition());
+		return(Robot.GrabberRelativeEncoder.getPosition()*-1);
 	}
 
 	/************************************************************************

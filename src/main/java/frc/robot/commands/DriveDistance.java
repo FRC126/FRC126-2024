@@ -83,16 +83,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         // Try to keep the robot straight using the gyro
         if (driveFb != 0) {       
-            if(Robot.navxMXP.getAngle() - targetAngle > 0.5) {
-                // We are drifiting to the left, correct
-                Robot.driveBase.Drive(driveFb, 0.05);
-            } else if (Robot.navxMXP.getAngle() - targetAngle < -0.5) {
-                // We are drifiting to the right, correct
-                Robot.driveBase.Drive(driveFb, -0.05);
-            } else {
-                // Drive straight
-                Robot.driveBase.Drive(driveFb, 0);
-            }
+            // Drive straight
+            Robot.driveBase.Drive(driveFb, 0, true, targetAngle);
         } else {
             Robot.driveBase.Drive(driveFb, 0);
         }    
