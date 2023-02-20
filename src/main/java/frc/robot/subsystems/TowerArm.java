@@ -33,6 +33,7 @@ public class TowerArm extends SubsystemBase {
 	public static double armExtendedHighPos=50;
 	public static double armExtendedMidPos=100;
 	public static double armExtendedLowPos=15;
+	double lastSpeed=1000;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -64,28 +65,33 @@ public class TowerArm extends SubsystemBase {
 	public void MoveArm(double speedIn) { 
 		double speed = speedIn;
 
-        //Check encoders to if we are at limits.
-		double pos = getPos();
-		
-		SmartDashboard.putBoolean("TA Retracted Limit", Robot.towerArmRetracedLimit.get());
-		if ( Robot.towerArmRetracedLimit.get() == false ) {
-			// Arm at max extension
-		}
+		if (speed != 0) {
+			//Check encoders to if we are at limits.
+			double pos = getPos();
+			
+			SmartDashboard.putBoolean("TA Retracted Limit", Robot.towerArmRetracedLimit.get());
+			if ( Robot.towerArmRetracedLimit.get() == false ) {
+				// Arm at max extension
+			}
 
-		if ( speed < 0) { 
-			if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
+			if ( speed < 0) { 
+				if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
 
-		if ( speed > 0) { 
-			if (pos > armExtendedHighPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
+			if ( speed > 0) { 
+				if (pos > armExtendedHighPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
 
-		SmartDashboard.putNumber("Tower Arm Pos", pos);
-		SmartDashboard.putNumber("Tower Arm Speed", speed);
+			SmartDashboard.putNumber("Tower Arm Pos", pos);
+			SmartDashboard.putNumber("Tower Arm Speed", speed);
+        }
 
-		Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
+		if (speed != lastSpeed) {
+			Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
+			lastSpeed = speed;
+		}	
 
-		if (speed == 0) {
+		if (speed == 0 && lastSpeed != 0) {
 			Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		}
 	}

@@ -31,6 +31,7 @@ public class Grabber extends SubsystemBase {
 	public static double grabberOpenPos=331;
 	public static double grabberConePos=50;
 	public static double grabberCubePos=280;
+	double lastSpeed=1000;
 	
 	/************************************************************************
 	 ************************************************************************/
@@ -75,9 +76,12 @@ public class Grabber extends SubsystemBase {
 		SmartDashboard.putNumber("Grabber Pos", pos);
 		SmartDashboard.putNumber("Grabber Speed", speed);
 
-		Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+		if (speed != lastSpeed) {
+			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+			lastSpeed = speed;
+		}	
 
-		if (speed == 0) {
+		if (speed == 0 && lastSpeed != 0) {
 			Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		}
 	}

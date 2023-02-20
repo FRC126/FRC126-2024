@@ -32,6 +32,7 @@ public class ArmExtension extends SubsystemBase {
 	public static double armExtendedPickupPos=250;
 	public static double armExtendedPickupFloorPos=500;
 	public static double armExtendedMaxPos=-750;
+	double lastSpeed=1000;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -62,33 +63,40 @@ public class ArmExtension extends SubsystemBase {
 	public void MoveArmExtension(double speedIn) { 
 		double speed = speedIn;
 
-        //  Check encoders to if we are at limits.
-		double pos = getPos();
-		
-		SmartDashboard.putBoolean("AE Bottom Limit", Robot.armExtensionBottomLimit.get());
-		if ( Robot.armExtensionBottomLimit.get() == false ) {
-			// Arm at max extension
+        if (speed != 0) {
+			//  Check encoders to if we are at limits.
+			double pos = getPos();
+			
+			SmartDashboard.putBoolean("AE Bottom Limit", Robot.armExtensionBottomLimit.get());
+			if ( Robot.armExtensionBottomLimit.get() == false ) {
+				// Arm at max extension
+				speed = 0;
+			}
+
+			SmartDashboard.putBoolean("AE Top Limit", Robot.armExtensionTopLimit.get());
+			if ( Robot.armExtensionTopLimit.get() == false ) {
+				// Arm in the minimum extension
+				speed = 0;
+			}
+
+			if ( speed < 0) { 
+				if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
+
+			if ( speed > 0) { 
+				if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
+
+			SmartDashboard.putNumber("Arm Extension Pos", pos);
+			SmartDashboard.putNumber("Arm Extension Speed", speed);
 		}
 
-		SmartDashboard.putBoolean("AE Top Limit", Robot.armExtensionTopLimit.get());
-		if ( Robot.armExtensionTopLimit.get() == false ) {
-			// Arm in the minimum extension
-		}
+		if (lastSpeed != speed) {
+		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
+			lastSpeed = speed;
+		}	
 
-		if ( speed < 0) { 
-			if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
-
-		if ( speed > 0) { 
-			if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
-
-		SmartDashboard.putNumber("Arm Extension Pos", pos);
-		SmartDashboard.putNumber("Arm Extension Speed", speed);
-
-		Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
-
-		if (speed == 0) {
+		if (speed == 0 && lastSpeed != 0) {
 			Robot.ArmExtensionMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		}
 	}

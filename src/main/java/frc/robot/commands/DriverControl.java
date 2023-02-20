@@ -50,7 +50,12 @@ public class DriverControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		// X buttom aborts any running auto commands
+		if (driveJoystick.isXButton()) {
+			Robot.stopAutoCommand();
+		}
+
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}
@@ -78,21 +83,9 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.brakesOff();
 		}	
 
-		// X buttom aborts any running auto commands
-		if (driveJoystick.isXButton()) {
-			Robot.stopAutoCommand();
-		}
-
 		if (driveJoystick.isAButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoDriveTest();
-				Robot.autoCommand.schedule();
-			};
-		}
-
-		if (driveJoystick.isBButton()) {
-			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoPlaceConeMid();
 				Robot.autoCommand.schedule();
 			};
 		}

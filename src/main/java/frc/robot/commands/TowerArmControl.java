@@ -47,6 +47,10 @@ public class TowerArmControl extends CommandBase {
 	
 	@Override
 	public void execute() {
+		if (operatorJoystick.isXButton()) {
+			Robot.stopAutoCommand();
+		}
+		
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
@@ -59,7 +63,14 @@ public class TowerArmControl extends CommandBase {
 			UD=0;
 		}
 
-		if ( operatorJoystick.isBackButton()) {
+		if ( operatorJoystick.isBButton() ) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoPlaceConeMid();
+				Robot.autoCommand.schedule();
+			};
+		}
+
+		if ( operatorJoystick.isBackButton() ) {
 			Robot.ignoreEncoders=true;
 		} else {
 			Robot.ignoreEncoders=false;
