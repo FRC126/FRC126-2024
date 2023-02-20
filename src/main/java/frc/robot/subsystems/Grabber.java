@@ -62,19 +62,21 @@ public class Grabber extends SubsystemBase {
 	public void MoveGrabber(double speedIn) { 
 		double speed = speedIn;
 		
-        //  Check encoders to if we are at limits.
-		double pos=getPos();
-		
-		if ( speed > 0) { 
-			if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
+		if (speed != 0) {
+			//  Check encoders to if we are at limits.
+			double pos = getPos();
+			
+			if (speed > 0) { 
+				if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
 
-		if ( speed < 0) { 
-			if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
-		}
+			if (speed < 0) { 
+				if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
 
-		SmartDashboard.putNumber("Grabber Pos", pos);
-		SmartDashboard.putNumber("Grabber Speed", speed);
+			SmartDashboard.putNumber("Grabber Pos", pos);
+			SmartDashboard.putNumber("Grabber Speed", speed);
+		}
 
 		if (speed != lastSpeed) {
 			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);

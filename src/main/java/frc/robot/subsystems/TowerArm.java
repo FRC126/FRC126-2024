@@ -70,15 +70,15 @@ public class TowerArm extends SubsystemBase {
 			double pos = getPos();
 			
 			SmartDashboard.putBoolean("TA Retracted Limit", Robot.towerArmRetracedLimit.get());
-			if ( Robot.towerArmRetracedLimit.get() == false ) {
+			if (Robot.towerArmRetracedLimit.get() == false) {
 				// Arm at max extension
 			}
 
-			if ( speed < 0) { 
+			if (speed < 0) { 
 				if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			if ( speed > 0) { 
+			if (speed > 0) { 
 				if (pos > armExtendedHighPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 

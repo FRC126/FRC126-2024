@@ -79,11 +79,11 @@ public class ArmExtension extends SubsystemBase {
 				speed = 0;
 			}
 
-			if ( speed < 0) { 
+			if (speed < 0) { 
 				if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			if ( speed > 0) { 
+			if (speed > 0) { 
 				if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 

@@ -113,10 +113,10 @@ public class WestCoastDrive extends SubsystemBase {
 		}
 
 		// Soft start code
-		if (fbIn==0) {
+		if (fbIn == 0) {
 			// No movement, so fb and last to zero
-		    fb=0;
-			fbLast=0;
+		    fb = 0;
+			fbLast = 0;
 		} else if (fbIn > 0) {
 			// Soft start for throttle forward
 			if ( fbIn > fbLast) {
@@ -128,75 +128,77 @@ public class WestCoastDrive extends SubsystemBase {
 			if ( fbIn < fbLast) {
 				fb = fbLast - 0.05;
 			}			
-			fbLast=fb;
+			fbLast = fb;
 		}
 
-		// If driveStraight is enable, keep the same heading
-		if (driveStraight) {
-			double degrees = Robot.navxMXP.getAngle();
-		    double tmp = degrees - straightDegrees;
+		if (fb !=0 || rot != 0) {
+			// If driveStraight is enable, keep the same heading
+			if (driveStraight) {
+				double degrees = Robot.navxMXP.getAngle();
+				double tmp = degrees - straightDegrees;
 
-			SmartDashboard.putNumber("NavX GyroX",degrees);
-			SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
-	
-            if(tmp > 0.5) {
-                // We are drifiting to the left, correct
-				rot=0.1;
-				if (tmp > 2) { rot=0.2; }
-            } else if (degrees - straightDegrees < -0.5) {
-                // We are drifiting to the right, correct
-                rot=-0.1;
-				if (tmp<-2) { rot=-0.2; }
-            } else {
-                // Drive straight
-                rot=0;
-			}	
-        }    			
-
-		// Calculate the speed of the wheels including any turning
-		leftMultiplier = fb + (rot);
-		rightMultiplier = fb - (rot);
-		leftSpeed = leftMultiplier / 1.0;
-		rightSpeed = rightMultiplier / 1.0;
-
-		/*
-		// Handle the difference between forward and backwards in the motors
-		if (leftSpeed > 0) {
-			rightSpeed = rightSpeed *.95;
-		}
-
-		// Handle the difference between forward and backwards in the motors
-		if (rightSpeed < 0) {
-			leftSpeed = leftSpeed *.95;
-		}
-        */
-
-		// Don't let the motors brown out the robot
-		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
-		if(limiter < 0) {
-			limiter = 0;
-		} else if(limiter > 1) {
-			limiter = 1;
-		}
+				SmartDashboard.putNumber("NavX GyroX",degrees);
+				SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
 		
-		previousLimiter = (4 * previousLimiter + limiter) / 5;
-		if(Robot.internalData.getVoltage() < Robot.voltageThreshold) {
-			leftSpeed *= previousLimiter;
-			rightSpeed *= previousLimiter;
+				if(tmp > 0.5) {
+					// We are drifiting to the left, correct
+					rot = 0.1;
+					if (tmp > 2) { rot = 0.2; }
+				} else if (tmp < -0.5) {
+					// We are drifiting to the right, correct
+					rot=-0.1;
+					if (tmp < -2) { rot = -0.2; }
+				} else {
+					// Drive straight
+					rot = 0;
+				}	
+			}    			
+
+			// Calculate the speed of the wheels including any turning
+			leftMultiplier = fb + (rot);
+			rightMultiplier = fb - (rot);
+			leftSpeed = leftMultiplier / 1.0;
+			rightSpeed = rightMultiplier / 1.0;
+
+			/*
+			// Handle the difference between forward and backwards in the motors
+			if (leftSpeed > 0) {
+				rightSpeed = rightSpeed *.95;
+			}
+
+			// Handle the difference between forward and backwards in the motors
+			if (rightSpeed < 0) {
+				leftSpeed = leftSpeed *.95;
+			}
+			*/
+
+			// Don't let the motors brown out the robot
+			limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
+			if (limiter < 0) {
+				limiter = 0;
+			} else if (limiter > 1) {
+				limiter = 1;
+			}
+			
+			previousLimiter = (4 * previousLimiter + limiter) / 5;
+			if (Robot.internalData.getVoltage() < Robot.voltageThreshold) {
+				leftSpeed *= previousLimiter;
+				rightSpeed *= previousLimiter;
+			}
+
+			SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
+
+			SmartDashboard.putNumber("drive fb", fb);
+			SmartDashboard.putNumber("drive rot", rot);
+			
+			SmartDashboard.putNumber("Left Speed", leftSpeed);
+			SmartDashboard.putNumber("Right Speed", rightSpeed);
+
+			SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
+			SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
+			SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
+			SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 		}
-
-		SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
-
-		SmartDashboard.putNumber("drive fb", fb);
-		SmartDashboard.putNumber("drive rot", rot);
-		
-		SmartDashboard.putNumber("Left Speed", leftSpeed);
-        SmartDashboard.putNumber("Right Speed", rightSpeed);
-
-		SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 
         // Set the Drive Motor Speeds
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);

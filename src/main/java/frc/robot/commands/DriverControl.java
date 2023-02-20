@@ -79,8 +79,10 @@ public class DriverControl extends CommandBase {
 				driveStraight = true;
 			}
 		} else {
-			driveStraight = false;
-			Robot.driveBase.brakesOff();
+			if (driveStraight == true) {
+			    driveStraight = false;
+				Robot.driveBase.brakesOff();
+			}	
 		}	
 
 		if (driveJoystick.isAButton()) {
@@ -110,7 +112,7 @@ public class DriverControl extends CommandBase {
 		// Auto balance the robot
 		if (driveJoystick.isAButton()) {
 			if ( Robot.driveBase.doAutoCommand() ) {
-				Robot.autoCommand=new AutoBalance();
+				Robot.autoCommand=new AutoBalance(500);
 				Robot.autoCommand.schedule();
 			}	
 		}
@@ -118,7 +120,7 @@ public class DriverControl extends CommandBase {
 		// Climb then auto balance the robot
 		if (driveJoystick.isBButton()) {
 			if ( Robot.driveBase.doAutoCommand() ) {
-				Robot.autoCommand=new AutoClimbBalance();
+				Robot.autoCommand=new AutoClimbBalance(700);
 				Robot.autoCommand.schedule();
 			}	
 		}
