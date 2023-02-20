@@ -32,10 +32,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public AutoBalance() {
+    public AutoBalance(int itersIn) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        iters=200;
+        iters=itersIn;
         balanceCount=0;
         pitch = Robot.navxMXP.getPitch();
         xAxisStart = Robot.navxMXP.getAngle();
@@ -98,7 +98,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public boolean isFinished() {
         iters--;
-        if (balanceCount > 5 || iters <= 0) {
+        if (balanceCount > 250 || iters <= 0) {
             // if we have reached the target distance, or run out of time to do so, 
             // stop driving and end the command.
             Robot.driveBase.Drive(0, 0);
