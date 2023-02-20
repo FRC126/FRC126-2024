@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Grabber extends SubsystemBase {
 
 	public static double grabberClosedPos=0;
-	public static double grabberOpenPos=331;
-	public static double grabberConePos=50;
-	public static double grabberCubePos=280;
+	public static double grabberOpenPos=310;
+	public static double grabberConePos=0;
+	public static double grabberCubePos=115;
 	double lastSpeed=1000;
 	
 	/************************************************************************
@@ -62,9 +62,12 @@ public class Grabber extends SubsystemBase {
 	public void MoveGrabber(double speedIn) { 
 		double speed = speedIn;
 		
+		//  Check encoders to if we are at limits.
+		double pos = getPos();
+
+		SmartDashboard.putNumber("Grabber Pos", pos);
+
 		if (speed != 0) {
-			//  Check encoders to if we are at limits.
-			double pos = getPos();
 			
 			if (speed > 0) { 
 				if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
@@ -74,9 +77,9 @@ public class Grabber extends SubsystemBase {
 				if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			SmartDashboard.putNumber("Grabber Pos", pos);
-			SmartDashboard.putNumber("Grabber Speed", speed);
 		}
+
+		SmartDashboard.putNumber("Grabber Speed", speed);
 
 		if (speed != lastSpeed) {
 			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
@@ -101,7 +104,7 @@ public class Grabber extends SubsystemBase {
 
 	 public double getPos() {
 		// Need to use encoders for the NEOs
-		return(Robot.GrabberRelativeEncoder.getPosition()*-1);
+		return(Robot.GrabberRelativeEncoder.getPosition());
 	}
 
 	/************************************************************************

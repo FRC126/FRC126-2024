@@ -109,7 +109,7 @@ public class WestCoastDrive extends SubsystemBase {
 
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning
-		    rot = rotIn *.3;
+		    rot = rotIn *.4;
 		}
 
 		// Soft start code
@@ -131,7 +131,6 @@ public class WestCoastDrive extends SubsystemBase {
 			fbLast = fb;
 		}
 
-		if (fb !=0 || rot != 0) {
 			// If driveStraight is enable, keep the same heading
 			if (driveStraight) {
 				double degrees = Robot.navxMXP.getAngle();
@@ -198,13 +197,13 @@ public class WestCoastDrive extends SubsystemBase {
 			SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
 			SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
 			SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
-		}
+		
 
         // Set the Drive Motor Speeds
 		Robot.leftDriveMotor1.set(leftSpeed * RobotMap.left1Inversion);
-		//Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
+		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
-		//Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
 	}
 
     /************************************************************************

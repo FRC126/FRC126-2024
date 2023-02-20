@@ -27,12 +27,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TowerArm extends SubsystemBase {
 
-	public static double armRetractedPos=-5;
-	public static double armPickupPos=0;
-	public static double armFloorPickupPos=5;
-	public static double armExtendedHighPos=50;
+	public static double armRetractedPos=-0;
+	public static double armPickupPos=20;
+	public static double armFloorPickupPos=40;
+	public static double armExtendedHighPos=165;
 	public static double armExtendedMidPos=100;
-	public static double armExtendedLowPos=15;
+	public static double armExtendedLowPos=45;
 	double lastSpeed=1000;
 
 	/************************************************************************
@@ -65,14 +65,17 @@ public class TowerArm extends SubsystemBase {
 	public void MoveArm(double speedIn) { 
 		double speed = speedIn;
 
+		//Check encoders to if we are at limits.
+		double pos = getPos();
+
+		SmartDashboard.putNumber("Tower Arm Pos", pos);
+
 		if (speed != 0) {
-			//Check encoders to if we are at limits.
-			double pos = getPos();
 			
-			SmartDashboard.putBoolean("TA Retracted Limit", Robot.towerArmRetracedLimit.get());
-			if (Robot.towerArmRetracedLimit.get() == false) {
-				// Arm at max extension
-			}
+			//SmartDashboard.putBoolean("TA Retracted Limit", Robot.towerArmRetracedLimit.get());
+			//if (Robot.towerArmRetracedLimit.get() == false) {
+			//	// Arm at max extension
+			//}
 
 			if (speed < 0) { 
 				if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
@@ -82,7 +85,6 @@ public class TowerArm extends SubsystemBase {
 				if (pos > armExtendedHighPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			SmartDashboard.putNumber("Tower Arm Pos", pos);
 			SmartDashboard.putNumber("Tower Arm Speed", speed);
         }
 

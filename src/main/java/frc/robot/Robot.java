@@ -178,16 +178,16 @@ public class Robot extends TimedRobot {
 
         // Initilize Tower Arm
         robotTowerArm = new TowerArm();
-        towerArmRetracedLimit = new DigitalInput(2);
+        //towerArmRetracedLimit = new DigitalInput(2);
 
         // Initilize Grabber    
         robotGrabber = new Grabber();
-        grabberRetracedLimit = new DigitalInput(3);
+        //grabberRetracedLimit = new DigitalInput(3);
         
         // Initilize Arm Extension    
         robotArmExtension = new ArmExtension();
-		armExtensionBottomLimit = new DigitalInput(0);
-		armExtensionTopLimit = new DigitalInput(1);
+		//armExtensionBottomLimit = new DigitalInput(0);
+		//armExtensionTopLimit = new DigitalInput(1);
 
         // Not using the PIXY right now
         //pixyVision = new PixyVision();

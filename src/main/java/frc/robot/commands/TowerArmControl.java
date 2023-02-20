@@ -31,7 +31,7 @@ public class TowerArmControl extends CommandBase {
 	
     public TowerArmControl(TowerArm subsystem) {
 		addRequirements(subsystem);
-		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.05);
     }
 
 	/**********************************************************************************
