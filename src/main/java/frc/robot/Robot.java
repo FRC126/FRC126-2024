@@ -401,6 +401,8 @@ public class Robot extends TimedRobot {
 
 	    Robot.isAutoCommand = true;
 
+   		SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
+
 		return true;
 	}
 
@@ -412,6 +414,8 @@ public class Robot extends TimedRobot {
             Robot.autoCommand.cancel();
 		}	
 		Robot.isAutoCommand=false;
+
+        SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
 		Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();

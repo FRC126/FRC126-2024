@@ -28,11 +28,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TowerArm extends SubsystemBase {
 
 	public static double armRetractedPos=-0;
-	public static double armPickupPos=20;
-	public static double armFloorPickupPos=40;
-	public static double armExtendedHighPos=165;
+	public static double armPickupPos=15;
+	public static double armFloorPickupPos=30;
+	public static double armExtendedHighPos=160;
+	public static double armExtendedMaxPos=175;
 	public static double armExtendedMidPos=100;
-	public static double armExtendedLowPos=45;
+	public static double armExtendedLowPos=50;
 	double lastSpeed=1000;
 
 	/************************************************************************
@@ -43,7 +44,7 @@ public class TowerArm extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new TowerArmControl(this));
 
-		resetEncoders();
+		//resetEncoders();
 
 		// Set brake mode for the tower arm motor
 		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -78,11 +79,13 @@ public class TowerArm extends SubsystemBase {
 			//}
 
 			if (speed < 0) { 
-				if (pos<armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos < armRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.1; }
+				if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			if (speed > 0) { 
-				if (pos > armExtendedHighPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos > armExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .1; }
+				if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			SmartDashboard.putNumber("Tower Arm Speed", speed);

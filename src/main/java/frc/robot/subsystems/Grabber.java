@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Grabber extends SubsystemBase {
 
 	public static double grabberClosedPos=0;
-	public static double grabberOpenPos=310;
-	public static double grabberConePos=0;
-	public static double grabberCubePos=115;
+	public static double grabberOpenPos=340;
+	public static double grabberConePos=50;
+	public static double grabberCubePos=250;
 	double lastSpeed=1000;
 	
 	/************************************************************************
@@ -41,7 +41,7 @@ public class Grabber extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new GrabberControl(this));
 
-		resetEncoders();
+		//resetEncoders();
 
 		// Brake mode on for the motor
 		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -69,11 +69,13 @@ public class Grabber extends SubsystemBase {
 
 		if (speed != 0) {
 			
-			if (speed > 0) { 
+			if (speed < 0) { 
+				if (pos >= grabberOpenPos - 20 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			if (speed < 0) { 
+			if (speed > 0) { 
+				if (pos <= grabberClosedPos + 20 && !Robot.ignoreEncoders) { speed = .2; }
 				if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
@@ -104,7 +106,7 @@ public class Grabber extends SubsystemBase {
 
 	 public double getPos() {
 		// Need to use encoders for the NEOs
-		return(Robot.GrabberRelativeEncoder.getPosition());
+		return(Robot.GrabberRelativeEncoder.getPosition() * -1);
 	}
 
 	/************************************************************************

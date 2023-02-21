@@ -28,34 +28,33 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            //new DriveDistance(-24, 150),
-
+            new DriveDistance(-12, 150),
+/*
             //new ParallelCommandGroup(
             //    new MoveTowerArm(TowerArm.armExtendedMidPos, 250),
             //    new MoveArmExtension(ArmExtension.armExtendedPlacePos, 250)
             //),
 
-            new MoveTowerArm(TowerArm.armExtendedMidPos, 250),
-            
-            //new MoveArmExtension(ArmExtension.armExtendedPlacePos, 250),
+            new MoveTowerArm(TowerArm.armExtendedMidPos/2, 400),
+
+            new ParallelCommandGroup(
+                new MoveTowerArm(TowerArm.armExtendedMidPos, 400),
+                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400)
+            ),
 
             //new DriveDistance(12, 150),
 
-            //new MoveGrabber(Grabber.grabberOpenPos, 250),
+            new MoveGrabber(Grabber.grabberCubePos/2, 400),
 
             //new DriveDistance(-12, 150),
 
-            //new ParallelCommandGroup(
-            //    new MoveArmExtension(ArmExtension.armRetractedPos , 250),
-            //    new MoveGrabber(Grabber.grabberConePos, 250)
-            //),    
+            new ParallelCommandGroup(
+                new MoveArmExtension(ArmExtension.armRetractedPos , 400),
+                new MoveGrabber(Grabber.grabberConePos, 400)
+            ),    
 
-            //new MoveArmExtension(ArmExtension.armRetractedPos , 250),
-
-            //new MoveGrabber(Grabber.grabberConePos, 250),
-
-            //new MoveTowerArm(TowerArm.armRetractedPos, 250),
-
+            new MoveTowerArm(TowerArm.armPickupPos, 400),
+*/
             new FinishAuto()
         );
     }       

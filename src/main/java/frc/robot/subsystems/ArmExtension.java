@@ -28,10 +28,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmExtension extends SubsystemBase {
 
 	public static double armRetractedPos=0;
-	public static double armExtendedPlacePos=500;
-	public static double armExtendedPickupPos=250;
-	public static double armExtendedPickupFloorPos=500;
-	public static double armExtendedMaxPos=-750;
+	public static double armExtendedPlacePos=340;
+	public static double armExtendedPickupPos=40;
+	public static double armExtendedPickupFloorPos=90;
+	//public static double armExtendedMaxPos=460;
+	public static double armExtendedMaxPos=385;
 	double lastSpeed=1000;
 
 	/************************************************************************
@@ -42,7 +43,7 @@ public class ArmExtension extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ArmExtensionControl(this));
 
-		resetEncoders();
+		//resetEncoders();
 
 		// Brake mode on for the motor
 		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -68,7 +69,7 @@ public class ArmExtension extends SubsystemBase {
 
 		SmartDashboard.putNumber("Arm Extension Pos", pos);
 
-		if (speed != 0) {
+		//if (speed != 0) {
 			
 			//SmartDashboard.putBoolean("AE Bottom Limit", Robot.armExtensionBottomLimit.get());
 			//if ( Robot.armExtensionBottomLimit.get() == false ) {
@@ -82,17 +83,22 @@ public class ArmExtension extends SubsystemBase {
 			//	speed = 0;
 			//}
 
-			if (speed < 0) { 
+			if (speed > 0) { 
+				if (pos < armRetractedPos + 35 && !Robot.ignoreEncoders) { speed = 0.2; }
+				if (pos < armRetractedPos + 15 && !Robot.ignoreEncoders) { speed = 0.1; }
 				if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
-			if (speed > 0) { 
+			if (speed < 0) { 
+				if (pos > armExtendedMaxPos - 35 && !Robot.ignoreEncoders) { speed = -.2; }
+				if (pos > armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.1; }
 				if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
+			SmartDashboard.putNumber("Arm Extension Speed", speedIn);
 			SmartDashboard.putNumber("Arm Extension Speed", speed);
 
-		}
+		//}
 
 		if (lastSpeed != speed) {
 		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
@@ -117,7 +123,7 @@ public class ArmExtension extends SubsystemBase {
 
 	 public double getPos() {
 		// Need to use encoders for the NEOs
-		return(Robot.ArmExtensionRelativeEncoder.getPosition());
+		return(Robot.ArmExtensionRelativeEncoder.getPosition() * -1);
 	}
 
 	/************************************************************************

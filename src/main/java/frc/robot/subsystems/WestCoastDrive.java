@@ -141,12 +141,12 @@ public class WestCoastDrive extends SubsystemBase {
 		
 				if(tmp > 0.5) {
 					// We are drifiting to the left, correct
-					rot = 0.1;
-					if (tmp > 2) { rot = 0.2; }
+					rot = -0.05;
+					if (tmp > 3) { rot = -0.1; }
 				} else if (tmp < -0.5) {
 					// We are drifiting to the right, correct
-					rot=-0.1;
-					if (tmp < -2) { rot = -0.2; }
+					rot=0.05;
+					if (tmp < -3) { rot = 0.1; }
 				} else {
 					// Drive straight
 					rot = 0;
@@ -204,6 +204,8 @@ public class WestCoastDrive extends SubsystemBase {
 		Robot.leftDriveMotor2.set(leftSpeed * RobotMap.left2Inversion);
         Robot.rightDriveMotor1.set(rightSpeed * RobotMap.right1Inversion);
 		Robot.rightDriveMotor2.set(rightSpeed * RobotMap.right2Inversion);
+
+		getDistanceInches();
 	}
 
     /************************************************************************
@@ -225,7 +227,7 @@ public class WestCoastDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 6;
-		double gearRatio = 3.41;
+		double gearRatio = 6;
 		
 		// Need to use encoders for the NEOs
 		// double ticksPerRotation = 2048;
@@ -238,10 +240,15 @@ public class WestCoastDrive extends SubsystemBase {
 
 		double left1 = Robot.left1RelativeEncoder.getPosition();
 		double left2 = Robot.left2RelativeEncoder.getPosition();
-		double right1 = Robot.right1RelativeEncoder.getPosition();
-		double right2 = Robot.right2RelativeEncoder.getPosition();
+		double right1 = Robot.right1RelativeEncoder.getPosition()*-1;
+		double right2 = Robot.right2RelativeEncoder.getPosition()*-1;
 
-		double avg2 = (left1 + left2 + right1 + right2) / 4;
+		SmartDashboard.putNumber("Left 1",left1);
+		SmartDashboard.putNumber("Left 2",left2);
+		SmartDashboard.putNumber("Right 1",right1);
+		SmartDashboard.putNumber("Right 2",right2);
+
+		double avg2 = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
 		double distance2 = (avg2 / gearRatio) * (wheelDiameter * 3.1459);
 

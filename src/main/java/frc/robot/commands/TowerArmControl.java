@@ -70,6 +70,13 @@ public class TowerArmControl extends CommandBase {
 			};
 		}
 
+		if ( operatorJoystick.isAButton() ) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoPlaceConeHigh();
+				Robot.autoCommand.schedule();
+			};
+		}
+
 		if ( operatorJoystick.isBackButton() ) {
 			Robot.ignoreEncoders=true;
 		} else {

@@ -92,6 +92,10 @@ public class DriverControl extends CommandBase {
 			};
 		}
 
+		if (driveJoystick.isYButton()) {
+			Robot.driveBase.resetEncoders();
+		}
+
 	    // Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
