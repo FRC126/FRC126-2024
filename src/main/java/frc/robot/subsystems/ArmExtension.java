@@ -31,6 +31,7 @@ public class ArmExtension extends SubsystemBase {
 	public static double armExtendedPlacePos=340;
 	public static double armExtendedPickupPos=40;
 	public static double armExtendedPickupFloorPos=90;
+	public static double armExtendedPlaceLow=150;
 	//public static double armExtendedMaxPos=460;
 	public static double armExtendedMaxPos=385;
 	double lastSpeed=1000;

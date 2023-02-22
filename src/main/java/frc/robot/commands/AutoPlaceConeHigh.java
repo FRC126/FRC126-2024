@@ -30,26 +30,25 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            //new DriveDistance(-12, 150),
-
+            // Drive Backwards, Raise and Extend the Arm.
             new ParallelCommandGroup(
                 new DriveDistance(-24, 150),
                 new MoveTowerArm(TowerArm.armExtendedHighPos, 400),
                 new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400)
             ),
 
-            //new MoveTowerArm(TowerArm.armExtendedHighPos, 400),
-            //new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400),
-
+            // Drive Forwards
             new DriveDistance(25, 250),
 
-            new MoveGrabber(Grabber.grabberCubePos-50, 250),
+            // Open the grabber to drop the cone
+            new MoveGrabber(Grabber.grabberConePos+50, 250),
 
+            // Drive backwards, lower and retract the arm, close the grabber
             new ParallelCommandGroup(
                 new DriveDistance(-24, 250),
                 new MoveArmExtension(ArmExtension.armRetractedPos, 250),
                 new MoveGrabber(Grabber.grabberConePos, 250),
-                new MoveTowerArm(TowerArm.armRetractedPos+10, 250)
+                new MoveTowerArm(TowerArm.armRetractedPos, 250)
             ),    
 
             new FinishAuto()        

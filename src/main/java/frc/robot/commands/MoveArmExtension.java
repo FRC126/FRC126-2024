@@ -51,17 +51,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
         double curPos=Robot.robotArmExtension.getPos();
         double targetPos=target;
+        double speed=0;
 
         if (curPos < targetPos - 4) { 
-            Robot.robotArmExtension.MoveArmExtension(-.7);
+            speed=-0.7;
+            if (curPos > targetPos - 25) { speed=-0.3; }
             targetReached=0;
         } else if (curPos > targetPos + 4) { 
-            Robot.robotArmExtension.MoveArmExtension(0.7);
+            speed=0.7;
+            if (curPos < targetPos + 25) { speed=0.3; }
             targetReached=0;
         } else {
-            Robot.robotArmExtension.MoveArmExtension(0);
+            speed=0;
             targetReached++;
         }
+
+        Robot.robotArmExtension.MoveArmExtension(speed);
     }
 
 	/**********************************************************************************

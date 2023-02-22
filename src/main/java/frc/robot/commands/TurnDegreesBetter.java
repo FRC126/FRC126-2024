@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     double startAngle;
     double targetDegrees;
     int iters;
-    static private double driftAllowance=3;
+    static private double driftAllowance=2;
     int targetReached=0;
 
 	/**********************************************************************************

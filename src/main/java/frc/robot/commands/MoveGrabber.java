@@ -51,17 +51,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
         double curPos=Robot.robotGrabber.getPos();
         double targetPos=target;
+        double speed=0;
 
         if (curPos < targetPos - 4) { 
-            Robot.robotGrabber.MoveGrabber(-.5);
+            speed=-0.8;
+            if (curPos > targetPos -20) { speed=- 0.4; }
             targetReached=0;
         } else if (curPos > targetPos + 4) { 
-            Robot.robotGrabber.MoveGrabber(0.5);
+            speed=0.8;
+            if (curPos < targetPos +20) { speed=-0.4; }
             targetReached=0;
         } else {
-            Robot.robotGrabber.MoveGrabber(0);
+            speed=0;
             targetReached++;
         }
+        Robot.robotGrabber.MoveGrabber(speed);
     }
 
 	/**********************************************************************************

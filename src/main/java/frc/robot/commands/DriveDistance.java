@@ -60,7 +60,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double currentDistance = Robot.driveBase.getDistanceInches();
         double diff =  Math.abs(distance) - currentDistance;
         double tmp = Math.abs(diff) / 20;
-        if ( tmp > .15) { tmp=.15; }
+        if ( tmp > .2) { tmp=.2; }
         if ( tmp < .075) { tmp=.075; }
 
         if (distance < 0) {

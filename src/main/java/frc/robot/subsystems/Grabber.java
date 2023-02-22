@@ -29,7 +29,7 @@ public class Grabber extends SubsystemBase {
 
 	public static double grabberClosedPos=0;
 	public static double grabberOpenPos=340;
-	public static double grabberConePos=50;
+	public static double grabberConePos=30;
 	public static double grabberCubePos=250;
 	double lastSpeed=1000;
 	
@@ -67,8 +67,7 @@ public class Grabber extends SubsystemBase {
 
 		SmartDashboard.putNumber("Grabber Pos", pos);
 
-		if (speed != 0) {
-			
+		if (speed != 0) {	
 			if (speed < 0) { 
 				if (pos >= grabberOpenPos - 20 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
@@ -78,10 +77,12 @@ public class Grabber extends SubsystemBase {
 				if (pos <= grabberClosedPos + 20 && !Robot.ignoreEncoders) { speed = .2; }
 				if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
-
 		}
 
 		SmartDashboard.putNumber("Grabber Speed", speed);
+
+		double cur=Robot.GrabberMotor.getOutputCurrent();
+		SmartDashboard.putNumber("Grabber Current", cur);
 
 		if (speed != lastSpeed) {
 			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);

@@ -132,7 +132,6 @@ public class Robot extends TimedRobot {
     //public static boolean intakeRunning=false;
     //public static boolean throwerRunning=false;
 
-    public static PixyVision pixyVision;
     public static LimeLight limeLight;
 
     // Global Robot Variables
@@ -188,9 +187,6 @@ public class Robot extends TimedRobot {
         robotArmExtension = new ArmExtension();
 		//armExtensionBottomLimit = new DigitalInput(0);
 		//armExtensionTopLimit = new DigitalInput(1);
-
-        // Not using the PIXY right now
-        //pixyVision = new PixyVision();
 
         // Not using the limelight right now
         // limeLight = new LimeLight();

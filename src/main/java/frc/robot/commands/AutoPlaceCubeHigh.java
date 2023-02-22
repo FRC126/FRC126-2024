@@ -29,27 +29,27 @@ public class AutoPlaceCubeHigh extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        addCommands(
-            new DriveDistance(-24, 150),
+         addCommands(
+            //new DriveDistance(-12, 150),
 
             new ParallelCommandGroup(
-                new MoveTowerArm(TowerArm.armExtendedHighPos, 250),
-                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 250)
+                new DriveDistance(-24, 150),
+                new MoveTowerArm(TowerArm.armExtendedHighPos, 400),
+                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400)
             ),
 
-            new DriveDistance(24, 150),
+            new DriveDistance(25, 250),
 
-            new MoveGrabber(Grabber.grabberOpenPos, 250),
-
-            new DriveDistance(-24, 150),
+            new MoveGrabber(Grabber.grabberCubePos+50, 250),
 
             new ParallelCommandGroup(
-                new MoveArmExtension(ArmExtension.armRetractedPos , 250),
-                new MoveGrabber(Grabber.grabberConePos, 250)
+                new DriveDistance(-24, 250),
+                new MoveArmExtension(ArmExtension.armRetractedPos, 250),
+                new MoveGrabber(Grabber.grabberConePos, 250),
+                new MoveTowerArm(TowerArm.armRetractedPos, 250)
             ),    
 
-            new MoveTowerArm(TowerArm.armRetractedPos, 250),
-
-            new FinishAuto()        );
+            new FinishAuto()        
+        );
     }       
 }

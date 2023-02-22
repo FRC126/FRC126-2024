@@ -48,6 +48,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void initialize() {
         Robot.driveBase.resetEncoders();
+        Robot.driveBase.brakesOn();
     }
 
 	/**********************************************************************************
@@ -81,7 +82,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 // Pointing down, Drive backwards
                 speed=-0.2;
                 if ( pitch < -10) {
-                    speed=0.3;
+                    speed=-0.3;
                 }
                 balanceCount=0;
             } else {
@@ -91,14 +92,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         }
 
         SmartDashboard.putNumber("Balance Speed",speed);
-        if (speed == 0) {
-            Robot.driveBase.brakesOn();
-        } else {
-            Robot.driveBase.brakesOff();
-        }
         Robot.driveBase.Drive(speed, rotate, true, xAxisStart);
-
-     }
+    }
 
 	/**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
@@ -106,11 +101,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public boolean isFinished() {
         iters--;
-        if (balanceCount > 250 || iters <= 0) {
+        if (balanceCount > 1000 || iters <= 0) {
             // if we have reached the target distance, or run out of time to do so, 
             // stop driving and end the command.
             Robot.driveBase.Drive(0, 0);
-            Robot.driveBase.brakesOn();
+            Robot.driveBase.brakesOff();
             return true;
         }
         return false;
@@ -122,6 +117,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void end(boolean isInteruppted) {
         Robot.driveBase.cancel();
+        Robot.driveBase.brakesOff();
     }
 }
 
