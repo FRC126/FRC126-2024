@@ -31,7 +31,9 @@ public class AutoHighConeBalance extends SequentialCommandGroup {
 
             new TurnDegreesBetter(180,200),
 
-            new AutoClimbBalance(500),
+            new Climb(500),
+
+            new Balance(500),
 
             new FinishAuto()        
         );
