@@ -124,12 +124,12 @@ public class Robot extends TimedRobot {
     public static TowerArm robotTowerArm;
     public static Grabber robotGrabber;
     public static ArmExtension robotArmExtension;
+    public static Brakes robotBrakes;
+    public static Flap robotFlap;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
-    //public static boolean intakeRunning=false;
-    //public static boolean throwerRunning=false;
 
     public static LimeLight limeLight;
 
@@ -174,6 +174,12 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
         driveBase = new WestCoastDrive();
 
+        // Brakes
+        robotBrakes = new Brakes();
+
+        // Flap
+        robotFlap = new Flap();
+
         // Initilize Tower Arm
         robotTowerArm = new TowerArm();
         towerArmRetracedLimit = new DigitalInput(6);
@@ -201,8 +207,8 @@ public class Robot extends TimedRobot {
         //compressor.enableDigital();
 
         // Initialize the built in gyro
-        // internalData.initGyro();
-        // internalData.resetGyro();
+        internalData.initGyro();
+        internalData.resetGyro();
 
         // Start the camera server for the drive camera
         driveCam = CameraServer.startAutomaticCapture();

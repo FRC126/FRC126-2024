@@ -33,6 +33,9 @@ public class RobotMap {
 	public static int xboxLStick = 9; // Left stick button
 	public static int xboxRStick = 10; // Right stick button
 
+	// Pneumatic Controller Can ID
+	public static int PneumaticID = 2;
+	
     // Tower Arm Can Bus ID
 	public static int TowerArmMotorID = 25;
 	public static int TowerArmMotorInversion;
@@ -103,4 +106,48 @@ public class RobotMap {
 		}
 	}
 
+	/************************************************************************************************************
+	 * Controls
+	 * 
+	 * Driver:
+	 * 		Left Joystick Y-Axis: Forward and Backwards
+	 * 		Right Joysick X-Axis: Left and Right
+	 * 		POV Left: Shift robot left
+	 * 		POV Right: Shift robot right
+	 * 		Left Trigger: Slow Mode
+	 * 		Right Trigger: Drive straight, apply motor braking when stopped.
+	 * 		A Button: Climb and Balance
+	 * 		X Button: Cancel any running auto routines
+	 * 		B Button: Use lime light to center on pole
+	 * 
+	 * Operator:
+	 * 		Left Joystick Y-Axis: Up moves arm up, Down moves arm down
+	 * 		Right Joystick Y-Axis: Up moves arm extension in, Down moves arm extension out
+	 * 		Right Trigger: Close Gripper
+	 * 		Left Trigger: Open Gripper
+	 * 
+	 * 		Auto Commands:
+	 * 			X Button: Cancel any running auto routines
+	 *      
+	 * 			A Button: Place Cone Low Position
+	 * 			B Button: Place Cone Mid Position
+	 * 			Y Button: Place Cone High Position
+	 * 
+	 * 			POV UP + A Button: Place Cube Low Position
+	 * 			POV UP + B Button: Place Cube Mid Position
+	 * 			POV UP + Y Button: Place Cube High Position
+	 * 
+	 *          POV LEFT + A Button: Pickup Cone		
+	 * 		    POV LEFT + B Button: Pickup Cube
+	 * 
+	 *          POV LEFT + Y Button: Catch Cone
+	 *          POV DOWN + Y Button: Catch Cube
+	 *          POV RIGHT + Y Button: Knock Over Cone
+	 * 
+	 * 			BACK BUTTON: Ignore encoders while move ARM, EXTENSION or GRIPPER, Only for Zero'ing the robot
+	 * 			START BUTTON: Zero all encoders
+	 * 			POV UP + START BUTTON: Zero arm encoder
+	 * 			POV RIGHT + START BUTTON: Zero arm extension encoder
+	 * 			POV DOWN + START BUTTON: Zero grabber encoder
+	 */
 }

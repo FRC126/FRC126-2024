@@ -20,22 +20,22 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  **********************************************************************************/
 
 public class AutoMoveRight extends SequentialCommandGroup {
-    public AutoMoveRight() {
+    public AutoMoveRight(int multiplier) {
         /**********************************************************************************
          **********************************************************************************/
 
         double angle=20;
 
         addCommands(
-            new DriveDistance(-12,150),
+            new DriveDistance(-6*multiplier,150),
 
             new TurnDegreesBetter(angle, 150),
 
-            new DriveDistance(6,150),
+            new DriveDistance(3*multiplier,150),
 
             new TurnDegreesBetter((angle * -1), 150),
 
-            new DriveDistance(7, 150),
+            new DriveDistance(3*multiplier+1, 150),
             
             new FinishAuto()
         );

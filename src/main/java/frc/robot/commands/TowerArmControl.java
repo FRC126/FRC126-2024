@@ -69,8 +69,6 @@ public class TowerArmControl extends CommandBase {
 				    Robot.autoCommand=new AutoPlaceCubeLow();
 				} else if ( operatorJoystick.getPovLeft() ) {
 				    Robot.autoCommand=new AutoPickupCone();
-				} else if ( operatorJoystick.getPovRight() ) {
-				    Robot.autoCommand=new AutoPickupCube();
 				} else {
 				    Robot.autoCommand=new AutoPlaceConeLow();
 				}	
@@ -82,7 +80,7 @@ public class TowerArmControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				if ( !operatorJoystick.getPovUp() ) {
 					Robot.autoCommand=new AutoPlaceCubeMid();
-				} else if ( operatorJoystick.getPovRight() ) {
+				} else if ( operatorJoystick.getPovLeft() ) {
 				    Robot.autoCommand=new AutoPickupCube();
 				} else {
 					Robot.autoCommand=new AutoPlaceConeMid();

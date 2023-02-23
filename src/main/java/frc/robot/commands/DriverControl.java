@@ -50,6 +50,8 @@ public class DriverControl extends CommandBase {
 	
 	@Override
 	public void execute() {
+		int multiplier=1;
+
 		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
@@ -96,10 +98,14 @@ public class DriverControl extends CommandBase {
 			Robot.driveBase.resetEncoders();
 		}
 
-	    // Shift the Robot Left
+		if (driveJoystick.isLShoulderButton()) {
+			multiplier=2;
+		}
+
+		// Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoMoveLeft();
+				Robot.autoCommand=new AutoMoveLeft(multiplier);
 				Robot.autoCommand.schedule();
 			}	
 		}
@@ -107,7 +113,7 @@ public class DriverControl extends CommandBase {
 		// Shift the Robot right
 		if (driveJoystick.getPovRight()) {
 			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoMoveRight();
+				Robot.autoCommand=new AutoMoveRight(multiplier);
 				Robot.autoCommand.schedule();
 	        }			
 		}
