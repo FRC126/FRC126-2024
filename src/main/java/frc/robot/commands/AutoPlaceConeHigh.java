@@ -55,8 +55,6 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
             ),    
 
-            //new MoveGrabber(Grabber.grabberOpenPos-20, 250),
-
             new FinishAuto()        
         );
     }       

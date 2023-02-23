@@ -111,7 +111,6 @@ public class Robot extends TimedRobot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
-    public static boolean isThrowCommand=false;
     public static boolean isAutoCommand=false;
 
     public static SequentialCommandGroup autoCommand;
@@ -386,6 +385,9 @@ public class Robot extends TimedRobot {
 	 ************************************************************************/
 
     static public boolean doAutoCommand() {
+		if (Robot.internalData.isAuto()) {
+            return false;
+        }
 		
 		if (Robot.isAutoCommand) {
 			return false;
@@ -398,7 +400,6 @@ public class Robot extends TimedRobot {
 	    Robot.isAutoCommand = true;
 
    		SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
-
 		return true;
 	}
 
@@ -406,6 +407,10 @@ public class Robot extends TimedRobot {
 	 ************************************************************************/
 
 	static public void stopAutoCommand() {
+		if (Robot.internalData.isAuto()) {
+            return;
+        }
+
 		if (Robot.isAutoCommand) {
             Robot.autoCommand.cancel();
 		}	
