@@ -24,12 +24,13 @@ public class AutoClimbBalance extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double angle=-20;
-
         addCommands(
             new Climb(500),
 
-            new Balance(500)
+            new Balance(500),
+            
+            new FinishAuto()
+
         );
     }       
 }

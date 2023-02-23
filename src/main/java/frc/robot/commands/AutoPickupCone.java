@@ -38,6 +38,7 @@ public class AutoPickupCone extends SequentialCommandGroup {
 
             new MoveTowerArm(RobotMap.towerArmRetractedPos, 250),
 
-            new FinishAuto()        );
+            new FinishAuto()    
+        );
     }       
 }
