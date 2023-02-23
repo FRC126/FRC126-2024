@@ -139,8 +139,8 @@ public class Robot extends TimedRobot {
 
     public static boolean ignoreEncoders=false;
 
-    public static enum targetHeights{LowTarget,HighTarget};
-    public static enum targetTypes{NoTarget,BallSeek,TargetSeek, PixyTargetSeek};
+    //public static enum targetHeights{LowTarget,HighTarget};
+    public static enum targetTypes{NoTarget,TargetSeek};
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
 
@@ -177,15 +177,15 @@ public class Robot extends TimedRobot {
 
         // Initilize Tower Arm
         robotTowerArm = new TowerArm();
-        //towerArmRetracedLimit = new DigitalInput(2);
+        towerArmRetracedLimit = new DigitalInput(6);
 
         // Initilize Grabber    
         robotGrabber = new Grabber();
-        //grabberRetracedLimit = new DigitalInput(3);
+        grabberRetracedLimit = new DigitalInput(7);
         
         // Initilize Arm Extension    
         robotArmExtension = new ArmExtension();
-		//armExtensionBottomLimit = new DigitalInput(0);
+		armExtensionBottomLimit = new DigitalInput(8);
 		//armExtensionTopLimit = new DigitalInput(1);
 
         // Not using the limelight right now

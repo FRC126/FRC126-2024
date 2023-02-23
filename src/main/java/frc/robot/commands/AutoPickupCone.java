@@ -15,9 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.*;
+import frc.robot.RobotMap;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -28,13 +26,17 @@ public class AutoPickupCone extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new MoveArmExtension(ArmExtension.armExtendedPickupPos, 250),
+            new MoveGrabber(RobotMap.grabberOpenPos, 250),
+            
+            new MoveTowerArm(RobotMap.towerArmRetractedPos+8, 250),
 
-            new MoveGrabber(Grabber.grabberConePos, 250),
+            new MoveArmExtension(RobotMap.armExtendedPickupPos, 250),
 
-            new MoveArmExtension(ArmExtension.armRetractedPos, 250),
+            new MoveGrabber(RobotMap.grabberConePos, 250),
 
-            new MoveTowerArm(TowerArm.armRetractedPos, 250),
+            new MoveArmExtension(RobotMap.armRetractedPos, 250),
+
+            new MoveTowerArm(RobotMap.towerArmRetractedPos, 250),
 
             new FinishAuto()        );
     }       

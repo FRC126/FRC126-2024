@@ -24,14 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
-
 public class Grabber extends SubsystemBase {
 
-	public static double grabberClosedPos=0;
-	public static double grabberOpenPos=340;
-	public static double grabberConePos=30;
-	public static double grabberCubePos=250;
 	double lastSpeed=1000;
+	int limitHit=0;
 	
 	/************************************************************************
 	 ************************************************************************/
@@ -40,8 +36,6 @@ public class Grabber extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new GrabberControl(this));
-
-		//resetEncoders();
 
 		// Brake mode on for the motor
 		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -67,15 +61,28 @@ public class Grabber extends SubsystemBase {
 
 		SmartDashboard.putNumber("Grabber Pos", pos);
 
+		if (Robot.grabberRetracedLimit.get() == false) {
+			SmartDashboard.putBoolean("Grabber Limit", true);
+			limitHit=0;	 
+		} else {
+		    SmartDashboard.putBoolean("Grabber Limit", false);
+			if (speed > 0) { speed=0; }
+			limitHit++;
+			if (limitHit > 20) {
+  			     Robot.GrabberRelativeEncoder.setPosition(5);
+				 limitHit=0;	 
+			}
+		}
+
 		if (speed != 0) {	
 			if (speed < 0) { 
-				if (pos >= grabberOpenPos - 20 && !Robot.ignoreEncoders) { speed = -.2; }
-				if (pos >= grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos >= RobotMap.grabberOpenPos - 20 && !Robot.ignoreEncoders) { speed = -.2; }
+				if (pos >= RobotMap.grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			if (speed > 0) { 
-				if (pos <= grabberClosedPos + 20 && !Robot.ignoreEncoders) { speed = .2; }
-				if (pos <= grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos <= RobotMap.grabberClosedPos + 20 && !Robot.ignoreEncoders) { speed = .2; }
+				if (pos <= RobotMap.grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 		}
 
@@ -89,9 +96,6 @@ public class Grabber extends SubsystemBase {
 			lastSpeed = speed;
 		}	
 
-		if (speed == 0 && lastSpeed != 0) {
-			Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		}
 	}
 
     /************************************************************************

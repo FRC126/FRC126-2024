@@ -15,10 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import frc.robot.Robot;
- 
+
 /**********************************************************************************
  **********************************************************************************/
 
@@ -27,7 +24,7 @@ public class AutoMoveLeft extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double angle=-30;
+        double angle=-20;
 
         addCommands(
             new DriveDistance(-12,150),

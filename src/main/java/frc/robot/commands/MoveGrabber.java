@@ -53,13 +53,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double targetPos=target;
         double speed=0;
 
-        if (curPos < targetPos - 4) { 
-            speed=-0.8;
-            if (curPos > targetPos -20) { speed=- 0.4; }
+        if (curPos < targetPos - 6) { 
+            speed=-0.9;
+            if (curPos > targetPos - 30) { speed=-0.4; }
             targetReached=0;
-        } else if (curPos > targetPos + 4) { 
-            speed=0.8;
-            if (curPos < targetPos +20) { speed=-0.4; }
+        } else if (curPos > targetPos + 6) { 
+            speed=0.9;
+            if (curPos < targetPos + 30) { speed=0.4; }
             targetReached=0;
         } else {
             speed=0;
@@ -75,7 +75,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 2 || iters <= 0) {
+        if (targetReached > 1 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.robotGrabber.cancel();
             return true;

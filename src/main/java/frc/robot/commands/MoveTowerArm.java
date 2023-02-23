@@ -54,12 +54,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double speed=0;
 
         if (curPos < targetPos - 2) { 
-            speed=0.65;
-            if (curPos > targetPos - 10) { speed=0.25; }
+            speed=0.75;
+            if (curPos > targetPos - 10) { speed=0.30; }
             targetReached=0;
         } else if (curPos > targetPos + 2) { 
-            speed=-0.65;
-            if (curPos < targetPos + 10) { speed=-0.25; }
+            speed=-0.75;
+            if (curPos < targetPos + 10) { speed=-0.30; }
             targetReached=0;
         } else {
             speed=0;

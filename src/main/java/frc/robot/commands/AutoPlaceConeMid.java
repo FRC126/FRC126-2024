@@ -16,9 +16,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.*;
- 
+import frc.robot.RobotMap;
+
 /**********************************************************************************
  **********************************************************************************/
 
@@ -28,21 +27,23 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
+            new DriveDistance(-6, 150),
+
             new ParallelCommandGroup(
-                new DriveDistance(-24, 150),
-                new MoveTowerArm(TowerArm.armExtendedMidPos, 400),
-                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400)
+                new DriveDistance(-18, 150),
+                new MoveTowerArm(RobotMap.towerArmExtendedMidPos, 400)
             ),
 
-            new DriveDistance(6, 250),
+            new DriveDistance(15, 250),
 
-            new MoveGrabber(Grabber.grabberConePos+50, 250),
+            new MoveGrabber(RobotMap.grabberConePos+50, 250),
 
+            new DriveDistance(-10, 250),
+            
             new ParallelCommandGroup(
-                new DriveDistance(-6, 250),
-                new MoveArmExtension(ArmExtension.armRetractedPos, 250),
-                new MoveGrabber(Grabber.grabberConePos, 250),
-                new MoveTowerArm(TowerArm.armRetractedPos+5, 250)
+                new DriveDistance(-1, 250),
+                new MoveGrabber(RobotMap.grabberConePos, 250),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos+5, 250)
             ),    
 
             new FinishAuto()        

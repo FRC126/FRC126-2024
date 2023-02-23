@@ -31,7 +31,7 @@ public class TowerArmControl extends CommandBase {
 	
     public TowerArmControl(TowerArm subsystem) {
 		addRequirements(subsystem);
-		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.05);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
 
 	/**********************************************************************************
@@ -63,12 +63,16 @@ public class TowerArmControl extends CommandBase {
 			UD=0;
 		}
 
-		if ( operatorJoystick.isYButton() ) {
+		if ( operatorJoystick.isAButton() ) {
 			if ( Robot.doAutoCommand() ) {
 				if ( operatorJoystick.getPovUp() ) {
-				    Robot.autoCommand=new AutoPlaceConeLow();
-				} else {
 				    Robot.autoCommand=new AutoPlaceCubeLow();
+				} else if ( operatorJoystick.getPovLeft() ) {
+				    Robot.autoCommand=new AutoPickupCone();
+				} else if ( operatorJoystick.getPovRight() ) {
+				    Robot.autoCommand=new AutoPickupCube();
+				} else {
+				    Robot.autoCommand=new AutoPlaceConeLow();
 				}	
 				Robot.autoCommand.schedule();
 			};
@@ -76,19 +80,25 @@ public class TowerArmControl extends CommandBase {
 
 		if ( operatorJoystick.isBButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovUp() ) {
-					Robot.autoCommand=new AutoPlaceConeMid();
-				} else {
+				if ( !operatorJoystick.getPovUp() ) {
 					Robot.autoCommand=new AutoPlaceCubeMid();
+				} else if ( operatorJoystick.getPovRight() ) {
+				    Robot.autoCommand=new AutoPickupCube();
+				} else {
+					Robot.autoCommand=new AutoPlaceConeMid();
 				}	
 				Robot.autoCommand.schedule();
 			};
 		}
 
-		if ( operatorJoystick.isAButton() ) {
+		if ( operatorJoystick.isYButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovUp() ) {
+				if ( !operatorJoystick.getPovUp() ) {
 					Robot.autoCommand=new AutoPlaceConeHigh();
+				} else if ( operatorJoystick.getPovLeft() ) {
+					Robot.autoCommand=new AutoCatchCone();
+				} else if ( operatorJoystick.getPovRight() ) {
+					Robot.autoCommand=new AutoKnockOverCone();
 				} else {	
 					Robot.autoCommand=new AutoPlaceCubeHigh();
 				}	
@@ -104,14 +114,18 @@ public class TowerArmControl extends CommandBase {
 
 		if ( operatorJoystick.isStartButton()) {
 			// Reset all the arm encoders at once
-			Robot.robotTowerArm.resetEncoders();
-			Robot.robotArmExtension.resetEncoders();
-			Robot.robotGrabber.resetEncoders();
+			if ( operatorJoystick.getPovUp() ) {
+				Robot.robotTowerArm.resetEncoders();
+			} else if ( operatorJoystick.getPovRight() ) {
+				Robot.robotArmExtension.resetEncoders();
+			} else if ( operatorJoystick.getPovDown() ) {
+				Robot.robotGrabber.resetEncoders();
+			} else {
+				Robot.robotTowerArm.resetEncoders();
+				Robot.robotArmExtension.resetEncoders();
+				Robot.robotGrabber.resetEncoders();
+			}	
 		}
-
-		// Log the Joystick X,Y Axis to the SmartDashboard.
-		//SmartDashboard.putNumber("JoyStick A Button",operatorJoystick.isAButton());
-		//SmartDashboard.putNumber("JoyStick X Axis",operatorJoystick.isBButton());
 
         Robot.robotTowerArm.MoveArm(UD);
 	}

@@ -26,15 +26,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  **********************************************************************************/
 
 public class ArmExtension extends SubsystemBase {
-
-	public static double armRetractedPos=0;
-	public static double armExtendedPlacePos=340;
-	public static double armExtendedPickupPos=40;
-	public static double armExtendedPickupFloorPos=90;
-	public static double armExtendedPlaceLow=150;
-	//public static double armExtendedMaxPos=460;
-	public static double armExtendedMaxPos=385;
 	double lastSpeed=1000;
+	int limitHit=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -43,8 +36,6 @@ public class ArmExtension extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ArmExtensionControl(this));
-
-		//resetEncoders();
 
 		// Brake mode on for the motor
 		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -70,30 +61,30 @@ public class ArmExtension extends SubsystemBase {
 
 		SmartDashboard.putNumber("Arm Extension Pos", pos);
 
+		if (Robot.armExtensionBottomLimit.get() == false) {
+			SmartDashboard.putBoolean("Arm Extension Limit", true);
+			limitHit=0;
+		} else {
+		    SmartDashboard.putBoolean("Arm Extension Limit", false);
+			if (speed > 0) { speed=0; }
+			limitHit++;
+			if (limitHit > 20) {
+  			     Robot.ArmExtensionRelativeEncoder.setPosition(5);
+			}
+		}
+
 		//if (speed != 0) {
 			
-			//SmartDashboard.putBoolean("AE Bottom Limit", Robot.armExtensionBottomLimit.get());
-			//if ( Robot.armExtensionBottomLimit.get() == false ) {
-			//	// Arm at max extension
-			//	speed = 0;
-			//}
-
-			//SmartDashboard.putBoolean("AE Top Limit", Robot.armExtensionTopLimit.get());
-			//if ( Robot.armExtensionTopLimit.get() == false ) {
-			//	// Arm in the minimum extension
-			//	speed = 0;
-			//}
-
 			if (speed > 0) { 
-				if (pos < armRetractedPos + 35 && !Robot.ignoreEncoders) { speed = 0.2; }
-				if (pos < armRetractedPos + 15 && !Robot.ignoreEncoders) { speed = 0.1; }
-				if (pos < armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos < RobotMap.armRetractedPos + 35 && !Robot.ignoreEncoders) { speed = 0.2; }
+				if (pos < RobotMap.armRetractedPos + 15 && !Robot.ignoreEncoders) { speed = 0.1; }
+				if (pos < RobotMap.armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			if (speed < 0) { 
-				if (pos > armExtendedMaxPos - 35 && !Robot.ignoreEncoders) { speed = -.2; }
-				if (pos > armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.1; }
-				if (pos > armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+				if (pos > RobotMap.armExtendedMaxPos - 35 && !Robot.ignoreEncoders) { speed = -.2; }
+				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.1; }
+				if (pos > RobotMap.armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			SmartDashboard.putNumber("Arm Extension Speed", speedIn);

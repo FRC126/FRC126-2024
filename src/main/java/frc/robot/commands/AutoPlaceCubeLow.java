@@ -15,9 +15,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
- 
+import frc.robot.RobotMap;
+
 /**********************************************************************************
  **********************************************************************************/
 
@@ -28,19 +28,26 @@ public class AutoPlaceCubeLow extends SequentialCommandGroup {
 
          addCommands(
             new ParallelCommandGroup(
-                new MoveTowerArm(TowerArm.armExtendedLowPos, 400),
-                new MoveArmExtension(ArmExtension.armExtendedPlaceLow, 400)
+                new MoveTowerArm(RobotMap.towerArmExtendedLowPos, 400),
+                new MoveArmExtension(RobotMap.armExtendedPlaceLow, 400)
             ),
 
-            new MoveGrabber(Grabber.grabberCubePos+50, 250),
+            new MoveGrabber(RobotMap.grabberOpenPos, 250),
 
             new ParallelCommandGroup(
-                new MoveArmExtension(ArmExtension.armRetractedPos, 250),
-                new MoveGrabber(Grabber.grabberConePos, 250),
-                new MoveTowerArm(TowerArm.armRetractedPos, 250)
-            ),    
+                new MoveArmExtension(RobotMap.armExtendedPlaceLow+30, 400),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
+            ),
 
-            new FinishAuto()        
+            new DriveDistance(-12, 150),
+
+            new ParallelCommandGroup(
+                new MoveArmExtension(RobotMap.armRetractedPos, 250),
+                new MoveGrabber(RobotMap.grabberConePos, 250),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
+            ),
+
+            new FinishAuto()
         );
     }       
 }

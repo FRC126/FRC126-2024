@@ -33,7 +33,6 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centeredCount;
-    private int iter;
     public static SequentialCommandGroup throwCommand;
 
 
@@ -55,11 +54,6 @@ public class LimeLight extends SubsystemBase {
         missedCount=0;
 
         centeredCount=0;
-
-        iter=0;
-
-        Robot.isThrowCommand = false;
-
     }
 
 	/************************************************************************
@@ -212,9 +206,6 @@ public class LimeLight extends SubsystemBase {
         if (Robot.targetType != Robot.targetTypes.TargetSeek) {
             // If we are not seeking a target, then reset all target 
             // data and return
-
-            Robot.robotDrive=0;
-            Robot.robotTurn=0;
             Robot.shootNow=false;
 
             setllTargetData(false, 0, 0, 0);
@@ -222,14 +213,7 @@ public class LimeLight extends SubsystemBase {
             validCount=0;
             missedCount=0;
             centeredCount=0;
-            iter=0;
-
-            if (Robot.isThrowCommand == true) {
-                // Cancel any outstanding throw commands.
-                throwCommand.cancel();
-                Robot.isThrowCommand = false;
-            }
-            
+           
             dashboardData();
 		 	return;
         }
@@ -238,42 +222,22 @@ public class LimeLight extends SubsystemBase {
 
         if (Robot.limeLight.getllTargetValid()){
             // We found a valid vision target.
-            iter=0;
 
             // Keep track of the number of time we seen a valid target
             validCount++;
             missedCount=0;
 
-            Robot.robotDrive=0;
+            //double area = Robot.limeLight.getllTargetArea();
+            //double threshold;
 
-            double area = Robot.limeLight.getllTargetArea();
-            double threshold;
-
-            // The further the object is awway from the us, allow less deviation from the center.
-            if (area < .2) {
-                threshold = 1.5;
-            } else if (area < .5) {
-                threshold = 2.5;
-            } else if (area < 1) {
-                threshold = 3.5;
-            } else {
-                threshold = 4.5;
-            }
-
-            if ( Robot.limeLight.getllTargetX() < ( -1 * threshold ) ) {
+            if ( Robot.limeLight.getllTargetX() < -1) {
                 // Target is to the left of the Robot, need to move left
-                Robot.robotTurn=-.25;
-                if ( Robot.limeLight.getllTargetX() + threshold < ( -1 * threshold ) ) {
-                    Robot.robotTurn=-.35;
-                }
+                // TODO: need to move the robot left
                 centeredCount=0;
                 Robot.shootNow=false;
-            } else if ( Robot.limeLight.getllTargetX() > threshold ) {
+            } else if ( Robot.limeLight.getllTargetX() > 1 ) {
                 // Target is to the left of the Robot, need to move right
-                Robot.robotTurn=.25;
-                if ( Robot.limeLight.getllTargetX() - threshold > threshold ) {
-                    Robot.robotTurn=.35;
-                }
+                // TODO: need to move the robot right
                 centeredCount=0;
                 Robot.shootNow=false;
             } else {
@@ -286,51 +250,19 @@ public class LimeLight extends SubsystemBase {
                 } else {
                    Robot.shootNow=false;
                 }
-                Robot.robotTurn=0;
             }
         } else {
             if (validCount > 10 && missedCount <= 3) {
                 // Don't change the old data, so we won't stop on dropping a frame or 3
                 missedCount++;
-                // Stop turning if we dropped a frame.
-                Robot.robotTurn = 0;
             } else {
-                iter++;
-
-                // Don't move forward or back
-                Robot.robotDrive=0;
                 // Initialize all target data
                 Robot.shootNow=false; 
                 setllTargetData(false, 0, 0, 0);
                 validCount=0;
                 missedCount=0;
                 centeredCount=0;
-    
-                if (Robot.isThrowCommand == true) {
-                    throwCommand.cancel();
-                    Robot.isThrowCommand = false;
-                }
-    
-                if (iter > 10 && iter < 350) {
-                    // Try turning until we pick up a target
-                    Robot.robotTurn= -0.3;
-                } else {
-                    Robot.robotTurn=0;
-                }    
-
-                if ( iter > 500 ) { 
-                    iter=0; 
-                }              
             }    
-        }
-
-        if (Robot.shootNow && Robot.isThrowCommand == false) {
-            // If we are centered on the target, and shooNow is true, the create
-            // an autoThrow command to throw the balls.
-
-            // TODO Need to set RPM based on targetArea.
-            //throwCommand = new AutoThrow(14000);
-            //Robot.isThrowCommand = true;
         }
 
         dashboardData();

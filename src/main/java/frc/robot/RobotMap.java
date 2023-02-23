@@ -57,6 +57,29 @@ public class RobotMap {
 	public static int right1Inversion;
 	public static int right2Inversion;
 
+	// Grabber Parameters
+	public static double grabberClosedPos=0;
+	public static double grabberOpenPos=340;
+	public static double grabberConePos=30;
+	public static double grabberCubePos=250;
+ 
+	// Tower Arm
+	public static double towerArmRetractedPos=-0;
+	public static double towerArmPickupPos=15;
+	public static double towerArmFloorPickupPos=30;
+	public static double towerArmExtendedHighPos=160;
+	public static double towerArmExtendedMaxPos=175;
+	public static double towerArmExtendedMidPos=143;
+	public static double towerArmExtendedLowPos=50;
+
+	// Arm Extension
+	public static double armRetractedPos=0;
+	public static double armExtendedPlacePos=340;
+	public static double armExtendedPickupPos=40;
+	public static double armExtendedPickupFloorPos=90;
+	public static double armExtendedPlaceLow=140;
+	public static double armExtendedMaxPos=385;
+	
 	//Position Calibrations
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 

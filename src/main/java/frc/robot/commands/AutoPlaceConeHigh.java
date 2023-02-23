@@ -16,11 +16,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.subsystems.*;
+import frc.robot.RobotMap;
 
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import frc.robot.Robot;
- 
 /**********************************************************************************
  **********************************************************************************/
 
@@ -30,26 +27,35 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
+            new DriveDistance(-6, 150),
+
             // Drive Backwards, Raise and Extend the Arm.
             new ParallelCommandGroup(
-                new DriveDistance(-24, 150),
-                new MoveTowerArm(TowerArm.armExtendedHighPos, 400),
-                new MoveArmExtension(ArmExtension.armExtendedPlacePos, 400)
+                new DriveDistance(-18, 400),
+                new MoveTowerArm(RobotMap.towerArmExtendedHighPos, 400),
+                new MoveArmExtension(RobotMap.armExtendedPlacePos, 400)
             ),
 
             // Drive Forwards
-            new DriveDistance(25, 250),
+            new DriveDistance(26, 250),
 
             // Open the grabber to drop the cone
-            new MoveGrabber(Grabber.grabberConePos+50, 250),
+            new MoveGrabber(RobotMap.grabberConePos+50, 250),
+
+            new ParallelCommandGroup(
+                new DriveDistance(-12, 150),
+                new MoveArmExtension(RobotMap.armExtendedPlacePos-100, 250)
+            ),    
 
             // Drive backwards, lower and retract the arm, close the grabber
             new ParallelCommandGroup(
-                new DriveDistance(-24, 250),
-                new MoveArmExtension(ArmExtension.armRetractedPos, 250),
-                new MoveGrabber(Grabber.grabberConePos, 250),
-                new MoveTowerArm(TowerArm.armRetractedPos, 250)
+                new DriveDistance(-12, 250),
+                new MoveArmExtension(RobotMap.armRetractedPos, 250),
+                new MoveGrabber(RobotMap.grabberClosedPos+5, 250),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
             ),    
+
+            //new MoveGrabber(Grabber.grabberOpenPos-20, 250),
 
             new FinishAuto()        
         );
