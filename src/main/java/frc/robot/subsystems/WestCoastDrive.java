@@ -31,6 +31,8 @@ public class WestCoastDrive extends SubsystemBase {
 	double leftMultiplier, rightMultiplier, leftSpeed, rightSpeed, fbSlowDown, rotSlowDown, limiter, left1RPM, left2RPM, right1RPM, right2RPM;
 	double previousLimiter = 1;
 	double fbLast=0;
+	double rotLast=0;
+
 	public static SequentialCommandGroup autoCommand;
 			
 	/************************************************************************
@@ -120,83 +122,90 @@ public class WestCoastDrive extends SubsystemBase {
 		} else if (fbIn > 0) {
 			// Soft start for throttle forward
 			if ( fbIn > fbLast) {
-				fb = fbLast + 0.05;
+				fb = fbLast + 0.025;
 			}			
 			fbLast=fb;
 		} else {
 			// Soft start for throttle reverse
 			if ( fbIn < fbLast) {
-				fb = fbLast - 0.05;
+				fb = fbLast - 0.025;
 			}			
 			fbLast = fb;
 		}
 
-			// If driveStraight is enable, keep the same heading
-			if (driveStraight) {
-				double degrees = Robot.navxMXP.getAngle();
-				double tmp = degrees - straightDegrees;
-
-				SmartDashboard.putNumber("NavX GyroX",degrees);
-				SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
+		// Soft turn code
+		if (rotIn == 0) {
+			// No movement, so rot and last to zero
+			rot = 0;
+			rotLast = 0;
+		} else if (rotIn > 0) {
+			// Soft start for throttle forward
+			if ( rotIn > rotLast) {
+				rot = rotLast + 0.025;
+			}			
+			rotLast=rot;
+		} else {
+			// Soft start for throttle reverse
+			if ( rotIn < rotLast) {
+				rot = rotLast - 0.025;
+			}			
+			rotLast = rot;
+		}
 		
-				if(tmp > 0.5) {
-					// We are drifiting to the left, correct
-					rot = -0.05;
-					if (tmp > 3) { rot = -0.1; }
-				} else if (tmp < -0.5) {
-					// We are drifiting to the right, correct
-					rot=0.05;
-					if (tmp < -3) { rot = 0.1; }
-				} else {
-					// Drive straight
-					rot = 0;
-				}	
-			}    			
+		// If driveStraight is enable, keep the same heading
+		if (driveStraight) {
+			double degrees = Robot.navxMXP.getAngle();
+			double tmp = degrees - straightDegrees;
 
-			// Calculate the speed of the wheels including any turning
-			leftMultiplier = fb + (rot);
-			rightMultiplier = fb - (rot);
-			leftSpeed = leftMultiplier / 1.0;
-			rightSpeed = rightMultiplier / 1.0;
+			SmartDashboard.putNumber("NavX GyroX",degrees);
+			SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
+	
+			if(tmp > 0.5) {
+				// We are drifiting to the left, correct
+				rot = -0.05;
+				if (tmp > 3) { rot = -0.1; }
+			} else if (tmp < -0.5) {
+				// We are drifiting to the right, correct
+				rot=0.05;
+				if (tmp < -3) { rot = 0.1; }
+			} else {
+				// Drive straight
+				rot = 0;
+			}	
+		}    			
 
-			/*
-			// Handle the difference between forward and backwards in the motors
-			if (leftSpeed > 0) {
-				rightSpeed = rightSpeed *.95;
-			}
+		// Calculate the speed of the wheels including any turning
+		leftMultiplier = fb + (rot);
+		rightMultiplier = fb - (rot);
+		leftSpeed = leftMultiplier / 1.0;
+		rightSpeed = rightMultiplier / 1.0;
 
-			// Handle the difference between forward and backwards in the motors
-			if (rightSpeed < 0) {
-				leftSpeed = leftSpeed *.95;
-			}
-			*/
+		// Don't let the motors brown out the robot
+		limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
+		if (limiter < 0) {
+			limiter = 0;
+		} else if (limiter > 1) {
+			limiter = 1;
+		}
+		
+		previousLimiter = (4 * previousLimiter + limiter) / 5;
+		if (Robot.internalData.getVoltage() < Robot.voltageThreshold) {
+			leftSpeed *= previousLimiter;
+			rightSpeed *= previousLimiter;
+		}
 
-			// Don't let the motors brown out the robot
-			limiter = 1 + (1 * (Robot.internalData.getVoltage() - Robot.voltageThreshold));
-			if (limiter < 0) {
-				limiter = 0;
-			} else if (limiter > 1) {
-				limiter = 1;
-			}
-			
-			previousLimiter = (4 * previousLimiter + limiter) / 5;
-			if (Robot.internalData.getVoltage() < Robot.voltageThreshold) {
-				leftSpeed *= previousLimiter;
-				rightSpeed *= previousLimiter;
-			}
+		SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
 
-			SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
+		SmartDashboard.putNumber("drive fb", fb);
+		SmartDashboard.putNumber("drive rot", rot);
+		
+		SmartDashboard.putNumber("Left Speed", leftSpeed);
+		SmartDashboard.putNumber("Right Speed", rightSpeed);
 
-			SmartDashboard.putNumber("drive fb", fb);
-			SmartDashboard.putNumber("drive rot", rot);
-			
-			SmartDashboard.putNumber("Left Speed", leftSpeed);
-			SmartDashboard.putNumber("Right Speed", rightSpeed);
-
-			SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
-			SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
-			SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
-			SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
+		SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
+		SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
+		SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
+		SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 		
 
         // Set the Drive Motor Speeds
@@ -229,15 +238,6 @@ public class WestCoastDrive extends SubsystemBase {
 		double wheelDiameter = 6;
 		double gearRatio = 6;
 		
-		// Need to use encoders for the NEOs
-		// double ticksPerRotation = 2048;
-		// double left = Robot.leftDriveEncoder.getAbsolutePosition();
-        // double right = Robot.rightDriveEncoder.getAbsolutePosition();	
-		// Get the absolute value of the average of all the encoders.
-		// double avg = (left + right) / 2;
-		// double distance = ((avg / ticksPerRotation) / gearRatio) * (wheelDiameter * 3.1459);
-		// SmartDashboard.putNumber("Drive Distance",distance);
-
 		double left1 = Robot.left1RelativeEncoder.getPosition();
 		double left2 = Robot.left2RelativeEncoder.getPosition();
 		double right1 = Robot.right1RelativeEncoder.getPosition()*-1;
@@ -248,13 +248,13 @@ public class WestCoastDrive extends SubsystemBase {
 		SmartDashboard.putNumber("Right 1",right1);
 		SmartDashboard.putNumber("Right 2",right2);
 
-		double avg2 = Math.abs((left1 + left2 + right1 + right2) / 4);
+		double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
-		double distance2 = (avg2 / gearRatio) * (wheelDiameter * 3.1459);
+		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
-		SmartDashboard.putNumber("Drive 2 Distance",distance2);
+		SmartDashboard.putNumber("Drive Distance",distance);
 
-		return(distance2);
+		return(distance);
 	}
 
     /************************************************************************
