@@ -73,7 +73,7 @@ public class ArmExtension extends SubsystemBase {
 			}
 		}
 
-		//if (speed != 0) {
+		if (speed != 0) {
 			
 			if (speed > 0) { 
 				if (pos < RobotMap.armRetractedPos + 35 && !Robot.ignoreEncoders) { speed = 0.2; }
@@ -86,15 +86,13 @@ public class ArmExtension extends SubsystemBase {
 				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.1; }
 				if (pos > RobotMap.armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
-
-			SmartDashboard.putNumber("Arm Extension Speed", speedIn);
-			SmartDashboard.putNumber("Arm Extension Speed", speed);
-
-		//}
+        }
 
 		if (lastSpeed != speed) {
 		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
 			lastSpeed = speed;
+
+			SmartDashboard.putNumber("Arm Extension Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {

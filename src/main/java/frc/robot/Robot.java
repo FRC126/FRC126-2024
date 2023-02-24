@@ -354,17 +354,17 @@ public class Robot extends TimedRobot {
         autonomous.schedule();
     }
 
- 	  /************************************************************************
+    /************************************************************************
      * This function is called periodically during autonomous.
-	   ************************************************************************/
+    ************************************************************************/
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
     }
 
- 	  /************************************************************************
+    /************************************************************************
      * This function is called once each time the robot enters teleoperated mode.
-	   ************************************************************************/
+    ************************************************************************/
     @Override
     public void teleopInit() { 
         Log.print(0, "Robot", "Robot Teleop Init");
@@ -380,17 +380,17 @@ public class Robot extends TimedRobot {
 		Robot.driveBase.cancel();
     }
 
- 	  /************************************************************************
+    /************************************************************************
      * This function is called periodically during teleoperated mode.
-	   ************************************************************************/
+    ************************************************************************/
     @Override
     public void teleopPeriodic() {
         CommandScheduler.getInstance().run();
     }
 
- 	  /************************************************************************
+    /************************************************************************
      * This function is called once each time the robot enters test mode.  
-	   ************************************************************************/
+    ************************************************************************/
     @Override
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
@@ -401,9 +401,9 @@ public class Robot extends TimedRobot {
 		Robot.driveBase.cancel();
     }  
 
- 	  /************************************************************************
+    /************************************************************************
      * This function is called periodically during test mode.
-	   ************************************************************************/
+    ************************************************************************/
    @Override
     public void testPeriodic() {
         CommandScheduler.getInstance().run();
