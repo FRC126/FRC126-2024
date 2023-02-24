@@ -22,7 +22,7 @@ import frc.robot.RobotMap;
  **********************************************************************************/
 
 public class AutoPlaceConeMid extends SequentialCommandGroup {
-    public AutoPlaceConeMid() {
+    public AutoPlaceConeMid(int action) {
         /**********************************************************************************
          **********************************************************************************/
 
@@ -48,5 +48,14 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
 
             new FinishAuto()        
         );
+
+        if (action == 1) {
+            addCommands(
+                new TurnDegreesBetter(180,250),
+                
+                new AutoClimbBalance()
+            );
+        }
+
     }       
 }

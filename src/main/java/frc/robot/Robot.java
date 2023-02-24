@@ -31,16 +31,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-//import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
-// import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.subsystems.*;
-//import frc.robot.commands.*;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -269,19 +267,26 @@ public class Robot extends TimedRobot {
             case 0:
             {
                 // Left Position
-                if ( selectedAutoBalance==1 ) { selectedAutoBalance=0; }
+                
                 switch (selectedAutoFunction) {
                     case 0:
-                        //autonomous = new AutoConeLow(selectedAutoBalance);    
-                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        // Floor Cone
+                        autonomous = new AutoPlaceConeLow(0);    
+                        SmartDashboard.putString("AutoCommand","Left - Cone Low - No Balance");
                         break;
                     case 1:
-                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        // Mid Cone
+                        autonomous = new AutoPlaceConeMid(0);    
+                        SmartDashboard.putString("AutoCommand","Left - Cone Mid - No Balance");
                         break;
                     case 2:
-                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        // High Cone
+                        autonomous = new AutoPlaceConeHigh(0);    
+                        SmartDashboard.putString("AutoCommand","Left - Cone High - No Balance");
                         break;
                     case 3:
+                        // No Cone
+                        SmartDashboard.putString("AutoCommand","Left - No Cone - No Balance");
                         break;    
                 }
                 break;
@@ -289,19 +294,29 @@ public class Robot extends TimedRobot {
             case 1:
             {
                 // Center Position
+
                 switch (selectedAutoFunction) {
                     case 0:
-                        //autonomous = new AutoConeLow(selectedAutoBalance);    
-                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        // Floor Cone
+                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
+                        SmartDashboard.putString("AutoCommand","Center - Cone Low");
                         break;
                     case 1:
-                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        // Mid Cone
+                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
+                        SmartDashboard.putString("AutoCommand","Center - Cone Mid");
                         break;
                     case 2:
-                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        // High Cone
+                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
+                        SmartDashboard.putString("AutoCommand","Center - Cone High");
                         break;
                     case 3:
-                        //autonomous = new AutoBalance();    
+                        // No Cone
+                        if (selectedAutoBalance==1) {
+                            autonomous = new AutoClimbBalance();    
+                            SmartDashboard.putString("AutoCommand","Center - No Cone - Balance");
+                        }    
                         break;    
                 }
             }
@@ -309,19 +324,26 @@ public class Robot extends TimedRobot {
             case 2:
             {
                 // Right Position
-                if ( selectedAutoBalance==1 ) { selectedAutoBalance=0; }
+                selectedAutoBalance=0;
                 switch (selectedAutoFunction) {
                     case 0:
-                        //autonomous = new AutoConeLow(selectedAutoBalance);    
-                        //SmartDashboard.putString("AutoCommand","One Ball");
+                        // Floor Cone
+                        autonomous = new AutoPlaceConeLow(0);    
+                        SmartDashboard.putString("AutoCommand","Right - Cone Low - No Balance");
                         break;
                     case 1:
-                        //autonomous = new AutoConeMid(selectedAutoBalance);    
+                        // Mid Cone
+                        autonomous = new AutoPlaceConeMid(0);    
+                        SmartDashboard.putString("AutoCommand","Right - Cone Mid - No Balance");
                         break;
                     case 2:
-                        //autonomous = new AutoConeHigh(selectedAutoBalance);    
+                        // High Cone
+                        autonomous = new AutoPlaceConeHigh(0);    
+                        SmartDashboard.putString("AutoCommand","Right - Cone High - No Balance");
                         break;
                     case 3:
+                        // No Cone
+                        SmartDashboard.putString("AutoCommand","Right - No Cone - No Balance");
                         break;    
                 }
             }
