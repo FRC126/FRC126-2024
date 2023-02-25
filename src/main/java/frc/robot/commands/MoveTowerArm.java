@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  **********************************************************************************/
 
  public class MoveTowerArm extends CommandBase {
-    double target;
+    double targetPos;
     int iters;
     int targetReached=0;
 
@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public MoveTowerArm(double targetIn, int iters_in ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        target = targetIn;
+        targetPos = targetIn;
         iters = iters_in;
         targetReached = 0;
     }
@@ -52,16 +52,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double curPos=Robot.robotTowerArm.getPos();
         double speed=0;
         double driftTolerance=1.5;
+        double maxSpeed=1;
+        double minSpeed=.25;
 
-        if (curPos < target - driftTolerance) { 
-            speed=0.15;
-            if (curPos < target - 15) { speed=0.35; }
-            if (curPos < target - 30) { speed=0.75; }
+        if (curPos < targetPos - driftTolerance) { 
+            Robot.boundSpeed(((targetPos-curPos)/50), maxSpeed, minSpeed);
             targetReached=0;
-        } else if (curPos > target + driftTolerance) { 
-            speed=-0.15;
-            if (curPos > target + 15) { speed=-0.35; }
-            if (curPos > target + 30) { speed=-0.75; }
+        } else if (curPos > targetPos + driftTolerance) { 
+            Robot.boundSpeed(((targetPos-curPos)/50), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
         } else {
             speed=0;

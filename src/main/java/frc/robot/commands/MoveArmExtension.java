@@ -53,16 +53,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double targetPos=target;
         double speed=0;
         double driftTolerance = 2;
+        double maxSpeed=1;
+        double minSpeed=.25;
 
         if (curPos < targetPos - driftTolerance) { 
-            speed=-0.2;
-            if (curPos < targetPos - 20) { speed=-0.4; }
-            if (curPos < targetPos - 40) { speed=-0.9; }
+            speed=Robot.boundSpeed(((curPos - targetPos)/50), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
         } else if (curPos > targetPos + driftTolerance) { 
-            speed=0.2;
-            if (curPos > targetPos + 20) { speed=0.4; }
-            if (curPos > targetPos + 40) { speed=0.9; }
+            speed=Robot.boundSpeed(((curPos - targetPos)/50), maxSpeed, minSpeed);
             targetReached=0;
         } else {
             speed=0;

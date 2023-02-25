@@ -457,4 +457,21 @@ public class Robot extends TimedRobot {
 		Robot.robotArmExtension.cancel();
 		Robot.driveBase.cancel();
 	}		
-}
+
+    /************************************************************************
+	 ************************************************************************/
+
+    static public double boundSpeed(double speedIn, double highSpeed, double lowSpeed ) {
+        double speedOut=speedIn;
+
+        if (speedIn < 0) {
+            if (speedIn < highSpeed)  { speedOut = highSpeed; }
+            if (speedIn > lowSpeed) { speedOut = lowSpeed; }  
+        } else {
+            if (speedIn > highSpeed)  { speedOut = highSpeed; }
+            if (speedIn < lowSpeed) { speedOut = lowSpeed; }  
+        }
+
+        return(speedOut);
+
+    }

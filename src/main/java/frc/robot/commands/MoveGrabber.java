@@ -52,17 +52,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double curPos=Robot.robotGrabber.getPos();
         double targetPos=target;
         double speed=0;
-        double driftTolerance=2;
+        double driftTolerance=3;
+        double maxSpeed=1;
+        double minSpeed=.25;
 
         if (curPos < targetPos - driftTolerance) { 
-            speed=-0.15;
-            if (curPos < targetPos - 25) { speed=-0.4; }
-            if (curPos < targetPos - 50) { speed=-0.9; }
+            speed=Robot.boundSpeed(((curPos-targetPos)/50), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
         } else if (curPos > targetPos + driftTolerance) { 
-            speed=0.15;
-            if (curPos > targetPos + 25) { speed=0.4; }
-            if (curPos > targetPos + 50) { speed=0.9; }
+            speed=Robot.boundSpeed(((curPos-targetPos)/50), maxSpeed, minSpeed);
             targetReached=0;
         } else {
             speed=0;

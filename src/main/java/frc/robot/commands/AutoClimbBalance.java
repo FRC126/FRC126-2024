@@ -25,9 +25,7 @@ public class AutoClimbBalance extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new Climb(500),
-
-            new Balance(500),
+            new ClimbAndBalance(5000),
             
             new FinishAuto()
 

@@ -15,19 +15,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import frc.robot.Robot;
+ 
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoBalance extends SequentialCommandGroup {
-    public AutoBalance() {
+public class AutoTurn180 extends SequentialCommandGroup {
+    public AutoTurn180() {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new Balance(500),
+            new TurnDegreesBetter(180, 250),
+            
             new FinishAuto()
-
         );
     }       
 }

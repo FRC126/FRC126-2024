@@ -81,13 +81,13 @@ public class TowerArmControl extends CommandBase {
 		if ( operatorJoystick.isBButton() ) {
 			if ( Robot.doAutoCommand() ) {
 				if ( operatorJoystick.getPovUp() ) {
-					Robot.autoCommand=new AutoPlaceConeMid(0);
+					Robot.autoCommand=new AutoPlaceCubeMid();
 				} else if ( operatorJoystick.isLShoulderButton() ) {
 				    Robot.autoCommand=new AutoCatchCube();
 				} else if ( operatorJoystick.isRShoulderButton() ) {
 				    Robot.autoCommand=new AutoPickupCube();
 				} else {
-					Robot.autoCommand=new AutoPlaceCubeMid();
+					Robot.autoCommand=new AutoPlaceConeMid(0);
 				}	
 				Robot.autoCommand.schedule();
 			};

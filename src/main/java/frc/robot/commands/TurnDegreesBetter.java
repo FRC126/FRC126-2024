@@ -48,7 +48,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         Robot.navxMXP.zeroYaw();
         startAngle = 0;
-        Robot.driveBase.brakesOff();
+        Robot.driveBase.brakesOn();
     }
 
 	/**********************************************************************************
@@ -63,30 +63,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
-        double tmp = diff / 200;
-        if ( tmp > .20) { tmp=.20; }
-        if ( tmp < .075) { tmp=.075; }
+        double tmp = diff / 150;
+        tmp = Robot.boundSpeed(tmp, .2, .075);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
             targetReached++;
             driveLr=0;
-            Robot.driveBase.brakesOn();
         } else if (currentDegrees < target) {
             driveLr=tmp * -1;
             targetReached=0;
-            Robot.driveBase.brakesOff();
         } else {
             driveLr=tmp;
             targetReached=0;
-            Robot.driveBase.brakesOff();
         }
 
-        SmartDashboard.putNumber("Current Degrees",currentDegrees);
-        SmartDashboard.putNumber("Target Degrees",target);
+        SmartDashboard.putNumber("Turn Current Degrees",currentDegrees);
+        SmartDashboard.putNumber("Turn Target Degrees",target);
         SmartDashboard.putNumber("Turn diff",diff);
-        //SmartDashboard.putNumber("DriveLR",driveLr);
-        SmartDashboard.putNumber("TargetReached",targetReached);
+        SmartDashboard.putNumber("Turn Target Reached",targetReached);
 
         Robot.driveBase.Drive(0, driveLr);
     }

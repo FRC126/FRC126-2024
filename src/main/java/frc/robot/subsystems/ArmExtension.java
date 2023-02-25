@@ -93,17 +93,28 @@ public class ArmExtension extends SubsystemBase {
 		}	
 
 		if (speed != 0) {
+
+			double towerArmPos=Robot.robotTowerArm.getPos();
+
+			if (speed == 0) {
+				// Need to pull the arm extension back in while moving the tower arm
+				if (towerArmPos < 20 && pos > RobotMap.armExtendedPickupPos+5) { speed=0.4; }
+				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+5) { speed=0.4; }
+				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+5) { speed=0.4; }		
+			}
 			
 			if (speed > 0) { 
-				if (pos < RobotMap.armRetractedPos + 35 && !Robot.ignoreEncoders) { speed = 0.3; }
-				if (pos < RobotMap.armRetractedPos + 15 && !Robot.ignoreEncoders) { speed = 0.1; }
+				if (pos < RobotMap.armRetractedPos + 30 && !Robot.ignoreEncoders) { speed = 0.4; }
+				if (pos < RobotMap.armRetractedPos + 15 && !Robot.ignoreEncoders) { speed = 0.2; }
 				if (pos < RobotMap.armRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
-			}
-
-			if (speed < 0) { 
-				if (pos > RobotMap.armExtendedMaxPos - 35 && !Robot.ignoreEncoders) { speed = -.3; }
-				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.1; }
+			} else if (speed < 0) { 
+				if (pos > RobotMap.armExtendedMaxPos - 30 && !Robot.ignoreEncoders) { speed = -.4; }
+				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos > RobotMap.armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+                
+				if (towerArmPos < 20 && pos > RobotMap.armExtendedPickupPos+5) { speed=0; }
+				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+5) { speed=0; }
+				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+5) { speed=0; }		
 			}
         }
 
@@ -111,7 +122,7 @@ public class ArmExtension extends SubsystemBase {
 		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
 			lastSpeed = speed;
 
-			SmartDashboard.putNumber("Arm Extension Speed", speed);
+			//SmartDashboard.putNumber("Arm Extension Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {

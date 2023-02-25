@@ -58,6 +58,14 @@ public class DriverControl extends CommandBase {
 			Robot.stopAutoCommand();
 		}
 
+		double pitch = Robot.navxMXP.getPitch();
+		double tilt1 = Robot.navxMXP.getRawGyroX();
+		double tilt2= Robot.navxMXP.getRawGyroY();
+
+        SmartDashboard.putNumber("NavX Pitch",pitch);
+        SmartDashboard.putNumber("NavX gyroX",tilt1);
+		SmartDashboard.putNumber("NavX gyroY",tilt2);
+
 		SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
@@ -90,7 +98,7 @@ public class DriverControl extends CommandBase {
 			}	
 		}	
 
-		if (driveJoystick.isAButton()) {
+		if (driveJoystick.isYButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoDriveTest();
 				Robot.autoCommand.schedule();
@@ -124,20 +132,18 @@ public class DriverControl extends CommandBase {
 		// Auto balance the robot
 		if (driveJoystick.isAButton()) {
 			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoBalance();
-				Robot.autoCommand.schedule();
-			}	
-		}
-
-		// Climb then auto balance the robot
-		if (driveJoystick.isBButton()) {
-			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoClimbBalance();
 				Robot.autoCommand.schedule();
 			}	
-		}
-        
-		
+		}      
+
+		if (driveJoystick.isAButton()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoTurn180();
+				Robot.autoCommand.schedule();
+			}	
+		}      
+
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);

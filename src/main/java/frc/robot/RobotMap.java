@@ -63,12 +63,12 @@ public class RobotMap {
 	// Grabber Parameters
 	public static double grabberClosedPos=0;
 	public static double grabberOpenPos=310;
-	public static double grabberConePos=15;
+	public static double grabberConePos=0;
 	public static double grabberCubePos=250;
  
 	// Tower Arm
 	public static double towerArmRetractedPos=-0;
-	public static double towerArmConePickupPos=7;
+	public static double towerArmConePickupPos=4;
 	public static double towerArmCubePickupPos=10;
 	public static double towerArmFloorPickupPos=12;
 	public static double towerArmCubeCatchPos=20;

@@ -112,7 +112,7 @@ public class Grabber extends SubsystemBase {
 			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
 			lastSpeed = speed;
 
-			SmartDashboard.putNumber("Grabber Speed", speed);
+			//SmartDashboard.putNumber("Grabber Speed", speed);
 		}	
 
 	}

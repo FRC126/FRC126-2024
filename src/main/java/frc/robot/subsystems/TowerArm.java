@@ -91,12 +91,12 @@ public class TowerArm extends SubsystemBase {
 
 		if (speed != 0) {	
 			if (speed < 0) { 
-				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.1; }
+				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos < RobotMap.towerArmRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
 
 			if (speed > 0) { 
-				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .1; }
+				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .2; }
 				if (pos > RobotMap.towerArmExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 			}
         }
@@ -106,7 +106,7 @@ public class TowerArm extends SubsystemBase {
 			Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
 			lastSpeed = speed;
 
-			SmartDashboard.putNumber("Tower Arm Speed", speed);
+			//SmartDashboard.putNumber("Tower Arm Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {
