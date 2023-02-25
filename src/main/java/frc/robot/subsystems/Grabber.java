@@ -28,6 +28,7 @@ public class Grabber extends SubsystemBase {
 
 	double lastSpeed=1000;
 	int limitHit=0;
+	double softSpeed=0;
 	
 	/************************************************************************
 	 ************************************************************************/
@@ -38,8 +39,8 @@ public class Grabber extends SubsystemBase {
 		setDefaultCommand(new GrabberControl(this));
 
 		// Brake mode on for the motor
-		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-	}
+		brakesOn();	
+	}	
 
 	/************************************************************************
 	 ************************************************************************/
@@ -73,6 +74,24 @@ public class Grabber extends SubsystemBase {
 				 limitHit=0;	 
 			}
 		}
+		
+		// Soft start code
+		if (speed == 0) {
+			// No movement
+		    softSpeed = 0;
+		} else if (speed > 0) {
+			// Soft start for arm up
+			if ( speed > softSpeed) {
+				speed = softSpeed + 0.05;
+			}			
+			softSpeed=speed;
+		} else {
+			// Soft start for throttle reverse
+			if ( speed < softSpeed) {
+				speed = softSpeed - 0.05;
+			}			
+			softSpeed=speed;
+		}	
 
 		if (speed != 0) {	
 			if (speed < 0) { 
@@ -120,5 +139,19 @@ public class Grabber extends SubsystemBase {
 	 public void cancel() {
         MoveGrabber(0); 
 	}
+
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void brakesOn() {
+		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void brakesOff() {
+		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}	
 
 }

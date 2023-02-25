@@ -52,18 +52,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double curPos=Robot.robotArmExtension.getPos();
         double targetPos=target;
         double speed=0;
+        double driftTolerance = 2;
 
-        if (curPos < targetPos - 3) { 
-            speed=-0.9;
-            if (curPos > targetPos - 25) { speed=-0.3; }
+        if (curPos < targetPos - driftTolerance) { 
+            speed=-0.2;
+            if (curPos < targetPos - 20) { speed=-0.4; }
+            if (curPos < targetPos - 40) { speed=-0.9; }
             targetReached=0;
-        } else if (curPos > targetPos + 3) { 
-            speed=0.9;
-            if (curPos < targetPos + 25) { speed=0.3; }
+        } else if (curPos > targetPos + driftTolerance) { 
+            speed=0.2;
+            if (curPos > targetPos + 20) { speed=0.4; }
+            if (curPos > targetPos + 40) { speed=0.9; }
             targetReached=0;
         } else {
             speed=0;
             targetReached++;
+            Robot.robotArmExtension.brakesOn();
         }
 
         Robot.robotArmExtension.MoveArmExtension(speed);
@@ -76,7 +80,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 4 || iters <= 0) {
+        if (targetReached > 5 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.robotArmExtension.cancel();
             return true;

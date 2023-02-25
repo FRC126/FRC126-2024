@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
 
-    //public static Compressor compressor;
+    public static Compressor compressor;
 
     // For use with limelight class
     public static double ThrowerRPM=0;
@@ -201,8 +201,8 @@ public class Robot extends TimedRobot {
         }
     
         // Instantiate the compress, CANID 2, Rev Robotics PCM
-        //compressor = new Compressor(2, PneumaticsModuleType.REVPH);
-        //compressor.enableDigital();
+        compressor = new Compressor(2, PneumaticsModuleType.REVPH);
+        compressor.enableDigital();
 
         // Initialize the built in gyro
         internalData.initGyro();
@@ -242,6 +242,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         Log.print(0, "Robot", "Robot Autonomous Init");
 
+        Robot.stopAutoCommand();
+
         Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
 		Robot.robotArmExtension.cancel();
@@ -267,21 +269,22 @@ public class Robot extends TimedRobot {
             case 0:
             {
                 // Left Position
+                if (selectedAutoBalance==1) selectedAutoBalance=0;
                 
                 switch (selectedAutoFunction) {
                     case 0:
                         // Floor Cone
-                        autonomous = new AutoPlaceConeLow(0);    
+                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone Low - No Balance");
                         break;
                     case 1:
                         // Mid Cone
-                        autonomous = new AutoPlaceConeMid(0);    
+                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone Mid - No Balance");
                         break;
                     case 2:
                         // High Cone
-                        autonomous = new AutoPlaceConeHigh(0);    
+                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone High - No Balance");
                         break;
                     case 3:
@@ -324,21 +327,22 @@ public class Robot extends TimedRobot {
             case 2:
             {
                 // Right Position
-                selectedAutoBalance=0;
+                if (selectedAutoBalance==1) selectedAutoBalance=0;
+
                 switch (selectedAutoFunction) {
                     case 0:
                         // Floor Cone
-                        autonomous = new AutoPlaceConeLow(0);    
+                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Right - Cone Low - No Balance");
                         break;
                     case 1:
                         // Mid Cone
-                        autonomous = new AutoPlaceConeMid(0);    
+                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Right - Cone Mid - No Balance");
                         break;
                     case 2:
                         // High Cone
-                        autonomous = new AutoPlaceConeHigh(0);    
+                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Right - Cone High - No Balance");
                         break;
                     case 3:
@@ -373,6 +377,8 @@ public class Robot extends TimedRobot {
             // Cancel the auto command if it was created
 	          autonomous.cancel();
         }
+
+        Robot.stopAutoCommand();
 
         Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
@@ -435,14 +441,14 @@ public class Robot extends TimedRobot {
 	 ************************************************************************/
 
 	static public void stopAutoCommand() {
-		if (Robot.internalData.isAuto()) {
-            return;
-        }
-
-		if (Robot.isAutoCommand) {
+        if (Robot.isAutoCommand) {
             Robot.autoCommand.cancel();
 		}	
 		Robot.isAutoCommand=false;
+
+        if (Robot.internalData.isAuto()) {
+            return;
+        }
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 

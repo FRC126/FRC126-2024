@@ -50,20 +50,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public void execute() {
 
         double curPos=Robot.robotTowerArm.getPos();
-        double targetPos=target;
         double speed=0;
+        double driftTolerance=1.5;
 
-        if (curPos < targetPos - 2) { 
-            speed=0.75;
-            if (curPos > targetPos - 10) { speed=0.30; }
+        if (curPos < target - driftTolerance) { 
+            speed=0.15;
+            if (curPos < target - 15) { speed=0.35; }
+            if (curPos < target - 30) { speed=0.75; }
             targetReached=0;
-        } else if (curPos > targetPos + 2) { 
-            speed=-0.75;
-            if (curPos < targetPos + 10) { speed=-0.30; }
+        } else if (curPos > target + driftTolerance) { 
+            speed=-0.15;
+            if (curPos > target + 15) { speed=-0.35; }
+            if (curPos > target + 30) { speed=-0.75; }
             targetReached=0;
         } else {
             speed=0;
             targetReached++;
+            Robot.robotTowerArm.brakesOn();
         }
 
         Robot.robotTowerArm.MoveArm(speed);
@@ -77,7 +80,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 2 || iters <= 0) {
+        if (targetReached > 5 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.robotTowerArm.cancel();
             return true;

@@ -57,7 +57,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         pitch = Robot.navxMXP.getPitch();
         xAxis = Robot.navxMXP.getAngle();
         double speed=0;
-
+        
         SmartDashboard.putNumber("NavX Pitch",pitch);
         SmartDashboard.putNumber("Balance Count",balanceCount);
 
@@ -77,13 +77,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             balanceCount=0;
         } else {
             // Reached target
+            speed =0;
             balanceCount++;
-            speed=0;
+            if (balanceCount == 1) {
+                // Set the encoders to zero, so we can track any movement
+                Robot.driveBase.resetEncoders();            
+                Robot.driveBase.brakesOn();            
+            } else {
+                // Try to actively keep the robot in place
+                double distance=Robot.driveBase.getDistanceInches();
+                if (distance < -.5) { speed=.05; }
+                if (distance > -.5) { speed=-0.5; }
+            }
         }    
 
         SmartDashboard.putNumber("Balance Speed",speed);
         Robot.driveBase.Drive(speed, 0, true, xAxisStart);
-
      }
 
 	/**********************************************************************************

@@ -52,18 +52,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double curPos=Robot.robotGrabber.getPos();
         double targetPos=target;
         double speed=0;
+        double driftTolerance=2;
 
-        if (curPos < targetPos - 6) { 
-            speed=-0.9;
-            if (curPos > targetPos - 30) { speed=-0.4; }
+        if (curPos < targetPos - driftTolerance) { 
+            speed=-0.15;
+            if (curPos < targetPos - 25) { speed=-0.4; }
+            if (curPos < targetPos - 50) { speed=-0.9; }
             targetReached=0;
-        } else if (curPos > targetPos + 6) { 
-            speed=0.9;
-            if (curPos < targetPos + 30) { speed=0.4; }
+        } else if (curPos > targetPos + driftTolerance) { 
+            speed=0.15;
+            if (curPos > targetPos + 25) { speed=0.4; }
+            if (curPos > targetPos + 50) { speed=0.9; }
             targetReached=0;
         } else {
             speed=0;
             targetReached++;
+            Robot.robotGrabber.brakesOn();
         }
         Robot.robotGrabber.MoveGrabber(speed);
     }
@@ -75,7 +79,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 1 || iters <= 0) {
+        if (targetReached > 5 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.robotGrabber.cancel();
             return true;

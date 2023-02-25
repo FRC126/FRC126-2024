@@ -52,13 +52,13 @@ public class GrabberControl extends CommandBase {
 			return;
 		}
 
-		double leftStick = operatorJoystick.getLeftTrigger();
-		double rightStick = operatorJoystick.getRightTrigger();
+		double leftTrigger = operatorJoystick.getLeftTrigger();
+		double rightTrigger = operatorJoystick.getRightTrigger();
 
-		if (leftStick > .2) {
-			Robot.robotGrabber.MoveGrabber(leftStick);
-		} else if (rightStick > .2 ) {
-			Robot.robotGrabber.MoveGrabber(rightStick * -1);
+		if (leftTrigger > .1) {
+			Robot.robotGrabber.MoveGrabber(leftTrigger);
+		} else if (rightTrigger > .1 ) {
+			Robot.robotGrabber.MoveGrabber(rightTrigger * -1);
 		} else {
 			Robot.robotGrabber.MoveGrabber(0);
 		}

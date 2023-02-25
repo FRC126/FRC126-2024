@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoCatchCone extends SequentialCommandGroup {
-    public AutoCatchCone() {
+public class AutoCatchCube extends SequentialCommandGroup {
+    public AutoCatchCube() {
         /**********************************************************************************
          **********************************************************************************/
 
@@ -30,8 +30,8 @@ public class AutoCatchCone extends SequentialCommandGroup {
             new MoveArmExtension(RobotMap.armRetractedPos, 250),
 
             new ParallelCommandGroup(
-                new MoveGrabber(RobotMap.grabberOpenPos, 250),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
+                new MoveGrabber(RobotMap.grabberCubePos-50, 250),
+                new MoveTowerArm(RobotMap.towerArmCubeCatchPos, 250)
             ),
 
             new FinishAuto()

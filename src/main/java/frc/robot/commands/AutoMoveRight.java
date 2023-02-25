@@ -24,18 +24,18 @@ public class AutoMoveRight extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double angle=20;
+        double angle=-30;
 
         addCommands(
-            new DriveDistance(-6*multiplier,150),
+            new DriveDistance(-10*multiplier,150),
 
             new TurnDegreesBetter(angle, 150),
 
-            new DriveDistance(3*multiplier,150),
+            new DriveDistance(5*multiplier,150),
 
             new TurnDegreesBetter((angle * -1), 150),
 
-            new DriveDistance(3*multiplier+1, 150),
+            new DriveDistance(4*multiplier, 150),
             
             new FinishAuto()
         );

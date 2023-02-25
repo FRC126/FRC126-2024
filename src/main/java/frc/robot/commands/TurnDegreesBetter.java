@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     double startAngle;
     double targetDegrees;
     int iters;
-    static private double driftAllowance=2;
+    static private double driftAllowance=1;
     int targetReached=0;
 
 	/**********************************************************************************
@@ -59,13 +59,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double driveLr=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.navxMXP.getAngle();      
+        double currentDegrees = Robot.navxMXP.getAngle() * -1;      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
-        double tmp = diff / 100;
-        if ( tmp > .2) { tmp=.2; }
-        if ( tmp < .1) { tmp=.1; }
+        double tmp = diff / 200;
+        if ( tmp > .20) { tmp=.20; }
+        if ( tmp < .075) { tmp=.075; }
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
@@ -85,7 +85,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("Current Degrees",currentDegrees);
         SmartDashboard.putNumber("Target Degrees",target);
         SmartDashboard.putNumber("Turn diff",diff);
-        SmartDashboard.putNumber("DriveLR",driveLr);
+        //SmartDashboard.putNumber("DriveLR",driveLr);
         SmartDashboard.putNumber("TargetReached",targetReached);
 
         Robot.driveBase.Drive(0, driveLr);
@@ -98,7 +98,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 5 || iters <= 0) {
+        if (targetReached > 3 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.driveBase.brakesOff();
             Robot.driveBase.Drive(0, 0);

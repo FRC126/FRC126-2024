@@ -28,6 +28,7 @@ import com.revrobotics.CANSparkMax;
 public class TowerArm extends SubsystemBase {
 	double lastSpeed=1000;
 	int limitHit=0;
+	double softSpeed=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -38,7 +39,7 @@ public class TowerArm extends SubsystemBase {
 		setDefaultCommand(new TowerArmControl(this));
 
 		// Set brake mode for the tower arm motor
-		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		brakesOn();
 	}
 
 	/************************************************************************
@@ -57,18 +58,36 @@ public class TowerArm extends SubsystemBase {
 
 		SmartDashboard.putNumber("Tower Arm Pos", pos);
 
-		if (Robot.towerArmRetracedLimit.get() == false) {
+		if (Robot.towerArmRetracedLimit.get() != false) {
 			SmartDashboard.putBoolean("Tower Arm Limit", true);
 			limitHit=0;	 
 		} else {
 		    SmartDashboard.putBoolean("Tower Arm Limit", false);
-			if (speed > 0) { speed=0; }
+			if (speed < 0) { speed=0; }
 			limitHit++;
-			if (limitHit > 20) {
-  			     Robot.GrabberRelativeEncoder.setPosition(5);
+			if (limitHit > 10) {
+  			     Robot.TowerArmRelativeEncoder.setPosition(5);
 				 limitHit=0;	 
 			}
 		}
+
+		// Soft start code
+		if (speed == 0) {
+			// No movement
+		    softSpeed = 0;
+		} else if (speed > 0) {
+			// Soft start for arm up
+			if ( speed > softSpeed) {
+				speed = softSpeed + 0.025;
+			}			
+			softSpeed=speed;
+		} else {
+			// Soft start for throttle reverse
+			if ( speed < softSpeed) {
+				speed = softSpeed - 0.025;
+			}			
+			softSpeed=speed;
+		}	
 
 		if (speed != 0) {	
 			if (speed < 0) { 
@@ -116,5 +135,19 @@ public class TowerArm extends SubsystemBase {
 	public double getPos() {
 		return(Robot.TowerArmRelativeEncoder.getPosition());
 	}
+
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void brakesOn() {
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void brakesOff() {
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}	
 
 }

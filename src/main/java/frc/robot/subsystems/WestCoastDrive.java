@@ -106,8 +106,8 @@ public class WestCoastDrive extends SubsystemBase {
 		double fb=fbIn;
 		double rot = rotIn;
 
-		SmartDashboard.putNumber("fbIn", fbIn);
-        SmartDashboard.putNumber("rotIn", rotIn);
+		//SmartDashboard.putNumber("fbIn", fbIn);
+        //SmartDashboard.putNumber("rotIn", rotIn);
 
 		if (Robot.internalData.isTeleop()) {
     		// Slow down the turning
@@ -122,13 +122,15 @@ public class WestCoastDrive extends SubsystemBase {
 		} else if (fbIn > 0) {
 			// Soft start for throttle forward
 			if ( fbIn > fbLast) {
-				fb = fbLast + 0.025;
+				fb = fbLast + 0.01;
+				if (fbIn > .5) { fb = fbLast + 0.025; }
 			}			
 			fbLast=fb;
 		} else {
 			// Soft start for throttle reverse
 			if ( fbIn < fbLast) {
-				fb = fbLast - 0.025;
+				fb = fbLast - 0.01;
+				if (fbIn < -.5) { fb = fbLast - 0.025; }
 			}			
 			fbLast = fb;
 		}
@@ -141,13 +143,15 @@ public class WestCoastDrive extends SubsystemBase {
 		} else if (rotIn > 0) {
 			// Soft start for throttle forward
 			if ( rotIn > rotLast) {
-				rot = rotLast + 0.025;
+				rot = rotLast + 0.01;
+				if (rotIn > .5) { rot = rotLast + 0.025; }
 			}			
 			rotLast=rot;
 		} else {
 			// Soft start for throttle reverse
 			if ( rotIn < rotLast) {
-				rot = rotLast - 0.025;
+				rot = rotLast - 0.01;
+				if (rotIn < -.5) { rot = rotLast - 0.025; }
 			}			
 			rotLast = rot;
 		}
@@ -157,17 +161,19 @@ public class WestCoastDrive extends SubsystemBase {
 			double degrees = Robot.navxMXP.getAngle();
 			double tmp = degrees - straightDegrees;
 
-			SmartDashboard.putNumber("NavX GyroX",degrees);
-			SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
+			//SmartDashboard.putNumber("NavX GyroX",degrees);
+			//SmartDashboard.putNumber("NavX GyroX Start",straightDegrees);
 	
 			if(tmp > 0.5) {
 				// We are drifiting to the left, correct
 				rot = -0.05;
 				if (tmp > 3) { rot = -0.1; }
+				if (tmp > 5) { rot = -0.2; }
 			} else if (tmp < -0.5) {
 				// We are drifiting to the right, correct
 				rot=0.05;
 				if (tmp < -3) { rot = 0.1; }
+				if (tmp < -5) { rot = 0.2; }
 			} else {
 				// Drive straight
 				rot = 0;
@@ -194,18 +200,18 @@ public class WestCoastDrive extends SubsystemBase {
 			rightSpeed *= previousLimiter;
 		}
 
-		SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
+		//SmartDashboard.putBoolean("Drive Limiter", limiter!=0?true:false);
 
-		SmartDashboard.putNumber("drive fb", fb);
-		SmartDashboard.putNumber("drive rot", rot);
+		//SmartDashboard.putNumber("drive fb", fb);
+		//SmartDashboard.putNumber("drive rot", rot);
 		
 		SmartDashboard.putNumber("Left Speed", leftSpeed);
 		SmartDashboard.putNumber("Right Speed", rightSpeed);
 
-		SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
-		SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
+		//SmartDashboard.putNumber("Left1", Robot.left1RelativeEncoder.getPosition());
+		//SmartDashboard.putNumber("Left2", Robot.left2RelativeEncoder.getPosition());
+		//SmartDashboard.putNumber("Right1", Robot.right1RelativeEncoder.getPosition());
+		//SmartDashboard.putNumber("Right2", Robot.right2RelativeEncoder.getPosition());
 		
 
         // Set the Drive Motor Speeds

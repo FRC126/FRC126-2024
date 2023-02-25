@@ -65,5 +65,12 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 new AutoClimbBalance()
             );
         }
+        if (action == 2) {
+            addCommands(
+                new TurnDegreesBetter(180,250),
+                
+                new DriveDistance(12*8,300)
+            );
+        }
     }       
 }

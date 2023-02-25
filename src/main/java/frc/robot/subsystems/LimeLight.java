@@ -227,17 +227,20 @@ public class LimeLight extends SubsystemBase {
             validCount++;
             missedCount=0;
 
-            //double area = Robot.limeLight.getllTargetArea();
-            //double threshold;
-
-            if ( Robot.limeLight.getllTargetX() < -1) {
+            if ( Robot.limeLight.getllTargetX() < -2) {
                 // Target is to the left of the Robot, need to move left
-                // TODO: need to move the robot left
+                if ( Robot.doAutoCommand() ) {
+                    Robot.autoCommand=new AutoMoveLeft(1);
+                    Robot.autoCommand.schedule();
+                }	   
                 centeredCount=0;
                 Robot.shootNow=false;
-            } else if ( Robot.limeLight.getllTargetX() > 1 ) {
+            } else if ( Robot.limeLight.getllTargetX() > 2 ) {
                 // Target is to the left of the Robot, need to move right
-                // TODO: need to move the robot right
+                if ( Robot.doAutoCommand() ) {
+                    Robot.autoCommand=new AutoMoveRight(1);
+                    Robot.autoCommand.schedule();
+                }			
                 centeredCount=0;
                 Robot.shootNow=false;
             } else {

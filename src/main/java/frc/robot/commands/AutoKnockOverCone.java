@@ -16,6 +16,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -26,11 +27,11 @@ public class AutoKnockOverCone extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new MoveGrabber(RobotMap.grabberConePos+50, 250),
-            
-            new MoveTowerArm(RobotMap.towerArmFloorPickupPos, 250),
-
-            new MoveArmExtension(RobotMap.armExtendedPickupPos, 250),
+            new ParallelCommandGroup(
+                new MoveGrabber(RobotMap.grabberOpenPos, 250),
+                new MoveTowerArm(RobotMap.towerArmFloorPickupPos, 250),
+                new MoveArmExtension(RobotMap.armRetractedPos, 250)
+            ),    
 
             new FinishAuto()        
         );

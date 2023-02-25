@@ -42,6 +42,7 @@ public class DriverControl extends CommandBase {
 	
 	@Override
 	public void initialize() {
+		Robot.stopAutoCommand();
 	}    
 
 	/**********************************************************************************
@@ -56,6 +57,8 @@ public class DriverControl extends CommandBase {
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
 		}
+
+		SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
@@ -118,30 +121,29 @@ public class DriverControl extends CommandBase {
 	        }			
 		}
 
-		/*
 		// Auto balance the robot
 		if (driveJoystick.isAButton()) {
-			if ( Robot.driveBase.doAutoCommand() ) {
-				Robot.autoCommand=new AutoBalance(500);
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoBalance();
 				Robot.autoCommand.schedule();
 			}	
 		}
 
 		// Climb then auto balance the robot
 		if (driveJoystick.isBButton()) {
-			if ( Robot.driveBase.doAutoCommand() ) {
-				Robot.autoCommand=new AutoClimbBalance(700);
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoClimbBalance();
 				Robot.autoCommand.schedule();
 			}	
 		}
-        */
+        
 		
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);
 
-		SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
-		SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
+		//SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
+		//SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
 		if (Robot.isAutoCommand) {
 			// Don't do anything during auto commands

@@ -97,7 +97,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (reachedCount > 5 || iters <= 0) {
+        if (reachedCount > 3 || iters <= 0) {
             Robot.driveBase.Drive(0, 0);
             Robot.driveBase.brakesOff();
             return true;
