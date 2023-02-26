@@ -46,7 +46,7 @@ public class AutoPlaceCubeHigh extends SequentialCommandGroup {
             ),    
 
             new ParallelCommandGroup(
-                new DriveDistance(-12, 250),
+                new DriveDistance(-16, 250),
                 new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
             ),    
 

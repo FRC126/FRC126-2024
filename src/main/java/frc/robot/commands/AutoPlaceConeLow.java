@@ -59,7 +59,7 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
         }
         if (action == 2) {
             addCommands(
-                new DriveDistance(-12*8,300),
+                new DriveDistance(-16*8,300),
 
                 new TurnDegreesBetter(180,250)
             );
