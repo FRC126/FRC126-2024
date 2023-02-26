@@ -108,48 +108,47 @@ public class RobotMap {
 		}
 	}
 
-	/************************************************************************************************************
-	 * Controls
-	 * 
-	 * Driver:
-	 * 		Left Joystick Y-Axis: Forward and Backwards
-	 * 		Right Joysick X-Axis: Left and Right
-	 * 		POV Left: Shift robot left
-	 * 		POV Right: Shift robot right
-	 * 		Left Trigger: Slow Mode
-	 * 		Right Trigger: Drive straight, apply motor braking when stopped.
-	 * 		A Button: Climb and Balance
-	 * 		X Button: Cancel any running auto routines
-	 * 		B Button: Use lime light to center on pole
-	 * 
-	 * Operator:
-	 * 		Left Joystick Y-Axis: Up moves arm up, Down moves arm down
-	 * 		Right Joystick Y-Axis: Up moves arm extension in, Down moves arm extension out
-	 * 		Right Trigger: Close Gripper
-	 * 		Left Trigger: Open Gripper
-	 * 
-	 * 		Auto Commands:
-	 * 			X Button: Cancel any running auto routines
-	 *      
-	 * 			A Button: Place Cone Low Position
-	 * 			B Button: Place Cone Mid Position
-	 * 			Y Button: Place Cone High Position
-	 * 
-	 * 			POV UP + A Button: Place Cube Low Position
-	 * 			POV UP + B Button: Place Cube Mid Position
-	 * 			POV UP + Y Button: Place Cube High Position
-	 * 
-	 *          POV LEFT + A Button: Pickup Cone		
-	 * 		    POV LEFT + B Button: Pickup Cube
-	 * 
-	 *          POV LEFT + Y Button: Catch Cone
-	 *          POV DOWN + Y Button: Catch Cube
-	 *          POV RIGHT + Y Button: Knock Over Cone
-	 * 
-	 * 			BACK BUTTON: Ignore encoders while move ARM, EXTENSION or GRIPPER, Only for Zero'ing the robot
-	 * 			START BUTTON: Zero all encoders
-	 * 			POV UP + START BUTTON: Zero arm encoder
-	 * 			POV RIGHT + START BUTTON: Zero arm extension encoder
-	 * 			POV DOWN + START BUTTON: Zero grabber encoder
-	 */
+/************************************************************************************************************
+Controls
+Driver:
+Left Joystick Y-Axis: Forward and Backwards
+Right Joysick X-Axis: Left and Right
+POV Left: Shift robot left
+POV Right: Shift robot right
+Left Trigger: Hold down while driving for slow mode
+Right Trigger: Hold down while driving to go straight, and apply motor braking when no throttle input.
+ 
+AutoCommands:
+A Button: Climb and Balance Automatically
+X Button: Cancel any running auto routines
+B Button: Turn 180 degrees
+ 
+ Operator:
+Left Joystick Y-Axis: Up moves arm up, Down moves arm down
+Right Joystick Y-Axis: Up moves arm extension in, Down moves arm extension out
+Right Trigger: Open Gripper
+Left Trigger: Close Gripper
+
+Auto Commands:
+X Button: Cancel any running auto routines
+
+A Button: Place Cone Low Position
+B Button: Place Cone Mid Position
+Y Button: Place Cone High Position
+
+POV UP + A Button: Place Cube Low Position
+POV UP + B Button: Place Cube Mid Position
+POV UP + Y Button: Place Cube High Position
+
+Left Should Button + A Button: Catch Cone from Chute
+Right Should Button + A Button: Grab Cone after catching
+
+Left Should Button + B Button: Catch Cube from Chute
+Right Should Button + B Button: Grab Cube after catching
+
+
+BACK BUTTON: Holding the back button while using the manual controls will ignore encoders while 
+moving the ARM, EXTENSION or GRIPPER, Only for Zero'ing the robot before a match
+encoders will automatically zero after 2 seconds with the limit switches activated.`
+*/
 }

@@ -78,7 +78,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             speed=0.30;
             if (pitch > 18) { StartedClimb = true; }
             balanceCount=0;
-        } else if (pitch > 8) {
+        } else if (pitch > 8 && !Holding) {
             // Robot is still pitched up, keep driving forward
             Balancing=true;
             Holding=false;
@@ -90,7 +90,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 speed=Robot.boundSpeed((pitch/150), maxSpeed, minSpeed);
             }  
             balanceCount=0;
-        } else if (pitch < -3) {
+        } else if (pitch < -3 && !Holding) {
             // Robot is pitching down, start driving backwards
             Balancing=true;
             Holding=false;
@@ -108,14 +108,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             Balancing=false;
             speed=0;
             balanceCount++;
-            Robot.driveBase.resetEncoders();
 
             if (balanceCount == 1) {
                 Robot.driveBase.resetEncoders();
                 Holding=false;
             } else {
                 // try to keep the robot from moving
-                Holding=true;
+                if (balanceCount > 20) {
+                     Holding=true;
+                }     
                 double distance = Robot.driveBase.getDistanceInches();
                 if (distance > 1) {
                     speed=0.05;

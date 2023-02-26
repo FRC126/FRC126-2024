@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     double startAngle;
     double targetDegrees;
     int iters;
-    static private double driftAllowance=1;
+    static private double driftAllowance=2;
     int targetReached=0;
 
 	/**********************************************************************************
@@ -48,7 +48,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         Robot.navxMXP.zeroYaw();
         startAngle = 0;
-        Robot.driveBase.brakesOn();
     }
 
 	/**********************************************************************************
@@ -64,12 +63,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 150;
-        tmp = Robot.boundSpeed(tmp, .2, .075);
+        tmp = Robot.boundSpeed(tmp, .25, .125);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
             targetReached++;
             driveLr=0;
+            Robot.driveBase.brakesOn();
         } else if (currentDegrees < target) {
             driveLr=tmp * -1;
             targetReached=0;

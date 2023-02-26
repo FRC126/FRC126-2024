@@ -58,9 +58,9 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
         }
         if (action == 2) {
             addCommands(
-                new TurnDegreesBetter(180,250),
-                
-                new DriveDistance(12*8,300)
+                new DriveDistance(-12*8,300),
+
+                new TurnDegreesBetter(180,250)
             );
         }
 

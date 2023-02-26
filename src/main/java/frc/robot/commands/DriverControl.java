@@ -98,6 +98,7 @@ public class DriverControl extends CommandBase {
 			}	
 		}	
 
+		/*
 		if (driveJoystick.isYButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoDriveTest();
@@ -108,10 +109,11 @@ public class DriverControl extends CommandBase {
 		if (driveJoystick.isYButton()) {
 			Robot.driveBase.resetEncoders();
 		}
-
+        
 		if (driveJoystick.isLShoulderButton()) {
 			multiplier=2;
 		}
+		*/
 
 		// Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
@@ -137,7 +139,7 @@ public class DriverControl extends CommandBase {
 			}	
 		}      
 
-		if (driveJoystick.isAButton()) {
+		if (driveJoystick.isBButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoTurn180();
 				Robot.autoCommand.schedule();

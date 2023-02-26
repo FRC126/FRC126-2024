@@ -297,6 +297,7 @@ public class Robot extends TimedRobot {
             case 1:
             {
                 // Center Position
+                if (selectedAutoBalance==2) selectedAutoBalance=0;
 
                 switch (selectedAutoFunction) {
                     case 0:

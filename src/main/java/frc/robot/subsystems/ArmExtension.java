@@ -98,9 +98,9 @@ public class ArmExtension extends SubsystemBase {
 
 			if (speed == 0) {
 				// Need to pull the arm extension back in while moving the tower arm
-				if (towerArmPos < 20 && pos > RobotMap.armExtendedPickupPos+5) { speed=0.4; }
-				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+5) { speed=0.4; }
-				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+5) { speed=0.4; }		
+				if (towerArmPos < 25 && pos > RobotMap.armExtendedPickupPos+10) { speed=0.4; }
+				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+10) { speed=0.4; }
+				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+10) { speed=0.4; }		
 			}
 			
 			if (speed > 0) { 
@@ -112,9 +112,9 @@ public class ArmExtension extends SubsystemBase {
 				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos > RobotMap.armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
                 
-				if (towerArmPos < 20 && pos > RobotMap.armExtendedPickupPos+5) { speed=0; }
-				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+5) { speed=0; }
-				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+5) { speed=0; }		
+				if (towerArmPos < 25 && pos > RobotMap.armExtendedPickupPos+10) { speed=0; }
+				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+10) { speed=0; }
+				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+10) { speed=0; }		
 			}
         }
 

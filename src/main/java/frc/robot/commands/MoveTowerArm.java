@@ -55,7 +55,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double speed=0;
         double driftTolerance=1.5;
         double maxSpeed=1;
-        double minSpeed=.25;
+        double minSpeed=.3;
 
 		double diff = curPos - targetPos;
         SmartDashboard.putNumber("Arm Diff",diff);

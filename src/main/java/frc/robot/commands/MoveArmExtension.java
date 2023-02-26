@@ -54,7 +54,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double speed=0;
         double driftTolerance = 2;
         double maxSpeed=1;
-        double minSpeed=.25;
+        double minSpeed=.3;
 
         double diff = curPos - targetPos;
         

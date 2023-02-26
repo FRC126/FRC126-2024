@@ -47,7 +47,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void initialize() {
         targetAngle = Robot.navxMXP.getAngle();
         Robot.driveBase.resetEncoders();
-        Robot.driveBase.brakesOff();
+        Robot.driveBase.brakesOn();
     }
 
 	/**********************************************************************************
@@ -69,7 +69,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         if ( diff > .5 ) {
             driveFb = tmp * distanceInversion;
             reachedCount=0;
-            Robot.driveBase.brakesOff();
         } else {
             driveFb=0;
             reachedCount++;

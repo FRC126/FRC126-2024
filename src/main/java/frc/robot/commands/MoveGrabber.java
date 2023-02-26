@@ -54,7 +54,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double speed=0;
         double driftTolerance=3;
         double maxSpeed=1;
-        double minSpeed=.25;
+        double minSpeed=.4;
 
         if (curPos < targetPos - driftTolerance) { 
             speed=Robot.boundSpeed(((curPos-targetPos)/50), maxSpeed*-1, minSpeed*-1);
