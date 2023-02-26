@@ -31,7 +31,7 @@ public class AutoCatchCube extends SequentialCommandGroup {
 
             new ParallelCommandGroup(
                 new MoveGrabber(RobotMap.grabberCubePos-50, 250),
-                new MoveTowerArm(RobotMap.towerArmCubeCatchPos, 250)
+                new MoveTowerArm(25, 250)
             ),
 
             new FinishAuto()

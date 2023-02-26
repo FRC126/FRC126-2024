@@ -122,7 +122,7 @@ public class ArmExtension extends SubsystemBase {
 		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
 			lastSpeed = speed;
 
-			//SmartDashboard.putNumber("Arm Extension Speed", speed);
+			SmartDashboard.putNumber("Arm Extension Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {

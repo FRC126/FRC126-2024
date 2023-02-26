@@ -33,11 +33,9 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
             ),
 
             new MoveGrabber(RobotMap.grabberOpenPos, 250),
-
-            new ParallelCommandGroup(
-                new MoveArmExtension(RobotMap.armExtendedPlaceLow+30, 400),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
-            ),
+            new MoveArmExtension(RobotMap.armRetractedPos, 400),
+            new MoveTowerArm(RobotMap.towerArmExtendedLowPos+30, 250),
+            
 
             new DriveDistance(-12, 150),
 

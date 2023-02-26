@@ -15,7 +15,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 //import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -41,10 +41,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	 **********************************************************************************/
 	
     public void initialize() {
+        targetReached=0;
     }
 
 	/**********************************************************************************
-     * Called repeatedly when this Command is scheduled to run
+     * Called repeatedly when this Command is scheduled to 
+     * 
 	 **********************************************************************************/
 	
     public void execute() {
@@ -55,17 +57,30 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double maxSpeed=1;
         double minSpeed=.25;
 
+		double diff = curPos - targetPos;
+        SmartDashboard.putNumber("Arm Diff",diff);
+        SmartDashboard.putNumber("curPos",curPos);
+        SmartDashboard.putNumber("targetPos",targetPos);
+        
         if (curPos < targetPos - driftTolerance) { 
-            Robot.boundSpeed(((targetPos-curPos)/50), maxSpeed, minSpeed);
+            speed=Robot.boundSpeed(((targetPos - curPos)/50), maxSpeed, minSpeed);
             targetReached=0;
+            SmartDashboard.putBoolean("Less Than",true);
+            SmartDashboard.putBoolean("greater Than",false);
         } else if (curPos > targetPos + driftTolerance) { 
-            Robot.boundSpeed(((targetPos-curPos)/50), maxSpeed*-1, minSpeed*-1);
+            speed=Robot.boundSpeed(((targetPos - curPos)/50), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
+            SmartDashboard.putBoolean("Less Than",false);
+            SmartDashboard.putBoolean("greater Than",true);
         } else {
             speed=0;
             targetReached++;
             Robot.robotTowerArm.brakesOn();
+            SmartDashboard.putBoolean("Less Than",false);
+            SmartDashboard.putBoolean("greater Than",false);
         }
+
+        SmartDashboard.putNumber("arm auto speed",speed);
 
         Robot.robotTowerArm.MoveArm(speed);
 

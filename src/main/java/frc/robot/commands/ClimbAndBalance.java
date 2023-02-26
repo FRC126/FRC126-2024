@@ -143,7 +143,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public boolean isFinished() {
         iters--;
-        if ( ( StartedClimb && balanceCount > 500 ) || iters <= 0 ) {
+        if ( ( StartedClimb && balanceCount > 50000 ) || iters <= 0 ) {
             return true;
         }
         return false;

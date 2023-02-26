@@ -106,7 +106,7 @@ public class TowerArm extends SubsystemBase {
 			Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
 			lastSpeed = speed;
 
-			//SmartDashboard.putNumber("Tower Arm Speed", speed);
+			SmartDashboard.putNumber("Tower Arm Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {

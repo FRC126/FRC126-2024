@@ -29,7 +29,7 @@ public class AutoPickupCone extends SequentialCommandGroup {
         addCommands(
             new ParallelCommandGroup(
                 new MoveArmExtension(RobotMap.armExtendedPickupPos, 100),
-                new MoveGrabber(RobotMap.grabberOpenPos, 150),
+                //new MoveGrabber(RobotMap.grabberOpenPos, 150),
                 new MoveTowerArm(RobotMap.towerArmConePickupPos, 100)
             ),
 

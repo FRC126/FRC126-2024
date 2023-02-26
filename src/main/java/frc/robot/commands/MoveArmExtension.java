@@ -15,7 +15,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 //import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -56,8 +56,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double maxSpeed=1;
         double minSpeed=.25;
 
+        double diff = curPos - targetPos;
+        
+        SmartDashboard.putNumber("Arm Diff",diff);
+        SmartDashboard.putNumber("curPos",curPos);
+        SmartDashboard.putNumber("targetPos",targetPos);
+
         if (curPos < targetPos - driftTolerance) { 
-            speed=Robot.boundSpeed(((curPos - targetPos)/50), maxSpeed*-1, minSpeed*-1);
+            speed=Robot.boundSpeed(((curPos-targetPos)/50), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
         } else if (curPos > targetPos + driftTolerance) { 
             speed=Robot.boundSpeed(((curPos - targetPos)/50), maxSpeed, minSpeed);

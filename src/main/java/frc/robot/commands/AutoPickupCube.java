@@ -28,17 +28,17 @@ public class AutoPickupCube extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new MoveGrabber(RobotMap.grabberOpenPos, 250),
+            new MoveGrabber(310, 250),
             
-            new ParallelCommandGroup(
-                new MoveTowerArm(RobotMap.towerArmConePickupPos, 250),
-                new MoveArmExtension(RobotMap.armExtendedPickupPos, 250)
-            ),    
+            
+            new MoveTowerArm(12, 250),
+            new MoveArmExtension(RobotMap.armExtendedPickupPos-2, 75),
+            
 
-            new MoveGrabber(RobotMap.grabberCubePos, 250),
+            new MoveGrabber(170, 250),
 
             new MoveArmExtension(RobotMap.armRetractedPos, 250),
-            new MoveTowerArm(RobotMap.towerArmRetractedPos, 250),
+            //new MoveTowerArm(RobotMap.towerArmRetractedPos, 250),
 
             new FinishAuto()
         );
