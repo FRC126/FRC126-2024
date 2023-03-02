@@ -24,14 +24,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  **********************************************************************************/
 
 public class FlapControl extends CommandBase {
-	JoystickWrapper operatorJoystick;
+	JoystickWrapper driverJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
     public FlapControl(Flap subsystem) {
 		addRequirements(subsystem);
-		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
+		driverJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
     }
 
 	/**********************************************************************************
@@ -39,6 +39,7 @@ public class FlapControl extends CommandBase {
 	
 	@Override
 	public void initialize() {
+		Robot.robotFlap.RetractFlap();
 	}    
 
 	/**********************************************************************************
@@ -52,10 +53,10 @@ public class FlapControl extends CommandBase {
 			return;
 		}
 
-        if (operatorJoystick.isLShoulderButton()) {
+		if (driverJoystick.isLShoulderButton()) {
              // Deploy Flap
              Robot.robotFlap.DeployFlap();
-        } else if (operatorJoystick.isRShoulderButton()) {
+        } else if (driverJoystick.isRShoulderButton()) {
              // Retract Flap
              Robot.robotFlap.RetractFlap();
         } 
@@ -76,6 +77,6 @@ public class FlapControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-        // TODO Retract Brakes
+		Robot.robotFlap.RetractFlap();
 	}     
 }

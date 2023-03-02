@@ -24,12 +24,12 @@ public class AutoMoveLeft extends SequentialCommandGroup {
         /**********************************************************************************
          **********************************************************************************/
 
-        double angle=30;
+        double angle=20;
 
         addCommands(
             new DriveDistance(-10*multiplier,150),
 
-            new TurnDegreesBetter(angle, 150),
+            new TurnDegreesBetter(angle+5, 150),
 
             new DriveDistance(5*multiplier,150),
 

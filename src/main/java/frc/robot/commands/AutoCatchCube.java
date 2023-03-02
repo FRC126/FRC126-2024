@@ -15,8 +15,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotMap;
+import frc.robot.Robot;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -31,8 +33,10 @@ public class AutoCatchCube extends SequentialCommandGroup {
 
             new ParallelCommandGroup(
                 new MoveGrabber(RobotMap.grabberCubePos-50, 250),
-                new MoveTowerArm(25, 250)
+                new MoveTowerArm(20, 250)
             ),
+
+            new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
 
             new FinishAuto()
        );

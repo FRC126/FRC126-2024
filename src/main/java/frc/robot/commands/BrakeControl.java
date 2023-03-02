@@ -52,6 +52,7 @@ public class BrakeControl extends CommandBase {
 			return;
 		}
 
+		/*
         if (driverJoystick.isLShoulderButton()) {
              // Deploy Brakes
              Robot.robotBrakes.ApplyBrakes();
@@ -59,6 +60,7 @@ public class BrakeControl extends CommandBase {
              // Retract Brakes
              Robot.robotBrakes.ReleaseBrakes();
         } 
+		*/
 	}
 
 	/**********************************************************************************

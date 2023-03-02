@@ -15,8 +15,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.RobotMap;
+import frc.robot.Robot;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -33,6 +35,8 @@ public class AutoCatchCone extends SequentialCommandGroup {
                 new MoveGrabber(RobotMap.grabberOpenPos, 250),
                 new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
             ),
+
+            new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
 
             new FinishAuto()
        );

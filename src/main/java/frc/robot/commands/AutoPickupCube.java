@@ -14,9 +14,10 @@
 
 package frc.robot.commands;
 
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 
  
 /**********************************************************************************
@@ -28,6 +29,8 @@ public class AutoPickupCube extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
+            new InstantCommand(Robot.robotFlap::RetractFlap, Robot.robotFlap),
+
             new MoveGrabber(310, 250),
                       
             new MoveTowerArm(12, 250),

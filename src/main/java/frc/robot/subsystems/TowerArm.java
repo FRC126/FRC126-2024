@@ -98,6 +98,10 @@ public class TowerArm extends SubsystemBase {
 			if (speed > 0) { 
 				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .2; }
 				if (pos > RobotMap.towerArmExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+
+				if (pos > 20) {
+					Robot.robotFlap.RetractFlap();
+				}
 			}
         }
 

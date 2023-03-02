@@ -118,9 +118,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                      Holding=true;
                 }     
                 double distance = Robot.driveBase.getDistanceInches();
-                if (distance > 1) {
+                if (distance > 2) {
                     speed=0.05;
-                } else if (distance < -1 ) {
+                } else if (distance < -2 ) {
                     speed=-0.05;
                 }
             }
