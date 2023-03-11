@@ -30,13 +30,15 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
             new DriveDistance(-6, 150),
 
             new ParallelCommandGroup(
-                new DriveDistance(-18, 150),
-                new MoveTowerArm(RobotMap.towerArmExtendedMidPos, 400)
+                new DriveDistance(-12, 150),
+                new MoveTowerArm(RobotMap.towerArmExtendedMidPos-5, 400)
             ),
 
-            new DriveDistance(15, 250),
+            new DriveDistance(9, 250),
 
-            new MoveGrabber(RobotMap.grabberConePos+50, 250),
+            new MoveTowerArm(RobotMap.towerArmExtendedMidPos-20, 400),
+
+            new MoveGrabber(RobotMap.grabberConePos+100, 250),
 
             new DriveDistance(-10, 250),
             
@@ -51,16 +53,16 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
 
         if (action == 1) {
             addCommands(
-                new TurnDegreesBetter(180,250),
+                new TurnDegreesBetter(175,250),
                 
                 new AutoClimbBalance()
             );
         }
         if (action == 2) {
             addCommands(
-                new DriveDistance(-16*8,300),
+                new DriveDistance(-16*8,300)
 
-                new TurnDegreesBetter(180,250)
+                //new TurnDegreesBetter(175,250)
             );
         }
 

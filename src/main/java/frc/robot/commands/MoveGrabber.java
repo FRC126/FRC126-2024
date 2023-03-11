@@ -52,7 +52,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
         double curPos=Robot.robotGrabber.getPos();
         double targetPos=target;
         double speed=0;
-        double driftTolerance=3;
+        double driftTolerance=5;
         double maxSpeed=1;
         double minSpeed=.4;
 

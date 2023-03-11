@@ -68,7 +68,7 @@ public class DriverControl extends CommandBase {
 
 		SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
-		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
+		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
 			// Ignore user controls during Autonomous
 			return;
 		}
@@ -118,8 +118,10 @@ public class DriverControl extends CommandBase {
 		// Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
+				Robot.autoMove=true;
 				Robot.autoCommand=new AutoMoveLeft(multiplier);
 				Robot.autoCommand.schedule();
+
 			}	
 		}
 
@@ -128,6 +130,7 @@ public class DriverControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoMoveRight(multiplier);
 				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
 	        }			
 		}
 
@@ -136,6 +139,15 @@ public class DriverControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoClimbBalance();
 				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
+			}	
+		}      
+
+		if (driveJoystick.isYButton()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoClimbBalanceBackwards();
+				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
 			}	
 		}      
 
@@ -143,6 +155,7 @@ public class DriverControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoTurn180();
 				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
 			}	
 		}      
 
@@ -153,7 +166,7 @@ public class DriverControl extends CommandBase {
 		//SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
 		//SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
-		if (Robot.isAutoCommand) {
+		if (Robot.isAutoCommand && Robot.autoMove) {
 			// Don't do anything during auto commands
 		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input

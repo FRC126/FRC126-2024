@@ -23,26 +23,16 @@ import frc.robot.Robot;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoCatchCone extends SequentialCommandGroup {
-    public AutoCatchCone() {
+public class AutoShelf extends SequentialCommandGroup {
+    public AutoShelf() {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new MoveArmExtension(RobotMap.armRetractedPos, 250),
-
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            
             new ParallelCommandGroup(
-                new MoveGrabber(RobotMap.grabberOpenPos, 150),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos, 150)
+                new MoveTowerArm(RobotMap.towerArmExtendedMidPos-7, 400),
+               new MoveGrabber(RobotMap.grabberOpenPos, 150)
             ),
-
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
 
             new FinishAuto()
        );

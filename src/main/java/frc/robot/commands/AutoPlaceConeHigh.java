@@ -31,45 +31,58 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
 
             // Drive Backwards, Raise and Extend the Arm.
             new ParallelCommandGroup(
-                new DriveDistance(-18, 400),
-                new MoveTowerArm(RobotMap.towerArmExtendedHighPos, 400),
+                new DriveDistance(-12, 400),
+                new MoveTowerArm(RobotMap.towerArmExtendedHighPos-5, 400),
                 new MoveArmExtension(RobotMap.armExtendedPlacePos, 400)
             ),
 
             // Drive Forwards
-            new DriveDistance(26, 250),
+            new DriveDistance(20, 200),
+
+            new MoveTowerArm(RobotMap.towerArmExtendedHighPos-20, 200),
 
             // Open the grabber to drop the cone
-            new MoveGrabber(RobotMap.grabberConePos+50, 250),
+            new MoveGrabber(RobotMap.grabberConePos+100, 100),
 
             new ParallelCommandGroup(
                 new DriveDistance(-12, 150),
-                new MoveArmExtension(RobotMap.armExtendedPlacePos-100, 250)
+                new MoveArmExtension(RobotMap.armExtendedPlacePos-100, 200)
             ),    
 
             // Drive backwards, lower and retract the arm, close the grabber
             new ParallelCommandGroup(
-                new DriveDistance(-12, 250),
-                new MoveArmExtension(RobotMap.armRetractedPos, 250),
-                new MoveGrabber(RobotMap.grabberClosedPos+5, 250),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
+                new DriveDistance(-6, 100),
+                new MoveArmExtension(RobotMap.armRetractedPos, 100),
+                new MoveGrabber(RobotMap.grabberClosedPos+5, 100),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos, 125)
             ),    
+
+            //new DriveDistance(12, 75),
 
             new FinishAuto()        
         );
         
         if (action == 1) {
             addCommands(
-                new TurnDegreesBetter(180,250),
+                //new TurnDegreesBetter(175,250),
                 
-                new AutoClimbBalance()
+                new AutoClimbBalanceBackwards()
             );
         }
         if (action == 2) {
             addCommands(
-                new DriveDistance(-12*8,300),
+                new DriveDistance(-16*8,300)
 
-                new TurnDegreesBetter(180,250)
+                //new TurnDegreesBetter(175,250)
+            );
+        }
+        if (action == 3) {
+            addCommands(
+                new TurnDegreesBetter(-15,150),
+                new DriveDistance(-18,300),
+                new TurnDegreesBetter(15,150),
+                new DriveDistance(-12*10,400)
+                //new TurnDegreesBetter(175,250)
             );
         }
     }       

@@ -16,6 +16,7 @@ package frc.robot.subsystems;
 
 //import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -39,8 +40,6 @@ public class Flap extends SubsystemBase {
 		setDefaultCommand(new FlapControl(this));
 
         // Map the intake solenoid, Rev Robotics PCM on CANID RobotMap.PneumaticID
-        flapSolenoid = new DoubleSolenoid(RobotMap.PneumaticID,
-		                                  PneumaticsModuleType.REVPH,3,4);	
 	}
 
 	/************************************************************************
@@ -52,7 +51,7 @@ public class Flap extends SubsystemBase {
 	 ************************************************************************/
 
 	public void DeployFlap() { 
-        flapSolenoid.set(DoubleSolenoid.Value.kForward);
+        Robot.flapSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 
 
@@ -60,7 +59,8 @@ public class Flap extends SubsystemBase {
 	 ************************************************************************/
 
     public void RetractFlap() { 
-        flapSolenoid.set(DoubleSolenoid.Value.kReverse);
+        Robot.flapSolenoid.set(DoubleSolenoid.Value.kForward);
+
 	}
 
     /************************************************************************

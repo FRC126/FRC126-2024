@@ -112,8 +112,8 @@ public class ArmExtension extends SubsystemBase {
 				if (pos > RobotMap.armExtendedMaxPos - 15 && !Robot.ignoreEncoders) { speed = -.2; }
 				if (pos > RobotMap.armExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
                 
-				if (towerArmPos < 25 && pos > RobotMap.armExtendedPickupPos+10) { speed=0; }
-				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+10) { speed=0; }
+				if (towerArmPos < 25 && pos > RobotMap.armExtendedPickupPos+70) { speed=0; }
+				if (towerArmPos < 50 && pos > RobotMap.armExtendedPlaceLow+40) { speed=0; }
 				if (towerArmPos > 140 && pos > RobotMap.armExtendedPlacePos+10) { speed=0; }		
 			}
         }

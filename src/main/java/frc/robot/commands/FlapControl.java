@@ -77,6 +77,6 @@ public class FlapControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-		Robot.robotFlap.RetractFlap();
+		//Robot.robotFlap.RetractFlap();
 	}     
 }

@@ -33,8 +33,8 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
             ),
 
             new MoveGrabber(RobotMap.grabberOpenPos, 250),
-            new MoveArmExtension(RobotMap.armRetractedPos, 400),
-            new MoveTowerArm(RobotMap.towerArmExtendedLowPos+30, 250),
+            //new MoveArmExtension(RobotMap.armRetractedPos, 400),
+            //new MoveTowerArm(RobotMap.towerArmExtendedLowPos+30, 250),
             
 
             new DriveDistance(-12, 150),
@@ -52,9 +52,9 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
 
         if (action == 1) {
             addCommands(
-                new TurnDegreesBetter(180,250),
+                //new TurnDegreesBetter(180,250),
                 
-                new AutoClimbBalance()
+                new AutoClimbBalanceBackwards()
             );
         }
         if (action == 2) {

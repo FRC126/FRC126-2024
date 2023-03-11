@@ -39,8 +39,8 @@ public class Brakes extends SubsystemBase {
 		setDefaultCommand(new BrakeControl(this));
        
         // Map the intake solenoid, Rev Robotics PCM on CANID RobotMap.PneumaticID
-        brakeSolenoid = new DoubleSolenoid(RobotMap.PneumaticID,
-                                           PneumaticsModuleType.REVPH,1,2);	
+        //brakeSolenoid = new DoubleSolenoid(RobotMap.PneumaticID,
+       //                                    PneumaticsModuleType.REVPH,1,2);	
     }
 
 	/************************************************************************
@@ -52,14 +52,14 @@ public class Brakes extends SubsystemBase {
 	 ************************************************************************/
 
 	public void ApplyBrakes() { 
-        brakeSolenoid.set(DoubleSolenoid.Value.kForward);
+        //brakeSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
      public void ReleaseBrakes() { 
-        brakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+       // brakeSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
     /************************************************************************
 	 ************************************************************************/

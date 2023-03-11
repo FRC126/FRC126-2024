@@ -126,7 +126,7 @@ public class WestCoastDrive extends SubsystemBase {
 				if (fbIn > .5) { fb = fbLast + 0.04; }
 			}			
 			fbLast=fb;
-		} else if (fbIn > 0) {
+		} else if (fbIn < 0) {
 			// Soft start for throttle reverse
 			if ( fbIn < fbLast) {
 				fb = fbLast - 0.02;
@@ -144,14 +144,14 @@ public class WestCoastDrive extends SubsystemBase {
 			// Soft start for throttle forward
 			if ( rotIn > rotLast) {
 				rot = rotLast + 0.01;
-				if (rotIn > .5) { rot = rotLast + 0.025; }
+				//if (rotIn > .5) { rot = rotLast + 0.025; }
 			}			
 			rotLast=rot;
 		} else if (rotIn < 0) {
 			// Soft start for throttle reverse
 			if ( rotIn < rotLast) {
 				rot = rotLast - 0.01;
-				if (rotIn < -.5) { rot = rotLast - 0.025; }
+				//if (rotIn < -.5) { rot = rotLast - 0.025; }
 			}			
 			rotLast = rot;
 		}

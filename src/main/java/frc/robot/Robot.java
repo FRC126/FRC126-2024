@@ -47,6 +47,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -112,6 +115,8 @@ public class Robot extends TimedRobot {
     public static boolean isAutoCommand=false;
 
     public static SequentialCommandGroup autoCommand;
+    
+    public static DoubleSolenoid flapSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH,15,14);	
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
@@ -135,6 +140,7 @@ public class Robot extends TimedRobot {
     public int RobotID = 0;
 
     public static boolean ignoreEncoders=false;
+    public static boolean autoMove=false;
 
     //public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,TargetSeek};
@@ -219,7 +225,7 @@ public class Robot extends TimedRobot {
         autoFunction.addOption("Mid Cone",1);
         autoFunction.addOption("High Cone",2);
         autoFunction.addOption("No Cone",3);
-        SmartDashboard.putData("Auto Choices",autoFunction);
+        SmartDashboard.putData("Cone Choices",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
         autoPosition.setDefaultOption("Left Position",0);
@@ -329,6 +335,7 @@ public class Robot extends TimedRobot {
             {
                 // Right Position
                 if (selectedAutoBalance==1) selectedAutoBalance=0;
+                if (selectedAutoBalance==2) selectedAutoBalance=3;
 
                 switch (selectedAutoFunction) {
                     case 0:
@@ -430,7 +437,7 @@ public class Robot extends TimedRobot {
 		Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
 		Robot.robotArmExtension.cancel();
-		Robot.driveBase.cancel();
+        if (Robot.autoMove) { Robot.driveBase.cancel(); }
 
 	    Robot.isAutoCommand = true;
 
@@ -456,7 +463,7 @@ public class Robot extends TimedRobot {
 		Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
 		Robot.robotArmExtension.cancel();
-		Robot.driveBase.cancel();
+        if (Robot.autoMove) { Robot.driveBase.cancel(); }
 	}		
 
     /************************************************************************

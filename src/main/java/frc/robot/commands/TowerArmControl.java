@@ -67,12 +67,16 @@ public class TowerArmControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				if ( operatorJoystick.getPovUp() ) {
 				    Robot.autoCommand=new AutoPlaceCubeLow();
+					Robot.autoMove=true;
 				} else if ( operatorJoystick.isLShoulderButton() ) {
 				    Robot.autoCommand=new AutoCatchCone();
+					Robot.autoMove=false;
 				} else if ( operatorJoystick.isRShoulderButton() ) {
 				    Robot.autoCommand=new AutoPickupCone();
+					Robot.autoMove=false;
 				} else {
 				    Robot.autoCommand=new AutoPlaceConeLow(0);
+					Robot.autoMove=true;
 				}	
 				Robot.autoCommand.schedule();
 			};
@@ -82,12 +86,18 @@ public class TowerArmControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				if ( operatorJoystick.getPovUp() ) {
 					Robot.autoCommand=new AutoPlaceCubeMid();
+					Robot.autoMove=true;
 				} else if ( operatorJoystick.isLShoulderButton() ) {
-				    Robot.autoCommand=new AutoCatchCube();
+				    //Robot.autoCommand=new AutoCatchCube();
+				    Robot.autoCommand=new AutoCatchCone();
+					Robot.autoMove=false;
 				} else if ( operatorJoystick.isRShoulderButton() ) {
-				    Robot.autoCommand=new AutoPickupCube();
+				    //Robot.autoCommand=new AutoPickupCube();
+				    Robot.autoCommand=new AutoPickupCone();
+					Robot.autoMove=false;
 				} else {
 					Robot.autoCommand=new AutoPlaceConeMid(0);
+					Robot.autoMove=true;
 				}	
 				Robot.autoCommand.schedule();
 			};
@@ -97,10 +107,13 @@ public class TowerArmControl extends CommandBase {
 			if ( Robot.doAutoCommand() ) {
 				if ( operatorJoystick.getPovUp() ) {
 					Robot.autoCommand=new AutoPlaceCubeHigh();
+					Robot.autoMove=true;
 				} else if ( operatorJoystick.isLShoulderButton()) {
+					Robot.autoMove=false;
 					Robot.autoCommand=new AutoKnockOverCone();
 				} else {	
 					Robot.autoCommand=new AutoPlaceConeHigh(0);
+					Robot.autoMove=true;
 				}	
 				Robot.autoCommand.schedule();
 			};
@@ -127,6 +140,14 @@ public class TowerArmControl extends CommandBase {
 			}	
 		}
 
+		if ( operatorJoystick.getPovRight() ) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoShelf();
+				Robot.autoMove=false;
+				Robot.autoCommand.schedule();
+			}
+		}
+		
         Robot.robotTowerArm.MoveArm(UD);
 	}
 
