@@ -65,56 +65,56 @@ public class TowerArmControl extends CommandBase {
 
 		if ( operatorJoystick.isAButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovUp() ) {
-				    Robot.autoCommand=new AutoPlaceCubeLow();
-					Robot.autoMove=true;
-				} else if ( operatorJoystick.isLShoulderButton() ) {
-				    Robot.autoCommand=new AutoCatchCone();
-					Robot.autoMove=false;
-				} else if ( operatorJoystick.isRShoulderButton() ) {
-				    Robot.autoCommand=new AutoPickupCone();
-					Robot.autoMove=false;
-				} else {
+				//if ( operatorJoystick.getPovUp() ) {
+				//    Robot.autoCommand=new AutoPlaceCubeLow();
+				//	Robot.autoMove=true;
+				//} else if ( operatorJoystick.isLShoulderButton() ) {
+				//    Robot.autoCommand=new AutoCatchCone();
+				//	Robot.autoMove=false;
+				//} else if ( operatorJoystick.isRShoulderButton() ) {
+				//   Robot.autoCommand=new AutoPickupCone();
+				//	Robot.autoMove=false;
+				//} else {
 				    Robot.autoCommand=new AutoPlaceConeLow(0);
 					Robot.autoMove=true;
-				}	
+				//}	
 				Robot.autoCommand.schedule();
 			};
 		}
 
 		if ( operatorJoystick.isBButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovUp() ) {
-					Robot.autoCommand=new AutoPlaceCubeMid();
-					Robot.autoMove=true;
-				} else if ( operatorJoystick.isLShoulderButton() ) {
-				    //Robot.autoCommand=new AutoCatchCube();
-				    Robot.autoCommand=new AutoCatchCone();
-					Robot.autoMove=false;
-				} else if ( operatorJoystick.isRShoulderButton() ) {
-				    //Robot.autoCommand=new AutoPickupCube();
-				    Robot.autoCommand=new AutoPickupCone();
-					Robot.autoMove=false;
-				} else {
+				//if ( operatorJoystick.getPovUp() ) {
+				//	Robot.autoCommand=new AutoPlaceCubeMid();
+				//	Robot.autoMove=true;
+				//} else if ( operatorJoystick.isLShoulderButton() ) {
+				//    //Robot.autoCommand=new AutoCatchCube();
+				//    Robot.autoCommand=new AutoCatchCone();
+				//	Robot.autoMove=false;
+				//} else if ( operatorJoystick.isRShoulderButton() ) {
+				//    //Robot.autoCommand=new AutoPickupCube();
+				//    Robot.autoCommand=new AutoPickupCone();
+				//	Robot.autoMove=false;
+				//} else {
 					Robot.autoCommand=new AutoPlaceConeMid(0);
 					Robot.autoMove=true;
-				}	
+				//}	
 				Robot.autoCommand.schedule();
 			};
 		}
 
 		if ( operatorJoystick.isYButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovUp() ) {
-					Robot.autoCommand=new AutoPlaceCubeHigh();
-					Robot.autoMove=true;
-				} else if ( operatorJoystick.isLShoulderButton()) {
-					Robot.autoMove=false;
-					Robot.autoCommand=new AutoKnockOverCone();
-				} else {	
+				//if ( operatorJoystick.getPovUp() ) {
+				//	Robot.autoCommand=new AutoPlaceCubeHigh();
+				//	Robot.autoMove=true;
+				//} else if ( operatorJoystick.isLShoulderButton()) {
+				//	Robot.autoMove=false;
+				//	Robot.autoCommand=new AutoKnockOverCone();
+				//} else {	
 					Robot.autoCommand=new AutoPlaceConeHigh(0);
 					Robot.autoMove=true;
-				}	
+				//}	
 				Robot.autoCommand.schedule();
 			};
 		}
@@ -127,17 +127,17 @@ public class TowerArmControl extends CommandBase {
 
 		if ( operatorJoystick.isStartButton()) {
 			// Reset all the arm encoders at once
-			if ( operatorJoystick.getPovUp() ) {
-				Robot.robotTowerArm.resetEncoders();
-			} else if ( operatorJoystick.getPovRight() ) {
-				Robot.robotArmExtension.resetEncoders();
-			} else if ( operatorJoystick.getPovDown() ) {
-				Robot.robotGrabber.resetEncoders();
-			} else {
-				Robot.robotTowerArm.resetEncoders();
-				Robot.robotArmExtension.resetEncoders();
-				Robot.robotGrabber.resetEncoders();
-			}	
+			//if ( operatorJoystick.getPovUp() ) {
+			//	Robot.robotTowerArm.resetEncoders();
+			//} else if ( operatorJoystick.getPovRight() ) {
+			//	Robot.robotArmExtension.resetEncoders();
+			//} else if ( operatorJoystick.getPovDown() ) {
+			//	Robot.robotGrabber.resetEncoders();
+			//} else {
+			//	Robot.robotTowerArm.resetEncoders();
+			//	Robot.robotArmExtension.resetEncoders();
+			//	Robot.robotGrabber.resetEncoders();
+			//}	
 		}
 
 		if ( operatorJoystick.getPovRight() ) {

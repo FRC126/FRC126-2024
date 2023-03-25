@@ -36,8 +36,6 @@ public class AutoCatchCube extends SequentialCommandGroup {
                 new MoveTowerArm(20, 250)
             ),
 
-            new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-
             new FinishAuto()
        );
     }       

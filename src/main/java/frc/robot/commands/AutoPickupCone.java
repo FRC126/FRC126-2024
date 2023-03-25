@@ -30,7 +30,7 @@ public class AutoPickupCone extends SequentialCommandGroup {
 
         addCommands(
 
-            new InstantCommand(Robot.robotFlap::RetractFlap, Robot.robotFlap),
+            new InstantCommand(Robot.robotPickup::RetractPickup, Robot.robotPickup),
 
             new ParallelCommandGroup(
                 new MoveArmExtension(RobotMap.armExtendedPickupPos, 100),

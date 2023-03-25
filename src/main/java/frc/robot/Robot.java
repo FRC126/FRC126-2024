@@ -89,8 +89,7 @@ public class Robot extends TimedRobot {
     public static CANSparkMax ArmExtensionMotor = new CANSparkMax(RobotMap.ArmExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder ArmExtensionRelativeEncoder = Robot.ArmExtensionMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
     public static DigitalInput armExtensionBottomLimit;
-    public static DigitalInput armExtensionTopLimit;
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Grabber Motor
     public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -101,13 +100,13 @@ public class Robot extends TimedRobot {
     // Catapult Motor
     public static CANSparkMax CatapultMotor = new CANSparkMax(RobotMap.catapultMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder CatapultRelativeEncoder = Robot.CatapultMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    //public static DigitalInput grabberRetracedLimit;
-
+    public static DigitalInput catapultBottomLimit;
+    
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Catapult Motor
+    // Pickup Motor
     public static CANSparkMax pickupMotor = new CANSparkMax(RobotMap.pickupMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static RelativeEncoder pickupRelativeEncoder = Robot.pickupMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-  
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
@@ -127,7 +126,7 @@ public class Robot extends TimedRobot {
 
     public static SequentialCommandGroup autoCommand;
     
-    public static DoubleSolenoid flapSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH,15,14);	
+    public static DoubleSolenoid PickupSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH,15,14);	
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
@@ -141,7 +140,7 @@ public class Robot extends TimedRobot {
     public static Catapult robotCatapult;
 
     public static Catapult robotBrakes;
-    public static Flap robotFlap;
+    public static Pickup robotPickup;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -168,10 +167,12 @@ public class Robot extends TimedRobot {
     int selectedAutoPosition;
 	int selectedAutoFunction;
     int selectedAutoBalance;
+    int selectedAllianceColor;
 	
     private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
     private final SendableChooser<Integer> autoBalance = new SendableChooser<>();
+    private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
     
  	  /************************************************************************
      * This function is run when the robot is first started up and should be used for any
@@ -194,8 +195,8 @@ public class Robot extends TimedRobot {
         // Brakes
         robotBrakes = new Catapult();
 
-        // Flap
-        robotFlap = new Flap();
+        // Pickup
+        robotPickup = new Pickup();
 
         // Initilize Tower Arm
         robotTowerArm = new TowerArm();
@@ -208,7 +209,9 @@ public class Robot extends TimedRobot {
         // Initilize Arm Extension    
         robotArmExtension = new ArmExtension();
 		armExtensionBottomLimit = new DigitalInput(8);
-		//armExtensionTopLimit = new DigitalInput(1);
+
+
+		catapultBottomLimit = new DigitalInput(5);
 
         // Not using the limelight right now
         // limeLight = new LimeLight();
@@ -243,11 +246,16 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Cone Choices",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
-        autoPosition.setDefaultOption("Left Position",0);
+        autoPosition.setDefaultOption("Inside Position",0);
         autoPosition.addOption("Center Position",1);
-        autoPosition.addOption("Right Position",2);
+        autoPosition.addOption("Outisde Position",2);
         SmartDashboard.putData("Auto Position",autoPosition);
 
+        // Dashboard Cooser for the Autonomous mode position
+        allianceColor.setDefaultOption("Red Alliance",0);
+        allianceColor.addOption("Blue Alliance",1);
+        SmartDashboard.putData("Auto Position",allianceColor);
+        
         autoBalance.setDefaultOption("Do Nothing",0);
         autoBalance.addOption("Balance",1);
         autoBalance.addOption("Leave Saftey Zone",2);
@@ -285,11 +293,16 @@ public class Robot extends TimedRobot {
 		} catch(NullPointerException e) {
 			selectedAutoBalance = 0;
 		}
+		try {
+			selectedAllianceColor = (int)allianceColor.getSelected();
+		} catch(NullPointerException e) {
+			selectedAllianceColor = 0;
+		}
 
         switch (selectedAutoPosition) {
             case 0:
             {
-                // Left Position
+                // Inside Position
                 if (selectedAutoBalance==1) selectedAutoBalance=0;
                 
                 switch (selectedAutoFunction) {
@@ -348,9 +361,10 @@ public class Robot extends TimedRobot {
             break;
             case 2:
             {
-                // Right Position
-                if (selectedAutoBalance==1) selectedAutoBalance=0;
-                if (selectedAutoBalance==2) selectedAutoBalance=3;
+                // Outside Position
+                if (selectedAutoBalance==1) { selectedAutoBalance=0; }
+                if (selectedAutoBalance==2) { selectedAutoBalance=3; }
+                if (selectedAllianceColor == 1 && selectedAutoBalance == 3) { selectedAutoBalance=4; }
 
                 switch (selectedAutoFunction) {
                     case 0:

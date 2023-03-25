@@ -30,19 +30,11 @@ public class AutoCatchCone extends SequentialCommandGroup {
 
         addCommands(
             new MoveArmExtension(RobotMap.armRetractedPos, 250),
-
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            
+          
             new ParallelCommandGroup(
                 new MoveGrabber(RobotMap.grabberOpenPos, 150),
                 new MoveTowerArm(RobotMap.towerArmRetractedPos, 150)
             ),
-
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
-            //new InstantCommand(Robot.robotFlap::DeployFlap, Robot.robotFlap),
 
             new FinishAuto()
        );

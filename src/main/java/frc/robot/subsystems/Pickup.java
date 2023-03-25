@@ -28,17 +28,17 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Flap extends SubsystemBase {
+public class Pickup extends SubsystemBase {
 	private DoubleSolenoid flapSolenoid;
 	int inversion=1;
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Flap() {
+	public Pickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new FlapControl(this));
+		setDefaultCommand(new PickupControl(this));
 
         // Map the intake solenoid, Rev Robotics PCM on CANID RobotMap.PneumaticID
 	}
@@ -51,16 +51,16 @@ public class Flap extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public void DeployFlap() { 
-        Robot.flapSolenoid.set(DoubleSolenoid.Value.kReverse);
+	public void DeployPickup() { 
+        Robot.PickupSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 
 
 	/************************************************************************
 	 ************************************************************************/
 
-    public void RetractFlap() { 
-        Robot.flapSolenoid.set(DoubleSolenoid.Value.kForward);
+    public void RetractPickup() { 
+        Robot.PickupSolenoid.set(DoubleSolenoid.Value.kForward);
 
 	}
 

@@ -28,32 +28,23 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
 
          addCommands(
             new ParallelCommandGroup(
-                new MoveTowerArm(RobotMap.towerArmExtendedLowPos, 400),
-                new MoveArmExtension(RobotMap.armExtendedPlaceLow, 400)
+                new MoveTowerArm(RobotMap.towerArmExtendedLowPos, 250),
+                new MoveArmExtension(RobotMap.armExtendedPlaceLow, 250)
             ),
 
-            new MoveGrabber(RobotMap.grabberOpenPos, 250),
-            //new MoveArmExtension(RobotMap.armRetractedPos, 400),
-            //new MoveTowerArm(RobotMap.towerArmExtendedLowPos+30, 250),
-            
-
-            new DriveDistance(-12, 150),
+            new MoveGrabber(RobotMap.grabberOpenPos, 150),
+         
+            new DriveDistance(-12, 100),
 
             new ParallelCommandGroup(
-                new MoveArmExtension(RobotMap.armRetractedPos, 250),
-                new MoveGrabber(RobotMap.grabberConePos, 250),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos, 250)
-            ),
-
-            //new MoveGrabber(Grabber.grabberOpenPos-20, 250),
-
-            new FinishAuto()
+                new MoveArmExtension(RobotMap.armRetractedPos, 150),
+                new MoveGrabber(RobotMap.grabberConePos, 150),
+                new MoveTowerArm(RobotMap.towerArmRetractedPos, 150)
+            )
         );
 
         if (action == 1) {
             addCommands(
-                //new TurnDegreesBetter(180,250),
-                
                 new AutoClimbBalanceBackwards()
             );
         }
@@ -64,5 +55,9 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
                 new TurnDegreesBetter(180,250)
             );
         }
+
+        addCommands(
+            new FinishAuto()
+        );    
     }        
 }

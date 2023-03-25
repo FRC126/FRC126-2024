@@ -29,7 +29,7 @@ public class AutoPickupCube extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new InstantCommand(Robot.robotFlap::RetractFlap, Robot.robotFlap),
+            new InstantCommand(Robot.robotPickup::RetractPickup, Robot.robotPickup),
 
             new MoveGrabber(310, 250),
                       

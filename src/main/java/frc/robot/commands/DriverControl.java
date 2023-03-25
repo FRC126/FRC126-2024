@@ -116,23 +116,23 @@ public class DriverControl extends CommandBase {
 		*/
 
 		// Shift the Robot Left
-		//if (driveJoystick.getPovLeft()) {
-		//	if ( Robot.doAutoCommand() ) {
-		//		Robot.autoMove=true;
-		//		Robot.autoCommand=new AutoMoveLeft(multiplier);
-		//		Robot.autoCommand.schedule();
-//
-//			}	
-//		}
+		if (driveJoystick.getPovLeft()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoMove=true;
+				Robot.autoCommand=new AutoMoveLeft(multiplier);
+				Robot.autoCommand.schedule();
+
+			}	
+		}
 
 		// Shift the Robot right
-		//if (driveJoystick.getPovRight()) {
-		//	if ( Robot.doAutoCommand() ) {
-		//		Robot.autoCommand=new AutoMoveRight(multiplier);
-		//		Robot.autoCommand.schedule();
-		//		Robot.autoMove=true;
-	    //   }			
-		//}
+		if (driveJoystick.getPovRight()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoMoveRight(multiplier);
+				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
+	       }			
+		}
 
 		// Auto balance the robot
 		if (driveJoystick.isAButton()) {

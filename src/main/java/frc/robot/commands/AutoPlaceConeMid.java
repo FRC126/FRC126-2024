@@ -34,22 +34,30 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
                 new MoveTowerArm(RobotMap.towerArmExtendedMidPos-5, 400)
             ),
 
-            new DriveDistance(9, 250),
-
-            new MoveTowerArm(RobotMap.towerArmExtendedMidPos-20, 400),
-
-            new MoveGrabber(RobotMap.grabberConePos+100, 250),
-
-            new DriveDistance(-10, 250),
-            
-            new ParallelCommandGroup(
-                new DriveDistance(-1, 250),
-                new MoveGrabber(RobotMap.grabberConePos, 250),
-                new MoveTowerArm(RobotMap.towerArmRetractedPos+5, 250)
-            ),    
-
-            new FinishAuto()        
+            new DriveDistance(9, 250)
         );
+
+        if (action != 0) {
+            // During Auto
+            addCommands(
+                new MoveTowerArm(RobotMap.towerArmExtendedMidPos-20, 400),
+
+                new MoveGrabber(RobotMap.grabberConePos+100, 250),
+
+                new DriveDistance(-10, 250),
+                
+                new ParallelCommandGroup(
+                    new DriveDistance(-1, 250),
+                    new MoveGrabber(RobotMap.grabberConePos, 250),
+                    new MoveTowerArm(RobotMap.towerArmRetractedPos+5, 250)
+                )
+            );    
+        } else {
+            // User Command
+            addCommands(
+                new MoveTowerArm(RobotMap.towerArmExtendedMidPos-15, 400)
+            );    
+        }
 
         if (action == 1) {
             addCommands(
@@ -65,6 +73,10 @@ public class AutoPlaceConeMid extends SequentialCommandGroup {
                 //new TurnDegreesBetter(175,250)
             );
         }
+
+        addCommands(
+            new FinishAuto()        
+        );    
 
     }       
 }

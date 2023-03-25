@@ -23,15 +23,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
-public class FlapControl extends CommandBase {
-	JoystickWrapper driverJoystick;
+public class PickupControl extends CommandBase {
+	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public FlapControl(Flap subsystem) {
+    public PickupControl(Pickup subsystem) {
 		addRequirements(subsystem);
-		driverJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
 
 	/**********************************************************************************
@@ -39,7 +39,7 @@ public class FlapControl extends CommandBase {
 	
 	@Override
 	public void initialize() {
-		Robot.robotFlap.RetractFlap();
+		Robot.robotPickup.RetractPickup();
 	}    
 
 	/**********************************************************************************
@@ -53,20 +53,20 @@ public class FlapControl extends CommandBase {
 			return;
 		}
 
-		if (driverJoystick.isLShoulderButton()) {
-             // Deploy Flap
-             Robot.robotFlap.DeployFlap();
-        } else if (driverJoystick.isRShoulderButton()) {
-             // Retract Flap
-             Robot.robotFlap.RetractFlap();
+		if (operatorJoystick.isLShoulderButton()) {
+             // Deploy Pickup
+             Robot.robotPickup.DeployPickup();
+        } else if (operatorJoystick.isRShoulderButton()) {
+             // Retract Pickup
+             Robot.robotPickup.RetractPickup();
         } 
 
-		if ( driverJoystick.getPovRight() ) {
-			Robot.robotFlap.pickupIntake();
-		} else if (driverJoystick.getPovLeft()) {
-			Robot.robotFlap.pickupEject();
+		if ( operatorJoystick.getPovUp() ) {
+			Robot.robotPickup.pickupIntake();
+		} else if (operatorJoystick.getPovDown()) {
+			Robot.robotPickup.pickupEject();
 		} else {
-			Robot.robotFlap.cancel();
+			Robot.robotPickup.cancel();
 		}
 	}
 
@@ -85,6 +85,6 @@ public class FlapControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-		//Robot.robotFlap.RetractFlap();
+		Robot.robotPickup.RetractPickup();
 	}     
 }
