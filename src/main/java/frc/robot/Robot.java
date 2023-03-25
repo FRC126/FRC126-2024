@@ -98,6 +98,17 @@ public class Robot extends TimedRobot {
     public static DigitalInput grabberRetracedLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Catapult Motor
+    public static CANSparkMax CatapultMotor = new CANSparkMax(RobotMap.catapultMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static RelativeEncoder CatapultRelativeEncoder = Robot.CatapultMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    //public static DigitalInput grabberRetracedLimit;
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Catapult Motor
+    public static CANSparkMax pickupMotor = new CANSparkMax(RobotMap.pickupMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static RelativeEncoder pickupRelativeEncoder = Robot.pickupMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+  
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
 
@@ -127,7 +138,9 @@ public class Robot extends TimedRobot {
     public static TowerArm robotTowerArm;
     public static Grabber robotGrabber;
     public static ArmExtension robotArmExtension;
-    public static Brakes robotBrakes;
+    public static Catapult robotCatapult;
+
+    public static Catapult robotBrakes;
     public static Flap robotFlap;
 
 	public static UsbCamera driveCam;
@@ -179,7 +192,7 @@ public class Robot extends TimedRobot {
         driveBase = new WestCoastDrive();
 
         // Brakes
-        robotBrakes = new Brakes();
+        robotBrakes = new Catapult();
 
         // Flap
         robotFlap = new Flap();
@@ -200,6 +213,8 @@ public class Robot extends TimedRobot {
         // Not using the limelight right now
         // limeLight = new LimeLight();
        
+        robotCatapult = new Catapult();
+
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {

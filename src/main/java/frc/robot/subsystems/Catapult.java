@@ -14,34 +14,32 @@
 
 package frc.robot.subsystems;
 
-//import frc.robot.Robot;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
 
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class Brakes extends SubsystemBase {
-	private DoubleSolenoid brakeSolenoid;
+public class Catapult extends SubsystemBase {
+	int inversion=1;
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Brakes() {
+	public Catapult() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new BrakeControl(this));
+		setDefaultCommand(new CatapultControl(this));
        
-        // Map the intake solenoid, Rev Robotics PCM on CANID RobotMap.PneumaticID
-        //brakeSolenoid = new DoubleSolenoid(RobotMap.PneumaticID,
-       //                                    PneumaticsModuleType.REVPH,1,2);	
-    }
+    	   Robot.CatapultMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		   resetEncoders();
+	}
 
 	/************************************************************************
 	 ************************************************************************/
@@ -51,19 +49,55 @@ public class Brakes extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public void ApplyBrakes() { 
-        //brakeSolenoid.set(DoubleSolenoid.Value.kForward);
+	public void CatapultForward() { 
+		double pos = getPos();
+		if ( pos < 4.5) {
+   		    Robot.CatapultMotor.set(.7 * inversion);
+		} else {
+			cancel();
+		}	
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-     public void ReleaseBrakes() { 
-       // brakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+     public void CatapultBackwards() { 
+		double pos = getPos();
+		if ( pos > 0 || Robot.ignoreEncoders) {
+	 	    Robot.CatapultMotor.set(-.05 * inversion);
+			if (Robot.ignoreEncoders){
+				resetEncoders();
+			}
+		} else {
+			cancel();
+		}	
 	}
     /************************************************************************
 	 ************************************************************************/
 
 	 public void cancel() {
+		Robot.CatapultMotor.set(0);
+		Robot.CatapultMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
+
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void resetEncoders() {
+		// Need to use encoders for the NEOs
+		Robot.CatapultRelativeEncoder.setPosition(0);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getPos() {
+		// Need to use encoders for the NEOs
+		double pos = Robot.CatapultRelativeEncoder.getPosition() * inversion;
+		SmartDashboard.putNumber("Catapult POS", pos);
+		return(pos);
+		
+	}
+
 }

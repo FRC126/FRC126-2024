@@ -20,8 +20,8 @@ import frc.robot.Robot;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.revrobotics.CANSparkMax;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Flap extends SubsystemBase {
 	private DoubleSolenoid flapSolenoid;
+	int inversion=1;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -66,7 +67,43 @@ public class Flap extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+	 
+	public void pickupIntake() { 
+		    Robot.pickupMotor.set(.25 * inversion);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+     public void pickupEject() { 
+		Robot.pickupMotor.set(-.25 * inversion);
+	}
+    /************************************************************************
+	 ************************************************************************/
+
 	 public void cancel() {
+		Robot.pickupMotor.set(0);
+		Robot.pickupMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void resetEncoders() {
+		// Need to use encoders for the NEOs
+		Robot.pickupRelativeEncoder.setPosition(0);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getPos() {
+		// Need to use encoders for the NEOs
+		double pos = Robot.pickupRelativeEncoder.getPosition() * inversion;
+		SmartDashboard.putNumber("Pickup POS", pos);
+		return(pos);
+		
 	}
 
 }

@@ -60,6 +60,14 @@ public class FlapControl extends CommandBase {
              // Retract Flap
              Robot.robotFlap.RetractFlap();
         } 
+
+		if ( driverJoystick.getPovRight() ) {
+			Robot.robotFlap.pickupIntake();
+		} else if (driverJoystick.getPovLeft()) {
+			Robot.robotFlap.pickupEject();
+		} else {
+			Robot.robotFlap.cancel();
+		}
 	}
 
 	/**********************************************************************************

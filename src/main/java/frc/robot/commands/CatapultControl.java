@@ -23,15 +23,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**********************************************************************************
  **********************************************************************************/
 
-public class BrakeControl extends CommandBase {
-	JoystickWrapper driverJoystick;
+public class CatapultControl extends CommandBase {
+	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public BrakeControl(Brakes subsystem) {
+    public CatapultControl(Catapult subsystem) {
 		addRequirements(subsystem);
-		driverJoystick = new JoystickWrapper(Robot.oi.driveController, 0.1);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
 
 	/**********************************************************************************
@@ -52,15 +52,14 @@ public class BrakeControl extends CommandBase {
 			return;
 		}
 
-		/*
-        if (driverJoystick.isLShoulderButton()) {
-             // Deploy Brakes
-             Robot.robotBrakes.ApplyBrakes();
-        } else if (driverJoystick.isRShoulderButton()) {
-             // Retract Brakes
-             Robot.robotBrakes.ReleaseBrakes();
-        } 
-		*/
+		if ( operatorJoystick.getPovUp() ) {
+			Robot.robotCatapult.CatapultForward();
+		} else if (operatorJoystick.getPovDown()) {
+			Robot.robotCatapult.CatapultBackwards();
+		} else {
+			Robot.robotCatapult.cancel();
+		}
+
 	}
 
 	/**********************************************************************************

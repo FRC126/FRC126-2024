@@ -54,6 +54,10 @@ public class RobotMap {
 	public static int rightDriveMotorCanID1 = 10;
 	public static int rightDriveMotorCanID2 = 11;
 
+	public static int catapultMotorId = 50;
+
+	public static int pickupMotorId = 51;
+
 	//Motor Inversions
     public static int left1Inversion;
 	public static int left2Inversion;
