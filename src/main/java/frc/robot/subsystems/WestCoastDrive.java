@@ -122,15 +122,15 @@ public class WestCoastDrive extends SubsystemBase {
 		} else if (fbIn > 0) {
 			// Soft start for throttle forward
 			if ( fbIn > fbLast) {
-				fb = fbLast + 0.02;
-				if (fbIn > .5) { fb = fbLast + 0.04; }
+				fb = fbLast + 0.04;
+				if (fbIn > .5) { fb = fbLast + 0.08; }
 			}			
 			fbLast=fb;
 		} else if (fbIn < 0) {
 			// Soft start for throttle reverse
 			if ( fbIn < fbLast) {
-				fb = fbLast - 0.02;
-				if (fbIn < -.5) { fb = fbLast - 0.04; }
+				fb = fbLast - 0.04;
+				if (fbIn < -.5) { fb = fbLast - 0.08; }
 			}			
 			fbLast = fb;
 		}

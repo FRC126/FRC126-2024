@@ -78,30 +78,44 @@ public class TowerArm extends SubsystemBase {
 		} else if (speed > 0) {
 			// Soft start for arm up
 			if ( speed > softSpeed) {
-				speed = softSpeed + 0.025;
+				speed = softSpeed + 0.1;
 			}			
 			softSpeed=speed;
 		} else {
 			// Soft start for throttle reverse
 			if ( speed < softSpeed) {
-				speed = softSpeed - 0.025;
+				speed = softSpeed - 0.1;
 			}			
 			softSpeed=speed;
 		}	
 
 		if (speed != 0) {	
-			if (speed < 0) { 
-				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.2; }
-				if (pos < RobotMap.towerArmRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
-			}
+			/*
+			// Need to pull the arm extension back in while moving the tower arm
+			double armExtensionPos=Robot.robotArmExtension.getPos();
+			if (pos < 25 && armExtensionPos > RobotMap.armExtendedPickupPos+10) { 
+				Robot.robotArmExtension.MoveArmExtension(0.4);
+			} else if (pos < 50 && armExtensionPos > RobotMap.armExtendedPlaceLow+10) { 
+				Robot.robotArmExtension.MoveArmExtension(0.4);
+			} else if (pos > 140 && armExtensionPos > RobotMap.armExtendedPlacePos+10) { 
+				Robot.robotArmExtension.MoveArmExtension(0.4);
+			}		
+			*/
 
-			if (speed > 0) { 
-				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .2; }
+			if (speed < 0) { 
+				// Slow down as we approach fully retracted
+				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.25; }
+				if (pos < RobotMap.towerArmRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+			} else if (speed > 0) { 
+				// Slow down as we approach fully extended
+				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .25; }
 				if (pos > RobotMap.towerArmExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 
 				if (pos > 20) {
-					Robot.robotFlap.RetractFlap();
-				}
+					// Retract the pickup if the arm goes to far out.
+					Robot.robotPickup.RetractPickup();
+					Robot.robotPickup.cancel();
+				}	
 			}
         }
 

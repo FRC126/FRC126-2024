@@ -15,7 +15,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+//import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,6 +28,8 @@ import com.revrobotics.CANSparkMax;
 
 public class Catapult extends SubsystemBase {
 	int inversion=1;
+	int limitHit=0;
+	int searchForLimit=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -37,8 +39,8 @@ public class Catapult extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new CatapultControl(this));
        
-    	   Robot.CatapultMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		   resetEncoders();
+    	Robot.CatapultMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		resetEncoders();
 	}
 
 	/************************************************************************
@@ -51,8 +53,8 @@ public class Catapult extends SubsystemBase {
 
 	public void CatapultForward() { 
 		double pos = getPos();
-		if ( pos < 4.5) {
-   		    Robot.CatapultMotor.set(.7 * inversion);
+		if ( pos < 5.25) {
+   		    Robot.CatapultMotor.set(.8 * inversion);
 		} else {
 			cancel();
 		}	
@@ -63,8 +65,35 @@ public class Catapult extends SubsystemBase {
 
      public void CatapultBackwards() { 
 		double pos = getPos();
-		if ( pos > 0 || Robot.ignoreEncoders) {
-	 	    Robot.CatapultMotor.set(-.05 * inversion);
+		double speed=-0.05;
+		boolean limitActive = Robot.catapultBottomLimit.get();
+
+		if (limitActive == true) {
+			SmartDashboard.putBoolean("Cataput BottomLimit", true);
+			limitHit=0;	 
+		} else {
+		    SmartDashboard.putBoolean("Cataput BottomLimit", false);
+			if (speed < 0) { speed=0; }
+			limitHit++;
+			if (limitHit > 10) {
+  			     Robot.CatapultRelativeEncoder.setPosition(-0.1);
+				 limitHit=0;	 
+			}
+		}
+
+		boolean searchingLimit = (pos <= 0 && !limitActive);
+
+		if ( searchingLimit ) { 
+			searchForLimit++;
+			if ( searchForLimit > 15 ) {
+				searchingLimit = false;
+			}
+		} else {
+			searchForLimit=0;
+		}
+
+		if ( searchingLimit || pos > 0 || Robot.ignoreEncoders) {
+	 	    Robot.CatapultMotor.set(speed);
 			if (Robot.ignoreEncoders){
 				resetEncoders();
 			}

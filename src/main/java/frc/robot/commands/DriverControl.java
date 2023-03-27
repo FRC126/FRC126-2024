@@ -59,13 +59,7 @@ public class DriverControl extends CommandBase {
 		}
 
 		double pitch = Robot.navxMXP.getPitch();
-		double tilt1 = Robot.navxMXP.getRawGyroX();
-		double tilt2= Robot.navxMXP.getRawGyroY();
-
         SmartDashboard.putNumber("NavX Pitch",pitch);
-        SmartDashboard.putNumber("NavX gyroX",tilt1);
-		SmartDashboard.putNumber("NavX gyroY",tilt2);
-
 		SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
 		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
@@ -98,23 +92,6 @@ public class DriverControl extends CommandBase {
 			}	
 		}	
 
-		/*
-		if (driveJoystick.isYButton()) {
-			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoDriveTest();
-				Robot.autoCommand.schedule();
-			};
-		}
-
-		if (driveJoystick.isYButton()) {
-			Robot.driveBase.resetEncoders();
-		}
-        
-		if (driveJoystick.isLShoulderButton()) {
-			multiplier=2;
-		}
-		*/
-
 		// Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
@@ -123,35 +100,27 @@ public class DriverControl extends CommandBase {
 				Robot.autoCommand.schedule();
 
 			}	
-		}
-
-		// Shift the Robot right
-		if (driveJoystick.getPovRight()) {
+		} else if (driveJoystick.getPovRight()) {
+			// Shift the Robot right
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoMoveRight(multiplier);
 				Robot.autoCommand.schedule();
 				Robot.autoMove=true;
 	       }			
-		}
-
-		// Auto balance the robot
-		if (driveJoystick.isAButton()) {
+		} else if (driveJoystick.isAButton()) {
+			// Auto balance the robot
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoClimbBalance();
 				Robot.autoCommand.schedule();
 				Robot.autoMove=true;
 			}	
-		}      
-
-		if (driveJoystick.isYButton()) {
+		} else if (driveJoystick.isYButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoClimbBalanceBackwards();
 				Robot.autoCommand.schedule();
 				Robot.autoMove=true;
 			}	
-		}      
-
-		if (driveJoystick.isBButton()) {
+		} else if (driveJoystick.isBButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoTurn180();
 				Robot.autoCommand.schedule();

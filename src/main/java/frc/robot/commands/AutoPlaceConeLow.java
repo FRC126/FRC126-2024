@@ -45,7 +45,7 @@ public class AutoPlaceConeLow extends SequentialCommandGroup {
 
         if (action == 1) {
             addCommands(
-                new AutoClimbBalanceBackwards()
+                new ClimbAndBalanceBackwards(5000)
             );
         }
         if (action == 2) {

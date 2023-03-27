@@ -48,11 +48,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
     public void execute() {
 
         if (direction == 1) {
+            Robot.robotPickup.DeployPickup();
             Robot.robotPickup.pickupIntake();
-            Robot.robotPickup.DeployPickup();
         } else {
-            Robot.robotPickup.pickupEject();
             Robot.robotPickup.DeployPickup();
+            Robot.robotPickup.pickupEject();
         }
     }
 

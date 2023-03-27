@@ -82,13 +82,13 @@ public class Grabber extends SubsystemBase {
 		} else if (speed > 0) {
 			// Soft start for arm up
 			if ( speed > softSpeed) {
-				speed = softSpeed + 0.05;
+				speed = softSpeed + 0.1;
 			}			
 			softSpeed=speed;
 		} else {
 			// Soft start for throttle reverse
 			if ( speed < softSpeed) {
-				speed = softSpeed - 0.05;
+				speed = softSpeed - 0.1;
 			}			
 			softSpeed=speed;
 		}	
@@ -105,8 +105,8 @@ public class Grabber extends SubsystemBase {
 			}
 		}
 
-		double cur=Robot.GrabberMotor.getOutputCurrent();
-		SmartDashboard.putNumber("Grabber Current", cur);
+		//double cur=Robot.GrabberMotor.getOutputCurrent();
+		//SmartDashboard.putNumber("Grabber Current", cur);
 
 		if (speed != lastSpeed) {
 			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);

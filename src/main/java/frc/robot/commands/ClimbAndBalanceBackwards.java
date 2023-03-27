@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     int iters;
     int balanceCount=0;
     int count=0;
+    int startingClimbCount=0;
     static final double balanceThresholdMin=-5;
     static final double balanceThresholdMax=5;
 
@@ -57,6 +58,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         Holding=false;
         balanceCount=0;
         count=0;
+        startingClimbCount=0;
     }
 
 	/**********************************************************************************
@@ -76,8 +78,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             Balancing=false;
             Holding=false;
             speed=-0.30;
-            if (pitch < -18) { StartedClimb = true; }
+            //if (pitch < -18) { StartedClimb = true; }
+            if (pitch < -16) { StartedClimb = true; }
             balanceCount=0;
+
+            // We've been trying to start climbing for too long
+            if ( startingClimbCount++ > 150 ) {
+                speed=0;
+            };
+
         } else if (pitch < -8 && !Holding) {
             // Robot is still pitched up, keep driving forward
             Balancing=true;
@@ -110,18 +119,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             Robot.driveBase.brakesOn();
 
             if (balanceCount == 1) {
-                Robot.driveBase.resetEncoders();
                 Holding=false;
             } else {
                 // try to keep the robot from moving
                 if (balanceCount > 20) {
-                     //Holding=true;
+                    Robot.driveBase.resetEncoders();
+                    Holding=true;
                 }     
                 double distance = Robot.driveBase.getDistanceInches();
                 if (distance > 2) {
-                    //speed=0.05;
+                    speed=0.05;
                 } else if (distance < -2 ) {
-                    //speed=-0.05;
+                    speed=-0.05;
                 }
             }
         }
@@ -129,11 +138,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         lastPitch=pitch;
 
         SmartDashboard.putNumber("NavX Pitch",pitch);
-        SmartDashboard.putNumber("Balance Count",balanceCount);
-        SmartDashboard.putBoolean("StartedClimb",StartedClimb);
-        SmartDashboard.putBoolean("Balancing",Balancing);
-        SmartDashboard.putBoolean("Holding",Holding);
-        SmartDashboard.putNumber("Balance Speed",speed);
+        //SmartDashboard.putNumber("Balance Count",balanceCount);
+        //SmartDashboard.putBoolean("StartedClimb",StartedClimb);
+        //SmartDashboard.putBoolean("Balancing",Balancing);
+        //SmartDashboard.putBoolean("Holding",Holding);
+        //SmartDashboard.putNumber("Balance Speed",speed);
 
         Robot.driveBase.Drive(speed, 0, true, xAxisStart);
     }

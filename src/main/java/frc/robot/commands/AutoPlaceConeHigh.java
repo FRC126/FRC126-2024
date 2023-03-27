@@ -38,14 +38,14 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
             ),
 
             // Drive Forwards
-            new DriveDistance(20, 200)
+            new DriveDistance(18, 250)
         );
 
         if (action != 0) {
             // If we are in Autonomous mode, then need to lower and retract the arm            
             addCommands(
                 // Lower the arm a little    
-                new MoveTowerArm(RobotMap.towerArmExtendedHighPos-20, 100),
+                new MoveTowerArm(RobotMap.towerArmExtendedHighPos-20, 150),
 
                 // Open the grabber to drop the cone
                 new MoveGrabber(RobotMap.grabberConePos+100, 100),
@@ -53,7 +53,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 // Drive Backwards, retact the arm, and start closing the grabber
                 new ParallelCommandGroup(
                     new DriveDistance(-12, 150),
-                    new MoveArmExtension(RobotMap.armExtendedPlacePos-100, 150),
+                    new MoveArmExtension(RobotMap.armRetractedPos+40, 150),
                     new MoveGrabber(RobotMap.grabberClosedPos+25, 150)
                 )    
            );
@@ -76,24 +76,20 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 200)
                 )
             );
-        }    
-
-        if (action == 1) {
+        } else if (action == 1) {
             // Action 1 is auto balance
             addCommands(             
                 // Backup a little to give room to lower the arm
-                new DriveDistance(-6, 75),
+                // new DriveDistance(-6, 75),
                 // Fully retract the arm while auto balancing
                 new ParallelCommandGroup(
                     new MoveArmExtension(RobotMap.armRetractedPos, 250),
                     new MoveGrabber(RobotMap.grabberClosedPos+5, 250),
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 250),
-                    new AutoClimbBalanceBackwards()
+                    new ClimbAndBalanceBackwards(5000)
                 )
             );
-        }
-
-        if (action == 2) {
+        } else if (action == 2) {
             // Action 2 is we are are on the inside position, and want to back up and grab a cube
             addCommands(
                 // Backup a little to give room to lower the arm
@@ -112,8 +108,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 ),    
             new TurnDegreesBetter(175,250)
             );
-        }
-        if (action == 3) {
+        } else if (action == 3) {
             // Action 3 is we are on the outside position, red alliance
             addCommands(
                 // Backup a little to give room to lower the arm
@@ -145,8 +140,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 ),
                 new TurnDegreesBetter(175,250)
             );
-        }
-        if (action == 4) {
+        } else if (action == 4) {
             // Action 3 is we are on the outside position, blue alliance
             addCommands(
                 new DriveDistance(-6, 75),

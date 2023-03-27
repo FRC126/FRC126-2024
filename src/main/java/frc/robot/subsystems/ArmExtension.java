@@ -81,19 +81,18 @@ public class ArmExtension extends SubsystemBase {
 		} else if (speed > 0) {
 			// Soft start for arm up
 			if ( speed > softSpeed) {
-				speed = softSpeed + 0.05;
+				speed = softSpeed + 0.1;
 			}			
 			softSpeed=speed;
 		} else {
 			// Soft start for throttle reverse
 			if ( speed < softSpeed) {
-				speed = softSpeed - 0.05;
+				speed = softSpeed - 0.1;
 			}			
 			softSpeed=speed;
 		}	
 
 		if (speed != 0) {
-
 			double towerArmPos=Robot.robotTowerArm.getPos();
 
 			if (speed == 0) {
@@ -121,8 +120,7 @@ public class ArmExtension extends SubsystemBase {
 		if (lastSpeed != speed) {
 		    Robot.ArmExtensionMotor.set(speed * RobotMap.ArmExtensionMotorInversion);
 			lastSpeed = speed;
-
-			SmartDashboard.putNumber("Arm Extension Speed", speed);
+			//SmartDashboard.putNumber("Arm Extension Speed", speed);
 		}	
 
 		if (speed == 0 && lastSpeed != 0) {

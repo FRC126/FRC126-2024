@@ -47,7 +47,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+//import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
@@ -210,8 +210,8 @@ public class Robot extends TimedRobot {
         robotArmExtension = new ArmExtension();
 		armExtensionBottomLimit = new DigitalInput(8);
 
-
-		catapultBottomLimit = new DigitalInput(5);
+        // Catapult Limit switch on DIO port 9
+		catapultBottomLimit = new DigitalInput(9);
 
         // Not using the limelight right now
         // limeLight = new LimeLight();
@@ -254,9 +254,9 @@ public class Robot extends TimedRobot {
         // Dashboard Cooser for the Autonomous mode position
         allianceColor.setDefaultOption("Red Alliance",0);
         allianceColor.addOption("Blue Alliance",1);
-        SmartDashboard.putData("Auto Position",allianceColor);
+        SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoBalance.setDefaultOption("Do Nothing",0);
+        autoBalance.setDefaultOption("Do Nothing",5);
         autoBalance.addOption("Balance",1);
         autoBalance.addOption("Leave Saftey Zone",2);
         SmartDashboard.putData("Auto Choices",autoBalance);
@@ -291,7 +291,7 @@ public class Robot extends TimedRobot {
 		try {
 			selectedAutoBalance = (int)autoBalance.getSelected();
 		} catch(NullPointerException e) {
-			selectedAutoBalance = 0;
+			selectedAutoBalance = 5;
 		}
 		try {
 			selectedAllianceColor = (int)allianceColor.getSelected();
@@ -303,7 +303,7 @@ public class Robot extends TimedRobot {
             case 0:
             {
                 // Inside Position
-                if (selectedAutoBalance==1) selectedAutoBalance=0;
+                if (selectedAutoBalance==1) selectedAutoBalance=5;
                 
                 switch (selectedAutoFunction) {
                     case 0:
@@ -331,7 +331,7 @@ public class Robot extends TimedRobot {
             case 1:
             {
                 // Center Position
-                if (selectedAutoBalance==2) selectedAutoBalance=0;
+                if (selectedAutoBalance==2) selectedAutoBalance=5;
 
                 switch (selectedAutoFunction) {
                     case 0:
@@ -362,7 +362,7 @@ public class Robot extends TimedRobot {
             case 2:
             {
                 // Outside Position
-                if (selectedAutoBalance==1) { selectedAutoBalance=0; }
+                if (selectedAutoBalance==1) { selectedAutoBalance=5; }
                 if (selectedAutoBalance==2) { selectedAutoBalance=3; }
                 if (selectedAllianceColor == 1 && selectedAutoBalance == 3) { selectedAutoBalance=4; }
 
@@ -466,6 +466,7 @@ public class Robot extends TimedRobot {
 		Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
 		Robot.robotArmExtension.cancel();
+        Robot.robotPickup.cancel();
         if (Robot.autoMove) { Robot.driveBase.cancel(); }
 
 	    Robot.isAutoCommand = true;
@@ -492,6 +493,7 @@ public class Robot extends TimedRobot {
 		Robot.robotTowerArm.cancel();
 		Robot.robotGrabber.cancel();
 		Robot.robotArmExtension.cancel();
+        Robot.robotPickup.cancel();
         if (Robot.autoMove) { Robot.driveBase.cancel(); }
 	}		
 

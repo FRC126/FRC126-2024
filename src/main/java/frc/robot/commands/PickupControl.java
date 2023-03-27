@@ -61,9 +61,9 @@ public class PickupControl extends CommandBase {
              Robot.robotPickup.RetractPickup();
         } 
 
-		if ( operatorJoystick.getPovUp() ) {
+		if ( operatorJoystick.getPovLeft() ) {
 			Robot.robotPickup.pickupIntake();
-		} else if (operatorJoystick.getPovDown()) {
+		} else if (operatorJoystick.getPovRight()) {
 			Robot.robotPickup.pickupEject();
 		} else {
 			Robot.robotPickup.cancel();

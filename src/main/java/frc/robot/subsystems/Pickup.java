@@ -67,8 +67,7 @@ public class Pickup extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	 
-	public void pickupIntake() { 
+	 	public void pickupIntake() { 
 		    Robot.pickupMotor.set(.25 * inversion);
 	}
 
@@ -76,7 +75,7 @@ public class Pickup extends SubsystemBase {
 	 ************************************************************************/
 
      public void pickupEject() { 
-		Robot.pickupMotor.set(-.25 * inversion);
+		Robot.pickupMotor.set(-.5 * inversion);
 	}
     /************************************************************************
 	 ************************************************************************/
@@ -101,7 +100,7 @@ public class Pickup extends SubsystemBase {
 	 public double getPos() {
 		// Need to use encoders for the NEOs
 		double pos = Robot.pickupRelativeEncoder.getPosition() * inversion;
-		SmartDashboard.putNumber("Pickup POS", pos);
+		//SmartDashboard.putNumber("Pickup POS", pos);
 		return(pos);
 		
 	}

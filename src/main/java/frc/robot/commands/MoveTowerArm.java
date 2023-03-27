@@ -53,7 +53,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         double curPos=Robot.robotTowerArm.getPos();
         double speed=0;
-        double driftTolerance=1.5;
+        double driftTolerance=2;
         double maxSpeed=1;
         double minSpeed=.3;
 
@@ -63,12 +63,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("targetPos",targetPos);
         
         if (curPos < targetPos - driftTolerance) { 
-            speed=Robot.boundSpeed(((targetPos - curPos)/50), maxSpeed, minSpeed);
+            speed=Robot.boundSpeed(((targetPos - curPos)/35), maxSpeed, minSpeed);
             targetReached=0;
             SmartDashboard.putBoolean("Less Than",true);
             SmartDashboard.putBoolean("greater Than",false);
         } else if (curPos > targetPos + driftTolerance) { 
-            speed=Robot.boundSpeed(((targetPos - curPos)/50), maxSpeed*-1, minSpeed*-1);
+            speed=Robot.boundSpeed(((targetPos - curPos)/35), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
             SmartDashboard.putBoolean("Less Than",false);
             SmartDashboard.putBoolean("greater Than",true);
