@@ -59,8 +59,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         double currentDistance = Robot.driveBase.getDistanceInches();
         double diff =  Math.abs(distance) - currentDistance;
-        double tmp = Math.abs(diff) / 30;
-        tmp = Robot.boundSpeed(tmp, .25, .15);
+        double tmp = Math.abs(diff) / 50;
+        tmp = Robot.boundSpeed(tmp, .25, .10);
 
         if (distance < 0) {
             distanceInversion=-1;

@@ -71,14 +71,14 @@ public class TowerArmControl extends CommandBase {
 			};
 		} else if ( operatorJoystick.isBButton() ) {
 			if ( Robot.doAutoCommand() ) {
-				if ( operatorJoystick.getPovLeft() ) {
+				//if ( operatorJoystick.getPovLeft() ) {
 		 			Robot.autoCommand=new AutoShelf();
 					Robot.autoMove=false;
 					Robot.autoCommand.schedule();
-				} else {
-					Robot.autoCommand=new AutoPlaceConeMid(0);
-					Robot.autoMove=true;
-				}	
+				//} else {
+				//	Robot.autoCommand=new AutoPlaceConeMid(0);
+				//	Robot.autoMove=true;
+				//}	
 				Robot.autoCommand.schedule();
 			};
 		} else if ( operatorJoystick.isYButton() ) {

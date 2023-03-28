@@ -63,10 +63,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("targetPos",targetPos);
 
         if (curPos < targetPos - driftTolerance) { 
-            speed=Robot.boundSpeed(((curPos-targetPos)/50), maxSpeed*-1, minSpeed*-1);
+            speed=Robot.boundSpeed(((curPos-targetPos)/30), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
         } else if (curPos > targetPos + driftTolerance) { 
-            speed=Robot.boundSpeed(((curPos - targetPos)/50), maxSpeed, minSpeed);
+            speed=Robot.boundSpeed(((curPos - targetPos)/30), maxSpeed, minSpeed);
             targetReached=0;
         } else {
             speed=0;

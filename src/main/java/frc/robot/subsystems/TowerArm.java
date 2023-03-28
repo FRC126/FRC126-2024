@@ -90,18 +90,6 @@ public class TowerArm extends SubsystemBase {
 		}	
 
 		if (speed != 0) {	
-			/*
-			// Need to pull the arm extension back in while moving the tower arm
-			double armExtensionPos=Robot.robotArmExtension.getPos();
-			if (pos < 25 && armExtensionPos > RobotMap.armExtendedPickupPos+10) { 
-				Robot.robotArmExtension.MoveArmExtension(0.4);
-			} else if (pos < 50 && armExtensionPos > RobotMap.armExtendedPlaceLow+10) { 
-				Robot.robotArmExtension.MoveArmExtension(0.4);
-			} else if (pos > 140 && armExtensionPos > RobotMap.armExtendedPlacePos+10) { 
-				Robot.robotArmExtension.MoveArmExtension(0.4);
-			}		
-			*/
-
 			if (speed < 0) { 
 				// Slow down as we approach fully retracted
 				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.25; }
@@ -111,7 +99,7 @@ public class TowerArm extends SubsystemBase {
 				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .25; }
 				if (pos > RobotMap.towerArmExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
 
-				if (pos > 20) {
+				if (pos > 5) {
 					// Retract the pickup if the arm goes to far out.
 					Robot.robotPickup.RetractPickup();
 					Robot.robotPickup.cancel();

@@ -58,9 +58,9 @@ public class DriverControl extends CommandBase {
 			Robot.stopAutoCommand();
 		}
 
-		double pitch = Robot.navxMXP.getPitch();
-        SmartDashboard.putNumber("NavX Pitch",pitch);
-		SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
+		//double pitch = Robot.navxMXP.getPitch();
+        //SmartDashboard.putNumber("NavX Pitch",pitch);
+		//SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
 		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
 			// Ignore user controls during Autonomous

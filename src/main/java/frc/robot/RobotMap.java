@@ -75,11 +75,11 @@ public class RobotMap {
 	public static double towerArmConePickupPos=4;
 	public static double towerArmCubePickupPos=10;
 	public static double towerArmFloorPickupPos=12;
-	public static double towerArmCubeCatchPos=20;
-	public static double towerArmExtendedLowPos=50;
-	public static double towerArmExtendedMidPos=143;
-	public static double towerArmExtendedHighPos=173;
-	public static double towerArmExtendedMaxPos=175;
+	public static double towerArmCubeCatchPos=0;
+	public static double towerArmExtendedLowPos=30;
+	public static double towerArmExtendedMidPos=123;
+	public static double towerArmExtendedHighPos=153;
+	public static double towerArmExtendedMaxPos=155;
 
 	// Arm Extension
 	public static double armRetractedPos=0;

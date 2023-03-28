@@ -53,8 +53,8 @@ public class Catapult extends SubsystemBase {
 
 	public void CatapultForward() { 
 		double pos = getPos();
-		if ( pos < 5.25) {
-   		    Robot.CatapultMotor.set(.8 * inversion);
+		if ( pos < 5.2) {
+   		    Robot.CatapultMotor.set(.7 * inversion);
 		} else {
 			cancel();
 		}	
@@ -66,12 +66,14 @@ public class Catapult extends SubsystemBase {
      public void CatapultBackwards() { 
 		double pos = getPos();
 		double speed=-0.05;
-		boolean limitActive = Robot.catapultBottomLimit.get();
+		boolean limitActive;
 
-		if (limitActive == true) {
+		if (Robot.catapultBottomLimit.get() == true) {
 			SmartDashboard.putBoolean("Cataput BottomLimit", true);
 			limitHit=0;	 
+			limitActive=false;
 		} else {
+			limitActive=true;
 		    SmartDashboard.putBoolean("Cataput BottomLimit", false);
 			if (speed < 0) { speed=0; }
 			limitHit++;
@@ -107,6 +109,7 @@ public class Catapult extends SubsystemBase {
 	 public void cancel() {
 		Robot.CatapultMotor.set(0);
 		Robot.CatapultMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		searchForLimit=0;
 	}
 
 

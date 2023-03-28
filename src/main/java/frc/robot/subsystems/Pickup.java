@@ -15,21 +15,20 @@
 package frc.robot.subsystems;
 
 //import frc.robot.Robot;
-import frc.robot.RobotMap;
+//import frc.robot.RobotMap;
 import frc.robot.Robot;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class Pickup extends SubsystemBase {
-	private DoubleSolenoid flapSolenoid;
 	int inversion=1;
 
 	/************************************************************************
@@ -61,14 +60,13 @@ public class Pickup extends SubsystemBase {
 
     public void RetractPickup() { 
         Robot.PickupSolenoid.set(DoubleSolenoid.Value.kForward);
-
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
-	 	public void pickupIntake() { 
-		    Robot.pickupMotor.set(.25 * inversion);
+	public void pickupIntake() { 
+	    Robot.pickupMotor.set(.30 * inversion);
 	}
 
 	/************************************************************************

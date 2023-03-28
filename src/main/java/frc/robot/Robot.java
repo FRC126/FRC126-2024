@@ -211,7 +211,7 @@ public class Robot extends TimedRobot {
 		armExtensionBottomLimit = new DigitalInput(8);
 
         // Catapult Limit switch on DIO port 9
-		catapultBottomLimit = new DigitalInput(9);
+		catapultBottomLimit = new DigitalInput(5);
 
         // Not using the limelight right now
         // limeLight = new LimeLight();
