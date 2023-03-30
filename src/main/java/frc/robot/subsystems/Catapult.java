@@ -54,7 +54,7 @@ public class Catapult extends SubsystemBase {
 	public void CatapultForward() { 
 		double pos = getPos();
 		if ( pos < 5.2) {
-   		    Robot.CatapultMotor.set(.7 * inversion);
+   		    Robot.CatapultMotor.set(.8 * inversion);
 		} else {
 			cancel();
 		}	

@@ -304,6 +304,8 @@ public class Robot extends TimedRobot {
             {
                 // Inside Position
                 if (selectedAutoBalance==1) selectedAutoBalance=5;
+                if (selectedAutoBalance==2) { selectedAutoBalance=3; }
+                if (selectedAllianceColor == 1 && selectedAutoBalance == 3) { selectedAutoBalance=4; }
                 
                 switch (selectedAutoFunction) {
                     case 0:
@@ -363,8 +365,6 @@ public class Robot extends TimedRobot {
             {
                 // Outside Position
                 if (selectedAutoBalance==1) { selectedAutoBalance=5; }
-                if (selectedAutoBalance==2) { selectedAutoBalance=3; }
-                if (selectedAllianceColor == 1 && selectedAutoBalance == 3) { selectedAutoBalance=4; }
 
                 switch (selectedAutoFunction) {
                     case 0:

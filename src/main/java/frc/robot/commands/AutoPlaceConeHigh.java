@@ -118,18 +118,18 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                     new MoveArmExtension(RobotMap.armRetractedPos, 100),
                     new MoveGrabber(RobotMap.grabberClosedPos+5, 100),
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 100),
-                    new TurnDegreesBetter(-15,100)
+                    new TurnDegreesBetter(-15,75)
                 ),
                 // Fully retract the arm while backing up around obsticle
                 new ParallelCommandGroup(
                     new MoveArmExtension(RobotMap.armRetractedPos, 100),
                     new MoveGrabber(RobotMap.grabberClosedPos+5, 100),
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 100),
-                    new DriveDistance(-18,100)
+                    new DriveDistance(-10,75)
                 ),
 
                 // turn back to a straight line
-                new TurnDegreesBetter(15,100),
+                new TurnDegreesBetter(15,75),
 
                 new DriveDistance(-12*10,400),
 
@@ -146,26 +146,29 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 new DriveDistance(-6, 75),
                 // Fully retract the arm while backing turning to avoid obsticle
                 new ParallelCommandGroup(
-                    new MoveArmExtension(RobotMap.armRetractedPos, 100),
-                    new MoveGrabber(RobotMap.grabberClosedPos+5, 100),
-                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 100),
-                    new TurnDegreesBetter(15,100)
+                    new MoveArmExtension(RobotMap.armRetractedPos, 50),
+                    new MoveGrabber(RobotMap.grabberClosedPos+5, 50),
+                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 50),
+                    new TurnDegreesBetter(10,75)
                 ),
                 // Fully retract the arm while backing up around obsticle
                 new ParallelCommandGroup(
-                    new MoveArmExtension(RobotMap.armRetractedPos, 100),
-                    new MoveGrabber(RobotMap.grabberClosedPos+5, 150),
-                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 125),
-                    new DriveDistance(-18,300)
+                    new MoveArmExtension(RobotMap.armRetractedPos, 50),
+                    new MoveGrabber(RobotMap.grabberClosedPos+5, 50),
+                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 50),
+                    new DriveDistance(-15,76)
                 ),
-                new DriveDistance(-18,100),
                 // turn back to a straight line
                 new TurnDegreesBetter(-15,100),
 
-                new DriveDistance(-12*10,400),
-                // Finish backing up and lower the pickup and run it.
                 new ParallelCommandGroup(
-                    new DriveDistance(-5*8,300),
+                    new MoveArmExtension(RobotMap.armRetractedPos, 50),
+                    new MoveGrabber(RobotMap.grabberClosedPos+5, 50),
+                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 50),
+                    new DriveDistance(-12*8,500)
+                ),                // Finish backing up and lower the pickup and run it.
+                new ParallelCommandGroup(
+                    new DriveDistance(-4*12,300),
                     new RunPickup(1,300)
                 )
             );
