@@ -65,7 +65,7 @@ public class Catapult extends SubsystemBase {
 
      public void CatapultBackwards() { 
 		double pos = getPos();
-		double speed=-0.05;
+		double speed=-0.1;
 		boolean limitActive;
 
 		if (Robot.catapultBottomLimit.get() == true) {
@@ -87,6 +87,7 @@ public class Catapult extends SubsystemBase {
 
 		if ( searchingLimit ) { 
 			searchForLimit++;
+			speed=-0.05;
 			if ( searchForLimit > 15 ) {
 				searchingLimit = false;
 			}
