@@ -239,27 +239,27 @@ public class Robot extends TimedRobot {
 		server.setSource(driveCam);
 
         // Dashboard Cooser for the Autonomous mode move
-        autoFunction.setDefaultOption("Floor Cone",0);
+        autoFunction.setDefaultOption("High Cone",2);
         autoFunction.addOption("Mid Cone",1);
-        autoFunction.addOption("High Cone",2);
+        autoFunction.addOption("Floor Cone",0);
         autoFunction.addOption("No Cone",3);
-        SmartDashboard.putData("Cone Choices",autoFunction);
+        SmartDashboard.putData("Auto Cone Choices",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
         autoPosition.setDefaultOption("Inside Position",0);
         autoPosition.addOption("Center Position",1);
         autoPosition.addOption("Outisde Position",2);
-        SmartDashboard.putData("Auto Position",autoPosition);
+        SmartDashboard.putData("Auto Robot Position",autoPosition);
 
         // Dashboard Cooser for the Autonomous mode position
         allianceColor.setDefaultOption("Red Alliance",0);
         allianceColor.addOption("Blue Alliance",1);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoBalance.setDefaultOption("Do Nothing",5);
+        autoBalance.setDefaultOption("Leave SZ, Get Cube",2);
         autoBalance.addOption("Balance",1);
-        autoBalance.addOption("Leave Saftey Zone",2);
-        SmartDashboard.putData("Auto Choices",autoBalance);
+        autoBalance.addOption("Do Nothing",5);
+        SmartDashboard.putData("Auto Action Choices",autoBalance);
 
         Log.print(0, "Robot", "Robot Init Complete");
     }

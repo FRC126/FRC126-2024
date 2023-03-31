@@ -77,8 +77,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             Balancing=false;
             Holding=false;
             speed=-0.30;
-            //if (pitch < -18) { StartedClimb = true; }
-            if (pitch < -14) { StartedClimb = true; }
+            if (pitch < -18) { StartedClimb = true; }
+            //if (pitch < -14) { StartedClimb = true; }
             balanceCount=0;
 
             // We've been trying to start climbing for too long
@@ -95,10 +95,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                speed=Robot.boundSpeed((pitch/90), maxSpeed*-1, minSpeed*-1);
             } else {
                 // If the pitch is going back down, divide the pitch by 150 
-                speed=Robot.boundSpeed((pitch/100), maxSpeed*-1, minSpeed*-1);
+                speed=Robot.boundSpeed((pitch/110), maxSpeed*-1, minSpeed*-1);
             }  
             balanceCount=0;
-        } else if (pitch > 7 && !Holding) {
+        } else if (pitch > 6) {
             // Robot is pitching down, start driving backwards
             Balancing=true;
             Holding=false;
@@ -107,7 +107,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 speed=Robot.boundSpeed((pitch/90), maxSpeed, minSpeed);
              } else {
                 // If the pitch is going back up, divide the pitch by 150 
-                speed=Robot.boundSpeed((pitch/100), maxSpeed, minSpeed);
+                speed=Robot.boundSpeed((pitch/110), maxSpeed, minSpeed);
              }  
              balanceCount=0;
         } else {
@@ -121,7 +121,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 Holding=false;
             } else {
                 // try to keep the robot from moving
-                if (balanceCount == 5) {
+                if (balanceCount == 3) {
                     Robot.driveBase.resetEncoders();
                     Holding=true;
                 }     
