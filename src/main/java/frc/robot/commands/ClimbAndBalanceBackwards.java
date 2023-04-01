@@ -71,13 +71,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         xAxis = Robot.navxMXP.getAngle();
         double speed=0;
         double maxSpeed=.28;
-        double minSpeed=.095;
+        double minSpeed=.090;
         if ( !StartedClimb ) {
             // Drive Foward until we start climbing up the ramps.
             Balancing=false;
             Holding=false;
             speed=-0.30;
-            if (pitch < -18) { StartedClimb = true; }
+            if (pitch < -14) { StartedClimb = true; }
             //if (pitch < -14) { StartedClimb = true; }
             balanceCount=0;
 
@@ -86,50 +86,51 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 speed=0;
             };
 
-        } else if (pitch < -7 && !Holding) {
+        } else if (pitch < -8 && !Holding) {
             // Robot is still pitched up, keep driving forward
             Balancing=true;
             Holding=false;
             if (lastPitch < pitch ) {
                 // If the pitch is still going up, divide the pitch by 120 
-               speed=Robot.boundSpeed((pitch/90), maxSpeed*-1, minSpeed*-1);
+               speed=Robot.boundSpeed((pitch/100), maxSpeed*-1, minSpeed*-1);
             } else {
                 // If the pitch is going back down, divide the pitch by 150 
-                speed=Robot.boundSpeed((pitch/110), maxSpeed*-1, minSpeed*-1);
+                speed=Robot.boundSpeed((pitch/120), maxSpeed*-1, minSpeed*-1);
             }  
             balanceCount=0;
-        } else if (pitch > 6) {
+        } else if (pitch > 8) {
             // Robot is pitching down, start driving backwards
             Balancing=true;
             Holding=false;
             if (lastPitch > pitch ) {
                 // If the pitch is still going down, divide the pitch by 120 
-                speed=Robot.boundSpeed((pitch/90), maxSpeed, minSpeed);
+                speed=Robot.boundSpeed((pitch/100), maxSpeed, minSpeed);
              } else {
                 // If the pitch is going back up, divide the pitch by 150 
-                speed=Robot.boundSpeed((pitch/110), maxSpeed, minSpeed);
+                speed=Robot.boundSpeed((pitch/120), maxSpeed, minSpeed);
              }  
              balanceCount=0;
         } else {
             // We are balanced, stop.
             Balancing=false;
             speed=0;
-            if (pitch < 3 && pitch > -3) { balanceCount++; }
+            //if (pitch < 3 && pitch > -3) { balanceCount++; }
+            balanceCount++;
             Robot.driveBase.brakesOn();
 
             if (balanceCount == 1) {
                 Holding=false;
             } else {
                 // try to keep the robot from moving
-                if (balanceCount == 3) {
+                if (balanceCount == 25) {
                     Robot.driveBase.resetEncoders();
                     Holding=true;
                 }     
                 double distance = Robot.driveBase.getDistanceInches();
                 if (distance > 1) {
-                    speed=-0.1;
+                   speed=-0.1;
                 } else if (distance < -1 ) {
-                    speed=0.1;
+                   speed=0.1;
                 }
             }
         }

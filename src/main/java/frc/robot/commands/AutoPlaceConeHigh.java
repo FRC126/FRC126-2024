@@ -53,8 +53,8 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 // Drive Backwards, retact the arm, and start closing the grabber
                 new ParallelCommandGroup(
                     new DriveDistance(-12, 150),
-                    new MoveArmExtension(RobotMap.armRetractedPos+40, 150),
-                    new MoveGrabber(RobotMap.grabberClosedPos+25, 150)
+                    new MoveArmExtension(RobotMap.armRetractedPos+40, 120),
+                    new MoveGrabber(RobotMap.grabberClosedPos+25, 120)
                 )    
            );
         } else {
@@ -97,20 +97,21 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 // Fully retract the arm while backing out of the community zone
                 new ParallelCommandGroup(
                     new MoveArmExtension(RobotMap.armRetractedPos, 100),
-                    new MoveGrabber(RobotMap.grabberClosedPos+5, 150),
-                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 125),
+                    new MoveGrabber(RobotMap.grabberClosedPos+5, 100),
+                    new MoveTowerArm(RobotMap.towerArmRetractedPos, 100),
                     new DriveDistance(-12*8,300)
                 ),
                 // Finish backing up and lower the pickup and run it.
+                new TurnDegreesBetter(175,250),
+
                 new ParallelCommandGroup(
                     new DriveDistance(-12*3.5,150),
                     new RunPickup(1,200)
-                ),    
-            new TurnDegreesBetter(175,250)
+                )    
             );
-        } else if (action == 4 || action ==3 ) {
-            int turnDirection=1;
-            if (action ==3) { turnDirection = -1; }
+        } else if (action == 4 || action == 3 ) {
+            int turnDirection=-1;
+            if (action == 3) { turnDirection = 1; }
             // Action 3 is we are on the outside position, blue alliance
             addCommands(
                 new DriveDistance(-6, 75),
@@ -126,7 +127,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                     new MoveArmExtension(RobotMap.armRetractedPos, 50),
                     new MoveGrabber(RobotMap.grabberClosedPos+5, 50),
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 50),
-                    new DriveDistance(-15,76)
+                    new DriveDistance(-10,76)
                 ),
                 // turn back to a straight line
                 new TurnDegreesBetter(-15 * turnDirection,100),

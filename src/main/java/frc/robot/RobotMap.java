@@ -78,8 +78,8 @@ public class RobotMap {
 	public static double towerArmCubeCatchPos=0;
 	public static double towerArmExtendedLowPos=30;
 	public static double towerArmExtendedMidPos=123;
-	public static double towerArmExtendedHighPos=170;
-	public static double towerArmExtendedMaxPos=175;
+	public static double towerArmExtendedHighPos=160;
+	public static double towerArmExtendedMaxPos=165;
 
 	// Arm Extension
 	public static double armRetractedPos=0;
