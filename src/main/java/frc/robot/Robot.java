@@ -327,8 +327,8 @@ public class Robot extends TimedRobot {
                         SmartDashboard.putString("AutoCommand","Left - No Cone - No Balance");
                         break;    
                 }
-                break;
             }
+            break;
             case 1:
             {
                 // Center Position

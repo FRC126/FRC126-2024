@@ -14,9 +14,11 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -38,7 +40,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
             ),
 
             // Drive Forwards
-            new DriveDistance(18, 250)
+            new DriveDistance(17, 250)
         );
 
         if (action != 0) {
@@ -110,8 +112,10 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                 )    
             );
         } else if (action == 4 || action == 3 ) {
-            int turnDirection=-1;
-            if (action == 3) { turnDirection = 1; }
+            int turnDirection=1;
+            if (action == 3) { turnDirection = -1; }
+            SmartDashboard.putNumber("AutoDebug ACtion",action);
+
             // Action 3 is we are on the outside position, blue alliance
             addCommands(
                 new DriveDistance(-6, 75),
@@ -120,7 +124,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                     new MoveArmExtension(RobotMap.armRetractedPos, 50),
                     new MoveGrabber(RobotMap.grabberClosedPos+5, 50),
                     new MoveTowerArm(RobotMap.towerArmRetractedPos, 50),
-                    new TurnDegreesBetter(10 * turnDirection,75)
+                    new TurnDegreesBetter(15 * turnDirection,100)
                 ),
                 // Fully retract the arm while backing up around obsticle
                 new ParallelCommandGroup(
@@ -130,7 +134,7 @@ public class AutoPlaceConeHigh extends SequentialCommandGroup {
                     new DriveDistance(-10,76)
                 ),
                 // turn back to a straight line
-                new TurnDegreesBetter(-15 * turnDirection,100),
+                //new TurnDegreesBetter(-15 * turnDirection,100),
 
                 new ParallelCommandGroup(
                     new MoveArmExtension(RobotMap.armRetractedPos, 50),
