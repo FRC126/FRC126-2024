@@ -15,31 +15,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import frc.robot.Robot;
- 
+
 /**********************************************************************************
  **********************************************************************************/
 
 public class AutoMoveLeft extends SequentialCommandGroup {
-    public AutoMoveLeft() {
+    public AutoMoveLeft(int multiplier) {
         /**********************************************************************************
          **********************************************************************************/
 
-        double speed=0.15;
-        double angle=-30;
+        double angle=20;
 
         addCommands(
-            new DriveDistance(-12,150),
+            new DriveDistance(-10*multiplier,75),
 
-            new TurnDegreesBetter(angle, 150),
+            new TurnDegreesBetter(angle+5, 50),
 
-            new DriveDistance(6,150),
+            new DriveDistance(5*multiplier,75),
 
-            new TurnDegreesBetter((angle * -1), 150),
+            new TurnDegreesBetter(((angle) * -1), 50),
 
-            new DriveDistance(7,150),
+            new DriveDistance(4*multiplier, 75),
             
             new FinishAuto()
         );

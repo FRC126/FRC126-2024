@@ -18,17 +18,18 @@ import frc.robot.Robot;
 import frc.robot.subsystems.*;	
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class ArmExtensionControl extends CommandBase {
+public class CatapultControl extends CommandBase {
 	JoystickWrapper operatorJoystick;
 	
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public ArmExtensionControl(ArmExtension subsystem) {
+    public CatapultControl(Catapult subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.1);
     }
@@ -51,14 +52,14 @@ public class ArmExtensionControl extends CommandBase {
 			return;
 		}
 
-  		// Get stick inputs
-		double UD = operatorJoystick.getRightStickY();
-		
-		if ( UD < .15 && UD > -0.15 ) {
-			UD=0;
+		if ( operatorJoystick.getPovUp() ) {
+			Robot.robotCatapult.CatapultForward();
+		} else if (operatorJoystick.getPovDown()) {
+			Robot.robotCatapult.CatapultBackwards();
+		} else {
+			Robot.robotCatapult.cancel();
 		}
 
-        Robot.robotArmExtension.MoveArmExtension(UD);
 	}
 
 	/**********************************************************************************
@@ -76,7 +77,6 @@ public class ArmExtensionControl extends CommandBase {
 
 	 @Override
 	public void end(boolean isInterrupted) {
-        Robot.robotArmExtension.MoveArmExtension(0);
-	}  
-    
+        // TODO Retract Brakes
+	}     
 }

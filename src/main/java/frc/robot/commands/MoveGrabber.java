@@ -15,23 +15,23 @@ package frc.robot.commands;
 import frc.robot.Robot;
 //import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
- public class MoveTowerArm extends CommandBase {
-    double targetPos;
+ public class MoveGrabber extends CommandBase {
+    double target;
     int iters;
     int targetReached=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public MoveTowerArm(double targetIn, int iters_in ) {
+    public MoveGrabber(double targetIn, int iters_in ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        targetPos = targetIn;
+        target = targetIn;
         iters = iters_in;
         targetReached = 0;
     }
@@ -41,49 +41,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void initialize() {
-        targetReached=0;
     }
 
 	/**********************************************************************************
-     * Called repeatedly when this Command is scheduled to 
-     * 
+     * Called repeatedly when this Command is scheduled to run
 	 **********************************************************************************/
 	
     public void execute() {
 
-        double curPos=Robot.robotTowerArm.getPos();
+        double curPos=Robot.robotGrabber.getPos();
+        double targetPos=target;
         double speed=0;
-        double driftTolerance=2;
+        double driftTolerance=5;
         double maxSpeed=1;
-        double minSpeed=.3;
+        double minSpeed=.4;
 
-		double diff = curPos - targetPos;
-        SmartDashboard.putNumber("Arm Diff",diff);
-        SmartDashboard.putNumber("curPos",curPos);
-        SmartDashboard.putNumber("targetPos",targetPos);
-        
         if (curPos < targetPos - driftTolerance) { 
-            speed=Robot.boundSpeed(((targetPos - curPos)/35), maxSpeed, minSpeed);
+            speed=Robot.boundSpeed(((curPos-targetPos)/35), maxSpeed*-1, minSpeed*-1);
             targetReached=0;
-            SmartDashboard.putBoolean("Less Than",true);
-            SmartDashboard.putBoolean("greater Than",false);
         } else if (curPos > targetPos + driftTolerance) { 
-            speed=Robot.boundSpeed(((targetPos - curPos)/35), maxSpeed*-1, minSpeed*-1);
+            speed=Robot.boundSpeed(((curPos-targetPos)/35), maxSpeed, minSpeed);
             targetReached=0;
-            SmartDashboard.putBoolean("Less Than",false);
-            SmartDashboard.putBoolean("greater Than",true);
         } else {
             speed=0;
             targetReached++;
-            Robot.robotTowerArm.brakesOn();
-            SmartDashboard.putBoolean("Less Than",false);
-            SmartDashboard.putBoolean("greater Than",false);
+            Robot.robotGrabber.brakesOn();
         }
-
-        SmartDashboard.putNumber("arm auto speed",speed);
-
-        Robot.robotTowerArm.MoveArm(speed);
-
+        Robot.robotGrabber.MoveGrabber(speed);
     }
 
 	/**********************************************************************************
@@ -95,7 +79,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         if (targetReached > 5 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
-            Robot.robotTowerArm.cancel();
+            Robot.robotGrabber.cancel();
             return true;
         }
 
@@ -107,6 +91,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.robotTowerArm.cancel();
+        Robot.robotGrabber.cancel();
     }
 }

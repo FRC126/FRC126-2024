@@ -6,39 +6,34 @@
 	   \ \ \  // /_\ \\ \ \L\ \
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
-
-    Team 126 2023 Code       
+    Team 126 2022 Code       
 	Go get em gaels!
-
 ***********************************/
 
 package frc.robot.commands;
 
 import frc.robot.Robot;
+//import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
 
- public class AutoBalance extends CommandBase {
-    
-    double pitch, xAxis, last_pitch, xAxisStart;
+ public class MoveArmExtension extends CommandBase {
+    double target;
     int iters;
-    int balanceCount=0;
-    static final double balanceThresholdMin=-5;
-    static final double balanceThresholdMax=5;
+    int targetReached=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public AutoBalance() {
+    public MoveArmExtension(double targetIn, int iters_in ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        iters=200;
-        balanceCount=0;
-        pitch = Robot.navxMXP.getPitch();
-        xAxisStart = Robot.navxMXP.getAngle();
+        target = targetIn;
+        iters = iters_in;
+        targetReached = 0;
     }
 
 	/**********************************************************************************
@@ -46,8 +41,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void initialize() {
-        Robot.driveBase.resetEncoders();
-        
     }
 
 	/**********************************************************************************
@@ -55,50 +48,34 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void execute() {
-        pitch = Robot.navxMXP.getPitch();
-        xAxis = Robot.navxMXP.getAngle();
+
+        double curPos=Robot.robotArmExtension.getPos();
+        double targetPos=target;
         double speed=0;
-        double rotate=0;
+        double driftTolerance = 2;
+        double maxSpeed=1;
+        double minSpeed=.3;
 
-        SmartDashboard.putNumber("NavX Pitch",pitch);
-        SmartDashboard.putNumber("NavX GyroX",xAxis);
-        SmartDashboard.putNumber("NavX GyroX Start",xAxisStart);
-        SmartDashboard.putNumber("Balance Count",balanceCount);
+        double diff = curPos - targetPos;
+        
+        SmartDashboard.putNumber("Arm Diff",diff);
+        SmartDashboard.putNumber("curPos",curPos);
+        SmartDashboard.putNumber("targetPos",targetPos);
 
-        if ( pitch > balanceThresholdMax) {
-            // Pointing up, Drive forward
-            speed=0.2;
-            if ( pitch > 10) {
-                speed=0.3;
-            }
-            balanceCount=0;
-        } else if (pitch < balanceThresholdMin) {
-            // Pointing down, Drive backwards
-            speed=-0.2;
-            if ( pitch < -10) {
-                speed=0.3;
-            }
-            balanceCount=0;
+        if (curPos < targetPos - driftTolerance) { 
+            speed=Robot.boundSpeed(((curPos-targetPos)/30), maxSpeed*-1, minSpeed*-1);
+            targetReached=0;
+        } else if (curPos > targetPos + driftTolerance) { 
+            speed=Robot.boundSpeed(((curPos - targetPos)/30), maxSpeed, minSpeed);
+            targetReached=0;
         } else {
-            // Reached target
-            balanceCount++;
-        }    
-
-        if (xAxis < xAxisStart-1) {
-            rotate=.1;
-        } else if (xAxis > xAxisStart+1) {
-            rotate=-1;
+            speed=0;
+            targetReached++;
+            Robot.robotArmExtension.brakesOn();
         }
 
-        SmartDashboard.putNumber("Balance Speed",speed);
-        if (speed == 0) {
-            Robot.driveBase.brakesOn();
-        } else {
-            Robot.driveBase.brakesOff();
-        }
-        Robot.driveBase.Drive(speed, rotate);
-
-     }
+        Robot.robotArmExtension.MoveArmExtension(speed);
+    }
 
 	/**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
@@ -106,13 +83,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public boolean isFinished() {
         iters--;
-        if (balanceCount > 5 || iters <= 0) {
-            // if we have reached the target distance, or run out of time to do so, 
-            // stop driving and end the command.
-            Robot.driveBase.Drive(0, 0);
-            Robot.driveBase.brakesOn();
+
+        if (targetReached > 5 || iters <= 0) {
+            // We have reached our target angle or run out of time to do so.
+            Robot.robotArmExtension.cancel();
             return true;
         }
+
         return false;
     }
 
@@ -121,7 +98,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.cancel();
+        Robot.robotArmExtension.cancel();
     }
 }
-

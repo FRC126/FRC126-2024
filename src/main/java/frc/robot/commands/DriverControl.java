@@ -18,7 +18,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.*;	
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
@@ -26,7 +26,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriverControl extends CommandBase {
 	JoystickWrapper driveJoystick;
-	
+	boolean driveStraight=false;
+	double straightDegrees = 0;
+
 	/**********************************************************************************
 	 **********************************************************************************/
 	
@@ -40,6 +42,7 @@ public class DriverControl extends CommandBase {
 	
 	@Override
 	public void initialize() {
+		Robot.stopAutoCommand();
 	}    
 
 	/**********************************************************************************
@@ -48,7 +51,18 @@ public class DriverControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		int multiplier=1;
+
+		// X buttom aborts any running auto commands
+		if (driveJoystick.isXButton()) {
+			Robot.stopAutoCommand();
+		}
+
+		//double pitch = Robot.navxMXP.getPitch();
+        //SmartDashboard.putNumber("NavX Pitch",pitch);
+		//SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
+
+		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
 			// Ignore user controls during Autonomous
 			return;
 		}
@@ -58,83 +72,78 @@ public class DriverControl extends CommandBase {
         double LR = driveJoystick.getRightStickX();
 
 		// Slow down the driver controls when the left trigger is pressed
-		if (driveJoystick.getLeftTrigger() > .6) {
+		if (driveJoystick.getLeftTrigger() > .5) {
 			LR=LR*.7;
 			FB=FB*.3;
 		}
 
 		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .6) {
+		if (driveJoystick.getRightTrigger() > .5) {
 			Robot.driveBase.brakesOn();
+			if (driveStraight != true) {
+                // Get the current angle from the Navx 
+				straightDegrees = Robot.navxMXP.getAngle();      
+				driveStraight = true;
+			}
 		} else {
-			Robot.driveBase.brakesOff();
+			if (driveStraight == true) {
+			    driveStraight = false;
+				Robot.driveBase.brakesOff();
+			}	
 		}	
 
-		// Turn off the brakes if operator is using the joysticks	  
-		if ( FB > .1 || FB < -0.1 || LR > .1 || LR < -0.1 ) {
-			Robot.driveBase.brakesOff();
-		}
-
-		if (driveJoystick.isAButton()) {
-			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoDriveTest();
-				Robot.autoCommand.schedule();
-			};
-		}
-
-		if (driveJoystick.isXButton()) {
-			Robot.stopAutoCommand();
-		}
-
-	    // Shift the Robot Left
+		// Shift the Robot Left
 		if (driveJoystick.getPovLeft()) {
 			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoMoveLeft();
+				Robot.autoMove=true;
+				Robot.autoCommand=new AutoMoveLeft(multiplier);
 				Robot.autoCommand.schedule();
-			}	
-		}
 
-		// Shift the Robot right
-		if (driveJoystick.getPovRight()) {
+			}	
+		} else if (driveJoystick.getPovRight()) {
+			// Shift the Robot right
 			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoMoveRight();
+				Robot.autoCommand=new AutoMoveRight(multiplier);
 				Robot.autoCommand.schedule();
-	        }			
-		}
-
-		/*
-		// Auto balance the robot
-		if (driveJoystick.isAButton()) {
-			if ( Robot.driveBase.doAutoCommand() ) {
-				Robot.autoCommand=new AutoBalance();
-				Robot.autoCommand.schedule();
-			}	
-		}
-
-		// Climb then auto balance the robot
-		if (driveJoystick.isBButton()) {
-			if ( Robot.driveBase.doAutoCommand() ) {
+				Robot.autoMove=true;
+	       }			
+		} else if (driveJoystick.isAButton()) {
+			// Auto balance the robot
+			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoClimbBalance();
 				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
 			}	
-		}
-        */
-		
+		} else if (driveJoystick.isYButton()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoClimbBalanceBackwards();
+				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
+			}	
+		} else if (driveJoystick.isBButton()) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoTurn180();
+				Robot.autoCommand.schedule();
+				Robot.autoMove=true;
+			}	
+		}      
+
 		// Log the Joystick X,Y Axis to the SmartDashboard.
 		//SmartDashboard.putNumber("JoyStick Y Axis",FB);
 		//SmartDashboard.putNumber("JoyStick X Axis",LR);
 
-		SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
-		SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
+		//SmartDashboard.putNumber("robotTurn",Robot.robotTurn);
+		//SmartDashboard.putNumber("robotDrive",Robot.robotDrive);
 
-		if (Robot.isAutoCommand) {
+		if (Robot.isAutoCommand && Robot.autoMove) {
 			// Don't do anything during auto commands
 		} else if (Robot.targetType == Robot.targetTypes.TargetSeek) {
 			// If we are seeking the throwing target, ignore the driver input
 			Robot.driveBase.Drive(Robot.robotDrive,Robot.robotTurn);
 		} else {
 			// Set drivebase speed based on user input
-			Robot.driveBase.Drive(FB,LR);
+			Robot.driveBase.Drive(FB,LR, driveStraight, straightDegrees);
+
 		}
 	}
 

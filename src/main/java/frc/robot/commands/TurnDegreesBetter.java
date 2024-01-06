@@ -48,7 +48,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         Robot.navxMXP.zeroYaw();
         startAngle = 0;
-        Robot.driveBase.brakesOff();
     }
 
 	/**********************************************************************************
@@ -59,13 +58,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double driveLr=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.navxMXP.getAngle();      
+        double currentDegrees = Robot.navxMXP.getAngle() * -1;      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
-        double tmp = diff / 100;
-        if ( tmp > .2) { tmp=.2; }
-        if ( tmp < .1) { tmp=.1; }
+        double tmp = diff / 150;
+        tmp = Robot.boundSpeed(tmp, .25, .25);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
@@ -75,18 +73,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         } else if (currentDegrees < target) {
             driveLr=tmp * -1;
             targetReached=0;
-            Robot.driveBase.brakesOff();
         } else {
             driveLr=tmp;
             targetReached=0;
-            Robot.driveBase.brakesOff();
         }
 
-        SmartDashboard.putNumber("Current Degrees",currentDegrees);
-        SmartDashboard.putNumber("Target Degrees",target);
+        SmartDashboard.putNumber("Turn Current Degrees",currentDegrees);
+        SmartDashboard.putNumber("Turn Target Degrees",target);
         SmartDashboard.putNumber("Turn diff",diff);
-        SmartDashboard.putNumber("DriveLR",driveLr);
-        SmartDashboard.putNumber("TargetReached",targetReached);
+        SmartDashboard.putNumber("Turn Target Reached",targetReached);
 
         Robot.driveBase.Drive(0, driveLr);
     }
@@ -98,7 +93,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 5 || iters <= 0) {
+        if (targetReached > 3 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
             Robot.driveBase.brakesOff();
             Robot.driveBase.Drive(0, 0);

@@ -19,18 +19,16 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class TowerArm extends SubsystemBase {
-
-	public static double armRetractedPos=-5;
-	public static double armPickupPos=-0;
-	public static double armExtendedHighPos=25;
-	public static double armExtendedMidPos=50;
+	double lastSpeed=1000;
+	int limitHit=0;
+	double softSpeed=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -40,11 +38,8 @@ public class TowerArm extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new TowerArmControl(this));
 
-		resetEncoders();
-
 		// Set brake mode for the tower arm motor
-		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
+		brakesOn();
 	}
 
 	/************************************************************************
@@ -55,33 +50,74 @@ public class TowerArm extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	 /************************************************************************
-	 * Send power to the drive motors
-	 ************************************************************************/
-
 	public void MoveArm(double speedIn) { 
+		double speed = speedIn;
 
-		double speed=speedIn;
-
-		if (Robot.internalData.isTeleop()) {
-    		// TODO
-		}
-
-        //TODO Check encoders to if we are at limits.
-		double pos=Robot.TowerArmRelativeEncoder.getPosition();
-
-		if ( speed < 0) { 
-			if (pos<armRetractedPos) { speed = 0; }
-		}
-
-		if ( speed > 0) { 
-			if (pos > armExtendedHighPos) { speed = 0; }
-		}
+		//Check encoders to if we are at limits.
+		double pos = getPos();
 
 		SmartDashboard.putNumber("Tower Arm Pos", pos);
-		SmartDashboard.putNumber("Tower Arm Speed", speed);
 
-		Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
+		if (Robot.towerArmRetracedLimit.get() != false) {
+			SmartDashboard.putBoolean("Tower Arm Limit", true);
+			limitHit=0;	 
+		} else {
+		    SmartDashboard.putBoolean("Tower Arm Limit", false);
+			if (speed < 0) { speed=0; }
+			limitHit++;
+			if (limitHit > 10) {
+  			     Robot.TowerArmRelativeEncoder.setPosition(5);
+				 limitHit=0;	 
+			}
+		}
+
+		// Soft start code
+		if (speed == 0) {
+			// No movement
+		    softSpeed = 0;
+		} else if (speed > 0) {
+			// Soft start for arm up
+			if ( speed > softSpeed) {
+				speed = softSpeed + 0.1;
+			}			
+			softSpeed=speed;
+		} else {
+			// Soft start for throttle reverse
+			if ( speed < softSpeed) {
+				speed = softSpeed - 0.1;
+			}			
+			softSpeed=speed;
+		}	
+
+		if (speed != 0) {	
+			if (speed < 0) { 
+				// Slow down as we approach fully retracted
+				if (pos < RobotMap.towerArmRetractedPos + 10 && !Robot.ignoreEncoders) { speed = -.25; }
+				if (pos < RobotMap.towerArmRetractedPos && !Robot.ignoreEncoders) { speed = 0; }
+			} else if (speed > 0) { 
+				// Slow down as we approach fully extended
+				if (pos > RobotMap.towerArmExtendedMaxPos - 10 && !Robot.ignoreEncoders) { speed = .25; }
+				if (pos > RobotMap.towerArmExtendedMaxPos && !Robot.ignoreEncoders) { speed = 0; }
+
+				if (pos > 5) {
+					// Retract the pickup if the arm goes to far out.
+					Robot.robotPickup.RetractPickup();
+					Robot.robotPickup.cancel();
+				}	
+			}
+        }
+
+		if (speed != lastSpeed) {
+			// Send power to the drive motors
+			Robot.TowerArmMotor.set(speed * RobotMap.TowerArmMotorInversion);
+			lastSpeed = speed;
+
+			SmartDashboard.putNumber("Tower Arm Speed", speed);
+		}	
+
+		if (speed == 0 && lastSpeed != 0) {
+			Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		}
 	}
 
     /************************************************************************
@@ -105,5 +141,19 @@ public class TowerArm extends SubsystemBase {
 	public double getPos() {
 		return(Robot.TowerArmRelativeEncoder.getPosition());
 	}
+
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void brakesOn() {
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void brakesOff() {
+		Robot.TowerArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}	
 
 }

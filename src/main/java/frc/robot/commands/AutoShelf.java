@@ -15,28 +15,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import frc.robot.Robot;
- 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.RobotMap;
+
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoDriveTest extends SequentialCommandGroup {
-    public AutoDriveTest() {
+public class AutoShelf extends SequentialCommandGroup {
+    public AutoShelf() {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new DriveDistance(12, 250),
+            new ParallelCommandGroup(
+               new MoveTowerArm(RobotMap.towerArmExtendedMidPos-7, 400),
+               new MoveGrabber(RobotMap.grabberOpenPos, 150)
+            ),
 
-            new TurnDegreesBetter(180, 150),
-
-            new DriveDistance(12, 250),
-
-            new TurnDegreesBetter(180, 150),
-            
             new FinishAuto()
-        );
+       );
     }       
 }

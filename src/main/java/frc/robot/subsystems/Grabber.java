@@ -19,15 +19,17 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
  **********************************************************************************/
-
 public class Grabber extends SubsystemBase {
 
+	double lastSpeed=1000;
+	int limitHit=0;
+	double softSpeed=0;
+	
 	/************************************************************************
 	 ************************************************************************/
 
@@ -36,11 +38,9 @@ public class Grabber extends SubsystemBase {
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new GrabberControl(this));
 
-		resetEncoders();
-
-		// Do we want brake mode on for the motors?
-		//Robot.GrabberMotor.setNeutralMode(NeutralMode.Brake);
-	}
+		// Brake mode on for the motor
+		brakesOn();	
+	}	
 
 	/************************************************************************
 	 ************************************************************************/
@@ -54,17 +54,67 @@ public class Grabber extends SubsystemBase {
 	 * Send power to the drive motors
 	 ************************************************************************/
 
-	public void MoveGrabber(double speed) { 
+	public void MoveGrabber(double speedIn) { 
+		double speed = speedIn;
+		
+		//  Check encoders to if we are at limits.
+		double pos = getPos();
 
-		if (Robot.internalData.isTeleop()) {
-    		// Slow down the turning in teleop
+		SmartDashboard.putNumber("Grabber Pos", pos);
+
+		if (Robot.grabberRetracedLimit.get() == false) {
+			SmartDashboard.putBoolean("Grabber Limit", true);
+			limitHit=0;	 
+		} else {
+		    SmartDashboard.putBoolean("Grabber Limit", false);
+			if (speed > 0) { speed=0; }
+			limitHit++;
+			if (limitHit > 20) {
+  			     Robot.GrabberRelativeEncoder.setPosition(5);
+				 limitHit=0;	 
+			}
+		}
+		
+		// Soft start code
+		if (speed == 0) {
+			// No movement
+		    softSpeed = 0;
+		} else if (speed > 0) {
+			// Soft start for arm up
+			if ( speed > softSpeed) {
+				speed = softSpeed + 0.1;
+			}			
+			softSpeed=speed;
+		} else {
+			// Soft start for throttle reverse
+			if ( speed < softSpeed) {
+				speed = softSpeed - 0.1;
+			}			
+			softSpeed=speed;
+		}	
+
+		if (speed != 0) {	
+			if (speed < 0) { 
+				if (pos >= RobotMap.grabberOpenPos - 20 && !Robot.ignoreEncoders) { speed = -.2; }
+				if (pos >= RobotMap.grabberOpenPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
+
+			if (speed > 0) { 
+				if (pos <= RobotMap.grabberClosedPos + 20 && !Robot.ignoreEncoders) { speed = .2; }
+				if (pos <= RobotMap.grabberClosedPos && !Robot.ignoreEncoders) { speed = 0; }
+			}
 		}
 
-		//SmartDashboard.putNumber("arm speed", speed);
+		//double cur=Robot.GrabberMotor.getOutputCurrent();
+		//SmartDashboard.putNumber("Grabber Current", cur);
 
-        //TODO Check encoders to if we are at limits.
+		if (speed != lastSpeed) {
+			Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+			lastSpeed = speed;
 
-		Robot.GrabberMotor.set(speed * RobotMap.GrabberMotorInversion);
+			//SmartDashboard.putNumber("Grabber Speed", speed);
+		}	
+
 	}
 
     /************************************************************************
@@ -75,11 +125,33 @@ public class Grabber extends SubsystemBase {
 		Robot.GrabberRelativeEncoder.setPosition(0);
 	}
 
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getPos() {
+		// Need to use encoders for the NEOs
+		return(Robot.GrabberRelativeEncoder.getPosition() * -1);
+	}
+
 	/************************************************************************
 	 *************************************************************************/
 
 	 public void cancel() {
         MoveGrabber(0); 
 	}
+
+	/************************************************************************
+	 *************************************************************************/
+
+	 public void brakesOn() {
+		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void brakesOff() {
+		Robot.GrabberMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}	
 
 }

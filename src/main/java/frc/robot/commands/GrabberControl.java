@@ -47,19 +47,18 @@ public class GrabberControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}
 
-		if (Robot.isAutoCommand) {
-		    return;
-		}			
+		double leftTrigger = operatorJoystick.getLeftTrigger();
+		double rightTrigger = operatorJoystick.getRightTrigger();
 
-		if (operatorJoystick.getPovLeft()) {
-			Robot.robotGrabber.MoveGrabber(.25);
-		} else if (operatorJoystick.getPovRight()) {
-			Robot.robotGrabber.MoveGrabber(-0.25);
+		if (leftTrigger > .3) {
+			Robot.robotGrabber.MoveGrabber(leftTrigger);
+		} else if (rightTrigger > .3 ) {
+			Robot.robotGrabber.MoveGrabber(rightTrigger * -1);
 		} else {
 			Robot.robotGrabber.MoveGrabber(0);
 		}

@@ -19,27 +19,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoMoveRight extends SequentialCommandGroup {
-    public AutoMoveRight(int multiplier) {
+public class AutoClimbBalanceBackwards extends SequentialCommandGroup {
+    public AutoClimbBalanceBackwards() {
         /**********************************************************************************
          **********************************************************************************/
 
-        double angle=-20;
-
         addCommands(
-            new DriveDistance(-10*multiplier,75),
-
-            new TurnDegreesBetter(angle-5, 50),
-
-            new DriveDistance(5*multiplier,75),
-
-            new TurnDegreesBetter((angle * -1), 50),
-
-            new DriveDistance(4*multiplier, 75),
+            new ClimbAndBalanceBackwards(5000),
             
             new FinishAuto()
+
         );
-    }   
-    
-    
+    }       
 }

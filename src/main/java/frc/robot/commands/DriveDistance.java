@@ -47,7 +47,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void initialize() {
         targetAngle = Robot.navxMXP.getAngle();
         Robot.driveBase.resetEncoders();
-        Robot.driveBase.brakesOff();
+        Robot.driveBase.brakesOn();
     }
 
 	/**********************************************************************************
@@ -59,18 +59,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         double currentDistance = Robot.driveBase.getDistanceInches();
         double diff =  Math.abs(distance) - currentDistance;
-        double tmp = Math.abs(diff) / 20;
-        if ( tmp > .5) { tmp=.5; }
-        if ( tmp < .15) { tmp=.15; }
+        double tmp = Math.abs(diff) / 50;
+        tmp = Robot.boundSpeed(tmp, .25, .10);
 
         if (distance < 0) {
             distanceInversion=-1;
         }    
 
-        if ( diff > 1 ) {
+        if ( diff > .5 ) {
             driveFb = tmp * distanceInversion;
             reachedCount=0;
-            Robot.driveBase.brakesOff();
         } else {
             driveFb=0;
             reachedCount++;
@@ -83,16 +81,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         // Try to keep the robot straight using the gyro
         if (driveFb != 0) {       
-            if(Robot.navxMXP.getAngle() - targetAngle > 0.5) {
-                // We are drifiting to the left, correct
-                Robot.driveBase.Drive(driveFb, 0.05);
-            } else if (Robot.navxMXP.getAngle() - targetAngle < -0.5) {
-                // We are drifiting to the right, correct
-                Robot.driveBase.Drive(driveFb, -0.05);
-            } else {
-                // Drive straight
-                Robot.driveBase.Drive(driveFb, 0);
-            }
+            // Drive straight
+            Robot.driveBase.Drive(driveFb, 0, true, targetAngle);
         } else {
             Robot.driveBase.Drive(driveFb, 0);
         }    
@@ -105,7 +95,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (reachedCount > 5 || iters <= 0) {
+        if (reachedCount > 3 || iters <= 0) {
             Robot.driveBase.Drive(0, 0);
             Robot.driveBase.brakesOff();
             return true;

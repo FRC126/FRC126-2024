@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  public class DriveWork extends CommandBase {
     double driveFb;
     double driveLr;
-    double targetAngle;
+    double startAngle;
     int iters;
 
 	/**********************************************************************************
@@ -42,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	 **********************************************************************************/
 	
     public void initialize() {
-        targetAngle = Robot.navxMXP.getAngle();
+        startAngle = Robot.navxMXP.getAngle();
     }
 
 	/**********************************************************************************
@@ -51,17 +51,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 	
     public void execute() {
         iters--;
-        boolean useGyro=false;
 
-        if(driveLr == 0 && useGyro == true) {
-            if(Robot.navxMXP.getAngle() - targetAngle > 1) {
-                Robot.driveBase.Drive(driveFb, -0.1);
-            }
-            else if(Robot.navxMXP.getAngle() - targetAngle < -1) {
-                Robot.driveBase.Drive(driveFb, 0.1);
-            } else {
-                Robot.driveBase.Drive(driveFb, 0);
-            }
+        if (driveLr == 0) {
+            Robot.driveBase.Drive(driveFb, 0, true, startAngle);
         } else {
             Robot.driveBase.Drive(driveFb, driveLr);            
         }

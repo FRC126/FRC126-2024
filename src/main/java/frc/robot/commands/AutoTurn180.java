@@ -22,24 +22,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoPlaceCubeHigh extends SequentialCommandGroup {
-    public AutoPlaceCubeHigh() {
+public class AutoTurn180 extends SequentialCommandGroup {
+    public AutoTurn180() {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new MoveTowerArm(3, 150),
-
-            // TODO Extend the arm
-
-            // TODO open grabber
-
-            new DriveDistance(-8,150),
-
-            // TODO Retract the arm
-
-            new MoveTowerArm(1, 150),
-          
+            new TurnDegreesBetter(180, 250),
+            
             new FinishAuto()
         );
     }       

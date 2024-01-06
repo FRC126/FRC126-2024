@@ -47,14 +47,14 @@ public class TowerArmControl extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if (Robot.internalData.isAuto()) {
+		if (operatorJoystick.isXButton()) {
+			Robot.stopAutoCommand();
+		}
+		
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}
-
-		if (Robot.isAutoCommand) {
-		    return;
-		}			
 
 		// Get stick inputs
 		double UD = operatorJoystick.getLeftStickY();
@@ -63,14 +63,45 @@ public class TowerArmControl extends CommandBase {
 			UD=0;
 		}
 
-		if ( operatorJoystick.isBackButton()) {
+		if ( operatorJoystick.isAButton() ) {
+			if ( Robot.doAutoCommand() ) {
+     		    Robot.autoCommand=new AutoPlaceConeLow(0);
+					Robot.autoMove=true;
+				Robot.autoCommand.schedule();
+			};
+		} else if ( operatorJoystick.isBButton() ) {
+			if ( Robot.doAutoCommand() ) {
+				//if ( operatorJoystick.getPovLeft() ) {
+		 			Robot.autoCommand=new AutoShelf();
+					Robot.autoMove=false;
+					Robot.autoCommand.schedule();
+				//} else {
+				//	Robot.autoCommand=new AutoPlaceConeMid(0);
+				//	Robot.autoMove=true;
+				//}	
+				Robot.autoCommand.schedule();
+			};
+		} else if ( operatorJoystick.isYButton() ) {
+			if ( Robot.doAutoCommand() ) {
+				Robot.autoCommand=new AutoPlaceConeHigh(0);
+				Robot.autoMove=true;
+				Robot.autoCommand.schedule();
+			};
+		} 
+
+		if ( operatorJoystick.isBackButton() ) {
+			Robot.ignoreEncoders=true;
+		} else {
+			Robot.ignoreEncoders=false;
+		}	
+
+		if ( operatorJoystick.isStartButton()) {
 			Robot.robotTowerArm.resetEncoders();
+			Robot.robotArmExtension.resetEncoders();
+			Robot.robotGrabber.resetEncoders();
+			Robot.robotCatapult.resetEncoders();
 		}
-
-		// Log the Joystick X,Y Axis to the SmartDashboard.
-		//SmartDashboard.putNumber("JoyStick A Button",operatorJoystick.isAButton());
-		//SmartDashboard.putNumber("JoyStick X Axis",operatorJoystick.isBButton());
-
+	
         Robot.robotTowerArm.MoveArm(UD);
 	}
 
