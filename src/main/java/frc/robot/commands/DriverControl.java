@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2023 Code       
+    Team 126 2024 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -109,17 +109,7 @@ public class DriverControl extends CommandBase {
 	       }			
 		} else if (driveJoystick.isAButton()) {
 			// Auto balance the robot
-			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoClimbBalance();
-				Robot.autoCommand.schedule();
-				Robot.autoMove=true;
-			}	
 		} else if (driveJoystick.isYButton()) {
-			if ( Robot.doAutoCommand() ) {
-				Robot.autoCommand=new AutoClimbBalanceBackwards();
-				Robot.autoCommand.schedule();
-				Robot.autoMove=true;
-			}	
 		} else if (driveJoystick.isBButton()) {
 			if ( Robot.doAutoCommand() ) {
 				Robot.autoCommand=new AutoTurn180();

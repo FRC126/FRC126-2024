@@ -11,7 +11,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2023 Code       
+    Team 126 2024 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -89,35 +89,6 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder right2RelativeEncoder = Robot.rightFollowMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Tower Arm Motor
-    public static CANSparkMax TowerArmMotor = new CANSparkMax(RobotMap.TowerArmMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static RelativeEncoder TowerArmRelativeEncoder = Robot.TowerArmMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static DigitalInput towerArmRetracedLimit;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ArmExtension Motor
-    public static CANSparkMax ArmExtensionMotor = new CANSparkMax(RobotMap.ArmExtensionMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static RelativeEncoder ArmExtensionRelativeEncoder = Robot.ArmExtensionMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static DigitalInput armExtensionBottomLimit;
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Grabber Motor
-    public static CANSparkMax GrabberMotor = new CANSparkMax(RobotMap.GrabberMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static RelativeEncoder GrabberRelativeEncoder = Robot.GrabberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static DigitalInput grabberRetracedLimit;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Catapult Motor
-    public static CANSparkMax CatapultMotor = new CANSparkMax(RobotMap.catapultMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static RelativeEncoder CatapultRelativeEncoder = Robot.CatapultMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static DigitalInput catapultBottomLimit;
-    
-  /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Pickup Motor
-    public static CANSparkMax pickupMotor = new CANSparkMax(RobotMap.pickupMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static RelativeEncoder pickupRelativeEncoder = Robot.pickupMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
 
@@ -144,14 +115,7 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static WestCoastDrive driveBase;
-    public static TowerArm robotTowerArm;
-    public static Grabber robotGrabber;
-    public static ArmExtension robotArmExtension;
-    public static Catapult robotCatapult;
-
-    public static Catapult robotBrakes;
-    public static Pickup robotPickup;
-
+    
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
@@ -202,38 +166,9 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
         driveBase = new WestCoastDrive();
 
-        // Brakes
-        robotBrakes = new Catapult();
-
-        // Pickup
-        robotPickup = new Pickup();
-
-        // Initilize Tower Arm
-        robotTowerArm = new TowerArm();
-        towerArmRetracedLimit = new DigitalInput(6);
-
-        // Initilize Grabber    
-        robotGrabber = new Grabber();
-        grabberRetracedLimit = new DigitalInput(7);
-        
-        // Initilize Arm Extension    
-        robotArmExtension = new ArmExtension();
-		armExtensionBottomLimit = new DigitalInput(8);
-
-        // create the lidarlite class on DIO 5
-        // distance = new LidarLite(new DigitalInput(5));
-
-        // Not using the PIXY right now
-        //pixyVision = new PixyVision();
-
-      // Catapult Limit switch on DIO port 9
-		catapultBottomLimit = new DigitalInput(5);
-
-        // Not using the limelight right now
+            // Not using the limelight right now
         // limeLight = new LimeLight();
        
-        robotCatapult = new Catapult();
-
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {
@@ -288,10 +223,6 @@ public class Robot extends TimedRobot {
         Log.print(0, "Robot", "Robot Autonomous Init");
 
         Robot.stopAutoCommand();
-
-        Robot.robotTowerArm.cancel();
-		Robot.robotGrabber.cancel();
-		Robot.robotArmExtension.cancel();
 		Robot.driveBase.cancel();
 
         try {
@@ -325,17 +256,17 @@ public class Robot extends TimedRobot {
                 switch (selectedAutoFunction) {
                     case 0:
                         // Floor Cone
-                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone Low - No Balance");
                         break;
                     case 1:
                         // Mid Cone
-                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone Mid - No Balance");
                         break;
                     case 2:
                         // High Cone
-                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Left - Cone High - No Balance");
                         break;
                     case 3:
@@ -353,59 +284,29 @@ public class Robot extends TimedRobot {
                 switch (selectedAutoFunction) {
                     case 0:
                         // Floor Cone
-                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Center - Cone Low");
                         break;
                     case 1:
                         // Mid Cone
-                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Center - Cone Mid");
                         break;
                     case 2:
                         // High Cone
-                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
+                        //autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
                         SmartDashboard.putString("AutoCommand","Center - Cone High");
                         break;
                     case 3:
                         // No Cone
                         if (selectedAutoBalance==1) {
-                            autonomous = new AutoClimbBalance();    
+                            //autonomous = new AutoClimbBalance();    
                             SmartDashboard.putString("AutoCommand","Center - No Cone - Balance");
                         }    
                         break;    
                 }
             }
             break;
-            case 2:
-            {
-                // Outside Position
-                if (selectedAutoBalance==1) { selectedAutoBalance=5; }
-                if (selectedAllianceColor == 1 && selectedAutoBalance == 3) { selectedAutoBalance=4; }
-
-                switch (selectedAutoFunction) {
-                    case 0:
-                        // Floor Cone
-                        autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Right - Cone Low - No Balance");
-                        break;
-                    case 1:
-                        // Mid Cone
-                        autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Right - Cone Mid - No Balance");
-                        break;
-                    case 2:
-                        // High Cone
-                        autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Right - Cone High - No Balance");
-                        break;
-                    case 3:
-                        // No Cone
-                        SmartDashboard.putString("AutoCommand","Right - No Cone - No Balance");
-                        break;    
-                }
-            }
-            break;
-
         }
 
         autonomous.schedule();
@@ -433,9 +334,6 @@ public class Robot extends TimedRobot {
 
         Robot.stopAutoCommand();
 
-        Robot.robotTowerArm.cancel();
-		Robot.robotGrabber.cancel();
-		Robot.robotArmExtension.cancel();
 		Robot.driveBase.cancel();
     }
 
@@ -529,9 +427,6 @@ public class Robot extends TimedRobot {
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
 
-		Robot.robotTowerArm.cancel();
-		Robot.robotGrabber.cancel();
-		Robot.robotArmExtension.cancel();
 		Robot.driveBase.cancel();
     }  
 
@@ -554,10 +449,7 @@ public class Robot extends TimedRobot {
 		if (Robot.isAutoCommand) {
 			return false;
 		}	
-		Robot.robotTowerArm.cancel();
-		Robot.robotGrabber.cancel();
-		Robot.robotArmExtension.cancel();
-        Robot.robotPickup.cancel();
+
         if (Robot.autoMove) { Robot.driveBase.cancel(); }
 
 	    Robot.isAutoCommand = true;
@@ -581,10 +473,6 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-		Robot.robotTowerArm.cancel();
-		Robot.robotGrabber.cancel();
-		Robot.robotArmExtension.cancel();
-        Robot.robotPickup.cancel();
         if (Robot.autoMove) { Robot.driveBase.cancel(); }
 	}		
 
