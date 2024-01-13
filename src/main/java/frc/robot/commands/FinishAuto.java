@@ -15,12 +15,12 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**********************************************************************************
  **********************************************************************************/
 
- public class FinishAuto extends CommandBase {
+ public class FinishAuto extends Command {
     
 	/**********************************************************************************
 	 **********************************************************************************/

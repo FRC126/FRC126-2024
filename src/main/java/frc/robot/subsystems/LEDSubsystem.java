@@ -30,7 +30,8 @@ public class LEDSubsystem extends SubsystemBase{
   @Override
   public void periodic() {
     if (DriverStation.isEnabled()) {
-      Alliance ally = DriverStation.getAlliance();
+      //Alliance ally = DriverStation.getAlliance();
+      Alliance ally = Alliance.Red;
       if (ally.equals(Alliance.Red)) {
         m_ledBuffer.setRGB(0,255,0,0);
         // If alliance = red, set strips to red

@@ -158,7 +158,8 @@ public class WestCoastDrive extends SubsystemBase {
 		
 		// If driveStraight is enable, keep the same heading
 		if ( driveStraight ) {
-			double degrees = Robot.navxMXP.getAngle();
+			double degrees = 0;
+			//double degrees = Robot.navxMXP.getAngle();
 			double tmp = degrees - straightDegrees;
 
 			//SmartDashboard.putNumber("NavX GyroX",degrees);

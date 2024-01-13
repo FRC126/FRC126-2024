@@ -22,12 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class LimeLightWork extends CommandBase {
+public class LimeLightWork extends Command {
     public static int iter=0;
     JoystickWrapper driveJoystick;
     private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");

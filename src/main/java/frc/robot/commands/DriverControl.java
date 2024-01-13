@@ -17,14 +17,14 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;	
 import frc.robot.JoystickWrapper;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
  **********************************************************************************/
 
-public class DriverControl extends CommandBase {
+public class DriverControl extends Command {
 	JoystickWrapper driveJoystick;
 	boolean driveStraight=false;
 	double straightDegrees = 0;
@@ -58,7 +58,7 @@ public class DriverControl extends CommandBase {
 			Robot.stopAutoCommand();
 		}
 
-		//double pitch = Robot.navxMXP.getPitch();
+		double pitch = Robot.navxMXP.getPitch();
         //SmartDashboard.putNumber("NavX Pitch",pitch);
 		//SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
