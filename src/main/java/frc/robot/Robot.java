@@ -30,18 +30,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
@@ -64,19 +62,19 @@ public class Robot extends TimedRobot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Drive Base Motors
-    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMaxLowLevel.MotorType.kBrushless); 
+    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMax.MotorType.kBrushless); 
 
     // Drive base encoders
     public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
     public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
 
-    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP

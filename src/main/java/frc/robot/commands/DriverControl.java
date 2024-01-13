@@ -59,7 +59,7 @@ public class DriverControl extends Command {
 		}
 
 		double pitch = Robot.navxMXP.getPitch();
-        //SmartDashboard.putNumber("NavX Pitch",pitch);
+        SmartDashboard.putNumber("NavX Pitch",pitch);
 		//SmartDashboard.putBoolean("isAutoCommand",Robot.isAutoCommand);
 
 		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
