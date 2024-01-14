@@ -71,7 +71,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             // We are at the right angle
             targetReached++;
             driveLr=0;
-            Robot.driveBase.brakesOn();
+            Robot.swerveDrive.brakesOn();
         } else if (currentDegrees < target) {
             driveLr=tmp * -1;
             targetReached=0;
@@ -85,7 +85,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("Turn diff",diff);
         SmartDashboard.putNumber("Turn Target Reached",targetReached);
 
-        Robot.driveBase.Drive(0, driveLr);
+        Robot.swerveDrive.Drive(0, 0, driveLr);
     }
 
 	/**********************************************************************************
@@ -97,8 +97,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         if (targetReached > 3 || iters <= 0) {
             // We have reached our target angle or run out of time to do so.
-            Robot.driveBase.brakesOff();
-            Robot.driveBase.Drive(0, 0);
+            Robot.swerveDrive.brakesOff();
+            Robot.swerveDrive.Drive(0, 0, 0);
             return true;
         }
 
@@ -110,7 +110,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.brakesOff();
-        Robot.driveBase.Drive(0, 0);
+        Robot.swerveDrive.brakesOff();
+        Robot.swerveDrive.Drive(0, 0, 0);
     }
 }

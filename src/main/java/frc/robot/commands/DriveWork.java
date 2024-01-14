@@ -53,9 +53,9 @@ import edu.wpi.first.wpilibj2.command.Command;
         iters--;
 
         if (driveLr == 0) {
-            Robot.driveBase.Drive(driveFb, 0, true, startAngle);
+            Robot.swerveDrive.Drive(driveFb, 0, 0, true, startAngle);
         } else {
-            Robot.driveBase.Drive(driveFb, driveLr);            
+            Robot.swerveDrive.Drive(driveFb, driveLr, 0);            
         }
      }
 
@@ -66,7 +66,7 @@ import edu.wpi.first.wpilibj2.command.Command;
     // Make this return true when this Command no longer needs to run execute()
     public boolean isFinished() {
         if (iters <= 0) {
-            Robot.driveBase.Drive(0, 0);
+            Robot.swerveDrive.Drive(0, 0, 0);
             return true;
         }
         return false;
@@ -77,7 +77,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.Drive(0, 0);
+        Robot.swerveDrive.Drive(0, 0, 0);
     }
 
 }

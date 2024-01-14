@@ -61,20 +61,36 @@ public class Robot extends TimedRobot {
     // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Drive Base Motors
-    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMax.MotorType.kBrushless); 
+    // Swerve Motors
+    public static CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
 
-    // Drive base encoders
-    public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
-    public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
+    public static CANSparkMax swerveFrontLeftDriveMotor = new CANSparkMax(RobotMap.swerveFrontLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveFrontLeftTurnMotor = new CANSparkMax(RobotMap.swerveFrontLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
 
-    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static CANSparkMax swerveRearLeftDriveMotor = new CANSparkMax(RobotMap.swerveRearLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveRearLeftTurnMotor = new CANSparkMax(RobotMap.swerveRearLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    // Built in Motor Encoders
+    public static RelativeEncoder swerveFrontRightDriveRelativeEncoder = Robot.swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveFrontRightTurnRelativeEncoder = Robot.swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveFrontLeftDriveRelativeEncoder = Robot.swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveFrontLeftTurnRelativeEncoder = Robot.swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveRearLeftDriveRelativeEncoder = Robot.swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearLeftTurnRelativeEncoder = Robot.swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 
+    public static double LENGTH = 28;
+    public static double WIDTH = 28;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -102,7 +118,7 @@ public class Robot extends TimedRobot {
     public static Controllers oi;
     public static Log log;
     public static InternalData internalData;
-    public static WestCoastDrive driveBase;
+    public static SwerveDrive swerveDrive;
     
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -152,7 +168,7 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
-        driveBase = new WestCoastDrive();
+        swerveDrive = new SwerveDrive();
 
             // Not using the limelight right now
         // limeLight = new LimeLight();
@@ -211,7 +227,7 @@ public class Robot extends TimedRobot {
         Log.print(0, "Robot", "Robot Autonomous Init");
 
         Robot.stopAutoCommand();
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -322,7 +338,7 @@ public class Robot extends TimedRobot {
 
         Robot.stopAutoCommand();
 
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
     }
 
     /************************************************************************
@@ -340,7 +356,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
 
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
     }  
 
     /************************************************************************
@@ -363,7 +379,9 @@ public class Robot extends TimedRobot {
 			return false;
 		}	
 
-        if (Robot.autoMove) { Robot.driveBase.cancel(); }
+        if (Robot.autoMove) { 
+    		Robot.swerveDrive.cancel();
+        }
 
 	    Robot.isAutoCommand = true;
 
@@ -386,7 +404,9 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-        if (Robot.autoMove) { Robot.driveBase.cancel(); }
+        if (Robot.autoMove) { 
+        	Robot.swerveDrive.cancel();
+        }
 	}		
 
     /************************************************************************
