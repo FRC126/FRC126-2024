@@ -36,8 +36,12 @@ public class SwerveDrive extends SubsystemBase {
 	double previousLimiter = 1;
 	double fbLast=0;
 	double rotLast=0;
+    double pi = 3.14159;
+    double inchesPerMeter = 2.54/100;
 
 	public static SequentialCommandGroup autoCommand;
+	public final double LENGTH = 26 * inchesPerMeter;
+	public final double WIDTH = 26 * inchesPerMeter;
 			
 	/************************************************************************
 	 ************************************************************************/
@@ -63,12 +67,13 @@ public class SwerveDrive extends SubsystemBase {
 
 	public void brakesOn() {
 		Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		Robot.swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
@@ -77,12 +82,13 @@ public class SwerveDrive extends SubsystemBase {
 
 	public void brakesOff() {
 		Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+
+		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		Robot.swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 	}
 
@@ -117,23 +123,67 @@ public class SwerveDrive extends SubsystemBase {
 		double y1 = y1In;
         double x1 = x1In;
 		double x2 = x2In;
-        double pi = 3.14159;
 
-		SmartDashboard.putNumber("y1In", y1In);
+   		SmartDashboard.putNumber("y1In", y1In);
 		SmartDashboard.putNumber("x1In", x1In);
-        SmartDashboard.putNumber("x2In", x2In);
+		SmartDashboard.putNumber("x2In", x2In);
 
-		Robot.swerveFrontRightDriveMotor.set(y1 * .4);
-		Robot.swerveFrontRightTurnMotor.set(x1 * .2);
+		if ( false ) {
+			Robot.swerveFrontRightDriveMotor.set(y1 * .4);
+			Robot.swerveFrontRightTurnMotor.set(x1 * .2);
 
-		Robot.swerveFrontLeftDriveMotor.set(y1 * .4);
-		Robot.swerveFrontLeftTurnMotor.set(x1 * .2);
+			Robot.swerveFrontLeftDriveMotor.set(y1 * .4);
+			Robot.swerveFrontLeftTurnMotor.set(x1 * .2);
 
-    	Robot.swerveRearLeftDriveMotor.set(y1 * .4);
-		Robot.swerveRearLeftTurnMotor.set(x1 * .2);
+			Robot.swerveRearLeftDriveMotor.set(y1 * .4);
+			Robot.swerveRearLeftTurnMotor.set(x1 * .2);
 
-		Robot.swerveRearRightDriveMotor.set(y1 * .4);
-		Robot.swerveRearRightTurnMotor.set(x1 * .2);
+			Robot.swerveRearRightDriveMotor.set(y1 * .4);
+			Robot.swerveRearRightTurnMotor.set(x1 * .2);
+		}
+		
+		if (true) {
+			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
+			y1 *= -1;
+		
+			double a = x1 - x2 * (LENGTH / r);
+			double b = x1 + x2 * (LENGTH / r);
+			double c = y1 - x2 * (WIDTH / r);
+			double d = y1 + x2 * (WIDTH / r);
+		
+			double backRightSpeed = Math.sqrt ((a * a) + (d * d));
+			double backLeftSpeed = Math.sqrt ((a * a) + (c * c));
+			double frontRightSpeed = Math.sqrt ((b * b) + (d * d));
+			double frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
+		
+			double backRightAngle = Math.atan2 (a, d) / pi;
+			double backLeftAngle = Math.atan2 (a, c) / pi;
+			double frontRightAngle = Math.atan2 (b, d) / pi;
+			double frontLeftAngle = Math.atan2 (b, c) / pi;
+
+	   		SmartDashboard.putNumber("backRightSpeed", backRightSpeed);
+			SmartDashboard.putNumber("backLeftSpeed", backLeftSpeed);
+			SmartDashboard.putNumber("frontRightSpeed", frontRightSpeed);
+			SmartDashboard.putNumber("frontLeftSpeed", frontLeftSpeed);
+
+			SmartDashboard.putNumber("backRightAngle", backRightAngle);
+			SmartDashboard.putNumber("backLeftAngle", backLeftAngle);
+			SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
+			SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
+
+			Robot.swerveFrontRightDriveMotor.set(frontRightSpeed * .4);
+			Robot.swerveFrontLeftDriveMotor.set(backLeftSpeed * .4);
+			Robot.swerveRearLeftDriveMotor.set(backLeftSpeed * .4);
+			Robot.swerveRearRightDriveMotor.set(backRightSpeed * .4);
+
+			//Robot.swerveFrontRightTurnMotor.set(x1 * .2);
+			//Robot.swerveFrontLeftTurnMotor.set(x1 * .2);
+			//Robot.swerveRearLeftTurnMotor.set(x1 * .2);
+			//Robot.swerveRearRightTurnMotor.set(x1 * .2);
+		}
+
+
+
 	}
 
     /************************************************************************

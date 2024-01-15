@@ -21,7 +21,8 @@ package frc.robot;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource;
-
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,6 +49,8 @@ import edu.wpi.first.wpilibj.SPI;
 //import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
+import com.ctre.phoenix6.hardware.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -56,9 +59,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class Robot extends TimedRobot {
 
-    // Thrower Motors
-    // public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
-    // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+    public static final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
+    public static final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
+    public static final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+
+    //public static Drivetrain driveTrain = new Drivetrain();
+
+    public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Motors
@@ -87,10 +96,11 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 
-    public static double LENGTH = 28;
-    public static double WIDTH = 28;
+    // Swerve Drive CAN Coders
+    public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
+    public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
+    public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
+    public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -108,10 +118,7 @@ public class Robot extends TimedRobot {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isAutoCommand=false;
-
     public static SequentialCommandGroup autoCommand;
-    
-    public static DoubleSolenoid PickupSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH,15,14);	
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
@@ -347,6 +354,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         CommandScheduler.getInstance().run();
+        //driveWithJoystick(true);
     }
 
     /************************************************************************
@@ -426,4 +434,35 @@ public class Robot extends TimedRobot {
         return(speedOut);
 
     }
+
+    /************************************************************************
+	 ************************************************************************/
+    private void driveWithJoystick(boolean fieldRelative) {
+        double y1 = driveJoystick.getLeftStickY();
+        double x1 = driveJoystick.getLeftStickX();
+        double x2 = driveJoystick.getRightStickX();
+
+		Robot.swerveDrive.Drive(y1, x1, x2);
+
+		// Get the x speed. We are inverting this because Xbox controllers return
+		// negative values when we push forward.
+		final var xSpeed =
+			Robot.xspeedLimiter.calculate(MathUtil.applyDeadband(y1, 0.02)) * Drivetrain.kMaxSpeed;
+
+		// Get the y speed or sideways/strafe speed. We are inverting this because
+		// we want a positive value when we pull to the left. Xbox controllers
+		// return positive values when you pull to the right by default.
+		final var ySpeed =
+			Robot.yspeedLimiter.calculate(MathUtil.applyDeadband(x1, 0.02)) * Drivetrain.kMaxSpeed;
+
+		// Get the rate of angular rotation. We are inverting this because we want a
+		// positive value when we pull to the left (remember, CCW is positive in
+		// mathematics). Xbox controllers return positive values when you pull to
+		// the right by default.
+		final var rot =
+			Robot.rotLimiter.calculate(MathUtil.applyDeadband(x2, 0.02)) * Drivetrain.kMaxAngularSpeed;
+
+		//driveTrain.drive(xSpeed, ySpeed, rot, true, getPeriod());	       
+  }
+
 }
