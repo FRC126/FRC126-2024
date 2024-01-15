@@ -124,21 +124,20 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	 public double CalcSpeed(double target, double current) {
+	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		    double speed=0;
-			double diff;
 
-            if ( target < (current) - 0.1 ) {
+            if ( targetAngle < (currentAngle) - 0.1 ) {
 				speed=-0.25;
-			} else if (target > (current) + 0.1 ) {
+			} else if (targetAngle > (currentAngle + 0.1) ) {
 				speed=0.25;
-            } else if ( target < (current) - 0.01 ) {
+            } else if ( targetAngle < (currentAngle - 0.01) ) {
 				speed=-0.1;
-			} else if (target > (current) + 0.01 ) {
+			} else if (targetAngle > (currentAngle + 0.01) ) {
 				speed=.1;
-            } else if ( target < (current) - 0.0015 ) {
+            } else if ( targetAngle < (currentAngle - 0.0015) ) {
 				speed=-0.025;
-			} else if (target > (current) + 0.0015 ) {
+			} else if (targetAngle > (currentAngle + 0.0015) ) {
 				speed=0.025;
 			}
 			return(speed);
@@ -153,10 +152,11 @@ public class SwerveDrive extends SubsystemBase {
 		double y1 = y1In;
         double x1 = x1In;
 		double x2 = x2In;
-		double backRightSpeed, backLeftSpeed, frontRightSpeed, frontLeftSpeed;
-		double backRightAngle, backLeftAngle, frontRightAngle, frontLeftAngle;
+		double rearRightSpeed, rearLeftSpeed, frontRightSpeed, frontLeftSpeed;
+		double rearRightAngle, rearLeftAngle, frontRightAngle, frontLeftAngle;
 
 		if (y1 == 0 && x1== 0 && x2 == 0) {
+			// If not joysticks are moved, just stop the motors and return
             Robot.swerveFrontRightDriveMotor.set(0);
 			Robot.swerveFrontLeftDriveMotor.set(0);
 			Robot.swerveRearLeftDriveMotor.set(0);
@@ -166,7 +166,6 @@ public class SwerveDrive extends SubsystemBase {
    			Robot.swerveRearRightTurnMotor.set(0);
    			Robot.swerveRearLeftTurnMotor.set(0);
             return;
-
 		}
 
    		SmartDashboard.putNumber("y1In", y1In);
@@ -175,29 +174,30 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (true) {
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
+			y1 *= -1;
 		
 			double a = x1 - x2 * (LENGTH / r);
 			double b = x1 + x2 * (LENGTH / r);
 			double c = y1 - x2 * (WIDTH / r);
 			double d = y1 + x2 * (WIDTH / r);
 		
-				backRightSpeed = Math.sqrt ((a * a) + (d * d));
-				backLeftSpeed = Math.sqrt ((a * a) + (c * c));
-				frontRightSpeed = Math.sqrt ((b * b) + (d * d));
-				frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
+			rearRightSpeed = Math.sqrt ((a * a) + (d * d));
+			rearLeftSpeed = Math.sqrt ((a * a) + (c * c));
+			frontRightSpeed = Math.sqrt ((b * b) + (d * d));
+			frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
 			
-				backRightAngle = Math.atan2 (a, d) / pi *.48;
-				backLeftAngle = Math.atan2 (a, c) / pi * .48;
-				frontRightAngle = Math.atan2 (b, d) / pi * .48;
-				frontLeftAngle = Math.atan2 (b, c) / pi * .48;
+			rearRightAngle = Math.atan2 (a, d) / pi *.48;
+			rearLeftAngle = Math.atan2 (a, c) / pi * .48;
+			frontRightAngle = Math.atan2 (b, d) / pi * .48;
+			frontLeftAngle = Math.atan2 (b, c) / pi * .48;
 
-	   		SmartDashboard.putNumber("backRightSpeed", backRightSpeed);
-			SmartDashboard.putNumber("backLeftSpeed", backLeftSpeed);
+	   		SmartDashboard.putNumber("backRightSpeed", rearRightSpeed);
+			SmartDashboard.putNumber("backLeftSpeed", rearLeftSpeed);
 			SmartDashboard.putNumber("frontRightSpeed", frontRightSpeed);
 			SmartDashboard.putNumber("frontLeftSpeed", frontLeftSpeed);
 
-			SmartDashboard.putNumber("backRightAngle", backRightAngle);
-			SmartDashboard.putNumber("backLeftAngle", backLeftAngle);
+			SmartDashboard.putNumber("backRightAngle", rearRightAngle);
+			SmartDashboard.putNumber("backLeftAngle", rearLeftAngle);
 			SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
 			SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
 
@@ -206,32 +206,32 @@ public class SwerveDrive extends SubsystemBase {
 			StatusSignal RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
 			StatusSignal RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
 
-			double FRPos = FRPosSS.getValueAsDouble();
-			double FLPos = FLPosSS.getValueAsDouble();
-			double RRPos = RRPosSS.getValueAsDouble();
-			double RLPos = RLPosSS.getValueAsDouble();
+			double frontRightPos = FRPosSS.getValueAsDouble();
+			double frontLeftPos = FLPosSS.getValueAsDouble();
+			double rearRightPos = RRPosSS.getValueAsDouble();
+			double rearLeftPos = RLPosSS.getValueAsDouble();
 
-    		SmartDashboard.putNumber("FRPos", FRPos);
-			SmartDashboard.putNumber("FLPos", FLPos);
-			SmartDashboard.putNumber("RRPos", RRPos);
-			SmartDashboard.putNumber("RLPos", RLPos);
+    		SmartDashboard.putNumber("frontRightPos", frontRightPos);
+			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
+			SmartDashboard.putNumber("rearRightPos", rearRightPos);
+			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
 
 			Robot.swerveFrontRightDriveMotor.set(frontRightSpeed * .4);
-			Robot.swerveFrontLeftDriveMotor.set(backLeftSpeed * .4 *-1);
-			Robot.swerveRearLeftDriveMotor.set(backLeftSpeed * .4 * -1);
-			Robot.swerveRearRightDriveMotor.set(backRightSpeed * .4);
+			Robot.swerveFrontLeftDriveMotor.set(rearLeftSpeed * .4 *-1);
+			Robot.swerveRearLeftDriveMotor.set(rearLeftSpeed * .4 * -1);
+			Robot.swerveRearRightDriveMotor.set(rearRightSpeed * .4);
 
 			double speed; 
-			speed=CalcSpeed(FRPos,frontRightAngle);
+			speed=CalcTurnSpeed(frontRightPos,frontRightAngle);
    			Robot.swerveFrontRightTurnMotor.set(speed);
 
-			speed=CalcSpeed(FLPos,frontLeftAngle);
+			speed=CalcTurnSpeed(frontLeftPos,frontLeftAngle);
    			Robot.swerveFrontLeftTurnMotor.set(speed);
 
-			speed=CalcSpeed(RRPos,backRightAngle);
+			speed=CalcTurnSpeed(rearRightPos,rearRightAngle);
    			Robot.swerveRearRightTurnMotor.set(speed);
 
-			speed=CalcSpeed(RLPos,backLeftAngle);
+			speed=CalcTurnSpeed(rearLeftPos,rearLeftAngle);
    			Robot.swerveRearLeftTurnMotor.set(speed);
 		}
 	}
