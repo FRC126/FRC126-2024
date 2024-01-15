@@ -24,7 +24,6 @@ import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -35,19 +34,12 @@ import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.subsystems.*;
-//import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-
-//import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import com.ctre.phoenix6.hardware.*;
 
@@ -64,8 +56,6 @@ public class Robot extends TimedRobot {
     public static final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
     public static final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
     public static final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
-
-    //public static Drivetrain driveTrain = new Drivetrain();
 
     public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
@@ -126,7 +116,8 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
-    
+    public static Drivetrain driveTrain;
+        
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
@@ -143,8 +134,6 @@ public class Robot extends TimedRobot {
     public static enum targetTypes{NoTarget,TargetSeek};
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
-
-    public static Compressor compressor;
 
     // For use with limelight class
     public static double ThrowerRPM=0;
@@ -176,8 +165,9 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
         swerveDrive = new SwerveDrive();
+        //driveTrain = new Drivetrain();
 
-            // Not using the limelight right now
+        // Not using the limelight right now
         // limeLight = new LimeLight();
        
         try {
@@ -186,10 +176,6 @@ public class Robot extends TimedRobot {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
     
-        // Instantiate the compress, CANID 2, Rev Robotics PCM
-        compressor = new Compressor(2, PneumaticsModuleType.REVPH);
-        compressor.enableDigital();
-
         // Initialize the built in gyro
         internalData.initGyro();
         internalData.resetGyro();
