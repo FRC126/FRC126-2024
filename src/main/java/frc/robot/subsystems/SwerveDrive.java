@@ -20,6 +20,10 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix6.hardware.*;
+import com.ctre.phoenix6.*;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
@@ -54,7 +58,10 @@ public class SwerveDrive extends SubsystemBase {
 		leftSpeed = 0;
 		rightSpeed = 0;
 
-		resetEncoders();
+		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -115,6 +122,29 @@ public class SwerveDrive extends SubsystemBase {
 	}		
 
 	/************************************************************************
+	 ************************************************************************/
+
+	 public double CalcSpeed(double target, double current) {
+		    double speed=0;
+			double diff;
+
+            if ( target < (current) - 0.1 ) {
+				speed=-0.25;
+			} else if (target > (current) + 0.1 ) {
+				speed=0.25;
+            } else if ( target < (current) - 0.01 ) {
+				speed=-0.1;
+			} else if (target > (current) + 0.01 ) {
+				speed=.1;
+            } else if ( target < (current) - 0.0015 ) {
+				speed=-0.025;
+			} else if (target > (current) + 0.0015 ) {
+				speed=0.025;
+			}
+			return(speed);
+	}
+
+	/************************************************************************
 	 * Send power to the drive motors
 	 ************************************************************************/
 
@@ -123,43 +153,43 @@ public class SwerveDrive extends SubsystemBase {
 		double y1 = y1In;
         double x1 = x1In;
 		double x2 = x2In;
+		double backRightSpeed, backLeftSpeed, frontRightSpeed, frontLeftSpeed;
+		double backRightAngle, backLeftAngle, frontRightAngle, frontLeftAngle;
+
+		if (y1 == 0 && x1== 0 && x2 == 0) {
+            Robot.swerveFrontRightDriveMotor.set(0);
+			Robot.swerveFrontLeftDriveMotor.set(0);
+			Robot.swerveRearLeftDriveMotor.set(0);
+			Robot.swerveRearRightDriveMotor.set(0);
+   			Robot.swerveFrontRightTurnMotor.set(0);
+   			Robot.swerveFrontLeftTurnMotor.set(0);
+   			Robot.swerveRearRightTurnMotor.set(0);
+   			Robot.swerveRearLeftTurnMotor.set(0);
+            return;
+
+		}
 
    		SmartDashboard.putNumber("y1In", y1In);
 		SmartDashboard.putNumber("x1In", x1In);
 		SmartDashboard.putNumber("x2In", x2In);
 
-		if ( false ) {
-			Robot.swerveFrontRightDriveMotor.set(y1 * .4);
-			Robot.swerveFrontRightTurnMotor.set(x1 * .2);
-
-			Robot.swerveFrontLeftDriveMotor.set(y1 * .4);
-			Robot.swerveFrontLeftTurnMotor.set(x1 * .2);
-
-			Robot.swerveRearLeftDriveMotor.set(y1 * .4);
-			Robot.swerveRearLeftTurnMotor.set(x1 * .2);
-
-			Robot.swerveRearRightDriveMotor.set(y1 * .4);
-			Robot.swerveRearRightTurnMotor.set(x1 * .2);
-		}
-		
 		if (true) {
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
-			y1 *= -1;
 		
 			double a = x1 - x2 * (LENGTH / r);
 			double b = x1 + x2 * (LENGTH / r);
 			double c = y1 - x2 * (WIDTH / r);
 			double d = y1 + x2 * (WIDTH / r);
 		
-			double backRightSpeed = Math.sqrt ((a * a) + (d * d));
-			double backLeftSpeed = Math.sqrt ((a * a) + (c * c));
-			double frontRightSpeed = Math.sqrt ((b * b) + (d * d));
-			double frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
-		
-			double backRightAngle = Math.atan2 (a, d) / pi;
-			double backLeftAngle = Math.atan2 (a, c) / pi;
-			double frontRightAngle = Math.atan2 (b, d) / pi;
-			double frontLeftAngle = Math.atan2 (b, c) / pi;
+				backRightSpeed = Math.sqrt ((a * a) + (d * d));
+				backLeftSpeed = Math.sqrt ((a * a) + (c * c));
+				frontRightSpeed = Math.sqrt ((b * b) + (d * d));
+				frontLeftSpeed = Math.sqrt ((b * b) + (c * c));
+			
+				backRightAngle = Math.atan2 (a, d) / pi *.48;
+				backLeftAngle = Math.atan2 (a, c) / pi * .48;
+				frontRightAngle = Math.atan2 (b, d) / pi * .48;
+				frontLeftAngle = Math.atan2 (b, c) / pi * .48;
 
 	   		SmartDashboard.putNumber("backRightSpeed", backRightSpeed);
 			SmartDashboard.putNumber("backLeftSpeed", backLeftSpeed);
@@ -171,19 +201,39 @@ public class SwerveDrive extends SubsystemBase {
 			SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
 			SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
 
+			StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
+			StatusSignal FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
+			StatusSignal RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
+			StatusSignal RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
+
+			double FRPos = FRPosSS.getValueAsDouble();
+			double FLPos = FLPosSS.getValueAsDouble();
+			double RRPos = RRPosSS.getValueAsDouble();
+			double RLPos = RLPosSS.getValueAsDouble();
+
+    		SmartDashboard.putNumber("FRPos", FRPos);
+			SmartDashboard.putNumber("FLPos", FLPos);
+			SmartDashboard.putNumber("RRPos", RRPos);
+			SmartDashboard.putNumber("RLPos", RLPos);
+
 			Robot.swerveFrontRightDriveMotor.set(frontRightSpeed * .4);
-			Robot.swerveFrontLeftDriveMotor.set(backLeftSpeed * .4);
-			Robot.swerveRearLeftDriveMotor.set(backLeftSpeed * .4);
+			Robot.swerveFrontLeftDriveMotor.set(backLeftSpeed * .4 *-1);
+			Robot.swerveRearLeftDriveMotor.set(backLeftSpeed * .4 * -1);
 			Robot.swerveRearRightDriveMotor.set(backRightSpeed * .4);
 
-			//Robot.swerveFrontRightTurnMotor.set(x1 * .2);
-			//Robot.swerveFrontLeftTurnMotor.set(x1 * .2);
-			//Robot.swerveRearLeftTurnMotor.set(x1 * .2);
-			//Robot.swerveRearRightTurnMotor.set(x1 * .2);
+			double speed; 
+			speed=CalcSpeed(FRPos,frontRightAngle);
+   			Robot.swerveFrontRightTurnMotor.set(speed);
+
+			speed=CalcSpeed(FLPos,frontLeftAngle);
+   			Robot.swerveFrontLeftTurnMotor.set(speed);
+
+			speed=CalcSpeed(RRPos,backRightAngle);
+   			Robot.swerveRearRightTurnMotor.set(speed);
+
+			speed=CalcSpeed(RLPos,backLeftAngle);
+   			Robot.swerveRearLeftTurnMotor.set(speed);
 		}
-
-
-
 	}
 
     /************************************************************************

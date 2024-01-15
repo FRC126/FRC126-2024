@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     public static final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
     public static final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
 
-    public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+    //public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Motors
@@ -424,10 +424,11 @@ public class Robot extends TimedRobot {
     /************************************************************************
 	 ************************************************************************/
     private void driveWithJoystick(boolean fieldRelative) {
-        double y1 = driveJoystick.getLeftStickY();
-        double x1 = driveJoystick.getLeftStickX();
-        double x2 = driveJoystick.getRightStickX();
+        //double y1 = driveJoystick.getLeftStickY();
+        //double x1 = driveJoystick.getLeftStickX();
+        //double x2 = driveJoystick.getRightStickX();
 
+        double x1=0,x2=0,y1=0;
 		Robot.swerveDrive.Drive(y1, x1, x2);
 
 		// Get the x speed. We are inverting this because Xbox controllers return
