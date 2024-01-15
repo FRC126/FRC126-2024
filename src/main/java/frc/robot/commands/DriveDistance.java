@@ -48,8 +48,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     public void initialize() {
         targetAngle = Robot.navxMXP.getAngle();
-        Robot.driveBase.resetEncoders();
-        Robot.driveBase.brakesOn();
+        Robot.swerveDrive.resetEncoders();
+        Robot.swerveDrive.brakesOn();
     }
 
 	/**********************************************************************************
@@ -59,7 +59,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void execute() {
         double distanceInversion=1;
 
-        double currentDistance = Robot.driveBase.getDistanceInches();
+        double currentDistance = Robot.swerveDrive.getDistanceInches();
         double diff =  Math.abs(distance) - currentDistance;
         double tmp = Math.abs(diff) / 50;
         tmp = Robot.boundSpeed(tmp, .25, .10);
@@ -74,19 +74,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         } else {
             driveFb=0;
             reachedCount++;
-            Robot.driveBase.brakesOn();
+            Robot.swerveDrive.brakesOn();
         }
 
-        Robot.driveBase.Drive(driveFb, 0);
+        Robot.swerveDrive.Drive(driveFb, 0, 0);
 
         SmartDashboard.putNumber("Drv Dist Spd",driveFb);
 
         // Try to keep the robot straight using the gyro
         if (driveFb != 0) {       
             // Drive straight
-            Robot.driveBase.Drive(driveFb, 0, true, targetAngle);
+            Robot.swerveDrive.Drive(driveFb, 0, 0, true, targetAngle);
         } else {
-            Robot.driveBase.Drive(driveFb, 0);
+            Robot.swerveDrive.Drive(driveFb, 0, 0);
         }    
      }
 
@@ -98,8 +98,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         iters--;
 
         if (reachedCount > 3 || iters <= 0) {
-            Robot.driveBase.Drive(0, 0);
-            Robot.driveBase.brakesOff();
+            Robot.swerveDrive.Drive(0, 0, 0);
+            Robot.swerveDrive.brakesOff();
             return true;
         }
         return false;
@@ -110,7 +110,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void end(boolean isInteruppted) {
-        Robot.driveBase.Drive(0, 0);
-        Robot.driveBase.brakesOff();
+        Robot.swerveDrive.Drive(0, 0, 0);
+        Robot.swerveDrive.brakesOff();
     }
 }

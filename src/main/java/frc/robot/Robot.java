@@ -21,9 +21,9 @@ package frc.robot;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource;
-
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,19 +34,14 @@ import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.subsystems.*;
-//import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
-//import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import com.ctre.phoenix6.hardware.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -56,25 +51,46 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class Robot extends TimedRobot {
 
-    // Thrower Motors
-    // public static TalonFX throwerMotor1 = new TalonFX(RobotMap.throwerMotorCanID1);
-    // public static TalonFX throwerMotor2 = new TalonFX(RobotMap.throwerMotorCanID2);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+    public static final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
+    public static final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
+    public static final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+
+    //public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Drive Base Motors
-    public static CANSparkMax leftDriveMotor1 = new CANSparkMax(RobotMap.leftDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax leftDriveMotor2 = new CANSparkMax(RobotMap.leftDriveMotorCanID2, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor1 = new CANSparkMax(RobotMap.rightDriveMotorCanID1, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax rightDriveMotor2 = new CANSparkMax(RobotMap.rightDriveMotorCanID2,  CANSparkMax.MotorType.kBrushless); 
+    // Swerve Motors
+    public static CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
 
-    // Drive base encoders
-    public static DutyCycleEncoder leftDriveEncoder = new DutyCycleEncoder(0);
-    public static DutyCycleEncoder rightDriveEncoder = new DutyCycleEncoder(1);
+    public static CANSparkMax swerveFrontLeftDriveMotor = new CANSparkMax(RobotMap.swerveFrontLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveFrontLeftTurnMotor = new CANSparkMax(RobotMap.swerveFrontLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
 
-    public static RelativeEncoder left1RelativeEncoder = Robot.leftDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder left2RelativeEncoder = Robot.leftDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right1RelativeEncoder = Robot.rightDriveMotor1.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder right2RelativeEncoder = Robot.rightDriveMotor2.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static CANSparkMax swerveRearLeftDriveMotor = new CANSparkMax(RobotMap.swerveRearLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveRearLeftTurnMotor = new CANSparkMax(RobotMap.swerveRearLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    // Built in Motor Encoders
+    public static RelativeEncoder swerveFrontRightDriveRelativeEncoder = Robot.swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveFrontRightTurnRelativeEncoder = Robot.swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveFrontLeftDriveRelativeEncoder = Robot.swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveFrontLeftTurnRelativeEncoder = Robot.swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveRearLeftDriveRelativeEncoder = Robot.swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearLeftTurnRelativeEncoder = Robot.swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    // Swerve Drive CAN Coders
+    public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
+    public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
+    public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
+    public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -92,18 +108,16 @@ public class Robot extends TimedRobot {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isAutoCommand=false;
-
     public static SequentialCommandGroup autoCommand;
-    
-    public static DoubleSolenoid PickupSolenoid = new DoubleSolenoid(2, PneumaticsModuleType.REVPH,15,14);	
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Subsystems
     public static Controllers oi;
     public static Log log;
     public static InternalData internalData;
-    public static WestCoastDrive driveBase;
-    
+    public static SwerveDrive swerveDrive;
+    public static Drivetrain driveTrain;
+        
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
@@ -120,8 +134,6 @@ public class Robot extends TimedRobot {
     public static enum targetTypes{NoTarget,TargetSeek};
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
-
-    public static Compressor compressor;
 
     // For use with limelight class
     public static double ThrowerRPM=0;
@@ -152,9 +164,10 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
-        driveBase = new WestCoastDrive();
+        swerveDrive = new SwerveDrive();
+        //driveTrain = new Drivetrain();
 
-            // Not using the limelight right now
+        // Not using the limelight right now
         // limeLight = new LimeLight();
        
         try {
@@ -163,10 +176,6 @@ public class Robot extends TimedRobot {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
     
-        // Instantiate the compress, CANID 2, Rev Robotics PCM
-        compressor = new Compressor(2, PneumaticsModuleType.REVPH);
-        compressor.enableDigital();
-
         // Initialize the built in gyro
         internalData.initGyro();
         internalData.resetGyro();
@@ -211,7 +220,7 @@ public class Robot extends TimedRobot {
         Log.print(0, "Robot", "Robot Autonomous Init");
 
         Robot.stopAutoCommand();
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -322,7 +331,7 @@ public class Robot extends TimedRobot {
 
         Robot.stopAutoCommand();
 
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
     }
 
     /************************************************************************
@@ -331,6 +340,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         CommandScheduler.getInstance().run();
+        //driveWithJoystick(true);
     }
 
     /************************************************************************
@@ -340,7 +350,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         Log.print(0, "Robot", "Robot Test Init");
 
-		Robot.driveBase.cancel();
+		Robot.swerveDrive.cancel();
     }  
 
     /************************************************************************
@@ -363,7 +373,9 @@ public class Robot extends TimedRobot {
 			return false;
 		}	
 
-        if (Robot.autoMove) { Robot.driveBase.cancel(); }
+        if (Robot.autoMove) { 
+    		Robot.swerveDrive.cancel();
+        }
 
 	    Robot.isAutoCommand = true;
 
@@ -386,7 +398,9 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-        if (Robot.autoMove) { Robot.driveBase.cancel(); }
+        if (Robot.autoMove) { 
+        	Robot.swerveDrive.cancel();
+        }
 	}		
 
     /************************************************************************
@@ -406,4 +420,36 @@ public class Robot extends TimedRobot {
         return(speedOut);
 
     }
+
+    /************************************************************************
+	 ************************************************************************/
+    private void driveWithJoystick(boolean fieldRelative) {
+        //double y1 = driveJoystick.getLeftStickY();
+        //double x1 = driveJoystick.getLeftStickX();
+        //double x2 = driveJoystick.getRightStickX();
+
+        double x1=0,x2=0,y1=0;
+		Robot.swerveDrive.Drive(y1, x1, x2);
+
+		// Get the x speed. We are inverting this because Xbox controllers return
+		// negative values when we push forward.
+		final var xSpeed =
+			Robot.xspeedLimiter.calculate(MathUtil.applyDeadband(y1, 0.02)) * Drivetrain.kMaxSpeed;
+
+		// Get the y speed or sideways/strafe speed. We are inverting this because
+		// we want a positive value when we pull to the left. Xbox controllers
+		// return positive values when you pull to the right by default.
+		final var ySpeed =
+			Robot.yspeedLimiter.calculate(MathUtil.applyDeadband(x1, 0.02)) * Drivetrain.kMaxSpeed;
+
+		// Get the rate of angular rotation. We are inverting this because we want a
+		// positive value when we pull to the left (remember, CCW is positive in
+		// mathematics). Xbox controllers return positive values when you pull to
+		// the right by default.
+		final var rot =
+			Robot.rotLimiter.calculate(MathUtil.applyDeadband(x2, 0.02)) * Drivetrain.kMaxAngularSpeed;
+
+		//driveTrain.drive(xSpeed, ySpeed, rot, true, getPeriod());	       
+  }
+
 }
