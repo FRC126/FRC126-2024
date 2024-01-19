@@ -128,17 +128,17 @@ public class SwerveDrive extends SubsystemBase {
 		    double speed=0;
 
             if ( targetAngle < (currentAngle) - 0.1 ) {
-				speed=-0.25;
+				speed=-0.4;
 			} else if (targetAngle > (currentAngle + 0.1) ) {
-				speed=0.25;
+				speed=0.4;
             } else if ( targetAngle < (currentAngle - 0.01) ) {
 				speed=-0.1;
 			} else if (targetAngle > (currentAngle + 0.01) ) {
-				speed=.1;
-            } else if ( targetAngle < (currentAngle - 0.0015) ) {
-				speed=-0.025;
-			} else if (targetAngle > (currentAngle + 0.0015) ) {
-				speed=0.025;
+				speed=0.1;
+            } else if ( targetAngle < (currentAngle - 0.0010) ) {
+				speed=-0.02;
+			} else if (targetAngle > (currentAngle + 0.0010) ) {
+				speed=0.02;
 			}
 			return(speed);
 	}
@@ -154,6 +154,13 @@ public class SwerveDrive extends SubsystemBase {
 		double x2 = x2In;
 		double rearRightSpeed, rearLeftSpeed, frontRightSpeed, frontLeftSpeed;
 		double rearRightAngle, rearLeftAngle, frontRightAngle, frontLeftAngle;
+
+        double currentAngle = Robot.navxMXP.getAngle();
+
+   		SmartDashboard.putNumber("currentAngle", currentAngle);
+
+		//x1 = ( x1In * Math.cos(currentAngle) - (y1In * Math.sin(currentAngle)));
+        //y1 = ( y1In * Math.cos(currentAngle) - (x1In * Math.sin(currentAngle)));
 
 		if (y1 == 0 && x1== 0 && x2 == 0) {
 			// If not joysticks are moved, just stop the motors and return
@@ -216,23 +223,29 @@ public class SwerveDrive extends SubsystemBase {
 			SmartDashboard.putNumber("rearRightPos", rearRightPos);
 			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
 
-			Robot.swerveFrontRightDriveMotor.set(frontRightSpeed * .4);
-			Robot.swerveFrontLeftDriveMotor.set(rearLeftSpeed * .4 *-1);
-			Robot.swerveRearLeftDriveMotor.set(rearLeftSpeed * .4 * -1);
-			Robot.swerveRearRightDriveMotor.set(rearRightSpeed * .4);
+			double speedRatio = 1;
 
-			double speed; 
-			speed=CalcTurnSpeed(frontRightPos,frontRightAngle);
-   			Robot.swerveFrontRightTurnMotor.set(speed);
+			double speed1; 
+			speed1=CalcTurnSpeed(frontRightPos,frontRightAngle);
+   			Robot.swerveFrontRightTurnMotor.set(speed1);
 
-			speed=CalcTurnSpeed(frontLeftPos,frontLeftAngle);
-   			Robot.swerveFrontLeftTurnMotor.set(speed);
+			double speed2; 
+			speed2=CalcTurnSpeed(frontLeftPos,frontLeftAngle);
+   			Robot.swerveFrontLeftTurnMotor.set(speed2);
 
-			speed=CalcTurnSpeed(rearRightPos,rearRightAngle);
-   			Robot.swerveRearRightTurnMotor.set(speed);
+			double speed3; 
+			speed3=CalcTurnSpeed(rearRightPos,rearRightAngle);
+   			Robot.swerveRearRightTurnMotor.set(speed3);
 
-			speed=CalcTurnSpeed(rearLeftPos,rearLeftAngle);
-   			Robot.swerveRearLeftTurnMotor.set(speed);
+			double speed4; 
+			speed4=CalcTurnSpeed(rearLeftPos,rearLeftAngle);
+   			Robot.swerveRearLeftTurnMotor.set(speed4);
+
+			Robot.swerveFrontRightDriveMotor.set(frontRightSpeed *speedRatio);
+			Robot.swerveFrontLeftDriveMotor.set(rearLeftSpeed * speedRatio * -1);
+			Robot.swerveRearLeftDriveMotor.set(rearLeftSpeed * speedRatio * -1);
+			Robot.swerveRearRightDriveMotor.set(rearRightSpeed * speedRatio);
+
 		}
 	}
 
