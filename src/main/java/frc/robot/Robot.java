@@ -93,6 +93,14 @@ public class Robot extends TimedRobot {
     public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Prototype Motors
+    public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax ProtoMotorTwo = new CANSparkMax(RobotMap.protoMotorTwoCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
 

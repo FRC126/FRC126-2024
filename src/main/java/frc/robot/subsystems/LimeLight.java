@@ -137,7 +137,6 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public void getCameraData() {
-
         //if ( Robot.trackTarget == Robot.targetTypes.throwingTarget ||
         //Robot.trackTarget == Robot.targetTypes.turretOnly ) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
@@ -229,18 +228,22 @@ public class LimeLight extends SubsystemBase {
 
             if ( Robot.limeLight.getllTargetX() < -2) {
                 // Target is to the left of the Robot, need to move left
+                /*
                 if ( Robot.doAutoCommand() ) {
                     Robot.autoCommand=new AutoMoveLeft(1);
                     Robot.autoCommand.schedule();
                 }	   
+                */
                 centeredCount=0;
                 Robot.shootNow=false;
             } else if ( Robot.limeLight.getllTargetX() > 2 ) {
                 // Target is to the left of the Robot, need to move right
+                /*
                 if ( Robot.doAutoCommand() ) {
                     Robot.autoCommand=new AutoMoveRight(1);
                     Robot.autoCommand.schedule();
                 }			
+                */
                 centeredCount=0;
                 Robot.shootNow=false;
             } else {

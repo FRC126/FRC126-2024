@@ -23,17 +23,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class SwerveControl extends Command {
-	JoystickWrapper driveJoystick;
-	boolean driveStraight=false;
-	double straightDegrees = 0;
+public class PrototypeControl extends Command {
+	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public SwerveControl(SwerveDrive subsystem) {
+    public PrototypeControl(Prototype subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController	, 0.15);
     }
 
 	/**********************************************************************************
@@ -50,21 +48,19 @@ public class SwerveControl extends Command {
 	
 	@Override
 	public void execute() {
-        double y1 = driveJoystick.getLeftStickY();
-        double x1 = driveJoystick.getLeftStickX();
-        double x2 = driveJoystick.getRightStickX();
+        double y1 = operatorJoystick.getLeftStickY();
 
-		Robot.swerveDrive.Drive(y1, x1, x2);
-
-		if ( driveJoystick.isBButton() ) {
-			Robot.swerveDrive.resetYaw();
-		}
-
-    	if ( driveJoystick.getRightTrigger() > 0 ) {
-			Robot.swerveDrive.brakesOn();
-		} else {
-			Robot.swerveDrive.brakesOff();
-		}
+		if (operatorJoystick.isAButton()) {
+		     Robot.prototype.runMotors(.75);
+		} else if (operatorJoystick.isAButton()) {
+		     Robot.prototype.runMotors(.5);
+		} else if (operatorJoystick.isYButton()) {
+		     Robot.prototype.runMotors(.25);
+		} else if (operatorJoystick.isXButton()) {
+		     Robot.prototype.runMotors(1);
+		} else {	
+		     Robot.prototype.runMotors(y1);
+		}	 
 
 	}
 
