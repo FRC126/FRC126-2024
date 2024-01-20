@@ -24,16 +24,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class PrototypeControl extends Command {
-	JoystickWrapper driveJoystick;
-	boolean driveStraight=false;
-	double straightDegrees = 0;
+	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
     public PrototypeControl(Prototype subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController	, 0.15);
     }
 
 	/**********************************************************************************
@@ -50,11 +48,9 @@ public class PrototypeControl extends Command {
 	
 	@Override
 	public void execute() {
-        double y1 = driveJoystick.getLeftStickY();
-        double x1 = driveJoystick.getLeftStickX();
-        double x2 = driveJoystick.getRightStickX();
+        double y1 = operatorJoystick.getLeftStickY();
 
-		Robot.swerveDrive.Drive(y1, x1, x2);
+		Robot.prototype.runMotors(y1);
 	}
 
 }
