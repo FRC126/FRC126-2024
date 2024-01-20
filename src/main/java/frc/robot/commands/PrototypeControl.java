@@ -50,7 +50,18 @@ public class PrototypeControl extends Command {
 	public void execute() {
         double y1 = operatorJoystick.getLeftStickY();
 
-		Robot.prototype.runMotors(y1);
+		if (operatorJoystick.isAButton()) {
+		     Robot.prototype.runMotors(.75);
+		} else if (operatorJoystick.isAButton()) {
+		     Robot.prototype.runMotors(.5);
+		} else if (operatorJoystick.isYButton()) {
+		     Robot.prototype.runMotors(.25);
+		} else if (operatorJoystick.isXButton()) {
+		     Robot.prototype.runMotors(1);
+		} else {	
+		     Robot.prototype.runMotors(y1);
+		}	 
+
 	}
 
 }

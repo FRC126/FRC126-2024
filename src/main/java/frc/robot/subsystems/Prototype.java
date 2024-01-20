@@ -54,11 +54,16 @@ public class Prototype extends SubsystemBase {
 	public void runMotors(double speed) {
    			Robot.ProtoMotorOne.set(speed);
    			Robot.ProtoMotorTwo.set(speed);
+
+      	    double motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
+			double motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
+			
+			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
+			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
 	}
 
     /************************************************************************
 	 ************************************************************************/
-
 
 	public void cancel() {
         runMotors(0); 

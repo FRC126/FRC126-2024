@@ -55,6 +55,17 @@ public class SwerveControl extends Command {
         double x2 = driveJoystick.getRightStickX();
 
 		Robot.swerveDrive.Drive(y1, x1, x2);
+
+		if ( driveJoystick.isBButton() ) {
+			Robot.swerveDrive.resetYaw();
+		}
+
+    	if ( driveJoystick.getRightTrigger() > 0 ) {
+			Robot.swerveDrive.brakesOn();
+		} else {
+			Robot.swerveDrive.brakesOff();
+		}
+
 	}
 
 }
