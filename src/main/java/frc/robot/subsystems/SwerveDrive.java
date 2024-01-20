@@ -228,6 +228,8 @@ public class SwerveDrive extends SubsystemBase {
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = Robot.navxMXP.getAngle();
+		// 2 dimensional rotation of the control inputs corrected to make the motion
+		// driver relative instead of robot relative
 		x1 = ( x1In * Math.cos(currentAngle*-1) - (y1In * Math.sin(currentAngle*-1)));
         y1 = ( y1In * Math.cos(currentAngle*-1) + (x1In * Math.sin(currentAngle*-1)));
 
@@ -263,7 +265,8 @@ public class SwerveDrive extends SubsystemBase {
 			Robot.swerveFrontLeftDriveMotor.set(0);
 			Robot.swerveRearLeftDriveMotor.set(0);
 			Robot.swerveRearRightDriveMotor.set(0);
-   			Robot.swerveFrontRightTurnMotor.set(0);
+
+			Robot.swerveFrontRightTurnMotor.set(0);
    			Robot.swerveFrontLeftTurnMotor.set(0);
    			Robot.swerveRearRightTurnMotor.set(0);
    			Robot.swerveRearLeftTurnMotor.set(0);
@@ -315,15 +318,15 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (swerveDebug) { 
 			// Debug data to the smart dashboard.
-			SmartDashboard.putNumber("rearRightSpeed", newWheelSpeed[rearRight]);
-			SmartDashboard.putNumber("rearLeftSpeed", newWheelSpeed[rearLeft]);
 			SmartDashboard.putNumber("frontRightSpeed", newWheelSpeed[frontRight]);
 			SmartDashboard.putNumber("frontLeftSpeed", newWheelSpeed[frontLeft]);
+			SmartDashboard.putNumber("rearRightSpeed", newWheelSpeed[rearRight]);
+			SmartDashboard.putNumber("rearLeftSpeed", newWheelSpeed[rearLeft]);
 
-			SmartDashboard.putNumber("rearRightAngle", rearRightAngle);
-			SmartDashboard.putNumber("rearLeftAngle", rearLeftAngle);
 			SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
 			SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
+			SmartDashboard.putNumber("rearRightAngle", rearRightAngle);
+			SmartDashboard.putNumber("rearLeftAngle", rearLeftAngle);
   		}
 	}
 
