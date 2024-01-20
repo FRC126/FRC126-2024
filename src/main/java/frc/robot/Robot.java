@@ -86,6 +86,10 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
+    // Prototype Motors
+    public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax ProtoMotorTwo = new CANSparkMax(RobotMap.protoMotorTwoCanID, CANSparkMax.MotorType.kBrushless);
+
     // Swerve Drive CAN Coders
     public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
     public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
@@ -117,6 +121,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Drivetrain driveTrain;
+    public static Prototype prototype;
         
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -166,6 +171,7 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
         swerveDrive = new SwerveDrive();
         //driveTrain = new Drivetrain();
+        prototype = new Prototype();
 
         // Not using the limelight right now
         // limeLight = new LimeLight();

@@ -42,6 +42,10 @@ public class RobotMap {
 	public static int rightDriveMotorCanID1 = 10;
 	public static int rightDriveMotorCanID2 = 11;
 
+  	// Driver Motor Can ID's
+	public static int protoMotorOneCanID = 20;
+	public static int protoMotorTwoCanID = 21;
+
 	// Swerve Drive Motors 
     public static int swerveFrontRightDriveCanID = 40;
     public static int swerveFrontRightTurnCanID = 41;
