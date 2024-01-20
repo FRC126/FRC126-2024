@@ -54,6 +54,12 @@ public class SwerveControl extends Command {
         double x1 = driveJoystick.getLeftStickX();
         double x2 = driveJoystick.getRightStickX();
 
+		if ( driveJoystick.getLeftTrigger() > 0 ) {
+			Robot.swerveDrive.driveSlow(true);
+		} else {
+			Robot.swerveDrive.driveSlow(false);
+		}		
+
 		Robot.swerveDrive.Drive(y1, x1, x2);
 
 		if ( driveJoystick.isBButton() ) {

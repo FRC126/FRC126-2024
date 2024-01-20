@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
+    boolean swerveDebug=true;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -43,7 +44,8 @@ public class SwerveDrive extends SubsystemBase {
 	static final int rearRight=3;
 
 	boolean areBrakesOn = false;
-
+	boolean driveSlow = false;
+	
     double frontLeftRPM, frontRightRPM, rearLeftRPM, rearRightRPM;
 	double previousLimiter = 1;
 	double fbLast=0;
@@ -89,6 +91,13 @@ public class SwerveDrive extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+	public void driveSlow(boolean in) {
+		driveSlow=in;
+	} 
+
+    /************************************************************************
+	 ************************************************************************/
+
 	public void brakesOn() {
 		if (!areBrakesOn) {
 			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -121,8 +130,10 @@ public class SwerveDrive extends SubsystemBase {
     	rearLeftRPM = Math.abs(Robot.swerveRearLeftDriveRelativeEncoder.getVelocity());
     	rearRightRPM = Math.abs(Robot.swerveRearRightDriveRelativeEncoder.getVelocity());
 
-		SmartDashboard.putNumber("front RPM",(frontLeftRPM+frontRightRPM)/2);
-		SmartDashboard.putNumber("rear RPM",(rearLeftRPM+rearRightRPM)/2);
+		if (swerveDebug) { 
+			SmartDashboard.putNumber("front RPM",(frontLeftRPM+frontRightRPM)/2);
+			SmartDashboard.putNumber("rear RPM",(rearLeftRPM+rearRightRPM)/2);
+		}		
 
 		return((frontLeftRPM + frontRightRPM + rearLeftRPM + rearRightRPM) / 4);
 	}
@@ -163,9 +174,16 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-		if (input > 0.4) { 
-			// Cap at 40 percent for now
-			input=0.4;
+		if (driveSlow) {
+			if (input > 0.2) { 
+				// Cap at 20 percent for driveSlow
+				input=0.2;
+			}
+		} else {
+			if (input > 0.4) { 
+				// Cap at 40 percent for now
+				input=0.4;
+			}
 		}
 
         if (input > 0) {
@@ -212,7 +230,6 @@ public class SwerveDrive extends SubsystemBase {
         double currentAngle = Robot.navxMXP.getAngle();
 		x1 = ( x1In * Math.cos(currentAngle*-1) - (y1In * Math.sin(currentAngle*-1)));
         y1 = ( y1In * Math.cos(currentAngle*-1) + (x1In * Math.sin(currentAngle*-1)));
-   		SmartDashboard.putNumber("currentAngle", currentAngle);
 
 		// Get the Encoder information from each swerve drive module
     	StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
@@ -225,15 +242,19 @@ public class SwerveDrive extends SubsystemBase {
 		double rearRightPos = RRPosSS.getValueAsDouble();
 		double rearLeftPos = RLPosSS.getValueAsDouble();
 
-		// Log debug data to the smart dashboard
-		SmartDashboard.putNumber("frontRightPos", frontRightPos);
-		SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
-		SmartDashboard.putNumber("rearRightPos", rearRightPos);
-		SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
+		if (swerveDebug) { 
+ 		    // Log debug data to the smart dashboard
+     		SmartDashboard.putNumber("currentAngle", currentAngle);
 
-   		SmartDashboard.putNumber("y1In", y1In);
-		SmartDashboard.putNumber("x1In", x1In);
-		SmartDashboard.putNumber("x2In", x2In);
+			SmartDashboard.putNumber("frontRightPos", frontRightPos);
+			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
+			SmartDashboard.putNumber("rearRightPos", rearRightPos);
+			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
+
+			SmartDashboard.putNumber("y1In", y1In);
+			SmartDashboard.putNumber("x1In", x1In);
+			SmartDashboard.putNumber("x2In", x2In);
+		}	
 
 		if (y1 == 0 && x1== 0 && x2 == 0) {
 			// If not joysticks are moved, just stop the motors, and
@@ -252,7 +273,7 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[rearRight] = smoothWheelSpeed(0,rearRight);
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(0,rearLeft);
 		} else {
-			// Calculate the speed and position of the 4 wheel based on 
+			// Calculate the speed and position of the 4 wheels based on 
 			// the joystick input
 
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
@@ -279,35 +300,40 @@ public class SwerveDrive extends SubsystemBase {
 			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			Robot.swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
 			
+			// Smooth the wheel speed so the robot isn't so jumpy
 			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight],frontRight);
 			newWheelSpeed[frontLeft] = smoothWheelSpeed(newWheelSpeed[frontLeft],frontLeft);
 			newWheelSpeed[rearRight] = smoothWheelSpeed(newWheelSpeed[rearRight],rearRight);
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft],rearLeft);
 
+			// Run the drive motors to the smoothed speed
 			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
 			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * -1);
 			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * -1);
 			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
 		}
 
-		SmartDashboard.putNumber("rearRightSpeed", newWheelSpeed[rearRight]);
-		SmartDashboard.putNumber("rearLeftSpeed", newWheelSpeed[rearLeft]);
-		SmartDashboard.putNumber("frontRightSpeed", newWheelSpeed[frontRight]);
-		SmartDashboard.putNumber("frontLeftSpeed", newWheelSpeed[frontLeft]);
+		if (swerveDebug) { 
+			// Debug data to the smart dashboard.
+			SmartDashboard.putNumber("rearRightSpeed", newWheelSpeed[rearRight]);
+			SmartDashboard.putNumber("rearLeftSpeed", newWheelSpeed[rearLeft]);
+			SmartDashboard.putNumber("frontRightSpeed", newWheelSpeed[frontRight]);
+			SmartDashboard.putNumber("frontLeftSpeed", newWheelSpeed[frontLeft]);
 
-		SmartDashboard.putNumber("rearRightAngle", rearRightAngle);
-		SmartDashboard.putNumber("rearLeftAngle", rearLeftAngle);
-		SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
-		SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
+			SmartDashboard.putNumber("rearRightAngle", rearRightAngle);
+			SmartDashboard.putNumber("rearLeftAngle", rearLeftAngle);
+			SmartDashboard.putNumber("frontRightAngle", frontRightAngle);
+			SmartDashboard.putNumber("frontLeftAngle", frontLeftAngle);
+  		}
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
 	public void resetEncoders() {
-    	Robot.swerveFrontRightDriveRelativeEncoder.setPosition(0);
     	Robot.swerveFrontLeftDriveRelativeEncoder.setPosition(0);
     	Robot.swerveRearLeftDriveRelativeEncoder.setPosition(0);
+    	Robot.swerveFrontRightDriveRelativeEncoder.setPosition(0);
     	Robot.swerveRearRightDriveRelativeEncoder.setPosition(0);
 	}
 
@@ -315,13 +341,13 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public double getDistanceInches() {
-		//double wheelDiameter = 6;
-		//double gearRatio = 6;
+		double wheelDiameter = 4;
+		double gearRatio = 6;
 		
-		//double left1 = Robot.left1RelativeEncoder.getPosition();
-		//double left2 = Robot.left2RelativeEncoder.getPosition();
-		//double right1 = Robot.right1RelativeEncoder.getPosition()*-1;
-		//double right2 = Robot.right2RelativeEncoder.getPosition()*-1;
+		double left1 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
+		double left2 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
+		double right1 = Robot.swerveFrontRightDriveRelativeEncoder.getPosition();
+		double right2 = Robot.swerveRearRightDriveRelativeEncoder.getPosition();
 
 		//double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
