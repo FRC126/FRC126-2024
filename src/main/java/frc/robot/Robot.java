@@ -86,10 +86,6 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    // Prototype Motors
-    public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax ProtoMotorTwo = new CANSparkMax(RobotMap.protoMotorTwoCanID, CANSparkMax.MotorType.kBrushless);
-
     // Swerve Drive CAN Coders
     public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
     public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
