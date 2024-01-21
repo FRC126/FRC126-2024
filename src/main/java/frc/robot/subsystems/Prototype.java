@@ -20,7 +20,6 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.*;
@@ -66,8 +65,9 @@ public class Prototype extends SubsystemBase {
 
 		StatusSignal OneRPM = Robot.protoTalonOne.getVelocity();
 		StatusSignal TwoRPM = Robot.protoTalonTwo.getVelocity();
-		motorOneRPM = OneRPM.getValueAsDouble();
-		motorTwoRPM = TwoRPM.getValueAsDouble();
+
+		motorOneRPM = OneRPM.getValueAsDouble() * 60;
+		motorTwoRPM = TwoRPM.getValueAsDouble() * 60 ;
 		
 		///////////////////////////////////////////////////////////////
 		//Spark max/Neo Motors
