@@ -34,11 +34,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  **********************************************************************************/
 
 public class Prototype extends SubsystemBase {	
+	boolean protoDebug=true;
+	
 	/************************************************************************
 	 ************************************************************************/
 
 	public Prototype() {
-		boolean protoDebug=true;
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
