@@ -154,12 +154,12 @@ public class Robot extends TimedRobot {
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
-    int selectedAutoBalance;
+    int selectedautoFollow;
     int selectedAllianceColor;
 	
     private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
-    private final SendableChooser<Integer> autoBalance = new SendableChooser<>();
+    private final SendableChooser<Integer> autoFollow = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
     
  	  /************************************************************************
@@ -206,16 +206,14 @@ public class Robot extends TimedRobot {
 		server.setSource(driveCam);
 
         // Dashboard Cooser for the Autonomous mode move
-        autoFunction.setDefaultOption("High Cone",2);
-        autoFunction.addOption("Mid Cone",1);
-        autoFunction.addOption("Floor Cone",0);
-        autoFunction.addOption("No Cone",3);
-        SmartDashboard.putData("Auto Cone Choices",autoFunction);
+        autoFunction.setDefaultOption("Speaker Shot",0);
+        autoFunction.addOption("Amplifier",1);
+        SmartDashboard.putData("Auto Target",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
-        autoPosition.setDefaultOption("Inside Position",0);
-        autoPosition.addOption("Center Position",1);
-        autoPosition.addOption("Outisde Position",2);
+        autoPosition.setDefaultOption("Position 0",0);
+        autoPosition.addOption("Position 1",1);
+        autoPosition.addOption("Position 2",2);
         SmartDashboard.putData("Auto Robot Position",autoPosition);
 
         // Dashboard Cooser for the Autonomous mode position
@@ -223,10 +221,10 @@ public class Robot extends TimedRobot {
         allianceColor.addOption("Blue Alliance",1);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoBalance.setDefaultOption("Leave SZ, Get Cube",2);
-        autoBalance.addOption("Balance",1);
-        autoBalance.addOption("Do Nothing",5);
-        SmartDashboard.putData("Auto Action Choices",autoBalance);
+        autoFollow.setDefaultOption("1 note",0);
+        autoFollow.addOption("2 note",1);
+        autoFollow.addOption("3 note",2);
+        SmartDashboard.putData("Auto Follow Choices",autoFollow);
 
         Log.print(0, "Robot", "Robot Init Complete");
     }
@@ -252,9 +250,9 @@ public class Robot extends TimedRobot {
 			selectedAutoFunction = 0;
 		}
 		try {
-			selectedAutoBalance = (int)autoBalance.getSelected();
+			selectedautoFollow = (int)autoFollow.getSelected();
 		} catch(NullPointerException e) {
-			selectedAutoBalance = 5;
+			selectedautoFollow = 0;
 		}
 		try {
 			selectedAllianceColor = (int)allianceColor.getSelected();
@@ -262,67 +260,17 @@ public class Robot extends TimedRobot {
 			selectedAllianceColor = 0;
 		}
 
-        switch (selectedAutoPosition) {
+        switch (selectedAutoFunction) {
             case 0:
-            {
-                // Inside Position
-                if (selectedAutoBalance==1) selectedAutoBalance=5;
-                if (selectedAutoBalance==2) { selectedAutoBalance=3; }
-                
-                switch (selectedAutoFunction) {
-                    case 0:
-                        // Floor Cone
-                        //autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Left - Cone Low - No Balance");
-                        break;
-                    case 1:
-                        // Mid Cone
-                        //autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Left - Cone Mid - No Balance");
-                        break;
-                    case 2:
-                        // High Cone
-                        //autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Left - Cone High - No Balance");
-                        break;
-                    case 3:
-                        // No Cone
-                        SmartDashboard.putString("AutoCommand","Left - No Cone - No Balance");
-                        break;    
-                }
-            }
-            break;
+                // Speaker Shot
+                //autonomous = new AutoShootSpeaker(selectedAutoPosition, selectedautoFollow);    
+                SmartDashboard.putString("AutoCommand","Speaker");
+                break;
             case 1:
-            {
-                // Center Position
-                if (selectedAutoBalance==2) selectedAutoBalance=5;
-
-                switch (selectedAutoFunction) {
-                    case 0:
-                        // Floor Cone
-                        //autonomous = new AutoPlaceConeLow(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Center - Cone Low");
-                        break;
-                    case 1:
-                        // Mid Cone
-                        //autonomous = new AutoPlaceConeMid(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Center - Cone Mid");
-                        break;
-                    case 2:
-                        // High Cone
-                        //autonomous = new AutoPlaceConeHigh(selectedAutoBalance);    
-                        SmartDashboard.putString("AutoCommand","Center - Cone High");
-                        break;
-                    case 3:
-                        // No Cone
-                        if (selectedAutoBalance==1) {
-                            //autonomous = new AutoClimbBalance();    
-                            SmartDashboard.putString("AutoCommand","Center - No Cone - Balance");
-                        }    
-                        break;    
-                }
-            }
-            break;
+                // Amplifier Shot
+                //autonomous = new AutoShootAmp(selectedAutoPosition, selectedautoFollow);    
+                SmartDashboard.putString("AutoCommand","AMP");
+                break;
         }
 
         autonomous.schedule();

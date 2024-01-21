@@ -65,7 +65,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 150;
-        tmp = Robot.boundSpeed(tmp, .25, .25);
+        tmp = Robot.boundSpeed(tmp, .25, .15);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
