@@ -36,6 +36,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class SwerveDrive extends SubsystemBase {
     boolean swerveDebug=true;
 
+	static final double softStartIncrement=0.04;
+
 	double[] wheelSpeed = {0,0,0,0};
 
 	static final int frontLeft=0;
@@ -149,9 +151,27 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
-		    double speed=0;
+		double speed=0;
+		double diff=0;
 
-            if ( targetAngle < (currentAngle) - 0.1 ) {
+		boolean useHardCoded=true;
+
+		if (!useHardCoded) {
+            if ( targetAngle < currentAngle ) {
+				diff = currentAngle-targetAngle;
+			} else if ( targetAngle > currentAngle ) {
+				diff = targetAngle - currentAngle;
+			} 
+			double tmp = Robot.boundSpeed(diff,.45,0.02);
+
+            if ( targetAngle < (currentAngle - 0.0010) ) {
+				speed = tmp * -1;
+			} else if (targetAngle > (currentAngle + 0.0010) ) {
+				speed = tmp;
+			}
+			return(speed);
+		} else {
+			if ( targetAngle < (currentAngle) - 0.1 ) {
 				speed=-0.4;
 			} else if (targetAngle > (currentAngle + 0.1) ) {
 				speed=0.4;
@@ -165,56 +185,56 @@ public class SwerveDrive extends SubsystemBase {
 				speed=0.02;
 			}
 			return(speed);
+		}	
 	}
 
 	/************************************************************************
-	 * Send power to the drive motors
+	 * Soft start for accelleration to make it more controlable.
 	 ************************************************************************/
 
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
 		if (driveSlow) {
-			if (input > 0.2) { 
-				// Cap at 20 percent for driveSlow
-				input=0.2;
-			}
+			// Cap at 20 percent for driveSlow
+			if (input > 0.2) { input=0.2; }
 		} else {
-			if (input > 0.4) { 
-				// Cap at 40 percent for now
-				input=0.4;
-			}
+			// Cap at 40 percent for now
+			if (input > 0.4) { input=0.4; }
 		}
 
         if (input > 0) {
 			// if the input speed is positive
 			if (input <= wheelSpeed[index]) {
 				// if the input speed is less than last speed, just set to input
-				result=input;
+				result = input;
 			} else if (input > wheelSpeed[index] ) {
 				// if the input speed is greater than the last speed, increment last speed
 				// and use that value
-				result = wheelSpeed[index]+0.02;
+				result = wheelSpeed[index] + softStartIncrement;
 			}
-		} else if (input > 0) {
+		} else if (input < 0) {
 			// if the input speed is negative
 			if (input >= wheelSpeed[index]) {
 				// if the input speed is greater than last speed, just set to input
-				result=input;
+				result = input;
 			} else if (input < wheelSpeed[index] ) {
 				// if the input speed is less than the last speed, decrement last speed
 				// and use that value
-				result = wheelSpeed[index]-0.02;
+				result = wheelSpeed[index] - softStartIncrement;
 			}
 
 		}
 
+		// Save the new speed in the class for future smoothing
 		wheelSpeed[index] = result;
         return(result);
 	}
 	
 	/************************************************************************
-	 * Send power to the drive motors
+	 * Swerve Drive will speed and position calculations
+	 * 
+	 * https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 	 ************************************************************************/
 
 	public void Drive(double y1In, double x1In, double x2In, boolean driveStraight, double straightDegrees) { 
