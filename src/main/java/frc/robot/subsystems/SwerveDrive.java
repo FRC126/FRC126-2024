@@ -345,22 +345,27 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
-		double gearRatio = 6;
+		// L1 ratio
+		double gearRatio = 8.14;
+		// L2 ratio
+		// double gearRatio = 6.75;
+		// L3 ratio
+		// double gearRatio = 6.12;
 		
 		double left1 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
 		double left2 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
 		double right1 = Robot.swerveFrontRightDriveRelativeEncoder.getPosition();
 		double right2 = Robot.swerveRearRightDriveRelativeEncoder.getPosition();
 
-		//double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
+		double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
-		//double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
+		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
-		//SmartDashboard.putNumber("Drive Distance",distance);
+		if (swerveDebug) { 
+  			SmartDashboard.putNumber("Drive Distance",distance);
+		}	
 
-		//return(distance);
-
-		return(0);
+		return(distance);
 	}
 
     /************************************************************************
