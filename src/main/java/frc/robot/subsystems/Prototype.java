@@ -38,6 +38,8 @@ public class Prototype extends SubsystemBase {
 	 ************************************************************************/
 
 	public Prototype() {
+		boolean protoDebug=true;
+
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new PrototypeControl(this));
@@ -52,14 +54,16 @@ public class Prototype extends SubsystemBase {
 	 ************************************************************************/
 
 	public void runMotors(double speed) {
-   			Robot.ProtoMotorOne.set(speed);
-   			Robot.ProtoMotorTwo.set(speed);
+		Robot.ProtoMotorOne.set(speed);
+		Robot.ProtoMotorTwo.set(speed);
 
-      	    double motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
-			double motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
+		double motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
+		double motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
 			
+		if (protoDebug) {
 			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
 			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
+		}
 	}
 
     /************************************************************************

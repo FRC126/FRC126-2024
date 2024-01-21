@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkRelativeEncoder;
@@ -131,6 +132,10 @@ public class Robot extends TimedRobot {
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
 
+    // Lidar Light Distance Measure
+    public static LidarLite distance;
+
+    // Lime Light
     public static LimeLight limeLight;
 
     // Global Robot Variables
@@ -190,7 +195,11 @@ public class Robot extends TimedRobot {
         internalData.initGyro();
         internalData.resetGyro();
 
-        // Start the camera server for the drive camera
+        // create the lidarlite class on DIO 5
+        distance = new LidarLite(new DigitalInput(5));
+
+        // Start the camera 
+        // server for the drive camera
         driveCam = CameraServer.startAutomaticCapture();
 		server = CameraServer.getServer();
         driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
