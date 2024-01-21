@@ -101,6 +101,9 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
+    public static TalonFX protoTalonOne = new TalonFX(26);
+    public static TalonFX protoTalonTwo = new TalonFX(27);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
@@ -200,10 +203,10 @@ public class Robot extends TimedRobot {
 
         // Start the camera 
         // server for the drive camera
-        driveCam = CameraServer.startAutomaticCapture();
-		server = CameraServer.getServer();
-        driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-		server.setSource(driveCam);
+        //driveCam = CameraServer.startAutomaticCapture();
+		//server = CameraServer.getServer();
+        //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+		//server.setSource(driveCam);
 
         // Dashboard Cooser for the Autonomous mode move
         autoFunction.setDefaultOption("Speaker Shot",0);

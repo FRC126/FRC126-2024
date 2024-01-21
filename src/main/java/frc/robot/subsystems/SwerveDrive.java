@@ -36,8 +36,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class SwerveDrive extends SubsystemBase {
     boolean swerveDebug=true;
 
-	static final double softStartIncrement=0.04;
-
 	double[] wheelSpeed = {0,0,0,0};
 
 	static final int frontLeft=0;
@@ -88,6 +86,7 @@ public class SwerveDrive extends SubsystemBase {
 
 	public void resetYaw() {
 		Robot.navxMXP.zeroYaw();
+		Robot.internalData.resetGyro();
 	} 
 
     /************************************************************************
@@ -152,40 +151,33 @@ public class SwerveDrive extends SubsystemBase {
 
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		double speed=0;
-		double diff=0;
 
-		boolean useHardCoded=true;
+		double reverse=1;
 
-		if (!useHardCoded) {
-            if ( targetAngle < currentAngle ) {
-				diff = currentAngle-targetAngle;
-			} else if ( targetAngle > currentAngle ) {
-				diff = targetAngle - currentAngle;
-			} 
-			double tmp = Robot.boundSpeed(diff,.45,0.02);
+		// If it's quicker, turn the other way
+	    if (targetAngle < -0.3 && currentAngle > .3) { reverse=-1; }
+        if (targetAngle > .3 && currentAngle < -.3) { reverse=-1; }
 
-            if ( targetAngle < (currentAngle - 0.0010) ) {
-				speed = tmp * -1;
-			} else if (targetAngle > (currentAngle + 0.0010) ) {
-				speed = tmp;
-			}
-			return(speed);
-		} else {
-			if ( targetAngle < (currentAngle) - 0.1 ) {
-				speed=-0.4;
-			} else if (targetAngle > (currentAngle + 0.1) ) {
-				speed=0.4;
-            } else if ( targetAngle < (currentAngle - 0.01) ) {
-				speed=-0.1;
-			} else if (targetAngle > (currentAngle + 0.01) ) {
-				speed=0.1;
-            } else if ( targetAngle < (currentAngle - 0.0010) ) {
-				speed=-0.02;
-			} else if (targetAngle > (currentAngle + 0.0010) ) {
-				speed=0.02;
-			}
-			return(speed);
-		}	
+     	SmartDashboard.putNumber("reverse angle", reverse);
+
+		if ( targetAngle < (currentAngle) - 0.1) {
+			speed=-0.4 * reverse;
+		} else if (targetAngle > (currentAngle + 0.1)) {
+			speed=0.4 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.01) ) {
+			speed=-0.1 * reverse;
+		} else if (targetAngle > (currentAngle + 0.01) ) {
+			speed=0.1 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.0010) ) {
+			speed=-0.025 * reverse;
+		} else if (targetAngle > (currentAngle + 0.0010) ) {
+			speed=0.025 * reverse;
+		} else if ( targetAngle < (currentAngle - 0.0005) ) {
+			speed=-0.01 * reverse;
+		} else if (targetAngle > (currentAngle + 0.0005) ) {
+			speed=0.01 * reverse;
+		}
+		return(speed);
 	}
 
 	/************************************************************************
@@ -195,12 +187,14 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
+    	double softStartIncrement=0.02;
+
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
 			if (input > 0.2) { input=0.2; }
 		} else {
-			// Cap at 40 percent for now
-			if (input > 0.4) { input=0.4; }
+			// Cap at 50 percent for now
+			if (input > 0.5) { input=0.5; }
 		}
 
         if (input > 0) {
@@ -238,20 +232,34 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void Drive(double y1In, double x1In, double x2In, boolean driveStraight, double straightDegrees) { 
-
 		double y1 = y1In;
         double x1 = x1In;
 		double x2 = x2In;
 		double[] newWheelSpeed = {0,0,0,0};
 		double rearRightAngle=0, rearLeftAngle=0, frontRightAngle=0, frontLeftAngle=0;
 
+		if (swerveDebug) { 
+ 		    // Log debug data to the smart dashboard
+			SmartDashboard.putNumber("y1", y1);
+			SmartDashboard.putNumber("x1", x1);
+			SmartDashboard.putNumber("x2", x2);
+		}	
+
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
 		// direction, and the controls are driver relative, not robot relative
-        double currentAngle = Robot.navxMXP.getAngle();
+        //double currentAngle = Robot.navxMXP.getAngle();
+		double currentAngle = Robot.internalData.getGyroAngle();
+
 		// 2 dimensional rotation of the control inputs corrected to make the motion
 		// driver relative instead of robot relative
-		x1 = ( x1In * Math.cos(currentAngle*-1) - (y1In * Math.sin(currentAngle*-1)));
-        y1 = ( y1In * Math.cos(currentAngle*-1) + (x1In * Math.sin(currentAngle*-1)));
+		//x1 = ( x1In * Math.cos(currentAngle*-1) - (y1In * Math.sin(currentAngle*-1)));
+        //y1 = ( y1In * Math.cos(currentAngle*-1) + (x1In * Math.sin(currentAngle*-1)));
+
+		if (swerveDebug) { 
+ 		    // Log debug data to the smart dashboard
+			SmartDashboard.putNumber("y1 Rotate", y1);
+			SmartDashboard.putNumber("x1 Rotate", x1);
+		}	
 
 		// Get the Encoder information from each swerve drive module
     	StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
@@ -272,13 +280,9 @@ public class SwerveDrive extends SubsystemBase {
 			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
 			SmartDashboard.putNumber("rearRightPos", rearRightPos);
 			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
-
-			SmartDashboard.putNumber("y1In", y1In);
-			SmartDashboard.putNumber("x1In", x1In);
-			SmartDashboard.putNumber("x2In", x2In);
 		}	
 
-		if (y1 == 0 && x1== 0 && x2 == 0) {
+		if (y1 == 0 && x1 == 0 && x2 == 0) {
 			// If not joysticks are moved, just stop the motors, and
 			// zero the speed offsets
             Robot.swerveFrontRightDriveMotor.set(0);
@@ -312,10 +316,10 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[frontRight] = Math.sqrt ((b * b) + (d * d));
 			newWheelSpeed[frontLeft] = Math.sqrt ((b * b) + (c * c));
 
-			rearRightAngle = Math.atan2 (a, d) / pi *.48;
-			rearLeftAngle = Math.atan2 (a, c) / pi * .48;
-			frontRightAngle = Math.atan2 (b, d) / pi * .48;
-			frontLeftAngle = Math.atan2 (b, c) / pi * .48;
+			rearRightAngle = Math.atan2 (a, d) / pi *.49;
+			rearLeftAngle = Math.atan2 (a, c) / pi * .49;
+			frontRightAngle = Math.atan2 (b, d) / pi * .49;
+			frontLeftAngle = Math.atan2 (b, c) / pi * .49;
 
 			// Run the turning motors based on the calculated target
 			Robot.swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));

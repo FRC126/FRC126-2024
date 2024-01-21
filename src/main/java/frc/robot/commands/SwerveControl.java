@@ -57,7 +57,8 @@ public class SwerveControl extends Command {
 		if ( driveJoystick.getLeftTrigger() > 0 ) {
 			Robot.swerveDrive.driveSlow(true);
 		} else {
-			Robot.swerveDrive.driveSlow(false);
+			Robot.swerveDrive.
+			driveSlow(false);
 		}		
 
 		Robot.swerveDrive.Drive(y1, x1, x2);

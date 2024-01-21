@@ -52,7 +52,7 @@ public class PrototypeControl extends Command {
 
 		if (operatorJoystick.isAButton()) {
 		     Robot.prototype.runMotors(.75);
-		} else if (operatorJoystick.isAButton()) {
+		} else if (operatorJoystick.isBButton()) {
 		     Robot.prototype.runMotors(.5);
 		} else if (operatorJoystick.isYButton()) {
 		     Robot.prototype.runMotors(.25);
