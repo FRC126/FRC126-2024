@@ -151,22 +151,26 @@ public class SwerveDrive extends SubsystemBase {
 
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		double speed=0;
-
 		double reverse=1;
+		boolean skip=false;
 
 		// If it's quicker, turn the other way
 	    if (targetAngle < -0.3 && currentAngle > .3) { reverse=-1; }
         if (targetAngle > .3 && currentAngle < -.3) { reverse=-1; }
 
+		// Skip the fast move if we are just crossing the boundry
+        if (targetAngle < -0.45 && currentAngle > .45) { skip=true; }
+        if (targetAngle > .45 && currentAngle < -.45) { skip=true; }
+
      	SmartDashboard.putNumber("reverse angle", reverse);
 
-		if ( targetAngle < (currentAngle) - 0.1) {
+		if ( targetAngle < (currentAngle) - 0.1 && !skip) {
 			speed=-0.4 * reverse;
-		} else if (targetAngle > (currentAngle + 0.1)) {
+		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
 			speed=0.4 * reverse;
-		} else if ( targetAngle < (currentAngle - 0.01) ) {
+		} else if ( targetAngle < (currentAngle - 0.02) ) {
 			speed=-0.1 * reverse;
-		} else if (targetAngle > (currentAngle + 0.01) ) {
+		} else if (targetAngle > (currentAngle + 0.02) ) {
 			speed=0.1 * reverse;
 		} else if ( targetAngle < (currentAngle - 0.0010) ) {
 			speed=-0.025 * reverse;
