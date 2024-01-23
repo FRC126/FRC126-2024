@@ -15,20 +15,19 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.commands.*;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.ctre.phoenix6.hardware.*;
-import com.ctre.phoenix6.*;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import com.ctre.phoenix6.*;
+import com.revrobotics.CANSparkMax;
+
+//import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.SparkRelativeEncoder;
+
 
 /**********************************************************************************
  **********************************************************************************/
@@ -198,7 +197,7 @@ public class SwerveDrive extends SubsystemBase {
 			if (input > 0.2) { input=0.2; }
 		} else {
 			// Cap at 50 percent for now
-			if (input > 0.5) { input=0.5; }
+			if (input > 0.3) { input=0.3; }
 		}
 
         if (input > 0) {
@@ -251,13 +250,14 @@ public class SwerveDrive extends SubsystemBase {
 
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
 		// direction, and the controls are driver relative, not robot relative
-        //double currentAngle = Robot.navxMXP.getAngle();
-		double currentAngle = Robot.internalData.getGyroAngle();
+        double currentAngle = Robot.navxMXP.getAngle();
+		double currentAngle2 = Robot.internalData.getGyroAngle();
 
 		// 2 dimensional rotation of the control inputs corrected to make the motion
 		// driver relative instead of robot relative
-		//x1 = ( x1In * Math.cos(currentAngle*-1) - (y1In * Math.sin(currentAngle*-1)));
-        //y1 = ( y1In * Math.cos(currentAngle*-1) + (x1In * Math.sin(currentAngle*-1)));
+		double angle=Math.toRadians(currentAngle); 
+		x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
+        y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
 
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
@@ -279,6 +279,7 @@ public class SwerveDrive extends SubsystemBase {
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
      		SmartDashboard.putNumber("currentAngle", currentAngle);
+     		SmartDashboard.putNumber("currentAngle2", currentAngle2);
 
 			SmartDashboard.putNumber("frontRightPos", frontRightPos);
 			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
