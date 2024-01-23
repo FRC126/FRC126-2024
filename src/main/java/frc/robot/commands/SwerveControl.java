@@ -77,3 +77,15 @@ public class SwerveControl extends Command {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Controls
+//
+// Left Joystick - Driver Relative Robot Movement
+//
+// Right Joystick - Robot Rotation
+//
+// Left Trigger - Slow Mode
+// Right Trigger - Brake Mode
+//
+// B Button - Reset Gyro to 0, do it when front of robot is facing directly away from the driver
+//
