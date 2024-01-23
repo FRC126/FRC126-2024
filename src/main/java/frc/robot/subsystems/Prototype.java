@@ -15,20 +15,19 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.*;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkRelativeEncoder;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import com.ctre.phoenix6.hardware.*;
+//import frc.robot.RobotMap;
+//import com.revrobotics.CANSparkMax;
+//import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.SparkRelativeEncoder;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -57,6 +56,7 @@ public class Prototype extends SubsystemBase {
 	public void runMotors(double speed) {
 		double motorOneRPM, motorTwoRPM;
 
+		/*
 		///////////////////////////////////////////////////////////////
 		// Falcom Motors
 
@@ -68,20 +68,21 @@ public class Prototype extends SubsystemBase {
 
 		motorOneRPM = OneRPM.getValueAsDouble() * 60;
 		motorTwoRPM = TwoRPM.getValueAsDouble() * 60 ;
-		
+		*/
 		///////////////////////////////////////////////////////////////
 		//Spark max/Neo Motors
 
-		//Robot.ProtoMotorOne.set(speed);
-		//Robot.ProtoMotorTwo.set(speed);
+		Robot.ProtoMotorOne.set(speed);
+		Robot.ProtoMotorTwo.set(speed);
 
-		//motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
-		//motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
-			
+		motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
+		motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
+		
 		if (protoDebug) {
 			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
 			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
 		}
+		
 	}
 
     /************************************************************************
