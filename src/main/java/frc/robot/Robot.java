@@ -128,7 +128,6 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
-    public static Drivetrain driveTrain;
     public static Prototype prototype;
         
 	public static UsbCamera driveCam;
@@ -390,36 +389,4 @@ public class Robot extends TimedRobot {
         return(speedOut);
 
     }
-
-    /************************************************************************
-	 ************************************************************************/
-    private void driveWithJoystick(boolean fieldRelative) {
-        //double y1 = driveJoystick.getLeftStickY();
-        //double x1 = driveJoystick.getLeftStickX();
-        //double x2 = driveJoystick.getRightStickX();
-
-        double x1=0,x2=0,y1=0;
-		Robot.swerveDrive.Drive(y1, x1, x2);
-
-		// Get the x speed. We are inverting this because Xbox controllers return
-		// negative values when we push forward.
-		final var xSpeed =
-			Robot.xspeedLimiter.calculate(MathUtil.applyDeadband(y1, 0.02)) * Drivetrain.kMaxSpeed;
-
-		// Get the y speed or sideways/strafe speed. We are inverting this because
-		// we want a positive value when we pull to the left. Xbox controllers
-		// return positive values when you pull to the right by default.
-		final var ySpeed =
-			Robot.yspeedLimiter.calculate(MathUtil.applyDeadband(x1, 0.02)) * Drivetrain.kMaxSpeed;
-
-		// Get the rate of angular rotation. We are inverting this because we want a
-		// positive value when we pull to the left (remember, CCW is positive in
-		// mathematics). Xbox controllers return positive values when you pull to
-		// the right by default.
-		final var rot =
-			Robot.rotLimiter.calculate(MathUtil.applyDeadband(x2, 0.02)) * Drivetrain.kMaxAngularSpeed;
-
-		//driveTrain.drive(xSpeed, ySpeed, rot, true, getPeriod());	       
-  }
-
 }

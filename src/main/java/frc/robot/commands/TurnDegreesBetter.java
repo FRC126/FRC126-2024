@@ -61,11 +61,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
         // get the current angle from the gyro
         double currentDegrees = Robot.navxMXP.getAngle();      
-        double target = targetDegrees;
+        double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 150;
-        tmp = Robot.boundSpeed(tmp, .5, .4);
+        tmp = Robot.boundSpeed(tmp, .3, .15);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle

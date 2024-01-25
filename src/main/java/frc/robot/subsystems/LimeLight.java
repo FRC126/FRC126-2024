@@ -190,7 +190,10 @@ public class LimeLight extends SubsystemBase {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry(entry);   
     }
 
-    private void dashboardData() {
+   	/************************************************************************
+	 ************************************************************************/
+
+     private void dashboardData() {
         SmartDashboard.putBoolean("LL Valid", Robot.limeLight.getllTargetValid());
         SmartDashboard.putNumber("LL Area", getllTargetArea());
         SmartDashboard.putNumber("LL X", getllTargetX());
@@ -233,7 +236,8 @@ public class LimeLight extends SubsystemBase {
                     SmartDashboard.putNumber("shootAngle", currentAngle);
                     SmartDashboard.putNumber("fooAngle", foo);
                     SmartDashboard.putNumber("shootAngle", currentAngle);
-                    Robot.autoCommand=new AutoTurn(currentAngle+(foo),500);
+                    Robot.autoMove=true;
+                    Robot.autoCommand=new AutoTurn(foo,500);
                     Robot.autoCommand.schedule();
                 }	   
                 
