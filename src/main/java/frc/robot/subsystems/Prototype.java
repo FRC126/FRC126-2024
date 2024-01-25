@@ -67,7 +67,7 @@ public class Prototype extends SubsystemBase {
 		StatusSignal TwoRPM = Robot.protoTalonTwo.getVelocity();
 
 		motorOneRPM = OneRPM.getValueAsDouble() * 60;
-		motorTwoRPM = TwoRPM.getValueAsDouble() * 60 ;
+		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
 		*/
 		///////////////////////////////////////////////////////////////
 		//Spark max/Neo Motors

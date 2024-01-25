@@ -190,14 +190,14 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.02;
+    	double softStartIncrement=0.05;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
 			if (input > 0.2) { input=0.2; }
 		} else {
 			// Cap at 50 percent for now
-			if (input > 0.3) { input=0.3; }
+			if (input > 0.45) { input=0.45; }
 		}
 
         if (input > 0) {

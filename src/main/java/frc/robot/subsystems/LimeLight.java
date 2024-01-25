@@ -226,24 +226,17 @@ public class LimeLight extends SubsystemBase {
             validCount++;
             missedCount=0;
 
-            if ( Robot.limeLight.getllTargetX() < -2) {
-                // Target is to the left of the Robot, need to move left
-                /*
+            double foo = Robot.limeLight.getllTargetX();
+            if ( foo < -1.5 || foo > 1.5) {
                 if ( Robot.doAutoCommand() ) {
-                    Robot.autoCommand=new AutoMoveLeft(1);
+                    double currentAngle = Robot.navxMXP.getAngle();
+                    SmartDashboard.putNumber("shootAngle", currentAngle);
+                    SmartDashboard.putNumber("fooAngle", foo);
+                    SmartDashboard.putNumber("shootAngle", currentAngle);
+                    Robot.autoCommand=new AutoTurn(currentAngle+(foo),500);
                     Robot.autoCommand.schedule();
                 }	   
-                */
-                centeredCount=0;
-                Robot.shootNow=false;
-            } else if ( Robot.limeLight.getllTargetX() > 2 ) {
-                // Target is to the left of the Robot, need to move right
-                /*
-                if ( Robot.doAutoCommand() ) {
-                    Robot.autoCommand=new AutoMoveRight(1);
-                    Robot.autoCommand.schedule();
-                }			
-                */
+                
                 centeredCount=0;
                 Robot.shootNow=false;
             } else {

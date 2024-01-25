@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
         prototype = new Prototype();
 
         // Not using the limelight right now
-        // limeLight = new LimeLight();
+        limeLight = new LimeLight();
        
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
