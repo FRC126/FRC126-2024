@@ -53,15 +53,18 @@ public class LimeLightWork extends Command {
 
     public void execute() {
 
-        limelightParams.forEach(e -> {
-            SmartDashboard.putNumber("LL " + e, Robot.limeLight.getEntry(e).getDouble(0));
-        });
+        //limelightParams.forEach(e -> {
+        //    SmartDashboard.putNumber("LL " + e, Robot.limeLight.getEntry(e).getDouble(0));
+        //});
 
+        
         if (driveJoystick.getPovUp()) {
             Robot.targetType = Robot.targetTypes.TargetSeek;
         } else {
             Robot.targetType = Robot.targetTypes.NoTarget;
         }     
+        
+        // Robot.targetType = Robot.targetTypes.TargetSeek;
 
         Robot.limeLight.trackTarget();
     }

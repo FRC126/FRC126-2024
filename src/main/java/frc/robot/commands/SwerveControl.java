@@ -49,6 +49,16 @@ public class SwerveControl extends Command {
 	
 	@Override
 	public void execute() {
+		// X buttom aborts any running auto commands
+		if (driveJoystick.isXButton()) {
+			Robot.stopAutoCommand();
+		}
+
+		if (Robot.internalData.isAuto() || (Robot.isAutoCommand && Robot.autoMove==true)) {
+			// Ignore user controls during Autonomous
+			return;
+		}
+
         double y1 = driveJoystick.getLeftStickY();
         double x1 = driveJoystick.getLeftStickX();
         double x2 = driveJoystick.getRightStickX();
@@ -56,8 +66,7 @@ public class SwerveControl extends Command {
 		if ( driveJoystick.getLeftTrigger() > 0 ) {
 			Robot.swerveDrive.driveSlow(true);
 		} else {
-			Robot.swerveDrive.
-			driveSlow(false);
+			Robot.swerveDrive.driveSlow(false);
 		}		
 
 		Robot.swerveDrive.Drive(y1, x1, x2);

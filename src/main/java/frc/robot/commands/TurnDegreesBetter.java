@@ -48,8 +48,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         //Robot.internalData.resetGyro();
         //startAngle=Robot.internalData.getGyroAngle();
 
-        Robot.navxMXP.zeroYaw();
-        startAngle = 0;
+        double currentDegrees = Robot.navxMXP.getAngle();      
+        startAngle = currentDegrees;
     }
 
 	/**********************************************************************************
@@ -57,26 +57,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     public void execute() {
-        double driveLr=0;
+        double driveRotate=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.navxMXP.getAngle() * -1;      
+        double currentDegrees = Robot.navxMXP.getAngle();      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 150;
-        tmp = Robot.boundSpeed(tmp, .25, .15);
+        tmp = Robot.boundSpeed(tmp, .3, .15);
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle
             targetReached++;
-            driveLr=0;
+            driveRotate=0;
             Robot.swerveDrive.brakesOn();
         } else if (currentDegrees < target) {
-            driveLr=tmp * -1;
+            driveRotate=tmp;
             targetReached=0;
         } else {
-            driveLr=tmp;
+            driveRotate=tmp*-1;
             targetReached=0;
         }
 
@@ -85,7 +85,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         SmartDashboard.putNumber("Turn diff",diff);
         SmartDashboard.putNumber("Turn Target Reached",targetReached);
 
-        Robot.swerveDrive.Drive(0, 0, driveLr);
+        Robot.swerveDrive.Drive(0, 0, driveRotate);
     }
 
 	/**********************************************************************************
