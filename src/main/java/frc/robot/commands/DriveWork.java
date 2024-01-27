@@ -26,6 +26,7 @@ public class DriveWork extends Command {
     double distance;
     int iters;
     int distanceReached;
+    boolean driveWorkDebug=true;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -55,30 +56,32 @@ public class DriveWork extends Command {
 	 **********************************************************************************/
 	
     public void execute() {
-        iters--;
-
         double FB = driveFb,
                LR = driveLr;
+        iters--;
 
         double tmp = Robot.swerveDrive.getDistanceInches();
+
         if (tmp + 6 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
-        }
-        if (tmp + 3 > distance) {
+        } else if (tmp + 3 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.25;
             LR=driveLr*.25;
-        }
-
-        if (tmp + 1 > distance) {
+        } else if (tmp + 1 > distance) {
             // Within one inch of the target
             Robot.swerveDrive.brakesOn();
             FB=0;
             LR=0;
             distanceReached++;
         }
+
+        if (driveWorkDebug) { 
+            SmartDashboard.putNumber("Distance Inches", tmp);
+            SmartDashboard.putNumber("Distance Reached", distanceReached);
+        }    
 
         Robot.swerveDrive.Drive(FB, LR, 0);            
      }
@@ -90,7 +93,6 @@ public class DriveWork extends Command {
     // Make this return true when this Command no longer needs to run execute()
     public boolean isFinished() {
         
-        SmartDashboard.putNumber("Distance Inches", Robot.swerveDrive.getDistanceInches());
         if (iters == 0 || distanceReached > 5) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
@@ -105,6 +107,7 @@ public class DriveWork extends Command {
 	
     public void end(boolean isInteruppted) {
         Robot.swerveDrive.Drive(0, 0, 0);
+        Robot.swerveDrive.brakesOff();
     }
 
 }

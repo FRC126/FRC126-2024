@@ -26,12 +26,12 @@ import com.ctre.phoenix6.*;
  **********************************************************************************/
 
 public class PrototypeThrower extends SubsystemBase {	
-	boolean protoDebug=true;
     static double targetRPM;
 	static double throwerSpeed[] = { 0,0 };
     static int delay;
     static double P = 0.000008;
     static double I = -0.0003;
+	boolean throwerDebug=true;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -63,7 +63,7 @@ public class PrototypeThrower extends SubsystemBase {
 		motorOneRPM = OneRPM.getValueAsDouble() * 60;
 		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
 		
-		if (protoDebug) {
+		if (throwerDebug) {
 			SmartDashboard.putNumber("Proto Talon One RPM",motorOneRPM);
 			SmartDashboard.putNumber("Proto Talon Two RPM",motorTwoRPM);
 		}
@@ -116,14 +116,16 @@ public class PrototypeThrower extends SubsystemBase {
   			Robot.protoTalonTwo.set(throwerSpeed[index] * -1);
 		}	
 
-        // Log info to the smart dashboard
-		String foo="Thrower " + index + " RPM Current";
-		SmartDashboard.putNumber(foo,rpm);
-		foo="Thrower " + index + " RPM Target";
-        SmartDashboard.putNumber(foo,targetRPM);
-		foo="Thrower " + index + " RPM Reached";
-        SmartDashboard.putBoolean(foo,targetReached);
-
+		if (throwerDebug) {
+			// Log info to the smart dashboard
+			String foo="Thrower " + index + " RPM Current";
+			SmartDashboard.putNumber(foo,rpm);
+			foo="Thrower " + index + " RPM Target";
+			SmartDashboard.putNumber(foo,targetRPM);
+			foo="Thrower " + index + " RPM Reached";
+			SmartDashboard.putBoolean(foo,targetReached);
+		}
+		
         return(targetReached);
     }
 

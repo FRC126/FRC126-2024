@@ -34,6 +34,7 @@ public class LimeLight extends SubsystemBase {
     private int missedCount;
     private int centeredCount;
     public static SequentialCommandGroup throwCommand;
+    boolean limeLightDebug=true;
 
 
 	/************************************************************************
@@ -146,11 +147,13 @@ public class LimeLight extends SubsystemBase {
         double ta = ntta.getDouble(0.0);
         double tv = nttv.getDouble(0.0);
         
-        //post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", tx);
-        SmartDashboard.putNumber("LimelightY", ty);
-        SmartDashboard.putNumber("LimelightArea", ta);
-        SmartDashboard.putNumber("LimelightValid", tv);
+        if (limeLightDebug) {
+            //post to smart dashboard periodically
+            SmartDashboard.putNumber("LimelightX", tx);
+            SmartDashboard.putNumber("LimelightY", ty);
+            SmartDashboard.putNumber("LimelightArea", ta);
+            SmartDashboard.putNumber("LimelightValid", tv);
+        }    
 
         if (tv < 1.0) {
             setllTargetData(false, 0, 0, 0);
@@ -257,7 +260,7 @@ public class LimeLight extends SubsystemBase {
                         }
                     }    	   
                     // TODO - set thrower angle based on the distance from the target
-                    
+
                 } else {
                    Robot.shootNow=false;
                 }
