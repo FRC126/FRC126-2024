@@ -32,17 +32,17 @@ import com.ctre.phoenix6.*;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Prototype extends SubsystemBase {	
+public class PrototypeTalon extends SubsystemBase {	
 	boolean protoDebug=true;
 	
 	/************************************************************************
 	 ************************************************************************/
 
-	public Prototype() {
+	public PrototypeTalon() {
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PrototypeControl(this));
+		setDefaultCommand(new PrototypeTalonControl(this));
 	}
 
 	/************************************************************************
@@ -56,14 +56,14 @@ public class Prototype extends SubsystemBase {
 	public void runMotors(double speed) {
 		double motorOneRPM, motorTwoRPM;
 
-		///////////////////////////////////////////////////////////////
-		//Spark max/Neo Motors
+		Robot.protoTalonOne.set(speed*.7);
+		Robot.protoTalonTwo.set(speed*.7*-1);
 
-		Robot.ProtoMotorOne.set(speed);
-		Robot.ProtoMotorTwo.set(speed);
+		StatusSignal OneRPM = Robot.protoTalonOne.getVelocity();
+		StatusSignal TwoRPM = Robot.protoTalonTwo.getVelocity();
 
-		motorOneRPM = Math.abs(Robot.ProtoMotorOneRelativeEncoder.getVelocity());
-		motorTwoRPM = Math.abs(Robot.ProtoMotorTwoRelativeEncoder.getVelocity());
+		motorOneRPM = OneRPM.getValueAsDouble() * 60;
+		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
 		
 		if (protoDebug) {
 			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
