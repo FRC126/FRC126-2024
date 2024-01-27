@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class PrototypeThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
+	boolean idleThrower=false;
+	int delay=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -47,18 +49,30 @@ public class PrototypeThrowerControl extends Command {
 	
 	@Override
 	public void execute() {
-        double y1 = operatorJoystick.getRightStickY();
+		double speed;
+
+		if ( delay > 0) { delay--; }
+
+		if (operatorJoystick.isBButton()) {
+            // Toggle the thrower idle
+			if (delay <= 0) {
+				if (idleThrower) { idleThrower = false; } else { idleThrower = true; }
+				delay=150;
+			}
+		}	
 
 		if (operatorJoystick.isAButton()) {
-			Robot.prototypeThrower.throwerRPM(1,3800);
-			Robot.prototypeThrower.throwerRPM(2,3800);
-		} else if (y1 > 0) {
-            Robot.prototypeThrower.runMotors(y1);
-		} else {
+			// Run the motors at 3800 rpm
+			speed=3800;
+		} else if (idleThrower) {
 			// Idle the throwers
-			Robot.prototypeThrower.throwerRPM(1,1500);
-			Robot.prototypeThrower.throwerRPM(2,1500);
+			speed=1500;
+		} else {
+			speed=0;
 		}
+
+		Robot.prototypeThrower.throwerRPM(1,speed);
+		Robot.prototypeThrower.throwerRPM(2,speed);
 	}
 
 }

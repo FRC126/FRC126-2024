@@ -48,28 +48,6 @@ public class PrototypeThrower extends SubsystemBase {
 
 	public void periodic() {}
 
-    /************************************************************************
-	 ************************************************************************/
-
-	public void runMotors(double speed) {
-		double motorOneRPM, motorTwoRPM;
-
-		Robot.protoTalonOne.set(speed*.7);
-		Robot.protoTalonTwo.set(speed*.7*-1);
-
-		StatusSignal OneRPM = Robot.protoTalonOne.getVelocity();
-		StatusSignal TwoRPM = Robot.protoTalonTwo.getVelocity();
-
-		motorOneRPM = OneRPM.getValueAsDouble() * 60;
-		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
-		
-		if (throwerDebug) {
-			SmartDashboard.putNumber("Proto Talon One RPM",motorOneRPM);
-			SmartDashboard.putNumber("Proto Talon Two RPM",motorTwoRPM);
-		}
-		
-	}
-
 	/************************************************************************
      * Run Main Thower Wheels by target RPM
 	 ************************************************************************/
@@ -125,7 +103,7 @@ public class PrototypeThrower extends SubsystemBase {
 			foo="Thrower " + index + " RPM Reached";
 			SmartDashboard.putBoolean(foo,targetReached);
 		}
-		
+
         return(targetReached);
     }
 
@@ -133,7 +111,8 @@ public class PrototypeThrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public void cancel() {
-        runMotors(0); 
+        throwerRPM(1,0); 
+        throwerRPM(2,0); 
 	}
 }
 

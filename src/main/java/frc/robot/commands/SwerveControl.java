@@ -69,8 +69,6 @@ public class SwerveControl extends Command {
 			Robot.swerveDrive.driveSlow(false);
 		}
 
-		Robot.swerveDrive.Drive(y1, x1, x2);
-
 		if (driveJoystick.isBButton()) {
 			Robot.swerveDrive.resetYaw();
 		}
@@ -95,14 +93,24 @@ public class SwerveControl extends Command {
 			}
 		}
 
-		if (driveJoystick.getRightTrigger() > 0) {
+		// Apply motor braking when the right trigger is pressed
+		if (driveJoystick.getRightTrigger() > .5) {
 			Robot.swerveDrive.brakesOn();
+			if (driveStraight != true) {
+                // Get the current angle from the Navx 
+				straightDegrees = Robot.navxMXP.getAngle();      
+				driveStraight = true;
+			}
 		} else {
-			Robot.swerveDrive.brakesOff();
-		}
+			if (driveStraight == true) {
+			    driveStraight = false;
+				Robot.swerveDrive.brakesOff();
+			}	
+		}			
+
+		Robot.swerveDrive.Drive(y1, x1, x2, driveStraight, straightDegrees);
 
 	}
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

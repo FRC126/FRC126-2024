@@ -87,25 +87,14 @@ public class RobotMap {
 
 /************************************************************************************************************
 Controls
+
 Driver:
-Left Joystick Y-Axis: Forward and Backwards
-Right Joysick X-Axis: Left and Right
-POV Left: Shift robot left
-POV Right: Shift robot right
-Left Trigger: Hold down while driving for slow mode
-Right Trigger: Hold down while driving to go straight, and apply motor braking when no throttle input.
- 
-AutoCommands:
 X Button: Cancel any running auto routines
-B Button: Turn 180 degrees
  
- Operator:
+Operator:
 
 Auto Commands:
 X Button: Cancel any running auto routines
-
-BACK BUTTON: Holding the back button while using the manual controls will ignore encoders while 
-moving components
 
 */
 }
