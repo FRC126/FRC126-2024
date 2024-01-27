@@ -22,19 +22,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.*;
 
-//import com.ctre.phoenix6.hardware.*;
-//import frc.robot.RobotMap;
-//import com.revrobotics.CANSparkMax;
-//import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkRelativeEncoder;
-//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 /**********************************************************************************
  **********************************************************************************/
 
 public class PrototypeTalon extends SubsystemBase {	
 	boolean protoDebug=true;
-	
+    static double targetRPM;
+	static double throwerSpeed[] = { 0,0 };
+    static int delay;
+    static double P = 0.000008;
+    static double I = -0.0003;
+
 	/************************************************************************
 	 ************************************************************************/
 
@@ -42,7 +40,7 @@ public class PrototypeTalon extends SubsystemBase {
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PrototypeTalonControl(this));
+		setDefaultCommand(new PrototypeThrowerControl(this));
 	}
 
 	/************************************************************************
@@ -66,11 +64,68 @@ public class PrototypeTalon extends SubsystemBase {
 		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
 		
 		if (protoDebug) {
-			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
-			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
+			SmartDashboard.putNumber("Proto Talon One RPM",motorOneRPM);
+			SmartDashboard.putNumber("Proto Talon Two RPM",motorTwoRPM);
 		}
 		
 	}
+
+	/************************************************************************
+     * Run Main Thower Wheels by target RPM
+	 ************************************************************************/
+
+    public boolean throwerRPM(int index, double targetRPM) {
+        boolean targetReached=false;
+		double ix, error=0.0, rpm;
+		StatusSignal RPM;
+
+		if (index == 1) {
+		    RPM = Robot.protoTalonOne.getVelocity();
+ 			rpm = RPM.getValueAsDouble() * 60;
+		} else {
+		    RPM = Robot.protoTalonTwo.getVelocity();
+			rpm = RPM.getValueAsDouble() * 60 * -1;
+		}	
+
+		/**********************************************************************
+		 * PID Loop for controlling motor RPM
+		 **********************************************************************/
+
+		if (targetRPM == 0) { /** Spindown **/
+			throwerSpeed[index]=0;
+		} else { /** Normal operation **/
+			error = targetRPM - rpm;
+			ix = error * 0.02; /** Loop frequency **/
+			throwerSpeed[index] += P * error + I * ix;
+		}
+
+		if(throwerSpeed[index] < 0) {
+			throwerSpeed[index] = 0;
+		} else if(throwerSpeed[index] > 1) {
+			throwerSpeed[index] = 1;
+		}
+
+		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
+			targetReached=true;
+		}
+
+        // Set the speed on the Thrower Motors
+		if (index == 1) {
+			Robot.protoTalonOne.set(throwerSpeed[index]);
+		} else {
+  			Robot.protoTalonTwo.set(throwerSpeed[index] * -1);
+		}	
+
+        // Log info to the smart dashboard
+		String foo="Thrower " + index + " RPM Current";
+		SmartDashboard.putNumber(foo,rpm);
+		foo="Thrower " + index + " RPM Target";
+        SmartDashboard.putNumber(foo,targetRPM);
+		foo="Thrower " + index + " RPM Reached";
+        SmartDashboard.putBoolean(foo,targetReached);
+
+        return(targetReached);
+    }
 
     /************************************************************************
 	 ************************************************************************/
@@ -79,4 +134,5 @@ public class PrototypeTalon extends SubsystemBase {
         runMotors(0); 
 	}
 }
+
 

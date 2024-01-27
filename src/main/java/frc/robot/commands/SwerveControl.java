@@ -82,7 +82,15 @@ public class SwerveControl extends Command {
 			if (Robot.doAutoCommand()) {
 				Robot.swerveDrive.resetEncoders();
 				Robot.autoMove = true;
-				Robot.autoCommand = new AutoDrive(1, 0, 0, dis);
+				Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
+				Robot.autoCommand.schedule();
+			}
+		}
+
+		if (driveJoystick.isYButton()) {
+			if (Robot.doAutoCommand()) {
+				Robot.autoMove = true;
+				Robot.autoCommand = new AutoTest();
 				Robot.autoCommand.schedule();
 			}
 		}

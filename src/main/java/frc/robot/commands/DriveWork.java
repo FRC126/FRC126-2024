@@ -24,19 +24,21 @@ public class DriveWork extends Command {
     double startAngle;
     double rotate;
     double distance;
-    int itters = 500;
+    int iters;
+    int distanceReached;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public DriveWork(double fb, double lr, double r, double dis) {
+    public DriveWork(double fb, double lr, double r, double dis, int itersIn) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         driveFb = fb;
         driveLr = lr;
         rotate = r;
         distance = dis;
-        
+        iters = itersIn;
+        distanceReached=0;
     }
 
 	/**********************************************************************************
@@ -53,12 +55,32 @@ public class DriveWork extends Command {
 	 **********************************************************************************/
 	
     public void execute() {
-        itters--;
-        if (driveLr == 0) {
-            Robot.swerveDrive.Drive(driveFb, 0, 0, true, startAngle);
-        } else {
-            Robot.swerveDrive.Drive(driveFb, driveLr, 0);            
+        iters--;
+
+        double FB = driveFb,
+               LR = driveLr;
+
+        double tmp = Robot.swerveDrive.getDistanceInches();
+        if (tmp + 6 > distance) {
+            // Slow down as we get close to the distance
+            FB=driveFb*.5;
+            LR=driveLr*.5;
         }
+        if (tmp + 3 > distance) {
+            // Slow down as we get close to the distance
+            FB=driveFb*.25;
+            LR=driveLr*.25;
+        }
+
+        if (tmp + 1 > distance) {
+            // Within one inch of the target
+            Robot.swerveDrive.brakesOn();
+            FB=0;
+            LR=0;
+            distanceReached++;
+        }
+
+        Robot.swerveDrive.Drive(FB, LR, 0);            
      }
 
 	/**********************************************************************************
@@ -69,7 +91,7 @@ public class DriveWork extends Command {
     public boolean isFinished() {
         
         SmartDashboard.putNumber("Distance Inches", Robot.swerveDrive.getDistanceInches());
-        if (itters == 0 || distance <= Robot.swerveDrive.getDistanceInches()) {
+        if (iters == 0 || distanceReached > 5) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
             return true;

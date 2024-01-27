@@ -141,13 +141,6 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	 public void Drive(double y1In, double x1In, double x2In) { 
-        Drive(y1In, x1In, x2In, false, 0);
-	}		
-
-	/************************************************************************
-	 ************************************************************************/
-
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		double speed=0;
 		double reverse=1;
@@ -227,7 +220,14 @@ public class SwerveDrive extends SubsystemBase {
 		wheelSpeed[index] = result;
         return(result);
 	}
-	
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void Drive(double y1In, double x1In, double x2In) { 
+        Drive(y1In, x1In, x2In, false, 0);
+	}		
+
 	/************************************************************************
 	 * Swerve Drive will speed and position calculations
 	 * 
@@ -253,12 +253,14 @@ public class SwerveDrive extends SubsystemBase {
         double currentAngle = Robot.navxMXP.getAngle();
 		double currentAngle2 = Robot.internalData.getGyroAngle();
 
-		// 2 dimensional rotation of the control inputs corrected to make the motion
-		// driver relative instead of robot relative
-		double angle=Math.toRadians(currentAngle); 
-		x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
-        y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
-
+		if (!Robot.isAutoCommand) {
+			// 2 dimensional rotation of the control inputs corrected to make the motion
+			// driver relative instead of robot relative
+			double angle=Math.toRadians(currentAngle); 
+			x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
+			y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
+		}
+		
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
 			SmartDashboard.putNumber("y1 Rotate", y1);

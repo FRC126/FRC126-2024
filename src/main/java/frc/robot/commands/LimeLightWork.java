@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class LimeLightWork extends Command {
     public static int iter=0;
     JoystickWrapper driveJoystick;
-    private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");
 
 	/************************************************************************
 	 ************************************************************************/
@@ -52,7 +51,7 @@ public class LimeLightWork extends Command {
 	 ************************************************************************/
 
     public void execute() {
-
+        //private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");
         //limelightParams.forEach(e -> {
         //    SmartDashboard.putNumber("LL " + e, Robot.limeLight.getEntry(e).getDouble(0));
         //});

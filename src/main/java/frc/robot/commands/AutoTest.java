@@ -19,25 +19,21 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 /**********************************************************************************
  **********************************************************************************/
 
-public class AutoMoveLeft extends SequentialCommandGroup {
-    public AutoMoveLeft(int multiplier) {
+public class AutoTest extends SequentialCommandGroup {
+    public AutoTest() {
         /**********************************************************************************
          **********************************************************************************/
-
-        double angle=20;
-
+        
         addCommands(
-            new DriveDistance(-10*multiplier,75),
-
-            new TurnDegreesBetter(angle+5, 50),
-
-            new DriveDistance(5*multiplier,75),
-
-            new TurnDegreesBetter(((angle) * -1), 50),
-
-            new DriveDistance(4*multiplier, 75),
-            
+            new DriveWork(.2,0,0,12,100),
+            new TurnDegreesBetter(90,100),
+            new DriveWork(.2,0,0,12,100),
+            new TurnDegreesBetter(90,100),
+            new DriveWork(.2,0,0,12,100),
+            new TurnDegreesBetter(90,100),
+            new DriveWork(.2,0,0,12,100),
+            new TurnDegreesBetter(90,100),
             new FinishAuto()
         );
-    }       
+    }
 }

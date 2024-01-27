@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  **********************************************************************************/
 
 public class AutoDrive extends SequentialCommandGroup {
-    public AutoDrive(double forward, double leftRight, double rotate, double distance) {
+    public AutoDrive(double forward, double leftRight, double rotate, double distance, int iters) {
         /**********************************************************************************
          **********************************************************************************/
         
         addCommands(
-            new DriveWork(forward, leftRight, rotate, distance),
+            new DriveWork(forward, leftRight, rotate, distance, iters),
             new FinishAuto()
         );
     }
