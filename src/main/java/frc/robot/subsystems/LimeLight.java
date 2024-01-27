@@ -137,6 +137,7 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public void getCameraData() {
+        /*
         //if ( Robot.trackTarget == Robot.targetTypes.throwingTarget ||
         //Robot.trackTarget == Robot.targetTypes.turretOnly ) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
@@ -152,11 +153,33 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putNumber("FOO Tx", tx);
         SmartDashboard.putNumber("FOO Ty", ty);
         SmartDashboard.putNumber("FOO Ta", ta);
+*/
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTableEntry nttx = table.getEntry("tx");
+        NetworkTableEntry ntty = table.getEntry("ty");
+        NetworkTableEntry ntta = table.getEntry("ta");
+        NetworkTableEntry nttv = table.getEntry("tv");
+        
+        //read values periodically
+        double tx = nttx.getDouble(0.0);
+        double ty = ntty.getDouble(0.0);
+        double ta = ntta.getDouble(0.0);
+        double tv = nttv.getDouble(0.0);
+        
+        //post to smart dashboard periodically
+        SmartDashboard.putNumber("LimelightX", tx);
+        SmartDashboard.putNumber("LimelightY", ty);
+        SmartDashboard.putNumber("LimelightArea", ta);
+        SmartDashboard.putNumber("LimelightValid", tv);
+
         if (tv < 1.0) {
             setllTargetData(false, 0, 0, 0);
         } else {
             setllTargetData(true, ta, tx, ty);
         }        
+
+
+
     }
 
     /************************************************************************
