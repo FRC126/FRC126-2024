@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    //public static TalonFX protoTalonOne = new TalonFX(26);
-    //public static TalonFX protoTalonTwo = new TalonFX(27);
+    public static TalonFX protoTalonOne = new TalonFX(26);
+    public static TalonFX protoTalonTwo = new TalonFX(27);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP

@@ -60,12 +60,8 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
     @Override
     public void periodic() {
-        //if ( Robot.trackTarget == Robot.targetTypes.throwingTarget ||
-        //Robot.trackTarget == Robot.targetTypes.turretOnly ) {
-            getEntry("pipeline").setNumber(0);
-        //} else {
-        //    getEntry("pipeline").setNumber(1);
-        //}
+        getEntry("pipeline").setNumber(0);
+
         double tv = getEntry("tv").getDouble(0);
         double tx = getEntry("tx").getDouble(0);
         double ty = getEntry("ty").getDouble(0);
@@ -137,30 +133,14 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public void getCameraData() {
-        /*
-        //if ( Robot.trackTarget == Robot.targetTypes.throwingTarget ||
-        //Robot.trackTarget == Robot.targetTypes.turretOnly ) {
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
-        //} else {
-        //    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
-        //}
-        double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-        double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-        double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-        double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
 
-        SmartDashboard.putNumber("FOO TV", tv);
-        SmartDashboard.putNumber("FOO Tx", tx);
-        SmartDashboard.putNumber("FOO Ty", ty);
-        SmartDashboard.putNumber("FOO Ta", ta);
-*/
+        //read values periodically
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry nttx = table.getEntry("tx");
         NetworkTableEntry ntty = table.getEntry("ty");
         NetworkTableEntry ntta = table.getEntry("ta");
         NetworkTableEntry nttv = table.getEntry("tv");
         
-        //read values periodically
         double tx = nttx.getDouble(0.0);
         double ty = ntty.getDouble(0.0);
         double ta = ntta.getDouble(0.0);
@@ -177,9 +157,6 @@ public class LimeLight extends SubsystemBase {
         } else {
             setllTargetData(true, ta, tx, ty);
         }        
-
-
-
     }
 
     /************************************************************************
@@ -257,7 +234,7 @@ public class LimeLight extends SubsystemBase {
             missedCount=0;
 
             double foo = Robot.limeLight.getllTargetX();
-            if ( foo < -1.5 || foo > 1.5) {
+            if ( foo < -1.0 || foo > 1.0) {
                 if ( Robot.doAutoCommand() ) {
                     double currentAngle = Robot.navxMXP.getAngle();
                     SmartDashboard.putNumber("shootAngle", currentAngle);

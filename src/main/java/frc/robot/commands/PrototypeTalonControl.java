@@ -22,13 +22,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class PrototypeControl extends Command {
+public class PrototypeTalonControl extends Command {
 	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public PrototypeControl(Prototype subsystem) {
+    public PrototypeTalonControl(PrototypeTalon subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController	, 0.15);
     }
@@ -47,7 +47,7 @@ public class PrototypeControl extends Command {
 	
 	@Override
 	public void execute() {
-        double y1 = operatorJoystick.getLeftStickY();
+        double y1 = operatorJoystick.getRightStickY();
         Robot.prototype.runMotors(y1);
 	}
 
