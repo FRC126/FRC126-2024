@@ -33,7 +33,7 @@ import com.revrobotics.CANSparkMax;
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
-    boolean swerveDebug=true;
+    boolean swerveDebug=false;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -375,7 +375,8 @@ public class SwerveDrive extends SubsystemBase {
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
 		// L1 ratio
-		double gearRatio = 8.14;
+		double gearRatio = SmartDashboard.getNumber("Gear Ratio", 8.14);
+		// double gearRatio = 8.14;
 		// L2 ratio
 		// double gearRatio = 6.75;
 		// L3 ratio

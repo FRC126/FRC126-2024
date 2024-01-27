@@ -15,23 +15,28 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DriveWork extends Command {
     double driveFb;
     double driveLr;
     double startAngle;
-    int iters;
+    double rotate;
+    double distance;
+    int itters = 500;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public DriveWork(double fb, double lr, int iters_in) {
+    public DriveWork(double fb, double lr, double r, double dis) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         driveFb = fb;
         driveLr = lr;
-        iters = iters_in;
+        rotate = r;
+        distance = dis;
+        
     }
 
 	/**********************************************************************************
@@ -47,8 +52,7 @@ public class DriveWork extends Command {
 	 **********************************************************************************/
 	
     public void execute() {
-        iters--;
-
+        itters--;
         if (driveLr == 0) {
             Robot.swerveDrive.Drive(driveFb, 0, 0, true, startAngle);
         } else {
@@ -62,7 +66,8 @@ public class DriveWork extends Command {
 	
     // Make this return true when this Command no longer needs to run execute()
     public boolean isFinished() {
-        if (iters <= 0) {
+        SmartDashboard.putNumber("Distance Inches", Robot.swerveDrive.getDistanceInches());
+        if (itters == 0 || distance <= Robot.swerveDrive.getDistanceInches()) {
             Robot.swerveDrive.Drive(0, 0, 0);
             return true;
         }
