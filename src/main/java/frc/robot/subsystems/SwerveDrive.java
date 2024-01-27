@@ -241,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
 		double[] newWheelSpeed = {0,0,0,0};
 		double rearRightAngle=0, rearLeftAngle=0, frontRightAngle=0, frontLeftAngle=0;
 
-		if (swerveDebug) { 
+		if (!swerveDebug) { 
  		    // Log debug data to the smart dashboard
 			SmartDashboard.putNumber("y1", y1);
 			SmartDashboard.putNumber("x1", x1);

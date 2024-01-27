@@ -14,9 +14,9 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 
 public class DriveWork extends Command {
     double driveFb;
@@ -45,6 +45,7 @@ public class DriveWork extends Command {
 	
     public void initialize() {
         startAngle = Robot.navxMXP.getAngle();
+        Robot.swerveDrive.brakesOn();
     }
 
 	/**********************************************************************************
@@ -66,9 +67,11 @@ public class DriveWork extends Command {
 	
     // Make this return true when this Command no longer needs to run execute()
     public boolean isFinished() {
+        
         SmartDashboard.putNumber("Distance Inches", Robot.swerveDrive.getDistanceInches());
         if (itters == 0 || distance <= Robot.swerveDrive.getDistanceInches()) {
             Robot.swerveDrive.Drive(0, 0, 0);
+            Robot.swerveDrive.brakesOff();
             return true;
         }
         return false;
