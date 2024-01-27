@@ -55,23 +55,24 @@ public class Prototype extends SubsystemBase {
 
 	public void runMotors(double speed) {
 		double motorOneRPM, motorTwoRPM;
-
-		/*
 		///////////////////////////////////////////////////////////////
 		// Falcom Motors
 
 		Robot.protoTalonOne.set(speed);
-		Robot.protoTalonTwo.set(speed);
+		Robot.protoTalonTwo.set(speed*-1*.75);
 
 		StatusSignal OneRPM = Robot.protoTalonOne.getVelocity();
 		StatusSignal TwoRPM = Robot.protoTalonTwo.getVelocity();
 
 		motorOneRPM = OneRPM.getValueAsDouble() * 60;
 		motorTwoRPM = TwoRPM.getValueAsDouble() * 60;
-		*/
+
+					SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
+			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
+
 		///////////////////////////////////////////////////////////////
 		//Spark max/Neo Motors
-
+/*
 		Robot.ProtoMotorOne.set(speed);
 		Robot.ProtoMotorTwo.set(speed);
 
@@ -82,7 +83,7 @@ public class Prototype extends SubsystemBase {
 			SmartDashboard.putNumber("Proto One RPM",motorOneRPM);
 			SmartDashboard.putNumber("Proto Two RPM",motorTwoRPM);
 		}
-		
+*/		
 	}
 
     /************************************************************************
