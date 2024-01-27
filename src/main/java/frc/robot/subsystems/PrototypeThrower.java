@@ -25,7 +25,7 @@ import com.ctre.phoenix6.*;
 /**********************************************************************************
  **********************************************************************************/
 
-public class PrototypeTalon extends SubsystemBase {	
+public class PrototypeThrower extends SubsystemBase {	
 	boolean protoDebug=true;
     static double targetRPM;
 	static double throwerSpeed[] = { 0,0 };
@@ -36,7 +36,7 @@ public class PrototypeTalon extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public PrototypeTalon() {
+	public PrototypeThrower() {
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);

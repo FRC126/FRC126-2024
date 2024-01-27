@@ -52,8 +52,12 @@ public class PrototypeThrowerControl extends Command {
 		if (operatorJoystick.isAButton()) {
 			Robot.prototypeThrower.throwerRPM(1,3800);
 			Robot.prototypeThrower.throwerRPM(2,3800);
-		} else {
+		} else if (y1 > 0) {
             Robot.prototypeThrower.runMotors(y1);
+		} else {
+			// Idle the throwers
+			Robot.prototypeThrower.throwerRPM(1,1500);
+			Robot.prototypeThrower.throwerRPM(2,1500);
 		}
 	}
 
