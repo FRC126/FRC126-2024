@@ -147,7 +147,11 @@ public class LimeLight extends SubsystemBase {
         double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-        
+
+        SmartDashboard.putNumber("FOO TV", tv);
+        SmartDashboard.putNumber("FOO Tx", tx);
+        SmartDashboard.putNumber("FOO Ty", ty);
+        SmartDashboard.putNumber("FOO Ta", ta);
         if (tv < 1.0) {
             setllTargetData(false, 0, 0, 0);
         } else {
