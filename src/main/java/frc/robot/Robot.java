@@ -109,6 +109,13 @@ public class Robot extends TimedRobot {
     public static AHRS navxMXP;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thower Motors
+    public static TalonFX thowerMotorOne = new TalonFX(26);
+    public static TalonFX thowerMotorTwo = new TalonFX(27);
+    public static CANSparkMax angleMotorOne = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax angleMotorTwo = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static double robotTurn = 0;
 	public static double robotDrive = 0;
