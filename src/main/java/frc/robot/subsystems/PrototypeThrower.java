@@ -27,11 +27,13 @@ import com.ctre.phoenix6.*;
 
 public class PrototypeThrower extends SubsystemBase {	
     static double targetRPM;
-	static double throwerSpeed[] = { 0,0 };
+	static double throwerSpeed[] = { 0,0,0 };
     static int delay;
-    static double P = 0.000008;
+    //static double P = 0.000008;
+    static double P = 0.000025;
     static double I = -0.0003;
 	boolean throwerDebug=true;
+	public static double myRPM=3800;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -102,6 +104,8 @@ public class PrototypeThrower extends SubsystemBase {
 			SmartDashboard.putNumber(foo,targetRPM);
 			foo="Thrower " + index + " RPM Reached";
 			SmartDashboard.putBoolean(foo,targetReached);
+			foo="Thrower " + index + " speed";
+			SmartDashboard.putNumber(foo,throwerSpeed[index]);
 		}
 
         return(targetReached);
@@ -113,6 +117,14 @@ public class PrototypeThrower extends SubsystemBase {
 	public void cancel() {
         throwerRPM(1,0); 
         throwerRPM(2,0); 
+	}
+
+	public double getRPM() {
+		return myRPM;
+	}
+
+	public void setRPM(double rpmIn) {
+		myRPM = rpmIn;
 	}
 }
 
