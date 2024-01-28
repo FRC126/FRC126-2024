@@ -26,7 +26,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class PrototypeThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
 	boolean idleThrower=false;
+	boolean runThrower=false;
 	int delay=0;
+	int runCount=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -53,6 +55,7 @@ public class PrototypeThrowerControl extends Command {
 		double speed;
 
 		if ( delay > 0) { delay--; }
+		if ( runCount > 0) { runCount--; }
 
 		SmartDashboard.putNumber("delay", delay);
 
@@ -63,6 +66,22 @@ public class PrototypeThrowerControl extends Command {
 				delay=150;
 			}
 		}	
+		if (operatorJoystick.isYButton()) {
+            // Toggle the thrower idle
+			if (delay <= 0) {
+				if (runThrower) { 
+					runThrower = false; 
+					runCount = 0;
+				} else { 
+					runThrower = true; 
+					runCount = 500;
+				}
+				delay=40;
+			}
+		}
+		if (runCount == 0) {
+			runThrower = false;
+		}
 
 		if (operatorJoystick.getPovLeft()) {
 			if (delay <= 0) {
@@ -76,6 +95,24 @@ public class PrototypeThrowerControl extends Command {
 				delay=25;
 			}	
 		} 	
+		if (operatorJoystick.getPovUp()) {
+			if (delay <= 0) {
+   			    Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()+1000);
+				delay=25;
+			}	
+		} 	
+		if (operatorJoystick.getPovDown()) {
+			if (delay <= 0) {
+                Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()-1000);
+				delay=25;
+			}	
+		} 	
+		if (Robot.prototypeThrower.getRPM() < 0) {
+			Robot.prototypeThrower.setRPM(0);
+		}
+		if (Robot.prototypeThrower.getRPM() > 5700) {
+			Robot.prototypeThrower.setRPM(5700);
+		}
 
 		SmartDashboard.putNumber("thrower myRPM", Robot.prototypeThrower.getRPM());
 		SmartDashboard.putBoolean("idleThrower", idleThrower);
@@ -86,6 +123,8 @@ public class PrototypeThrowerControl extends Command {
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=2000;
+		} else if (runThrower) {
+			speed=Robot.prototypeThrower.getRPM();
 		} else {
 			speed=0;
 		}
