@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class DriveWork extends Command {
-    double driveFb;
-    double driveLr;
+    double driveFb; // front/back
+    double driveLr; // left/right
     double startAngle;
     double rotate;
     double distanceDesired;
     int iters;
-    double distanceReached = 0;
+    double distanceAchieved = 0;
     boolean driveWorkDebug=true;
 
 	/**********************************************************************************
@@ -61,9 +61,9 @@ public class DriveWork extends Command {
         double FB = driveFb,
                LR = driveLr;
         iters--;
-        distanceReached = Robot.swerveDrive.getDistanceInches();
+        distanceAchieved = Robot.swerveDrive.getDistanceInches();
 
-        if (distanceReached + 5 > distanceDesired) {
+        if (distanceAchieved + 5 > distanceDesired) {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
@@ -71,7 +71,7 @@ public class DriveWork extends Command {
         } 
 
         if (driveWorkDebug) { 
-            SmartDashboard.putNumber(Robot.DISTANCE_ACHIEVED, distanceReached);
+            SmartDashboard.putNumber(Robot.DISTANCE_ACHIEVED, distanceAchieved);
         }    
 
         Robot.swerveDrive.Drive(FB, LR, 0);            
@@ -80,11 +80,9 @@ public class DriveWork extends Command {
 	/**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
 	 **********************************************************************************/
-	
-    // Make this return true when this Command no longer needs to run execute()
 	@Override
     public boolean isFinished() {
-        if (iters == 0 || distanceReached >= distanceDesired) {
+        if (iters == 0 || distanceAchieved >= distanceDesired) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
             return true;
