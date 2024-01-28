@@ -76,11 +76,11 @@ public class SwerveControl extends Command {
 		SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
 
 		if (driveJoystick.isAButton()) {
-			double dis = SmartDashboard.getNumber("Distance", 24);
+			double distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
 			if (Robot.doAutoCommand()) {
 				Robot.swerveDrive.resetEncoders();
 				Robot.autoMove = true;
-				Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
+				Robot.autoCommand = new AutoDrive(.3, 0, 0, distanceDesired, 500);
 				Robot.autoCommand.schedule();
 			}
 		}
@@ -123,8 +123,9 @@ public class SwerveControl extends Command {
 // Left Trigger - Slow Mode
 // Right Trigger - Brake Mode
 //
+// Y Button - Execute AutoTest
 // B Button - Reset Gyro to 0, do it when front of robot is facing directly away
-// A Button -  Execute AutoDrive
+// A Button - Execute AutoDrive
 //
 /////////////////////////////////////////////////////////////////////////////////////// from
 /////////////////////////////////////////////////////////////////////////////////////// the
