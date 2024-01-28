@@ -238,6 +238,12 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean(WITHIN_FIVE, false);
 
+        Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
+            BuildConstants.GIT_BRANCH,
+            BuildConstants.BUILD_DATE,
+            BuildConstants.GIT_DATE,
+            BuildConstants.GIT_SHA
+            ));
         Log.print(0, "Robot", "Robot Init Complete");
     }
 
