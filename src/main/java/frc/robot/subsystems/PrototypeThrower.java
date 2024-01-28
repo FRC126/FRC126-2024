@@ -27,7 +27,7 @@ import com.ctre.phoenix6.*;
 
 public class PrototypeThrower extends SubsystemBase {	
     static double targetRPM;
-	static double throwerSpeed[] = { 0,0 };
+	static double throwerSpeed[] = { 0,0,0 };
     static int delay;
     static double P = 0.000008;
     static double I = -0.0003;
