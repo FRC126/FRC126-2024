@@ -229,7 +229,6 @@ public class Robot extends TimedRobot {
         autoFollow.addOption("3 note",2);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
 
-        /*
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
             BuildConstants.GIT_BRANCH,
             BuildConstants.BUILD_DATE,
@@ -237,7 +236,6 @@ public class Robot extends TimedRobot {
             BuildConstants.GIT_SHA
             ));
         Log.print(0, "Robot", "Robot Init Complete");
-        */
     }
 
  	  /************************************************************************
