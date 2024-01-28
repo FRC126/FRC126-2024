@@ -34,6 +34,7 @@ public class LimeLight extends SubsystemBase {
     private int missedCount;
     private int centeredCount;
     public static SequentialCommandGroup throwCommand;
+    boolean limeLightDebug=true;
 
 
 	/************************************************************************
@@ -146,11 +147,13 @@ public class LimeLight extends SubsystemBase {
         double ta = ntta.getDouble(0.0);
         double tv = nttv.getDouble(0.0);
         
-        //post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", tx);
-        SmartDashboard.putNumber("LimelightY", ty);
-        SmartDashboard.putNumber("LimelightArea", ta);
-        SmartDashboard.putNumber("LimelightValid", tv);
+        if (limeLightDebug) {
+            //post to smart dashboard periodically
+            SmartDashboard.putNumber("LimelightX", tx);
+            SmartDashboard.putNumber("LimelightY", ty);
+            SmartDashboard.putNumber("LimelightArea", ta);
+            SmartDashboard.putNumber("LimelightValid", tv);
+        }    
 
         if (tv < 1.0) {
             setllTargetData(false, 0, 0, 0);
@@ -198,10 +201,12 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      private void dashboardData() {
-        SmartDashboard.putBoolean("LL Valid", Robot.limeLight.getllTargetValid());
-        SmartDashboard.putNumber("LL Area", getllTargetArea());
-        SmartDashboard.putNumber("LL X", getllTargetX());
-        SmartDashboard.putBoolean("shootnow", Robot.shootNow);
+        if (limeLightDebug) {
+            //SmartDashboard.putBoolean("LL Valid", Robot.limeLight.getllTargetValid());
+            //SmartDashboard.putNumber("LL Area", getllTargetArea());
+            //SmartDashboard.putNumber("LL X", getllTargetX());
+            //SmartDashboard.putBoolean("shootnow", Robot.shootNow);
+        }    
      }
 
    	/************************************************************************
@@ -236,10 +241,6 @@ public class LimeLight extends SubsystemBase {
             double foo = Robot.limeLight.getllTargetX();
             if ( foo < -1.0 || foo > 1.0) {
                 if ( Robot.doAutoCommand() ) {
-                    double currentAngle = Robot.navxMXP.getAngle();
-                    SmartDashboard.putNumber("shootAngle", currentAngle);
-                    SmartDashboard.putNumber("fooAngle", foo);
-                    SmartDashboard.putNumber("shootAngle", currentAngle);
                     Robot.autoMove=true;
                     Robot.autoCommand=new AutoTurn(foo,500);
                     Robot.autoCommand.schedule();
@@ -250,10 +251,18 @@ public class LimeLight extends SubsystemBase {
             } else {
                 // Target is centered, don't turn the robot
                 centeredCount++;
-                if (centeredCount > 10) {
+                if (centeredCount > 4) {
                     // If we have stayed centered on the target for 10 interations, 
-                    // throw the ball
-                    Robot.shootNow=true;
+                    // drive forwards toward the target
+                    if (getllTargetArea() < .5) {
+                        if ( Robot.doAutoCommand() ) {
+                            Robot.autoMove=true;
+                            Robot.autoCommand=new AutoDrive(.1,0,0,3,50);
+                            Robot.autoCommand.schedule();
+                        }
+                    }    	   
+                    // TODO - set thrower angle based on the distance from the target
+
                 } else {
                    Robot.shootNow=false;
                 }

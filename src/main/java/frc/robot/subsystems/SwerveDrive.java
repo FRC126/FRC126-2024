@@ -33,7 +33,7 @@ import com.revrobotics.CANSparkMax;
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
-    boolean swerveDebug=true;
+    boolean swerveDebug=false;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -141,13 +141,6 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	 public void Drive(double y1In, double x1In, double x2In) { 
-        Drive(y1In, x1In, x2In, false, 0);
-	}		
-
-	/************************************************************************
-	 ************************************************************************/
-
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		double speed=0;
 		double reverse=1;
@@ -227,7 +220,14 @@ public class SwerveDrive extends SubsystemBase {
 		wheelSpeed[index] = result;
         return(result);
 	}
-	
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void Drive(double y1In, double x1In, double x2In) { 
+        Drive(y1In, x1In, x2In, false, 0);
+	}		
+
 	/************************************************************************
 	 * Swerve Drive will speed and position calculations
 	 * 
@@ -241,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
 		double[] newWheelSpeed = {0,0,0,0};
 		double rearRightAngle=0, rearLeftAngle=0, frontRightAngle=0, frontLeftAngle=0;
 
-		if (swerveDebug) { 
+		if (!swerveDebug) { 
  		    // Log debug data to the smart dashboard
 			SmartDashboard.putNumber("y1", y1);
 			SmartDashboard.putNumber("x1", x1);
@@ -251,19 +251,24 @@ public class SwerveDrive extends SubsystemBase {
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = Robot.navxMXP.getAngle();
-		double currentAngle2 = Robot.internalData.getGyroAngle();
 
-		// 2 dimensional rotation of the control inputs corrected to make the motion
-		// driver relative instead of robot relative
-		double angle=Math.toRadians(currentAngle); 
-		x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
-        y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
+		if (!Robot.isAutoCommand) {
+			// 2 dimensional rotation of the control inputs corrected to make the motion
+			// driver relative instead of robot relative
+			double angle=Math.toRadians(currentAngle); 
+			x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
+			y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
+		}
 
-		if (swerveDebug) { 
- 		    // Log debug data to the smart dashboard
-			SmartDashboard.putNumber("y1 Rotate", y1);
-			SmartDashboard.putNumber("x1 Rotate", x1);
-		}	
+		if (driveStraight) {
+			if (currentAngle < straightDegrees-1.5) {
+				x2In=.02;	
+			} else if (currentAngle > straightDegrees+1.5) {
+				x2In=-.02;	
+			} else {
+				x2In=0;
+			}
+		}
 
 		// Get the Encoder information from each swerve drive module
     	StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
@@ -275,17 +280,6 @@ public class SwerveDrive extends SubsystemBase {
 		double frontLeftPos = FLPosSS.getValueAsDouble();
 		double rearRightPos = RRPosSS.getValueAsDouble();
 		double rearLeftPos = RLPosSS.getValueAsDouble();
-
-		if (swerveDebug) { 
- 		    // Log debug data to the smart dashboard
-     		SmartDashboard.putNumber("currentAngle", currentAngle);
-     		SmartDashboard.putNumber("currentAngle2", currentAngle2);
-
-			SmartDashboard.putNumber("frontRightPos", frontRightPos);
-			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
-			SmartDashboard.putNumber("rearRightPos", rearRightPos);
-			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
-		}	
 
 		if (y1 == 0 && x1 == 0 && x2 == 0) {
 			// If not joysticks are moved, just stop the motors, and
@@ -346,7 +340,17 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		if (swerveDebug) { 
-			// Debug data to the smart dashboard.
+ 		    // Log debug data to the smart dashboard
+			SmartDashboard.putNumber("y1 Rotate", y1);
+			SmartDashboard.putNumber("x1 Rotate", x1);
+
+     		SmartDashboard.putNumber("currentAngle", currentAngle);
+
+			SmartDashboard.putNumber("frontRightPos", frontRightPos);
+			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
+			SmartDashboard.putNumber("rearRightPos", rearRightPos);
+			SmartDashboard.putNumber("rearLeftPos", rearLeftPos);
+
 			SmartDashboard.putNumber("frontRightSpeed", newWheelSpeed[frontRight]);
 			SmartDashboard.putNumber("frontLeftSpeed", newWheelSpeed[frontLeft]);
 			SmartDashboard.putNumber("rearRightSpeed", newWheelSpeed[rearRight]);
@@ -375,7 +379,8 @@ public class SwerveDrive extends SubsystemBase {
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
 		// L1 ratio
-		double gearRatio = 8.14;
+		double gearRatio = SmartDashboard.getNumber("Gear Ratio", 8.14);
+		// double gearRatio = 8.14;
 		// L2 ratio
 		// double gearRatio = 6.75;
 		// L3 ratio

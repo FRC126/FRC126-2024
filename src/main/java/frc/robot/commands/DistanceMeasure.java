@@ -7,7 +7,7 @@
 	    \ \_\/\______/ \ \____/
 		 \/_/\/_____/   \/___/
 
-    Team 126 2022 Code       
+    Team 126 2024 Code       
 	Go get em gaels!
 
 ***********************************/
@@ -51,7 +51,7 @@ public class DistanceMeasure extends Command {
 	 * Returns true if command finished
 	 **********************************************************************************/
 
-	 @Override
+	@Override
 	public boolean isFinished() {
 		return false;
 	}
@@ -60,7 +60,7 @@ public class DistanceMeasure extends Command {
 	 * Called once after isFinished returns true
 	 **********************************************************************************/
 
-	 @Override
+	@Override
 	public void end(boolean isInterrupted) {
 	}  
 }

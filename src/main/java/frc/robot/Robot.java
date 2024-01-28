@@ -129,7 +129,8 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
-        
+    public static PrototypeThrower prototypeThrower;    
+
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static SequentialCommandGroup autonomous;
@@ -181,8 +182,8 @@ public class Robot extends TimedRobot {
         log = new Log();
         internalData = new InternalData();
         swerveDrive = new SwerveDrive();
-        //driveTrain = new Drivetrain();
         prototype = new Prototype();
+        prototypeThrower = new PrototypeThrower();
 
         // Not using the limelight right now
         limeLight = new LimeLight();

@@ -20,20 +20,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix6.*;
-
-//import com.ctre.phoenix6.hardware.*;
-//import frc.robot.RobotMap;
-//import com.revrobotics.CANSparkMax;
-//import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkRelativeEncoder;
-//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 /**********************************************************************************
  **********************************************************************************/
 
 public class Prototype extends SubsystemBase {	
-	boolean protoDebug=true;
+	boolean protoDebug=false;
 	
 	/************************************************************************
 	 ************************************************************************/

@@ -28,8 +28,7 @@ public class AutoTurn180 extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new TurnDegreesBetter(180, 250),
-            
+            new TurnDegreesBetter(180, 250),          
             new FinishAuto()
         );
     }       

@@ -46,7 +46,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called just before this Command runs the first time
 	 **********************************************************************************/
 	
-    public void initialize() {
+     @Override
+     public void initialize() {
         targetAngle = Robot.navxMXP.getAngle();
         Robot.swerveDrive.resetEncoders();
         Robot.swerveDrive.brakesOn();
@@ -56,7 +57,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called repeatedly when this Command is scheduled to run
 	 **********************************************************************************/
 	
-    public void execute() {
+     @Override
+     public void execute() {
         double distanceInversion=1;
 
         double currentDistance = Robot.swerveDrive.getDistanceInches();
@@ -94,7 +96,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Make this return true when this Command no longer needs to run execute()
 	 **********************************************************************************/
 	
-    public boolean isFinished() {
+     @Override
+     public boolean isFinished() {
         iters--;
 
         if (reachedCount > 3 || iters <= 0) {
@@ -109,6 +112,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called once after isFinished returns true
 	 **********************************************************************************/
 	
+ 	@Override
     public void end(boolean isInteruppted) {
         Robot.swerveDrive.Drive(0, 0, 0);
         Robot.swerveDrive.brakesOff();

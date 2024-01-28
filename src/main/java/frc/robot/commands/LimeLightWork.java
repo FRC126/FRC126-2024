@@ -18,10 +18,6 @@ import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
 
-import java.util.Arrays;
-import java.util.List;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**********************************************************************************
@@ -30,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class LimeLightWork extends Command {
     public static int iter=0;
     JoystickWrapper driveJoystick;
-    private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");
 
 	/************************************************************************
 	 ************************************************************************/
@@ -44,6 +39,7 @@ public class LimeLightWork extends Command {
      * Called just before this Command runs the first time
 	 ************************************************************************/
 
+    @Override
     public void initialize() {
     }
 
@@ -51,8 +47,9 @@ public class LimeLightWork extends Command {
      * Called repeatedly when this Command is scheduled to run
 	 ************************************************************************/
 
+    @Override
     public void execute() {
-
+        //private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");
         //limelightParams.forEach(e -> {
         //    SmartDashboard.putNumber("LL " + e, Robot.limeLight.getEntry(e).getDouble(0));
         //});
@@ -70,6 +67,7 @@ public class LimeLightWork extends Command {
      * Make this return true when this Command no longer needs to run execute()
 	 ************************************************************************/
 
+    @Override
     public boolean isFinished() {
         return false;
     }
