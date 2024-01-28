@@ -25,7 +25,9 @@ public class AutoDrive extends SequentialCommandGroup {
          **********************************************************************************/
         
         addCommands(
+            new ResetEncoders(),
             new DriveWork(forward, leftRight, rotate, distanceDesired, iters),
+            new ResetEncoders(),
             new FinishAuto()
         );
     }

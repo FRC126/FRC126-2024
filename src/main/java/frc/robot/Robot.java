@@ -236,8 +236,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber(DISTANCE_DESIRED, 24);
         SmartDashboard.putNumber(GEAR_RATIO, 8.14);
 
-        SmartDashboard.putBoolean(WITHIN_ONE, false);
-        SmartDashboard.putBoolean(WITHIN_THREE, false);
         SmartDashboard.putBoolean(WITHIN_FIVE, false);
 
         Log.print(0, "Robot", "Robot Init Complete");

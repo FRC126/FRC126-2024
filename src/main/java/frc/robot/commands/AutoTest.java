@@ -15,6 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -23,16 +24,21 @@ public class AutoTest extends SequentialCommandGroup {
     public AutoTest() {
         /**********************************************************************************
          **********************************************************************************/
-        
-        addCommands(
-            new DriveWork(.2,0,0,12,100),
+        Robot.swerveDrive.resetEncoders();
+         addCommands(
+            new ResetEncoders(),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new ResetEncoders(),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new ResetEncoders(),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new ResetEncoders(),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
+            new ResetEncoders(),
             new FinishAuto()
         );
     }

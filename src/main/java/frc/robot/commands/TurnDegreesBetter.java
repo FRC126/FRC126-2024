@@ -48,7 +48,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         // Save the starting angle for the turn
         //Robot.internalData.resetGyro();
         //startAngle=Robot.internalData.getGyroAngle();
-
+        
         double currentDegrees = Robot.navxMXP.getAngle();      
         startAngle = currentDegrees;
     }

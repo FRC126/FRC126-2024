@@ -47,6 +47,7 @@ public class DriveWork extends Command {
 
     @Override
     public void initialize() {
+        distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, distanceDesired);
         startAngle = Robot.navxMXP.getAngle();
         Robot.swerveDrive.brakesOn();
     }
@@ -83,7 +84,6 @@ public class DriveWork extends Command {
     // Make this return true when this Command no longer needs to run execute()
 	@Override
     public boolean isFinished() {
-        double distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
         if (iters == 0 || distanceReached >= distanceDesired) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();

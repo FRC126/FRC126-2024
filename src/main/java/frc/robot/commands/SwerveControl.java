@@ -78,7 +78,6 @@ public class SwerveControl extends Command {
 		if (driveJoystick.isAButton()) {
 			double distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
 			if (Robot.doAutoCommand()) {
-				Robot.swerveDrive.resetEncoders();
 				Robot.autoMove = true;
 				Robot.autoCommand = new AutoDrive(.3, 0, 0, distanceDesired, 500);
 				Robot.autoCommand.schedule();
