@@ -43,7 +43,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called just before this Command runs the first time
 	 **********************************************************************************/
 	
-    public void initialize() {
+     @Override
+     public void initialize() {
         // Save the starting angle for the turn
         //Robot.internalData.resetGyro();
         //startAngle=Robot.internalData.getGyroAngle();
@@ -56,6 +57,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called repeatedly when this Command is scheduled to run
 	 **********************************************************************************/
 	
+    @Override
     public void execute() {
         double driveRotate=0;
 
@@ -92,6 +94,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Make this return true when this Command no longer needs to run execute()
 	 **********************************************************************************/
 	
+    @Override
     public boolean isFinished() {
         iters--;
 
@@ -109,6 +112,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      * Called once after isFinished returns true
 	 **********************************************************************************/
 	
+    @Override
     public void end(boolean isInteruppted) {
         Robot.swerveDrive.brakesOff();
         Robot.swerveDrive.Drive(0, 0, 0);
