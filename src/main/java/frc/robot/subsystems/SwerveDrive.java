@@ -379,7 +379,7 @@ public class SwerveDrive extends SubsystemBase {
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
 		// L1 ratio
-		double gearRatio = SmartDashboard.getNumber("Gear Ratio", 8.14);
+		double gearRatio = SmartDashboard.getNumber(Robot.GEAR_RATIO, 8.14);
 		// double gearRatio = 8.14;
 		// L2 ratio
 		// double gearRatio = 6.75;
