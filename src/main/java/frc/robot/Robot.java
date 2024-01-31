@@ -98,6 +98,10 @@ public class Robot extends TimedRobot {
     public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
+    // Pickup CAN Motors
+    public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
+    public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Prototype Motors
     public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
