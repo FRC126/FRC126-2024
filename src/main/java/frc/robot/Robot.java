@@ -101,8 +101,19 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    public static TalonFX protoTalonOne = new TalonFX(26);
-    public static TalonFX protoTalonTwo = new TalonFX(27);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thrower Motors
+
+    public static TalonFX throwerTalonOne = new TalonFX(RobotMap.talonMotorOneCanID);
+    public static TalonFX throwerTalonTwo = new TalonFX(RobotMap.talonMotorTwoCanID);
+
+    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -129,7 +140,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
-    public static PrototypeThrower prototypeThrower;    
+    public static Thrower thrower;    
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -183,7 +194,7 @@ public class Robot extends TimedRobot {
         internalData = new InternalData();
         swerveDrive = new SwerveDrive();
         prototype = new Prototype();
-        prototypeThrower = new PrototypeThrower();
+        thrower = new Thrower();
 
         // Not using the limelight right now
         limeLight = new LimeLight();

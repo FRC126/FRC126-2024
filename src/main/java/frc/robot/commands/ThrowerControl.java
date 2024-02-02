@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class PrototypeThrowerControl extends Command {
+public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
 	boolean idleThrower=false;
 	boolean runThrower=false;
@@ -33,7 +33,7 @@ public class PrototypeThrowerControl extends Command {
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public PrototypeThrowerControl(PrototypeThrower subsystem) {
+    public ThrowerControl(Thrower subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController	, 0.15);
     }
@@ -85,54 +85,54 @@ public class PrototypeThrowerControl extends Command {
 
 		if (operatorJoystick.getPovLeft()) {
 			if (delay <= 0) {
-   			    Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()-100);
+   			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
 				delay=25;
 			}	
 		} 	
 		if (operatorJoystick.getPovRight()) {
 			if (delay <= 0) {
-                Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()+100);
+                Robot.thrower.setRPM(Robot.thrower.getRPM()+100);
 				delay=25;
 			}	
 		} 	
 		if (operatorJoystick.getPovUp()) {
 			if (delay <= 0) {
-   			    Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()+1000);
+   			    Robot.thrower.setRPM(Robot.thrower.getRPM()+1000);
 				delay=25;
 			}	
 		} 	
 		if (operatorJoystick.getPovDown()) {
 			if (delay <= 0) {
-                Robot.prototypeThrower.setRPM(Robot.prototypeThrower.getRPM()-1000);
+                Robot.thrower.setRPM(Robot.thrower.getRPM()-1000);
 				delay=25;
 			}	
 		} 	
-		if (Robot.prototypeThrower.getRPM() < 0) {
-			Robot.prototypeThrower.setRPM(0);
+		if (Robot.thrower.getRPM() < 0) {
+			Robot.thrower.setRPM(0);
 		}
-		if (Robot.prototypeThrower.getRPM() > 5700) {
-			Robot.prototypeThrower.setRPM(5700);
+		if (Robot.thrower.getRPM() > 5700) {
+			Robot.thrower.setRPM(5700);
 		}
 
-		SmartDashboard.putNumber("thrower myRPM", Robot.prototypeThrower.getRPM());
+		SmartDashboard.putNumber("thrower myRPM", Robot.thrower.getRPM());
 		SmartDashboard.putBoolean("idleThrower", idleThrower);
 
 		if (operatorJoystick.isAButton()) {
 			// Run the motors at 3800 rpm
-			speed=Robot.prototypeThrower.getRPM();
+			speed=Robot.thrower.getRPM();
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=2000;
 		} else if (runThrower) {
-			speed=Robot.prototypeThrower.getRPM();
+			speed=Robot.thrower.getRPM();
 		} else {
 			speed=0;
 		}
 
      	SmartDashboard.putNumber("speed", speed);
 
-		Robot.prototypeThrower.throwerRPM(1,speed);
-		Robot.prototypeThrower.throwerRPM(2,speed);
+		Robot.thrower.throwerRPM(1,speed);
+		Robot.thrower.throwerRPM(2,speed);
 	}
 
 }
