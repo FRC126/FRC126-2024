@@ -124,31 +124,14 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public double getMeanRPM() {
-    	frontLeftRPM = Math.abs(Robot.swerveFrontRightDriveRelativeEncoder.getVelocity());
-    	frontRightRPM = Math.abs(Robot.swerveFrontLeftDriveRelativeEncoder.getVelocity());
-    	rearLeftRPM = Math.abs(Robot.swerveRearLeftDriveRelativeEncoder.getVelocity());
-    	rearRightRPM = Math.abs(Robot.swerveRearRightDriveRelativeEncoder.getVelocity());
-
-		if (swerveDebug) { 
-			SmartDashboard.putNumber("front RPM",(frontLeftRPM+frontRightRPM)/2);
-			SmartDashboard.putNumber("rear RPM",(rearLeftRPM+rearRightRPM)/2);
-		}		
-
-		return((frontLeftRPM + frontRightRPM + rearLeftRPM + rearRightRPM) / 4);
-	}
-
-	/************************************************************************
-	 ************************************************************************/
-
 	 public double CalcTurnSpeed(double targetAngle, double currentAngle) {
 		double speed=0;
 		double reverse=1;
 		boolean skip=false;
 
 		// If it's quicker, turn the other way
-	    if (targetAngle < -0.3 && currentAngle > .3) { reverse=-1; }
-        if (targetAngle > .3 && currentAngle < -.3) { reverse=-1; }
+	    if (targetAngle < -0.25 && currentAngle > .25) { reverse=-1; }
+        if (targetAngle > .25 && currentAngle < -.25) { reverse=-1; }
 
 		// Skip the fast move if we are just crossing the boundry
         if (targetAngle < -0.45 && currentAngle > .45) { skip=true; }
@@ -183,14 +166,14 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.02;
+    	double softStartIncrement=0.01;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
 			if (input > 0.25) { input=0.25; }
 		} else {
 			// Cap at 50 percent for now
-			if (input > 0.45) { input=0.45; }
+			//if (input > 0.5) { input=0.5; }
 		}
 
         if (input > 0) {
@@ -224,8 +207,8 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	 public void Drive(double y1In, double x1In, double x2In) { 
-        Drive(y1In, x1In, x2In, false, 0);
+	 public void Drive(double forwardBackIn, double leftRightIn, double rotateIn) { 
+        Drive(forwardBackIn, leftRightIn, rotateIn, false, 0);
 	}		
 
 	/************************************************************************
@@ -234,18 +217,18 @@ public class SwerveDrive extends SubsystemBase {
 	 * https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 	 ************************************************************************/
 
-	public void Drive(double y1In, double x1In, double x2In, boolean driveStraight, double straightDegrees) { 
-		double y1 = y1In;
-        double x1 = x1In;
-		double x2 = x2In;
+	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn, boolean driveStraight, double straightDegrees) { 
+		double forwardBack = forwardBackIn;
+        double leftRight = leftRightIn;
+		double rotate = rotateIn;
 		double[] newWheelSpeed = {0,0,0,0};
 		double rearRightAngle=0, rearLeftAngle=0, frontRightAngle=0, frontLeftAngle=0;
 
 		if (!swerveDebug) { 
  		    // Log debug data to the smart dashboard
-			SmartDashboard.putNumber("y1", y1);
-			SmartDashboard.putNumber("x1", x1);
-			SmartDashboard.putNumber("x2", x2);
+			SmartDashboard.putNumber("forwardBack", forwardBack);
+			SmartDashboard.putNumber("leftRight", leftRight);
+			SmartDashboard.putNumber("rotate", rotate);
 		}	
 
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
@@ -256,17 +239,18 @@ public class SwerveDrive extends SubsystemBase {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
 			// driver relative instead of robot relative
 			double angle=Math.toRadians(currentAngle); 
-			x1 = ( x1In * Math.cos(angle) - (y1In * Math.sin(angle)));
-			y1 = ( y1In * Math.cos(angle) + (x1In * Math.sin(angle)));
+			leftRight = ( leftRightIn * Math.cos(angle) - (forwardBackIn * Math.sin(angle)));
+			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
 		}
 
 		if (driveStraight) {
-			if (currentAngle < straightDegrees-1.5) {
-				x2In=.02;	
-			} else if (currentAngle > straightDegrees+1.5) {
-				x2In=-.02;	
+			// If driveStraight is true, keep the robot facing the right direction
+			if (currentAngle < straightDegrees-1.0) {
+				rotate=.02;	
+			} else if (currentAngle > straightDegrees+1.0) {
+				rotate=-.02;	
 			} else {
-				x2In=0;
+				rotate=0;
 			}
 		}
 
@@ -281,7 +265,7 @@ public class SwerveDrive extends SubsystemBase {
 		double rearRightPos = RRPosSS.getValueAsDouble();
 		double rearLeftPos = RLPosSS.getValueAsDouble();
 
-		if (y1 == 0 && x1 == 0 && x2 == 0) {
+		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
 			// If not joysticks are moved, just stop the motors, and
 			// zero the speed offsets
             Robot.swerveFrontRightDriveMotor.set(0);
@@ -303,12 +287,12 @@ public class SwerveDrive extends SubsystemBase {
 			// the joystick input
 
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
-			y1 *= -1;
+			forwardBack *= -1;
 		
-			double a = x1 - x2 * (LENGTH / r);
-			double b = x1 + x2 * (LENGTH / r);
-			double c = y1 - x2 * (WIDTH / r);
-			double d = y1 + x2 * (WIDTH / r);
+			double a = leftRight - rotate * (LENGTH / r);
+			double b = leftRight + rotate * (LENGTH / r);
+			double c = forwardBack - rotate * (WIDTH / r);
+			double d = forwardBack + rotate * (WIDTH / r);
 		
 			newWheelSpeed[rearRight] = Math.sqrt ((a * a) + (d * d));
 			newWheelSpeed[rearLeft] = Math.sqrt ((a * a) + (c * c));
@@ -341,8 +325,8 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
-			SmartDashboard.putNumber("y1 Rotate", y1);
-			SmartDashboard.putNumber("x1 Rotate", x1);
+			SmartDashboard.putNumber("forwardBack", forwardBack);
+			SmartDashboard.putNumber("leftRight", leftRight);
 
      		SmartDashboard.putNumber("currentAngle", currentAngle);
 

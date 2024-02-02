@@ -59,22 +59,35 @@ public class SwerveControl extends Command {
 			return;
 		}
 
-		double y1 = driveJoystick.getLeftStickY();
-		double x1 = driveJoystick.getLeftStickX();
-		double x2 = driveJoystick.getRightStickX();
+		// Get the driver inputs from the driver xbox controller
+		double forwardBack = driveJoystick.getLeftStickY();
+		double leftRight = driveJoystick.getLeftStickX();
 
+		// Soften the rotate to 60%
+		double rotate = driveJoystick.getRightStickX() * .6;
+
+		// left Trigger enables slow mode
 		if (driveJoystick.getLeftTrigger() > 0) {
 			Robot.swerveDrive.driveSlow(true);
 		} else {
 			Robot.swerveDrive.driveSlow(false);
 		}
 
+		// Apply motor braking when the right trigger is pressed
+		if (driveJoystick.getRightTrigger() > .5) {
+			Robot.swerveDrive.brakesOn();
+		} else {
+			if (driveStraight == true) {
+			    driveStraight = false;
+				Robot.swerveDrive.brakesOff();
+			}	
+		}			
+
+		// reset the gyro to zero fix any drift
 		if (driveJoystick.isBButton()) {
 			Robot.swerveDrive.resetYaw();
 		}
 		
-		SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
-
 		if (driveJoystick.isAButton()) {
 			double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
@@ -93,22 +106,23 @@ public class SwerveControl extends Command {
 			}
 		}
 
-		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .5) {
-			Robot.swerveDrive.brakesOn();
+		if (rotate == 0) {
+			// if no rotate input specified, we are going to drive straight
 			if (driveStraight != true) {
-                // Get the current angle from the Navx 
+				// If driveStraight isn't set, save the current angle
 				straightDegrees = Robot.navxMXP.getAngle();      
 				driveStraight = true;
+			} else {
+				// clear drive straight since we are rotating
+				driveStraight = false;
 			}
-		} else {
-			if (driveStraight == true) {
-			    driveStraight = false;
-				Robot.swerveDrive.brakesOff();
-			}	
-		}			
 
-		Robot.swerveDrive.Drive(y1, x1, x2, driveStraight, straightDegrees);
+		}
+
+
+		SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
+
+		Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, driveStraight, straightDegrees);
 
 	}
 }
