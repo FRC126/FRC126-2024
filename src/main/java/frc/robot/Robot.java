@@ -106,8 +106,22 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    public static TalonFX protoTalonOne = new TalonFX(26);
-    public static TalonFX protoTalonTwo = new TalonFX(27);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thrower Motors
+
+    public static TalonFX throwerTalonOne = new TalonFX(RobotMap.talonMotorOneCanID);
+    public static TalonFX throwerTalonTwo = new TalonFX(RobotMap.talonMotorTwoCanID);
+
+    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static DigitalInput throwerBottomLimit;
+    public static DigitalInput throwerTopLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -134,7 +148,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
-    public static PrototypeThrower prototypeThrower;    
+    public static Thrower thrower;    
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -186,13 +200,22 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
-        swerveDrive = new SwerveDrive();
-        prototype = new Prototype();
-        prototypeThrower = new PrototypeThrower();
 
-        // Not using the limelight right now
+        // Swerve drive subsystem 
+        swerveDrive = new SwerveDrive();
+
+        // Thrower Devices
+        thrower = new Thrower();
+        throwerBottomLimit = new DigitalInput(8);
+        throwerTopLimit = new DigitalInput(7);
+
+        // Prototype SubSystem
+        prototype = new Prototype();
+
+        // Limelight subsystem
         limeLight = new LimeLight();
        
+        // Navx Subsystem
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {
@@ -206,8 +229,7 @@ public class Robot extends TimedRobot {
         // create the lidarlite class on DIO 5
         distance = new LidarLite(new DigitalInput(5));
 
-        // Start the camera 
-        // server for the drive camera
+        // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
 		//server = CameraServer.getServer();
         //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);

@@ -15,6 +15,7 @@
 package frc.robot;
 
 public class RobotMap {
+	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
 	public static int lStickX = 0; // Left stick X
 	public static int lStickY = 1; // Left stick Y
@@ -33,19 +34,27 @@ public class RobotMap {
 	public static int xboxLStick = 9; // Left stick button
 	public static int xboxRStick = 10; // Right stick button
 
-	// Pneumatic Controller Can ID
-	public static int PneumaticID = 2;
-	
+	///////////////////////////////////////////////////////////////////////////
    	// Driver Motor Can ID's
 	public static int leftDriveMotorCanID1 = 12;
 	public static int leftDriveMotorCanID2 = 13;
 	public static int rightDriveMotorCanID1 = 10;
 	public static int rightDriveMotorCanID2 = 11;
 
-  	// Driver Motor Can ID's
+	///////////////////////////////////////////////////////////////////////////
+  	// Proto Motor Can ID's
 	public static int protoMotorOneCanID = 22;
 	public static int protoMotorTwoCanID = 23;
 
+	///////////////////////////////////////////////////////////////////////////
+ 	// Thrower Motor Can ID's
+	public static int talonMotorOneCanID = 26;
+	public static int talonMotorTwoCanID = 27;
+	public static int throwerTriggerMotorCanID = 28;
+	public static int throwerClimberMotorLeftCanID = 24;
+	public static int throwerClimberMotorRightCanID = 25;
+
+	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
     public static int swerveFrontRightDriveCanID = 40;
     public static int swerveFrontRightTurnCanID = 41;
@@ -56,6 +65,7 @@ public class RobotMap {
     public static int swerveRearLeftDriveCanID = 44;
     public static int swerveRearLeftTurnCanID = 45;
 
+	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Encoders
 	public static int SwerveFrontRightEncoderCanID = 30;
 	public static int SwerveFrontLeftEncoderCanID = 31;
@@ -84,6 +94,7 @@ public class RobotMap {
 			right2Inversion    = 1;
 		}
 	}
+}
 
 /************************************************************************************************************
 Controls
@@ -97,4 +108,4 @@ Auto Commands:
 X Button: Cancel any running auto routines
 
 */
-}
+

@@ -22,8 +22,9 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
-	boolean driveStraight = false;
-	double straightDegrees = 0;
+	public static boolean driveStraight = false;
+	public static double straightDegrees = 0;
+	int delay=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -47,6 +48,8 @@ public class SwerveControl extends Command {
 
 	@Override
 	public void execute() {
+		if (--delay < 0) { delay=0; }
+
 		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
@@ -57,22 +60,32 @@ public class SwerveControl extends Command {
 			return;
 		}
 
-		double y1 = driveJoystick.getLeftStickY();
-		double x1 = driveJoystick.getLeftStickX();
-		double x2 = driveJoystick.getRightStickX();
+		// Get the driver inputs from the driver xbox controller
+		double forwardBack = driveJoystick.getLeftStickY();
+		double leftRight = driveJoystick.getLeftStickX();
 
+		// Soften the rotate to 60%
+		double rotate = driveJoystick.getRightStickX() * .6;
+
+		// left Trigger enables slow mode
 		if (driveJoystick.getLeftTrigger() > 0) {
 			Robot.swerveDrive.driveSlow(true);
 		} else {
 			Robot.swerveDrive.driveSlow(false);
 		}
 
+		// Apply motor braking when the right trigger is pressed
+		if (driveJoystick.getRightTrigger() > .5) {
+			Robot.swerveDrive.brakesOn();
+		} else {
+			Robot.swerveDrive.brakesOff();
+		}			
+
+		// reset the gyro to zero fix any drift
 		if (driveJoystick.isBButton()) {
 			Robot.swerveDrive.resetYaw();
 		}
 		
-		SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
-
 		if (driveJoystick.isAButton()) {
 			double distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
 			if (Robot.doAutoCommand()) {
@@ -82,6 +95,13 @@ public class SwerveControl extends Command {
 			}
 		}
 
+    	if (driveJoystick.isStartButton()) {
+			if (delay == 0) {
+			    Robot.swerveDrive.toggleFullSpeed();
+				delay=100;
+			}	
+		}	
+
 		if (driveJoystick.isYButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
@@ -90,22 +110,24 @@ public class SwerveControl extends Command {
 			}
 		}
 
-		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .5) {
-			Robot.swerveDrive.brakesOn();
+		if (rotate == 0 && (forwardBack != 0 || leftRight != 0)) {
+			// if no rotate input specified, we are going to drive straight
 			if (driveStraight != true) {
-                // Get the current angle from the Navx 
+				// If driveStraight isn't set, save the current angle
 				straightDegrees = Robot.navxMXP.getAngle();      
 				driveStraight = true;
-			}
-		} else {
-			if (driveStraight == true) {
-			    driveStraight = false;
-				Robot.swerveDrive.brakesOff();
 			}	
-		}			
+		} else {
+				// clear drive straight since we are rotating
+				driveStraight = false;
+		}
 
-		Robot.swerveDrive.Drive(y1, x1, x2, driveStraight, straightDegrees);
+		SmartDashboard.putBoolean("driveStraight", driveStraight);
+		SmartDashboard.putNumber("straightDegrees", straightDegrees);
+
+		//SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
+
+		Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, driveStraight, straightDegrees);
 
 	}
 }
