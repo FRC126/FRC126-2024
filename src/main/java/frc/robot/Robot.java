@@ -371,6 +371,22 @@ public class Robot extends TimedRobot {
     /************************************************************************
 	 ************************************************************************/
 
+    static public boolean checkAutoCommand() {
+		if (Robot.internalData.isAuto()) {
+            return true;
+        }
+		
+		if (Robot.isAutoCommand) {
+			return true;
+		}	
+
+        return false;
+    }    
+
+
+    /************************************************************************
+	 ************************************************************************/
+
     static public boolean doAutoCommand() {
 		if (Robot.internalData.isAuto()) {
             return false;

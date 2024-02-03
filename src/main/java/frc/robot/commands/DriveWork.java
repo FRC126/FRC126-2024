@@ -83,7 +83,7 @@ public class DriveWork extends Command {
 	@Override
     public boolean isFinished() {
         distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
-        if (iters == 0 || distanceAchieved >= distanceDesired) {
+        if (iters == 0 || distanceAchieved >= distanceDesired || !Robot.checkAutoCommand()) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
             return true;

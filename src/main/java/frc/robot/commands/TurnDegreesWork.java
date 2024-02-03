@@ -98,7 +98,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 3 || iters <= 0) {
+        if (targetReached > 3 || iters <= 0 || !Robot.checkAutoCommand()) {
             // We have reached our target angle or run out of time to do so.
             Robot.swerveDrive.brakesOff();
             Robot.swerveDrive.Drive(0, 0, 0);
