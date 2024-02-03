@@ -114,6 +114,31 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+    public double moveThrower(double speed) {
+        double position=0;
+
+		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
+		double right = Robot.throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
+
+		position=left+right/2.0;
+
+		if ( speed < 0 && Robot.throwerTopLimit.get() == true ) {
+			speed=0;
+		}		
+		if ( speed > 0 && Robot.throwerTopLimit.get() == true ) {
+			speed=0;
+		}		
+
+		Robot.throwerClimberMotorLeft.set(speed);
+		Robot.throwerClimberMotorRight.set(speed*-1);
+
+        return(position);
+	}
+
+
+    /************************************************************************
+	 ************************************************************************/
+
 	public void cancel() {
         throwerRPM(1,0); 
         throwerRPM(2,0); 

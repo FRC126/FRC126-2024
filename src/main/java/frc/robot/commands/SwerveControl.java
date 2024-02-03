@@ -26,6 +26,7 @@ public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
 	boolean driveStraight = false;
 	double straightDegrees = 0;
+	int delay=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -49,6 +50,8 @@ public class SwerveControl extends Command {
 
 	@Override
 	public void execute() {
+		if (--delay < 0) { delay=0; }
+
 		// X buttom aborts any running auto commands
 		if (driveJoystick.isXButton()) {
 			Robot.stopAutoCommand();
@@ -91,12 +94,18 @@ public class SwerveControl extends Command {
 		if (driveJoystick.isAButton()) {
 			double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
-				Robot.swerveDrive.resetEncoders();
 				Robot.autoMove = true;
 				Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
 				Robot.autoCommand.schedule();
 			}
 		}
+
+    	if (driveJoystick.isStartButton()) {
+			if (delay == 0) {
+			    Robot.swerveDrive.toggleFullSpeed();
+				delay=100;
+			}	
+		}	
 
 		if (driveJoystick.isYButton()) {
 			if (Robot.doAutoCommand()) {

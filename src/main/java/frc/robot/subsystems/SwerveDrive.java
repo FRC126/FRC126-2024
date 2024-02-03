@@ -34,6 +34,7 @@ import com.revrobotics.CANSparkMax;
 
 public class SwerveDrive extends SubsystemBase {
     boolean swerveDebug=false;
+	boolean enableFullSpeed=false;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -81,6 +82,17 @@ public class SwerveDrive extends SubsystemBase {
 	public void periodic() {}
 
     /************************************************************************
+	 ************************************************************************/
+
+	public void toggleFullSpeed() {
+		if (enableFullSpeed) { 
+			enableFullSpeed=false;
+		} else {
+			enableFullSpeed=true;
+		}	
+	} 
+
+	/************************************************************************
 	 ************************************************************************/
 
 	public void resetYaw() {
@@ -173,7 +185,7 @@ public class SwerveDrive extends SubsystemBase {
 			if (input > 0.25) { input=0.25; }
 		} else {
 			// Cap at 50 percent for now
-			//if (input > 0.5) { input=0.5; }
+			if (input > 0.5 && !enableFullSpeed ) { input=0.5; }
 		}
 
         if (input > 0) {

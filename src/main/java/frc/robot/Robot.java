@@ -115,6 +115,9 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
+    public static DigitalInput throwerBottomLimit;
+    public static DigitalInput throwerTopLimit;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
@@ -192,13 +195,22 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
-        swerveDrive = new SwerveDrive();
-        prototype = new Prototype();
-        thrower = new Thrower();
 
-        // Not using the limelight right now
+        // Swerve drive subsystem 
+        swerveDrive = new SwerveDrive();
+
+        // Thrower Devices
+        thrower = new Thrower();
+        throwerBottomLimit = new DigitalInput(8);
+        throwerTopLimit = new DigitalInput(7);
+
+        // Prototype SubSystem
+        prototype = new Prototype();
+
+        // Limelight subsystem
         limeLight = new LimeLight();
        
+        // Navx Subsystem
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {
@@ -212,8 +224,7 @@ public class Robot extends TimedRobot {
         // create the lidarlite class on DIO 5
         distance = new LidarLite(new DigitalInput(5));
 
-        // Start the camera 
-        // server for the drive camera
+        // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
 		//server = CameraServer.getServer();
         //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
