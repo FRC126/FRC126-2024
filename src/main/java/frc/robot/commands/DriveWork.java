@@ -19,26 +19,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class DriveWork extends Command {
-    double driveFb; // front/back
-    double driveLr; // left/right
+    double driveFb;
+    double driveLr;
     double startAngle;
     double rotate;
-    double distanceDesired;
+    double distance;
     int iters;
-    double distanceAchieved = 0;
+    static int distanceReached=0;
     boolean driveWorkDebug=true;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public DriveWork(double fb, double lr, double r, double distanceDesired, int itersIn) {
+    public DriveWork(double fb, double lr, double r, double dis, int itersIn) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        this.driveFb = fb;
-        this.driveLr = lr;
-        this.rotate = r;
-        this.distanceDesired = distanceDesired;
-        this.iters = itersIn;
+        driveFb = fb;
+        driveLr = lr;
+        rotate = r;
+        distance = dis;
+        iters = itersIn;
+        distanceReached=0;
+        Robot.swerveDrive.resetEncoders();
     }
 
 	/**********************************************************************************
@@ -50,6 +52,8 @@ public class DriveWork extends Command {
         startAngle = Robot.navxMXP.getAngle();
         Robot.swerveDrive.brakesOn();
         Robot.swerveDrive.resetEncoders();
+        distanceReached=0;
+
     }    
 
 	/**********************************************************************************
@@ -61,17 +65,37 @@ public class DriveWork extends Command {
         double FB = driveFb,
                LR = driveLr;
         iters--;
-        distanceAchieved = Robot.swerveDrive.getDistanceInches();
 
-        if (distanceAchieved + 5 > distanceDesired) {
+        double tmp = Robot.swerveDrive.getDistanceInches();
+
+        if (tmp + 6 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
-            SmartDashboard.putBoolean(Robot.WITHIN_FIVE, true);
         } 
+        if (tmp + 4 > distance) {
+            // Slow down as we get close to the distance
+            FB=driveFb*.25;
+            LR=driveLr*.25;
+        } 
+        if (tmp + .5 > distance) {
+            // Within one inch of the target
+            Robot.swerveDrive.brakesOn();
+            FB=0;
+            LR=0;
+            distanceReached++;
+        }
+
+        if (FB > 0 && FB < 0.08) { FB=.08; }
+        if (FB < 0 && FB > -0.08) { FB=-.08; }
+        if (LR > 0 && LR < 0.08) { LR=.08; }
+        if (LR < 0 && LR > -0.08) { LR=-.08; }
+
 
         if (driveWorkDebug) { 
-            SmartDashboard.putNumber(Robot.DISTANCE_ACHIEVED, distanceAchieved);
+            SmartDashboard.putNumber("Distance Inches", tmp);
+            SmartDashboard.putNumber("Distance", distance);
+            SmartDashboard.putNumber("Distance Reached", distanceReached);
         }    
 
         Robot.swerveDrive.Drive(FB, LR, 0);            
@@ -80,10 +104,11 @@ public class DriveWork extends Command {
 	/**********************************************************************************
      * Make this return true when this Command no longer needs to run execute()
 	 **********************************************************************************/
+	
+    // Make this return true when this Command no longer needs to run execute()
 	@Override
-    public boolean isFinished() {
-        distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
-        if (iters == 0 || distanceAchieved >= distanceDesired || !Robot.checkAutoCommand()) {
+    public boolean isFinished() {       
+        if (iters == 0 || distanceReached > 3 || !Robot.checkAutoCommand()) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
             return true;

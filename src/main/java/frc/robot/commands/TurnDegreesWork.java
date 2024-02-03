@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**********************************************************************************
  **********************************************************************************/
 
- public class TurnDegreesBetter extends Command {
+ public class TurnDegreesWork extends Command {
     double startAngle;
     double targetDegrees;
     int iters;
@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	/**********************************************************************************
 	 **********************************************************************************/
 	
-    public TurnDegreesBetter(double degrees_in, int iters_in ) {
+    public TurnDegreesWork(double degrees_in, int iters_in ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         targetDegrees = degrees_in;
@@ -48,7 +48,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         // Save the starting angle for the turn
         //Robot.internalData.resetGyro();
         //startAngle=Robot.internalData.getGyroAngle();
-        
+
         double currentDegrees = Robot.navxMXP.getAngle();      
         startAngle = currentDegrees;
     }
@@ -66,8 +66,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
-        double tmp = diff / 150;
-        tmp = Robot.boundSpeed(tmp, .25, .02 );
+        double tmp = diff / 250;
+        tmp = Robot.boundSpeed(tmp, .25, .01 );
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle

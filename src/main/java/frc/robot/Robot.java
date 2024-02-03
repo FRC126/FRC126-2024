@@ -51,11 +51,6 @@ import com.ctre.phoenix6.hardware.*;
  * directory.
  */
 public class Robot extends TimedRobot {
-    // How many inches we want to drive
-    public static final String DISTANCE_DESIRED = "Distance Desired";
-    public static final String DISTANCE_ACHIEVED = "Distance Achieved";
-    public static final String GEAR_RATIO = "Gear Ratio";
-    public static final String WITHIN_FIVE = "Within Five";
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -167,7 +162,7 @@ public class Robot extends TimedRobot {
     public static boolean autoMove=false;
 
     //public static enum targetHeights{LowTarget,HighTarget};
-    public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo};
+    public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo, TargetThree, TargetFour};
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
 
@@ -255,10 +250,6 @@ public class Robot extends TimedRobot {
         autoFollow.addOption("2 note",1);
         autoFollow.addOption("3 note",2);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
-        SmartDashboard.putNumber(DISTANCE_DESIRED, 24);
-        SmartDashboard.putNumber(GEAR_RATIO, 8.14);
-
-        SmartDashboard.putBoolean(WITHIN_FIVE, false);
 
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
             BuildConstants.GIT_BRANCH,
