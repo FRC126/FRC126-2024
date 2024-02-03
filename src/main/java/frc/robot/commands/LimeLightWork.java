@@ -56,6 +56,10 @@ public class LimeLightWork extends Command {
         
         if (driveJoystick.getPovUp()) {
             Robot.targetType = Robot.targetTypes.TargetSeek;
+        } else if (driveJoystick.getPovLeft()) {
+            Robot.targetType = Robot.targetTypes.TargetOne;
+        } else if (driveJoystick.getPovRight()) {
+            Robot.targetType = Robot.targetTypes.TargetTwo;
         } else {
             Robot.targetType = Robot.targetTypes.NoTarget;
         }     

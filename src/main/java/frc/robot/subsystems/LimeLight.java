@@ -139,8 +139,16 @@ public class LimeLight extends SubsystemBase {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
         // Set Pipeline
-        table.getEntry("pipeline").setValue(0);
-
+        if (Robot.targetType != Robot.targetTypes.TargetSeek) {
+            table.getEntry("pipeline").setValue(0);
+        }    
+        if (Robot.targetType != Robot.targetTypes.TargetOne) {
+            table.getEntry("pipeline").setValue(1);
+        }    
+        if (Robot.targetType != Robot.targetTypes.TargetTwo) {
+            table.getEntry("pipeline").setValue(2);
+        }    
+        
         NetworkTableEntry nttx = table.getEntry("tx");
         NetworkTableEntry ntty = table.getEntry("ty");
         NetworkTableEntry ntta = table.getEntry("ta");
@@ -218,7 +226,7 @@ public class LimeLight extends SubsystemBase {
 
     public void trackTarget() {
 
-        if (Robot.targetType != Robot.targetTypes.TargetSeek) {
+        if (Robot.targetType == Robot.targetTypes.NoTarget) {
             // If we are not seeking a target, then reset all target 
             // data and return
             Robot.shootNow=false;
@@ -255,17 +263,18 @@ public class LimeLight extends SubsystemBase {
             } else {
                 // Target is centered, don't turn the robot
                 centeredCount++;
-                if (centeredCount > 4) {
+                if (centeredCount > 2) {
                     // If we have stayed centered on the target for 10 interations, 
                     // drive forwards toward the target
-                    if (getllTargetArea() < .5) {
+                    if (getllTargetArea() < .25 && 1 == 2 ) {
                         if ( Robot.doAutoCommand() ) {
                             Robot.autoMove=true;
-                            Robot.autoCommand=new AutoDrive(.1,0,0,3,50);
+                            Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
                             Robot.autoCommand.schedule();
                         }
                     }    	   
                     // TODO - set thrower angle based on the distance from the target
+                    Robot.shootNow=true;
 
                 } else {
                    Robot.shootNow=false;

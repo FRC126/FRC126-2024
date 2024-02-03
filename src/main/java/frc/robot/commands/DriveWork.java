@@ -25,7 +25,7 @@ public class DriveWork extends Command {
     double rotate;
     double distance;
     int iters;
-    int distanceReached;
+    static int distanceReached=0;
     boolean driveWorkDebug=true;
 
 	/**********************************************************************************
@@ -40,6 +40,7 @@ public class DriveWork extends Command {
         distance = dis;
         iters = itersIn;
         distanceReached=0;
+        Robot.swerveDrive.resetEncoders();
     }
 
 	/**********************************************************************************
@@ -51,6 +52,8 @@ public class DriveWork extends Command {
         startAngle = Robot.navxMXP.getAngle();
         Robot.swerveDrive.brakesOn();
         Robot.swerveDrive.resetEncoders();
+        distanceReached=0;
+
     }    
 
 	/**********************************************************************************
@@ -69,11 +72,13 @@ public class DriveWork extends Command {
             // Slow down as we get close to the distance
             FB=driveFb*.5;
             LR=driveLr*.5;
-        } else if (tmp + 3 > distance) {
+        } 
+        if (tmp + 4 > distance) {
             // Slow down as we get close to the distance
             FB=driveFb*.25;
             LR=driveLr*.25;
-        } else if (tmp + 1 > distance) {
+        } 
+        if (tmp + .5 > distance) {
             // Within one inch of the target
             Robot.swerveDrive.brakesOn();
             FB=0;
@@ -81,8 +86,15 @@ public class DriveWork extends Command {
             distanceReached++;
         }
 
+        if (FB > 0 && FB < 0.08) { FB=.08; }
+        if (FB < 0 && FB > -0.08) { FB=-.08; }
+        if (LR > 0 && LR < 0.08) { LR=.08; }
+        if (LR < 0 && LR > -0.08) { LR=-.08; }
+
+
         if (driveWorkDebug) { 
             SmartDashboard.putNumber("Distance Inches", tmp);
+            SmartDashboard.putNumber("Distance", distance);
             SmartDashboard.putNumber("Distance Reached", distanceReached);
         }    
 
@@ -97,7 +109,7 @@ public class DriveWork extends Command {
 	@Override
     public boolean isFinished() {
         
-        if (iters == 0 || distanceReached > 5) {
+        if (iters == 0 || distanceReached > 3) {
             Robot.swerveDrive.Drive(0, 0, 0);
             Robot.swerveDrive.brakesOff();
             return true;

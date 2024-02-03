@@ -162,7 +162,7 @@ public class Robot extends TimedRobot {
     public static boolean autoMove=false;
 
     //public static enum targetHeights{LowTarget,HighTarget};
-    public static enum targetTypes{NoTarget,TargetSeek};
+    public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo};
     public static enum allianceColor{Red,Blue};
 	public static double voltageThreshold = 10.0;
 
