@@ -22,55 +22,76 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.math.MathUtil;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 public class PickupControl extends Command {
 	JoystickWrapper operatorJoystick;
-	boolean idleThrower=false;
-	boolean runThrower=false;
-	int delay=0;
-	int runCount=0;
+	boolean idleThrower = false;
+	boolean runThrower = false;
+	int delay = 0;
+	int runCount = 0;
+	boolean runPickup = false;
+	private static int DUMMY = 0;
+	boolean increasing = true;
 
 	/**********************************************************************************
 	 **********************************************************************************/
-	
-    public PickupControl(Pickup subsystem) {
+
+	public PickupControl(Pickup subsystem) {
 		addRequirements(subsystem);
-		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController	, 0.15);
-    }
+		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
+	}
 
 	/**********************************************************************************
 	 **********************************************************************************/
-	
+
 	@Override
 	public void initialize() {
 		Robot.stopAutoCommand();
-	}    
+	}
 
 	/**********************************************************************************
 	 * Called every tick (20ms)
 	 **********************************************************************************/
-	
+
 	@Override
 	public void execute() {
+
+		if (operatorJoystick.isXButton()) {
+			increasing = !increasing;
+		}
+		int value = DUMMY;
+		if (increasing) {
+			value = value + 1;
+		} else {
+			value = value - 1;
+		}
+		DUMMY = value;
+		SmartDashboard.putNumber("DUMMY", DUMMY);
+
+	}
+
+	public void execute2() {
 		double speed;
 
-		if ( delay > 0) { delay--; }
-		if ( runCount > 0) { runCount--; }
+		if (delay > 0) {
+			delay--;
+		}
+		if (runCount > 0) {
+			runCount--;
+		}
 
 		SmartDashboard.putNumber("delay", delay);
 
-		}	
 		if (operatorJoystick.isXButton()) {
-            // Toggle the pickup idle
+			// Toggle the pickup idle
 			if (delay <= 0) {
-				if (runPickup) { 
-					runPickup = false; 
+				if (runPickup) {
+					runPickup = false;
 					runCount = 0;
-				} else { 
-					runPickup = true; 
+				} else {
+					runPickup = true;
 					runCount = 500;
 				}
-				delay=40;
+				delay = 40;
 			}
 		}
 		if (runCount == 0) {
@@ -89,21 +110,20 @@ public class PickupControl extends Command {
 
 		if (operatorJoystick.isAButton()) {
 			// Run the motors at 3800 rpm
-			speed=Robot.prototypeThrower.getRPM();
+			speed = Robot.prototypeThrower.getRPM();
 		} else if (idleThrower) {
 			// Idle the throwers
-			speed=2000;
+			speed = 2000;
 		} else if (runThrower) {
-			speed=Robot.prototypeThrower.getRPM();
+			speed = Robot.prototypeThrower.getRPM();
 		} else {
-			speed=0;
+			speed = 0;
 		}
 
-     	SmartDashboard.putNumber("speed", speed);
+		SmartDashboard.putNumber("speed", speed);
 
-		Robot.prototypeThrower.throwerRPM(1,speed);
-		Robot.prototypeThrower.throwerRPM(2,speed);
+		Robot.prototypeThrower.throwerRPM(1, speed);
+		Robot.prototypeThrower.throwerRPM(2, speed);
 	}
 
 }
-

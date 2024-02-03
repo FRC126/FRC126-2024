@@ -34,6 +34,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.commands.PickupControl;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -139,6 +140,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
     public static PrototypeThrower prototypeThrower;    
+    public static Pickup pickup;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -193,6 +195,8 @@ public class Robot extends TimedRobot {
         swerveDrive = new SwerveDrive();
         prototype = new Prototype();
         prototypeThrower = new PrototypeThrower();
+        pickup = new Pickup();
+
 
         // Not using the limelight right now
         limeLight = new LimeLight();
