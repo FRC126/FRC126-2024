@@ -24,8 +24,8 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
-	boolean driveStraight = false;
-	double straightDegrees = 0;
+	public static boolean driveStraight = false;
+	public static double straightDegrees = 0;
 	int delay=0;
 
 	/**********************************************************************************
@@ -80,10 +80,7 @@ public class SwerveControl extends Command {
 		if (driveJoystick.getRightTrigger() > .5) {
 			Robot.swerveDrive.brakesOn();
 		} else {
-			if (driveStraight == true) {
-			    driveStraight = false;
-				Robot.swerveDrive.brakesOff();
-			}	
+			Robot.swerveDrive.brakesOff();
 		}			
 
 		// reset the gyro to zero fix any drift
@@ -115,21 +112,22 @@ public class SwerveControl extends Command {
 			}
 		}
 
-		if (rotate == 0) {
+		if (rotate == 0 && (forwardBack != 0 || leftRight != 0)) {
 			// if no rotate input specified, we are going to drive straight
 			if (driveStraight != true) {
 				// If driveStraight isn't set, save the current angle
 				straightDegrees = Robot.navxMXP.getAngle();      
 				driveStraight = true;
-			} else {
+			}	
+		} else {
 				// clear drive straight since we are rotating
 				driveStraight = false;
-			}
-
 		}
 
+		SmartDashboard.putBoolean("driveStraight", driveStraight);
+		SmartDashboard.putNumber("straightDegrees", straightDegrees);
 
-		SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
+		//SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
 
 		Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, driveStraight, straightDegrees);
 
