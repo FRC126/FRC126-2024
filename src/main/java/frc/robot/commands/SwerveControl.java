@@ -16,8 +16,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.JoystickWrapper;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveDrive;
@@ -89,10 +87,10 @@ public class SwerveControl extends Command {
 		}
 		
 		if (driveJoystick.isAButton()) {
-			double dis = SmartDashboard.getNumber("Distance", 24);
+			double distanceDesired = SmartDashboard.getNumber(Robot.DISTANCE_DESIRED, 24);
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
-				Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
+				Robot.autoCommand = new AutoDrive(.3, 0, 0, distanceDesired, 500);
 				Robot.autoCommand.schedule();
 			}
 		}
@@ -144,10 +142,8 @@ public class SwerveControl extends Command {
 // Left Trigger - Slow Mode
 // Right Trigger - Brake Mode
 //
-// B Button - Reset Gyro to 0, do it when front of robot is facing directly away
-// A Button -  Execute AutoDrive
+// Y Button - Execute AutoTest
+// B Button - Reset Gyro to 0, do it when front of robot is facing directly away from the driver
+// A Button - Execute AutoDrive
 //
-/////////////////////////////////////////////////////////////////////////////////////// from
-/////////////////////////////////////////////////////////////////////////////////////// the
-/////////////////////////////////////////////////////////////////////////////////////// driver
-//
+/////////////////////////////////////////////////////////////////////////////////////// 
