@@ -35,7 +35,7 @@ public class LimeLight extends SubsystemBase {
     private int centeredCount;
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
-
+    NetworkTable table;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -55,24 +55,15 @@ public class LimeLight extends SubsystemBase {
         missedCount=0;
 
         centeredCount=0;
+
+        table = NetworkTableInstance.getDefault().getTable("limelight");
+
     }
 
 	/************************************************************************
 	 ************************************************************************/
     @Override
     public void periodic() {
-        getEntry("pipeline").setNumber(0);
-
-        double tv = getEntry("tv").getDouble(0);
-        double tx = getEntry("tx").getDouble(0);
-        double ty = getEntry("ty").getDouble(0);
-        double ta = getEntry("ta").getDouble(0);
-        
-        if (tv < 1.0) {
-            setllTargetData(false, 0, 0, 0);
-        } else {
-            setllTargetData(true, ta, tx, ty);
-        }        
     }
 
 	/************************************************************************
@@ -134,21 +125,28 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public void getCameraData() {
-
-        //read values periodically
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        double pipeline=0;
 
         // Set Pipeline
-        if (Robot.targetType != Robot.targetTypes.TargetSeek) {
-            table.getEntry("pipeline").setValue(0);
-        }    
-        if (Robot.targetType != Robot.targetTypes.TargetOne) {
-            table.getEntry("pipeline").setValue(1);
-        }    
-        if (Robot.targetType != Robot.targetTypes.TargetTwo) {
-            table.getEntry("pipeline").setValue(2);
-        }    
-        
+        switch (Robot.targetType) {
+            case TargetSeek:
+                pipeline=0;
+                break;
+            case TargetOne:
+                pipeline=1;
+                break;
+            case TargetTwo:
+                pipeline=2;
+                break;
+        }
+
+        setPipeline(pipeline);
+        setCameraMode(false);
+        setLED(false);
+
+        int foo=getPipeline();
+        SmartDashboard.putNumber("Limelight Pipe", foo);
+
         NetworkTableEntry nttx = table.getEntry("tx");
         NetworkTableEntry ntty = table.getEntry("ty");
         NetworkTableEntry ntta = table.getEntry("ta");
@@ -177,6 +175,25 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+    public void setPipeline(double pipelineIn) {
+        double pipeline=pipelineIn;
+        if (pipeline>9) { pipeline=9; }
+        if (pipeline<0) { pipeline=0; }
+        table.getEntry("pipeline").setValue(pipeline);
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
+    public int getPipeline() {
+        NetworkTableEntry pipeline = table.getEntry("pipeline");
+        int pipe = (int)pipeline.getDouble(0.0);
+        return(pipe);
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
     public void setLED(boolean onOff) {
         getEntry("ledMode").setNumber(onOff ? 1 : 0);
     }
@@ -191,13 +208,6 @@ public class LimeLight extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-    public void setPipeline(int pipeline) {
-        getEntry("pipeline").setNumber(pipeline);
-    }
-
-	/************************************************************************
-	 ************************************************************************/
-
     public void setStreamMode(int mode) {
         getEntry("stream").setNumber(mode);
     }
@@ -206,20 +216,8 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
     public NetworkTableEntry getEntry(String entry) {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry(entry);   
+        return table.getEntry(entry);   
     }
-
-   	/************************************************************************
-	 ************************************************************************/
-
-     private void dashboardData() {
-        if (limeLightDebug) {
-            //SmartDashboard.putBoolean("LL Valid", Robot.limeLight.getllTargetValid());
-            //SmartDashboard.putNumber("LL Area", getllTargetArea());
-            //SmartDashboard.putNumber("LL X", getllTargetX());
-            //SmartDashboard.putBoolean("shootnow", Robot.shootNow);
-        }    
-     }
 
    	/************************************************************************
 	 ************************************************************************/
@@ -237,7 +235,6 @@ public class LimeLight extends SubsystemBase {
             missedCount=0;
             centeredCount=0;
            
-            dashboardData();
 		 	return;
         }
         
@@ -266,13 +263,13 @@ public class LimeLight extends SubsystemBase {
                 if (centeredCount > 2) {
                     // If we have stayed centered on the target for 10 interations, 
                     // drive forwards toward the target
-                    if (getllTargetArea() < .25 && 1 == 2 ) {
-                        if ( Robot.doAutoCommand() ) {
-                            Robot.autoMove=true;
-                            Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
-                            Robot.autoCommand.schedule();
-                        }
-                    }    	   
+                    //if (getllTargetArea() < .25 ) {
+                    //    if ( Robot.doAutoCommand() ) {
+                    //        Robot.autoMove=true;
+                    //        Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
+                    //        Robot.autoCommand.schedule();
+                    //    }
+                    //}    	   
                     // TODO - set thrower angle based on the distance from the target
                     Robot.shootNow=true;
 
@@ -293,8 +290,6 @@ public class LimeLight extends SubsystemBase {
                 centeredCount=0;
             }    
         }
-
-        dashboardData();
     }          
 
 }
