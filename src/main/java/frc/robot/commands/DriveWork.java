@@ -49,7 +49,8 @@ public class DriveWork extends Command {
     public void initialize() {
         startAngle = Robot.navxMXP.getAngle();
         Robot.swerveDrive.brakesOn();
-    }
+        Robot.swerveDrive.resetEncoders();
+    }    
 
 	/**********************************************************************************
      * Called repeatedly when this Command is scheduled to run

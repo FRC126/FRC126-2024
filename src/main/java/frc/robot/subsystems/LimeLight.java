@@ -137,6 +137,10 @@ public class LimeLight extends SubsystemBase {
 
         //read values periodically
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+        // Set Pipeline
+        table.getEntry("pipeline").setValue(0);
+
         NetworkTableEntry nttx = table.getEntry("tx");
         NetworkTableEntry ntty = table.getEntry("ty");
         NetworkTableEntry ntta = table.getEntry("ta");

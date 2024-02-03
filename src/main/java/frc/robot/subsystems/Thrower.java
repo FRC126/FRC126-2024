@@ -25,7 +25,7 @@ import com.ctre.phoenix6.*;
 /**********************************************************************************
  **********************************************************************************/
 
-public class PrototypeThrower extends SubsystemBase {	
+public class Thrower extends SubsystemBase {	
     static double targetRPM;
 	static double throwerSpeed[] = { 0,0,0 };
     static int delay;
@@ -38,11 +38,11 @@ public class PrototypeThrower extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public PrototypeThrower() {
+	public Thrower() {
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PrototypeThrowerControl(this));
+		setDefaultCommand(new ThrowerControl(this));
 	}
 
 	/************************************************************************
@@ -60,10 +60,10 @@ public class PrototypeThrower extends SubsystemBase {
 		StatusSignal RPM;
 
 		if (index == 1) {
-		    RPM = Robot.protoTalonOne.getVelocity();
+		    RPM = Robot.throwerTalonOne.getVelocity();
  			rpm = RPM.getValueAsDouble() * 60;
 		} else {
-		    RPM = Robot.protoTalonTwo.getVelocity();
+		    RPM = Robot.throwerTalonTwo.getVelocity();
 			rpm = RPM.getValueAsDouble() * 60 * -1;
 		}	
 
@@ -91,9 +91,9 @@ public class PrototypeThrower extends SubsystemBase {
 
         // Set the speed on the Thrower Motors
 		if (index == 1) {
-			Robot.protoTalonOne.set(throwerSpeed[index]);
+			Robot.throwerTalonOne.set(throwerSpeed[index]);
 		} else {
-  			Robot.protoTalonTwo.set(throwerSpeed[index] * -1);
+  			Robot.throwerTalonTwo.set(throwerSpeed[index] * -1);
 		}	
 
 		if (throwerDebug) {
@@ -110,6 +110,31 @@ public class PrototypeThrower extends SubsystemBase {
 
         return(targetReached);
     }
+
+    /************************************************************************
+	 ************************************************************************/
+
+    public double moveThrower(double speed) {
+        double position=0;
+
+		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
+		double right = Robot.throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
+
+		position=left+right/2.0;
+
+		if ( speed < 0 && Robot.throwerTopLimit.get() == true ) {
+			speed=0;
+		}		
+		if ( speed > 0 && Robot.throwerTopLimit.get() == true ) {
+			speed=0;
+		}		
+
+		Robot.throwerClimberMotorLeft.set(speed);
+		Robot.throwerClimberMotorRight.set(speed*-1);
+
+        return(position);
+	}
+
 
     /************************************************************************
 	 ************************************************************************/

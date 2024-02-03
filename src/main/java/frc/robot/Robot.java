@@ -20,12 +20,9 @@ package frc.robot;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
-import edu.wpi.first.cscore.VideoSource;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -34,7 +31,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 
-import frc.robot.commands.PickupControl;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -111,8 +107,22 @@ public class Robot extends TimedRobot {
     public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
     public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
 
-    public static TalonFX protoTalonOne = new TalonFX(26);
-    public static TalonFX protoTalonTwo = new TalonFX(27);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thrower Motors
+
+    public static TalonFX throwerTalonOne = new TalonFX(RobotMap.talonMotorOneCanID);
+    public static TalonFX throwerTalonTwo = new TalonFX(RobotMap.talonMotorTwoCanID);
+
+    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
+
+    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
+    public static DigitalInput throwerBottomLimit;
+    public static DigitalInput throwerTopLimit;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -139,7 +149,7 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
-    public static PrototypeThrower prototypeThrower;    
+    public static Thrower thrower;    
     public static Pickup pickup;
 
 	public static UsbCamera driveCam;
@@ -192,15 +202,24 @@ public class Robot extends TimedRobot {
         oi = new Controllers();
         log = new Log();
         internalData = new InternalData();
+
+        // Swerve drive subsystem 
         swerveDrive = new SwerveDrive();
+
+        // Thrower Devices
+        thrower = new Thrower();
+        throwerBottomLimit = new DigitalInput(8);
+        throwerTopLimit = new DigitalInput(7);
+
+        // Prototype SubSystem
         prototype = new Prototype();
-        prototypeThrower = new PrototypeThrower();
         pickup = new Pickup();
 
 
-        // Not using the limelight right now
+        // Limelight subsystem
         limeLight = new LimeLight();
        
+        // Navx Subsystem
         try {
             navxMXP = new AHRS(SPI.Port.kMXP);
         } catch (RuntimeException ex) {
@@ -214,8 +233,7 @@ public class Robot extends TimedRobot {
         // create the lidarlite class on DIO 5
         distance = new LidarLite(new DigitalInput(5));
 
-        // Start the camera 
-        // server for the drive camera
+        // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
 		//server = CameraServer.getServer();
         //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
