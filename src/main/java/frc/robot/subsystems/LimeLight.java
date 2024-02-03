@@ -129,15 +129,12 @@ public class LimeLight extends SubsystemBase {
 
         // Set Pipeline
         switch (Robot.targetType) {
-            case TargetSeek:
-                pipeline=0;
-                break;
-            case TargetOne:
-                pipeline=1;
-                break;
-            case TargetTwo:
-                pipeline=2;
-                break;
+            case NoTarget: { return; }
+            case TargetSeek: { pipeline=0; break; }
+            case TargetOne: { pipeline=1; break; }
+            case TargetTwo: { pipeline=2; break; }
+            case TargetThree: { pipeline=3; break; }
+            case TargetFour: { pipeline=4; break; }
         }
 
         setPipeline(pipeline);
