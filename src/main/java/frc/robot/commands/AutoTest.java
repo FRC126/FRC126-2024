@@ -25,18 +25,22 @@ public class AutoTest extends SequentialCommandGroup {
     public AutoTest() {
         /**********************************************************************************
          **********************************************************************************/
-        
+       
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
             new DriveWork(.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
-            new DriveWork(.2,0,0,12,100),
+            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
+            new DriveWork(0.2,0,0,12,100),
             new TurnDegreesBetter(90,100),
+            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
             new FinishAuto()
         );
     }
