@@ -26,14 +26,13 @@ import com.ctre.phoenix6.*;
  **********************************************************************************/
 
 public class Thrower extends SubsystemBase {	
-    static double targetRPM;
 	static double throwerSpeed[] = { 0,0,0 };
+	static int targetReached[] = { 0,0,0 } ;
     static int delay;
-    //static double P = 0.000008;
     static double P = 0.000025;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=3800;
+	public static double myRPM=3500;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -54,8 +53,7 @@ public class Thrower extends SubsystemBase {
      * Run Main Thower Wheels by target RPM
 	 ************************************************************************/
 
-    public boolean throwerRPM(int index, double targetRPM) {
-        boolean targetReached=false;
+    public int throwerRPM(int index, double targetRPM) {
 		double ix, error=0.0, rpm;
 		StatusSignal RPM;
 
@@ -86,7 +84,9 @@ public class Thrower extends SubsystemBase {
 		}
 
 		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
-			targetReached=true;
+			targetReached[index]++;
+		} else {
+			targetReached[index]=0;
 		}
 
         // Set the speed on the Thrower Motors
@@ -103,12 +103,12 @@ public class Thrower extends SubsystemBase {
 			foo="Thrower " + index + " RPM Target";
 			SmartDashboard.putNumber(foo,targetRPM);
 			foo="Thrower " + index + " RPM Reached";
-			SmartDashboard.putBoolean(foo,targetReached);
+			SmartDashboard.putNumber(foo,targetReached[index]);
 			foo="Thrower " + index + " speed";
 			SmartDashboard.putNumber(foo,throwerSpeed[index]);
 		}
 
-        return(targetReached);
+        return(targetReached[index]);
     }
 
     /************************************************************************
@@ -135,18 +135,40 @@ public class Thrower extends SubsystemBase {
         return(position);
 	}
 
+    /************************************************************************
+	 ************************************************************************/
 
+    public void throwerTriggerOn() {
+		Robot.throwerTriggerMotor.set(.3);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+    public void throwerTriggerOff() {
+		Robot.throwerTriggerMotor.set(0);
+	}
+	
+	
     /************************************************************************
 	 ************************************************************************/
 
 	public void cancel() {
         throwerRPM(1,0); 
         throwerRPM(2,0); 
+		throwerTriggerOff();
+		moveThrower(0);
 	}
+
+    /************************************************************************
+	 ************************************************************************/
 
 	public double getRPM() {
 		return myRPM;
 	}
+
+    /************************************************************************
+	 ************************************************************************/
 
 	public void setRPM(double rpmIn) {
 		myRPM = rpmIn;

@@ -49,11 +49,6 @@ public class LimeLightWork extends Command {
 
     @Override
     public void execute() {
-        //private List<String> limelightParams = Arrays.asList("tv", "tx", "ty", "ta", "ts", "tl", "tshort", "tlong", "thor", "tvert", "getpipe", "camtran");
-        //limelightParams.forEach(e -> {
-        //    SmartDashboard.putNumber("LL " + e, Robot.limeLight.getEntry(e).getDouble(0));
-        //});
-        
         if (driveJoystick.getPovUp()) {
             Robot.targetType = Robot.targetTypes.TargetSeek;
         } else if (driveJoystick.getPovLeft()) {
