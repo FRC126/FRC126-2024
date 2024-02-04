@@ -72,6 +72,9 @@ public class RobotMap {
 	public static int SwerveRearRightEncoderCanID = 33;
 	public static int SwerveRearLeftEncoderCanID = 32;
 
+	//Pickup Motor Can ID's
+	public static int PickupCanID = 50;
+
 	//Motor Inversions
     public static int left1Inversion;
 	public static int left2Inversion;
@@ -95,6 +98,7 @@ public class RobotMap {
 		}
 	}
 }
+
 
 /************************************************************************************************************
 Controls
