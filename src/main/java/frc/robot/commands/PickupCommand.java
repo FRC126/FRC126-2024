@@ -52,10 +52,17 @@ public class PickupCommand extends Command {
 
 	@Override
 	public void execute() {
-		SmartDashboard.putBoolean("x pressed",operatorJoystick.isXButton());		
+		SmartDashboard.putBoolean("x pressed",operatorJoystick.isXButton());
+		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING,0.0);
+		if (pickMotorSpeed > 1.0)	{
+				pickMotorSpeed = 1.0;
+		} else if (pickMotorSpeed < -1.0) {
+				pickMotorSpeed = -1.0;
+		}
+
 		
 		if (operatorJoystick.isXButton()) {
-			this.pickupSubsystem.runMotor(.1);
+			this.pickupSubsystem.runMotor(pickMotorSpeed);
 		} else {
 			this.pickupSubsystem.runMotor(0);
 
