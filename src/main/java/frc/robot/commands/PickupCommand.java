@@ -26,8 +26,6 @@ public class PickupCommand extends Command {
 	JoystickWrapper operatorJoystick;
 	PickupSubsystem pickupSubsystem;
 
-
-
 	/**********************************************************************************
 	 **********************************************************************************/
 
@@ -36,7 +34,6 @@ public class PickupCommand extends Command {
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
 		this.pickupSubsystem = subsystem;
 	}
-
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -52,21 +49,19 @@ public class PickupCommand extends Command {
 
 	@Override
 	public void execute() {
-		SmartDashboard.putBoolean("x pressed",operatorJoystick.isXButton());
-		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING,0.0);
-		if (pickMotorSpeed > 1.0)	{
-				pickMotorSpeed = 1.0;
+		SmartDashboard.putBoolean("x pressed", operatorJoystick.isXButton());
+		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 0.0);
+		if (pickMotorSpeed > 1.0) {
+			pickMotorSpeed = 1.0;
 		} else if (pickMotorSpeed < -1.0) {
-				pickMotorSpeed = -1.0;
+			pickMotorSpeed = -1.0;
 		}
 
-		
 		if (operatorJoystick.isXButton()) {
 			this.pickupSubsystem.runMotor(pickMotorSpeed);
 		} else {
 			this.pickupSubsystem.runMotor(0);
 
 		}
-
 	}
 }
