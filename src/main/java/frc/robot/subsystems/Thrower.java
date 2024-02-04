@@ -47,7 +47,10 @@ public class Thrower extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public void periodic() {}
+	public void periodic() {
+        boolean here=Robot.photoSensor.get();
+		SmartDashboard.putBoolean("photoSensor",here);
+	}
 
 	/************************************************************************
      * Run Main Thower Wheels by target RPM

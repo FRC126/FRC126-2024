@@ -17,47 +17,51 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase{
-  private final AddressableLED m_led = new AddressableLED(9);
-  // LED's go into PWM #9
-  private final AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(60);
-  private int m_rainbowFirstPixelHue;
+  AddressableLED m_led;
+  AddressableLEDBuffer m_ledBuffer;
+  int m_rainbowFirstPixelHue;
+
+  public LEDSubsystem() {
+      m_led = new AddressableLED(9);
+
+      // LED's go into PWM #9
+      m_ledBuffer = new AddressableLEDBuffer(150);
+
+      m_led.setLength(m_ledBuffer.getLength());
+  
+      // Set the data
+      m_led.setData(m_ledBuffer);
+      m_led.start();
+  }  
 
   @Override
   public void periodic() {
-    if (DriverStation.isEnabled()) {
-      //Alliance ally = DriverStation.getAlliance();
-      Alliance ally = Alliance.Red;
-      if (ally.equals(Alliance.Red)) {
-        m_ledBuffer.setRGB(0,255,0,0);
-        // If alliance = red, set strips to red
-      }
-      else if (ally.equals(Alliance.Blue)) { // should only have pipelines 0 & 1
-        m_ledBuffer.setRGB(0,0,0,255);
-        // If allience = blue, set strips blue
-      }
-    }
+      boolean foo=true;
+      
+      if (foo) {
+          rainbow();
+      } else { 
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+              // Sets the specified LED to the RGB values for red
+              m_ledBuffer.setRGB(i, 255, 0, 0);
+          }
+          m_led.setData(m_ledBuffer);
+      }    
   }
-
-
-  @Override
-  public void simulationPeriodic() {
-
-  }
-
-
 
   public void rainbow() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-      m_ledBuffer.setHSV(i, hue, 255, 128);
-    }
-    m_rainbowFirstPixelHue += 3;
-    m_rainbowFirstPixelHue %= 180;
-    m_led.setData(m_ledBuffer);
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+          m_ledBuffer.setHSV(i, hue, 255, 128);
+      }
+      m_rainbowFirstPixelHue += 3;
+      m_rainbowFirstPixelHue %= 180;
+      m_led.setData(m_ledBuffer);
   }
 }
