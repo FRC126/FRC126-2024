@@ -118,6 +118,7 @@ public class Robot extends TimedRobot {
 
     public static DigitalInput throwerBottomLimit;
     public static DigitalInput throwerTopLimit;
+    public static DigitalInput photoSensor;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -146,6 +147,7 @@ public class Robot extends TimedRobot {
     public static Prototype prototype;
     public static Thrower thrower;    
     public static PickupSubsystem pickup;
+    public static LEDSubsystem Leds;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -207,11 +209,14 @@ public class Robot extends TimedRobot {
         thrower = new Thrower();
         throwerBottomLimit = new DigitalInput(8);
         throwerTopLimit = new DigitalInput(7);
+        photoSensor = new DigitalInput(2);
 
         // Prototype SubSystem
         prototype = new Prototype();
         pickup = new PickupSubsystem();
 
+        // LED Subsystem
+        Leds = new LEDSubsystem();
 
         // Limelight subsystem
         limeLight = new LimeLight();
