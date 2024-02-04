@@ -36,6 +36,7 @@ public class LimeLight extends SubsystemBase {
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
     NetworkTable table;
+    double pipelineLast=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -137,8 +138,14 @@ public class LimeLight extends SubsystemBase {
             case TargetFour: { pipeline=4; break; }
         }
 
+        if (pipeline != pipelineLast) {
+            validCount=0;
+            setllTargetData(false, 0, 0, 0);
+        }
+        pipelineLast=pipeline;
+
         setPipeline(pipeline);
-        setCameraMode(false);
+        setCameraMode(true);
         setLED(false);
 
         int foo=getPipeline();
@@ -162,7 +169,7 @@ public class LimeLight extends SubsystemBase {
             SmartDashboard.putNumber("LimelightValid", tv);
         }    
 
-        if (tv < 1.0) {
+        if (tv < .9) {
             setllTargetData(false, 0, 0, 0);
         } else {
             setllTargetData(true, ta, tx, ty);
@@ -244,38 +251,40 @@ public class LimeLight extends SubsystemBase {
             validCount++;
             missedCount=0;
 
-            double foo = Robot.limeLight.getllTargetX();
-            if ( foo < -1.0 || foo > 1.0) {
-                if ( Robot.doAutoCommand() ) {
-                    Robot.autoMove=true;
-                    Robot.autoCommand=new AutoTurn(foo,500);
-                    Robot.autoCommand.schedule();
-                }	   
-                
-                centeredCount=0;
-                Robot.shootNow=false;
-            } else {
-                // Target is centered, don't turn the robot
-                centeredCount++;
-                if (centeredCount > 2) {
-                    // If we have stayed centered on the target for 10 interations, 
-                    // drive forwards toward the target
-                    //if (getllTargetArea() < .25 ) {
-                    //    if ( Robot.doAutoCommand() ) {
-                    //        Robot.autoMove=true;
-                    //        Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
-                    //        Robot.autoCommand.schedule();
-                    //    }
-                    //}    	   
-                    // TODO - set thrower angle based on the distance from the target
-                    Robot.shootNow=true;
-
+            if (validCount > 3) {
+                double foo = Robot.limeLight.getllTargetX();
+                if ( foo < -1.5 || foo > 1.5) {
+                    if ( Robot.doAutoCommand() ) {
+                        Robot.autoMove=true;
+                        Robot.autoCommand=new AutoTurn(foo,100);
+                        Robot.autoCommand.schedule();
+                    }	   
+                    centeredCount=0;
+                    Robot.shootNow=false;
                 } else {
-                   Robot.shootNow=false;
+                    // Target is centered, don't turn the robot
+                    centeredCount++;
+                    if (centeredCount > 2) {
+                        // If we have stayed centered on the target for 10 interations, 
+                        // drive forwards toward the target
+                        //if (getllTargetArea() < .25 ) {
+                        //    if ( Robot.doAutoCommand() ) {
+                        //        Robot.autoMove=true;
+                        //        Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
+                        //        Robot.autoCommand.schedule();
+                        //    }
+                        //}    	   
+                        // TODO - set thrower angle based on the distance from the target
+                        Robot.shootNow=true;
+
+                    } else {
+                    Robot.shootNow=false;
+                    }
                 }
-            }
+            }    
+            SmartDashboard.putNumber("Limelight Centered", centeredCount);
         } else {
-            if (validCount > 10 && missedCount <= 3) {
+            if ( missedCount < 10 ) {
                 // Don't change the old data, so we won't stop on dropping a frame or 3
                 missedCount++;
             } else {

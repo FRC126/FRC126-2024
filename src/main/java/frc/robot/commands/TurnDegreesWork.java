@@ -37,6 +37,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         targetDegrees = degrees_in;
         iters = iters_in;
         targetReached=0;
+        double currentDegrees = Robot.navxMXP.getAngle();      
+        startAngle = currentDegrees;
     }
 
 	/**********************************************************************************
@@ -48,9 +50,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         // Save the starting angle for the turn
         //Robot.internalData.resetGyro();
         //startAngle=Robot.internalData.getGyroAngle();
-
-        double currentDegrees = Robot.navxMXP.getAngle();      
-        startAngle = currentDegrees;
+        //double currentDegrees = Robot.navxMXP.getAngle();      
+        //startAngle = currentDegrees;
     }
 
 	/**********************************************************************************
@@ -67,7 +68,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 250;
-        tmp = Robot.boundSpeed(tmp, .25, .01 );
+        tmp = Robot.boundSpeed(tmp, .15, .02 );
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle

@@ -247,20 +247,24 @@ public class SwerveDrive extends SubsystemBase {
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = Robot.navxMXP.getAngle();
 
-		//if (!Robot.isAutoCommand) {
+		if (!Robot.isAutoCommand) {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
 			// driver relative instead of robot relative
 			double angle=Math.toRadians(currentAngle); 
 			leftRight = ( leftRightIn * Math.cos(angle) - (forwardBackIn * Math.sin(angle)));
 			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
-		//}
+		}
 
 		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
 			if (currentAngle < straightDegrees-1.0) {
-				rotate=.02;	
+				rotate=.03;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.075; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.125; }
 			} else if (currentAngle > straightDegrees+1.0) {
-				rotate=-.02;	
+				rotate=-.03;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.075; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.125; }
 			} else {
 				rotate=0;
 			}

@@ -415,6 +415,7 @@ public class Robot extends TimedRobot {
         if (Robot.autoMove) { 
         	Robot.swerveDrive.cancel();
         }
+        Robot.autoMove=false;
 	}		
 
     /************************************************************************
@@ -432,6 +433,5 @@ public class Robot extends TimedRobot {
         }
 
         return(speedOut);
-
     }
 }
