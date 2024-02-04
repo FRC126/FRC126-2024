@@ -54,7 +54,6 @@ public class PickupSubsystem extends SubsystemBase {
 
 		Robot.PickupMotor.set(speed);
 
-		SmartDashboard.putNumber("Pickup Motor Speed ", speed);
 		SmartDashboard.putNumber("Pickup runMotor called", called++);
 	}
 
