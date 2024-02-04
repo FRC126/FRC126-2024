@@ -32,7 +32,6 @@ public class PickupSubsystem extends SubsystemBase {
 	 ************************************************************************/
 
 	public PickupSubsystem() {
-
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new PickupCommand(this));
@@ -62,6 +61,5 @@ public class PickupSubsystem extends SubsystemBase {
 
 	public void cancel() {
 		runMotor(0);
-
 	}
 }

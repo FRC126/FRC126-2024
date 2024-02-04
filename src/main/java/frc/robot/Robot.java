@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
     public static Thrower thrower;    
-    public static PickupSubsystem pickup;
+    private static PickupSubsystem pickup;
     public static LEDSubsystem Leds;
 
 	public static UsbCamera driveCam;
