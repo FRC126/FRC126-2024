@@ -61,6 +61,15 @@ public class LidarLite extends SubsystemBase {
     }
 
 	/**********************************************************************************
+	 **********************************************************************************/
+
+    @Override
+    public void periodic() {
+        measureDistance();  
+    }
+
+
+	/**********************************************************************************
      * Take a measurement and return the distance in cm
      * 
      * @return Distance in cm

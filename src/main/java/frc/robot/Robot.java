@@ -346,8 +346,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
+        Robot.Leds.setMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
-        //driveWithJoystick(true);
+        Robot.Leds.doLights();
     }
 
     /************************************************************************

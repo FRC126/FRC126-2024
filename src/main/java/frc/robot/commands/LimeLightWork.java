@@ -17,6 +17,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
+import frc.robot.subsystems.LEDSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -53,8 +54,10 @@ public class LimeLightWork extends Command {
             Robot.targetType = Robot.targetTypes.TargetSeek;
         } else if (driveJoystick.getPovLeft()) {
             Robot.targetType = Robot.targetTypes.TargetOne;
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
         } else if (driveJoystick.getPovRight()) {
             Robot.targetType = Robot.targetTypes.TargetTwo;
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
         } else {
             Robot.targetType = Robot.targetTypes.NoTarget;
         }     

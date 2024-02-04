@@ -103,34 +103,41 @@ public class SwerveDrive extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	public void driveSlow(boolean in) {
+	public boolean driveSlow(boolean in) {
+		boolean ret=false;
+		if (driveSlow != in) { ret = true; }
 		driveSlow=in;
+		return(ret);
 	} 
 
     /************************************************************************
 	 ************************************************************************/
 
-	public void brakesOn() {
+	public boolean brakesOn() {
 		if (!areBrakesOn) {
 			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			areBrakesOn=true;
+            return(true);
 		}	
+		return(false);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public void brakesOff() {
+	public boolean brakesOff() {
 		if (areBrakesOn) {
 			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			areBrakesOn=false;
+			return(true);
 		}	
+		return(false);
 	}
 
 	/************************************************************************
@@ -339,13 +346,13 @@ public class SwerveDrive extends SubsystemBase {
 			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
 		}
 
-		     		SmartDashboard.putNumber("currentAngle", currentAngle);
+
+   		SmartDashboard.putNumber("currentAngle", currentAngle);
 
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
 			SmartDashboard.putNumber("forwardBack", forwardBack);
 			SmartDashboard.putNumber("leftRight", leftRight);
-
 
 			SmartDashboard.putNumber("frontRightPos", frontRightPos);
 			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);
