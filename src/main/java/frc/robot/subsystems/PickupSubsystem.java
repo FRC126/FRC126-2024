@@ -23,59 +23,46 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**********************************************************************************
  **********************************************************************************/
 
-public class Pickup extends SubsystemBase {	
-    boolean pickupDebug=false;
+public class PickupSubsystem extends SubsystemBase {
+	boolean pickupDebug = false;
 	double pickupRPM;
+	int called = 0;
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public Pickup() {
+	public PickupSubsystem() {
 
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PickupControl(this));
+		setDefaultCommand(new PickupCommand(this));
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public void periodic() {}
+	public void periodic() {
+	}
 
 	/************************************************************************
-     * Run Main Thower Wheels by target RPM
+	 * Run Main Thower Wheels by target RPM
 	 ************************************************************************/
 
-	 public void runMotors(double speed) {
-
+	public void runMotor(double speed) {
 		///////////////////////////////////////////////////////////////
-		//Spark max/Neo Motors
+		// Spark max/Neo Motors
 
 		Robot.PickupMotor.set(speed);
 
-		pickupRPM = Math.abs(Robot.PickupMotorEncoder.getVelocity());
-		setRPM(pickupRPM);
-
-		if (pickupDebug) {
-			SmartDashboard.putNumber("Pickup Motor RPM",pickupRPM);
-		}
-		
+		SmartDashboard.putNumber("Pickup Motor Speed ", speed);
+		SmartDashboard.putNumber("Pickup runMotor called", called++);
 	}
 
-    /************************************************************************
+	/************************************************************************
 	 ************************************************************************/
 
 	public void cancel() {
-        runMotors(0); 
-	}
+		runMotor(0);
 
-	public double getRPM() {
-		return pickupRPM;
-	}
-
-	public void setRPM(double rpmIn) {
-		pickupRPM = rpmIn;
 	}
 }
-
-

@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
     public static Thrower thrower;    
-    public static Pickup pickup;
+    public static PickupSubsystem pickup;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -213,7 +213,7 @@ public class Robot extends TimedRobot {
 
         // Prototype SubSystem
         prototype = new Prototype();
-        pickup = new Pickup();
+        pickup = new PickupSubsystem();
 
 
         // Limelight subsystem
