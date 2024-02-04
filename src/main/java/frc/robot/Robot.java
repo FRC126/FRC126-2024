@@ -20,12 +20,9 @@ package frc.robot;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
-import edu.wpi.first.cscore.VideoSource;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -93,6 +90,10 @@ public class Robot extends TimedRobot {
     public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
+    // Pickup CAN Motors
+    public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
+    public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Prototype Motors
     public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
@@ -144,6 +145,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
     public static Thrower thrower;    
+    public static PickupSubsystem pickup;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -206,6 +208,8 @@ public class Robot extends TimedRobot {
 
         // Prototype SubSystem
         prototype = new Prototype();
+        pickup = new PickupSubsystem();
+
 
         // Limelight subsystem
         limeLight = new LimeLight();
