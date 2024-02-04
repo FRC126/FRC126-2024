@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
     public static SwerveDrive swerveDrive;
     public static Prototype prototype;
     public static Thrower thrower;    
-    public static PickupSubsystem pickup;
+    private static PickupSubsystem pickup;
     public static LEDSubsystem Leds;
 
 	public static UsbCamera driveCam;
@@ -182,6 +182,8 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
     private final SendableChooser<Integer> autoFollow = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
+
+    public static final String PICKUP_MOTOR_SPEED_STRING = "Pickup Motor Speed";
     
  	  /************************************************************************
      * This function is run when the robot is first started up and should be used for any
@@ -259,6 +261,8 @@ public class Robot extends TimedRobot {
         autoFollow.addOption("2 note",1);
         autoFollow.addOption("3 note",2);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
+        SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,0.1);
+           
 
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
             BuildConstants.GIT_BRANCH,
