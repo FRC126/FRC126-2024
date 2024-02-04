@@ -119,7 +119,7 @@ public class SwerveControl extends Command {
 				straightDegrees = Robot.navxMXP.getAngle();      
 				driveStraight = true;
 			}	
-		} else {
+		} else if (rotate != 0) {
 				// clear drive straight since we are rotating
 				driveStraight = false;
 		}

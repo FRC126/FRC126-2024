@@ -131,8 +131,15 @@ public class ThrowerControl extends Command {
 
      	SmartDashboard.putNumber("speed", speed);
 
-		Robot.thrower.throwerRPM(1,speed);
-		Robot.thrower.throwerRPM(2,speed);
+		int reachedOne = Robot.thrower.throwerRPM(1,speed);
+		int reachedTwo = Robot.thrower.throwerRPM(2,speed);
+
+		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
+		if ((reachedOne > 5 && reachedTwo > 5 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
+            Robot.thrower.throwerTriggerOn();
+		} else {
+            Robot.thrower.throwerTriggerOff();
+		}
 	}
 
 }
