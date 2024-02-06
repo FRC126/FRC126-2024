@@ -31,7 +31,8 @@ public class LidarLite extends SubsystemBase {
     */
     private static final int CALIBRATION_OFFSET = -5;
     private double[] dataSeries;
-
+    private static final int HEIGHT_IN = 83;
+    private static final int SUBHEIGHT_IN = 24;
     private Counter counter;
     private double distanceAvg=0;
 
@@ -94,9 +95,14 @@ public class LidarLite extends SubsystemBase {
         }
             
         distanceAvg = sum / count;
-
-        SmartDashboard.putNumber("LidarLite Distance",distanceAvg);
+        double distanceInch = distanceAvg*0.39370079;
+        SmartDashboard.putNumber("LidarLite Distance",distanceInch);
+        SmartDashboard.putNumber("Thrower Angle", calcAngle(distanceInch, HEIGHT_IN,SUBHEIGHT_IN));
 
         return distanceAvg;
+    }
+    public static double calcAngle(double x, double height, double subHeight) {
+        
+        return Math.toDegrees(Math.atan((height - subHeight)/(x)));
     }
 }
