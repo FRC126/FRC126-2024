@@ -56,6 +56,14 @@ public class SwerveDrive extends SubsystemBase {
 	public static SequentialCommandGroup autoCommand;
 	public final double LENGTH = 26 * inchesPerMeter;
 	public final double WIDTH = 26 * inchesPerMeter;
+
+	private static final double testTurnRatio = .6;
+	private static final double testSpeedRatio = .7;
+	private static final double competitionTurnRatio = 1.0;
+	private static final double competitionSpeedRatio = 1.0;
+
+	private double currentTurnRatio = testTurnRatio;
+	private double currentSpeedRatio = testSpeedRatio;
 			
 	/************************************************************************
 	 ************************************************************************/
@@ -175,7 +183,7 @@ public class SwerveDrive extends SubsystemBase {
 		} else if (targetAngle > (currentAngle + 0.0005) ) {
 			speed=0.01 * reverse;
 		}
-		return(speed);
+		return(speed*currentTurnRatio);
 	}
 
 	/************************************************************************
@@ -220,7 +228,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		// Save the new speed in the class for future smoothing
 		wheelSpeed[index] = result;
-        return(result);
+        return(wheelSpeed[index]);
 	}
 
 	/************************************************************************
@@ -237,6 +245,14 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn, boolean driveStraight, double straightDegrees) { 
+		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
+			currentTurnRatio = competitionTurnRatio;
+			currentSpeedRatio = competitionSpeedRatio;
+		} else {
+			currentTurnRatio = testTurnRatio;
+			currentSpeedRatio = testSpeedRatio;
+		}
+
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
 		double rotate = rotateIn;
@@ -340,10 +356,10 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft],rearLeft);
 
 			// Run the drive motors to the smoothed speed
-			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
-			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft]);
-			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft]);
-			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
+			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
+			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio);
+			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
+			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
 		}
 
 
