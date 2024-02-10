@@ -350,7 +350,7 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
-        Robot.Leds.setMode(LEDSubsystem.LEDModes.None);
+        Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
     }
