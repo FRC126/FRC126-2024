@@ -56,6 +56,19 @@ public class SwerveDrive extends SubsystemBase {
 	public final double LENGTH = 26 * inchesPerMeter;
 	public final double WIDTH = 26 * inchesPerMeter;
 
+	double[][] calcTurn = {
+			{ 0.25, 0.45, 0.1, 0.4, 0.02, 0.1, 0.0010, 0.025, 0.0005, 0.01 },
+			{ 0.25, 0.45, 0.1, 0.4, 0.02, 0.1, 0.0010, 0.025, 0.0005, 0.01 },
+	};
+	double[][] smoothWheel = {
+			{ 0.25, 0.5, 0.03 },
+			{ 0.25, 0.5, 0.03 },
+	};
+	double[][] driveSpeed = {
+			{ 1.0, 0.03, 0.2, 0.075, 0.4, 0.125 },
+			{ 1.0, 0.03, 0.2, 0.075, 0.4, 0.125 },
+	};
+
 	/************************************************************************
 	 ************************************************************************/
 
@@ -78,6 +91,7 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
+	@Override
 	public void periodic() {
 	}
 
@@ -145,45 +159,46 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public double CalcTurnSpeed(double targetAngle, double currentAngle) {
+	public double calcTurnSpeed(double targetAngle, double currentAngle, double var1, double var2, double var3,
+			double var4, double var5, double var6, double var7, double var8, double var9, double var10) {
 		double speed = 0;
 		double reverse = 1;
 		boolean skip = false;
 
 		// If it's quicker, turn the other way
-		if (targetAngle < -0.25 && currentAngle > .25) {
+		if (targetAngle < -var1 && currentAngle > var1) {
 			reverse = -1;
 		}
-		if (targetAngle > .25 && currentAngle < -.25) {
+		if (targetAngle > var1 && currentAngle < -var1) {
 			reverse = -1;
 		}
 
 		// Skip the fast move if we are just crossing the boundry
-		if (targetAngle < -0.45 && currentAngle > .45) {
+		if (targetAngle < -var2 && currentAngle > var2) {
 			skip = true;
 		}
-		if (targetAngle > .45 && currentAngle < -.45) {
+		if (targetAngle > var2 && currentAngle < -var2) {
 			skip = true;
 		}
 
 		SmartDashboard.putNumber("reverse angle", reverse);
 
-		if (targetAngle < (currentAngle) - 0.1 && !skip) { // make array, go down
-			speed = -0.4 * reverse; // jumpy
-		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
-			speed = 0.4 * reverse;
-		} else if (targetAngle < (currentAngle - 0.02)) {
-			speed = -0.1 * reverse; // jumpy
-		} else if (targetAngle > (currentAngle + 0.02)) {
-			speed = 0.1 * reverse;
-		} else if (targetAngle < (currentAngle - 0.0010)) {
-			speed = -0.025 * reverse;
-		} else if (targetAngle > (currentAngle + 0.0010)) {
-			speed = 0.025 * reverse;
-		} else if (targetAngle < (currentAngle - 0.0005)) {
-			speed = -0.01 * reverse;
-		} else if (targetAngle > (currentAngle + 0.0005)) {
-			speed = 0.01 * reverse;
+		if (targetAngle < (currentAngle) - var3 && !skip) {
+			speed = -var4 * reverse;
+		} else if (targetAngle > (currentAngle + var3) && !skip) {
+			speed = var4 * reverse;
+		} else if (targetAngle < (currentAngle - var5)) {
+			speed = -var6 * reverse;
+		} else if (targetAngle > (currentAngle + var5)) {
+			speed = var6 * reverse;
+		} else if (targetAngle < (currentAngle - var7)) {
+			speed = -var8 * reverse;
+		} else if (targetAngle > (currentAngle + var7)) {
+			speed = var8 * reverse;
+		} else if (targetAngle < (currentAngle - var9)) {
+			speed = -var10 * reverse;
+		} else if (targetAngle > (currentAngle + var9)) {
+			speed = var10 * reverse;
 		}
 		return (speed);
 	}
@@ -192,21 +207,19 @@ public class SwerveDrive extends SubsystemBase {
 	 * Soft start for accelleration to make it more controlable.
 	 ************************************************************************/
 
-	public double smoothWheelSpeed(double input, int index) {
+	public double smoothWheelSpeed(double input, int index, double var1, double var2, double softStartIncrement) {
 		double result = 0;
-
-		double softStartIncrement = 0.03; // build up maybe lower
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
-			if (input > 0.25) {
-				input = 0.25;
+			if (input > var1) {
+				input = var1;
 			} // here
 		} else {
 			// Cap at 50 percent for now
-			if (input > 0.5 && !enableFullSpeed) {
-				input = 0.5;
-			} // here - limit to .75
+			if (input > var2 && !enableFullSpeed) {
+				input = var2;
+			}
 		}
 
 		if (input > 0) {
@@ -257,6 +270,7 @@ public class SwerveDrive extends SubsystemBase {
 		double rotate = rotateIn;
 		double[] newWheelSpeed = { 0, 0, 0, 0 };
 		double rearRightAngle = 0, rearLeftAngle = 0, frontRightAngle = 0, frontLeftAngle = 0;
+		int activeTweak = (int) SmartDashboard.getNumber("activeTweak", 0);
 
 		if (!swerveDebug) {
 			// Log debug data to the smart dashboard
@@ -279,21 +293,25 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
-			if (currentAngle < straightDegrees - 1.0) {
-				rotate = .03;
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2) {
-					rotate = .075;
+			if (currentAngle < straightDegrees - driveSpeed[activeTweak][0]) {
+				rotate = driveSpeed[activeTweak][1];
+				if (leftRight > driveSpeed[activeTweak][2] || leftRight < -driveSpeed[activeTweak][2]
+						|| forwardBack > driveSpeed[activeTweak][2] || forwardBack < -driveSpeed[activeTweak][2]) {
+					rotate = driveSpeed[activeTweak][3];
 				}
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4) {
-					rotate = .125;
+				if (leftRight > driveSpeed[activeTweak][4] || leftRight < -driveSpeed[activeTweak][4]
+						|| forwardBack > driveSpeed[activeTweak][4] || forwardBack < -driveSpeed[activeTweak][4]) {
+					rotate = driveSpeed[activeTweak][5];
 				}
-			} else if (currentAngle > straightDegrees + 1.0) {
-				rotate = -.03;
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2) {
-					rotate = -.075;
+			} else if (currentAngle > straightDegrees + driveSpeed[activeTweak][0]) {
+				rotate = -driveSpeed[activeTweak][1];
+				if (leftRight > driveSpeed[activeTweak][2] || leftRight < -driveSpeed[activeTweak][2]
+						|| forwardBack > driveSpeed[activeTweak][2] || forwardBack < -driveSpeed[activeTweak][2]) {
+					rotate = -driveSpeed[activeTweak][3];
 				}
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4) {
-					rotate = -.125;
+				if (leftRight > driveSpeed[activeTweak][4] || leftRight < -driveSpeed[activeTweak][4]
+						|| forwardBack > driveSpeed[activeTweak][4] || forwardBack < -driveSpeed[activeTweak][4]) {
+					rotate = -driveSpeed[activeTweak][5];
 				}
 			} else {
 				rotate = 0;
@@ -301,10 +319,10 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		// Get the Encoder information from each swerve drive module
-		StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
-		StatusSignal FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
-		StatusSignal RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
-		StatusSignal RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
+		StatusSignal<Double> FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
+		StatusSignal<Double> RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
 
 		double frontRightPos = FRPosSS.getValueAsDouble();
 		double frontLeftPos = FLPosSS.getValueAsDouble();
@@ -324,10 +342,14 @@ public class SwerveDrive extends SubsystemBase {
 			Robot.swerveRearRightTurnMotor.set(0);
 			Robot.swerveRearLeftTurnMotor.set(0);
 
-			newWheelSpeed[frontRight] = smoothWheelSpeed(0, frontRight);
-			newWheelSpeed[frontLeft] = smoothWheelSpeed(0, frontLeft);
-			newWheelSpeed[rearRight] = smoothWheelSpeed(0, rearRight);
-			newWheelSpeed[rearLeft] = smoothWheelSpeed(0, rearLeft);
+			newWheelSpeed[frontRight] = smoothWheelSpeed(0, frontRight, smoothWheel[activeTweak][0],
+					smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[frontLeft] = smoothWheelSpeed(0, frontLeft, smoothWheel[activeTweak][0],
+					smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[rearRight] = smoothWheelSpeed(0, rearRight, smoothWheel[activeTweak][0],
+					smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[rearLeft] = smoothWheelSpeed(0, rearLeft, smoothWheel[activeTweak][0],
+					smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
 		} else {
 			// Calculate the speed and position of the 4 wheels based on
 			// the joystick input
@@ -351,16 +373,32 @@ public class SwerveDrive extends SubsystemBase {
 			frontLeftAngle = Math.atan2(b, c) / pi * .49;
 
 			// Run the turning motors based on the calculated target
-			Robot.swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos, frontRightAngle));
-			Robot.swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos, frontLeftAngle));
-			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos, rearRightAngle));
-			Robot.swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos, rearLeftAngle));
+			Robot.swerveFrontRightTurnMotor.set(calcTurnSpeed(frontRightPos, frontRightAngle, calcTurn[activeTweak][0],
+					calcTurn[activeTweak][1], calcTurn[activeTweak][2], calcTurn[activeTweak][3],
+					calcTurn[activeTweak][4], calcTurn[activeTweak][5], calcTurn[activeTweak][6],
+					calcTurn[activeTweak][7], calcTurn[activeTweak][8], calcTurn[activeTweak][9]));
+			Robot.swerveFrontLeftTurnMotor.set(calcTurnSpeed(frontLeftPos, frontLeftAngle, calcTurn[activeTweak][0],
+					calcTurn[activeTweak][1], calcTurn[activeTweak][2], calcTurn[activeTweak][3],
+					calcTurn[activeTweak][4], calcTurn[activeTweak][5], calcTurn[activeTweak][6],
+					calcTurn[activeTweak][7], calcTurn[activeTweak][8], calcTurn[activeTweak][9]));
+			Robot.swerveRearRightTurnMotor.set(calcTurnSpeed(rearRightPos, rearRightAngle, calcTurn[activeTweak][0],
+					calcTurn[activeTweak][1], calcTurn[activeTweak][2], calcTurn[activeTweak][3],
+					calcTurn[activeTweak][4], calcTurn[activeTweak][5], calcTurn[activeTweak][6],
+					calcTurn[activeTweak][7], calcTurn[activeTweak][8], calcTurn[activeTweak][9]));
+			Robot.swerveRearLeftTurnMotor.set(calcTurnSpeed(rearLeftPos, rearLeftAngle, calcTurn[activeTweak][0],
+					calcTurn[activeTweak][1], calcTurn[activeTweak][2], calcTurn[activeTweak][3],
+					calcTurn[activeTweak][4], calcTurn[activeTweak][5], calcTurn[activeTweak][6],
+					calcTurn[activeTweak][7], calcTurn[activeTweak][8], calcTurn[activeTweak][9]));
 
 			// Smooth the wheel speed so the robot isn't so jumpy
-			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight], frontRight);
-			newWheelSpeed[frontLeft] = smoothWheelSpeed(newWheelSpeed[frontLeft], frontLeft);
-			newWheelSpeed[rearRight] = smoothWheelSpeed(newWheelSpeed[rearRight], rearRight);
-			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft], rearLeft);
+			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight], frontRight,
+					smoothWheel[activeTweak][0], smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[frontLeft] = smoothWheelSpeed(newWheelSpeed[frontLeft], frontLeft,
+					smoothWheel[activeTweak][0], smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[rearRight] = smoothWheelSpeed(newWheelSpeed[rearRight], rearRight,
+					smoothWheel[activeTweak][0], smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
+			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft], rearLeft, smoothWheel[activeTweak][0],
+					smoothWheel[activeTweak][1], smoothWheel[activeTweak][2]);
 
 			// Run the drive motors to the smoothed speed
 			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
