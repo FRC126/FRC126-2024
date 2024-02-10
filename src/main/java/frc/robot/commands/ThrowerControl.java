@@ -118,8 +118,14 @@ public class ThrowerControl extends Command {
 		SmartDashboard.putBoolean("idleThrower", idleThrower);
 
 		if (operatorJoystick.isAButton()) {
-			// Run the motors at 3800 rpm
+
+			double distance=Robot.distance.getDistanceAvg();
+			// TODO set the thrower angle and speed based on the distance
+			// TODO TODO TODO
+
+    		// Run the motors at specified rpm
 			speed=Robot.thrower.getRPM();
+
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=2000;
@@ -131,8 +137,8 @@ public class ThrowerControl extends Command {
 
      	SmartDashboard.putNumber("speed", speed);
 
-		int reachedOne = Robot.thrower.throwerRPM(1,speed);
-		int reachedTwo = Robot.thrower.throwerRPM(2,speed);
+		int reachedOne = Robot.thrower.throwerRPM(0,speed);
+		int reachedTwo = Robot.thrower.throwerRPM(1,speed);
 
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 5 && reachedTwo > 5 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {

@@ -184,6 +184,7 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
 
     public static final String PICKUP_MOTOR_SPEED_STRING = "Pickup Motor Speed";
+    public static final String COMPETITION_ROBOT = "Competition Robot";
     
  	  /************************************************************************
      * This function is run when the robot is first started up and should be used for any
@@ -262,6 +263,7 @@ public class Robot extends TimedRobot {
         autoFollow.addOption("3 note",2);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
         SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,0.1);
+        SmartDashboard.putBoolean(COMPETITION_ROBOT, false);
            
 
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
@@ -350,8 +352,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
+        Robot.Leds.setMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
-        //driveWithJoystick(true);
+        Robot.Leds.doLights();
     }
 
     /************************************************************************

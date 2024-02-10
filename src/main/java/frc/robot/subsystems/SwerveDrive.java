@@ -56,6 +56,14 @@ public class SwerveDrive extends SubsystemBase {
 	public static SequentialCommandGroup autoCommand;
 	public final double LENGTH = 26 * inchesPerMeter;
 	public final double WIDTH = 26 * inchesPerMeter;
+
+	private static final double testTurnRatio = .6;
+	private static final double testSpeedRatio = .7;
+	private static final double competitionTurnRatio = 1.0;
+	private static final double competitionSpeedRatio = 1.0;
+
+	private double currentTurnRatio = testTurnRatio;
+	private double currentSpeedRatio = testSpeedRatio;
 			
 	/************************************************************************
 	 ************************************************************************/
@@ -103,34 +111,41 @@ public class SwerveDrive extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	public void driveSlow(boolean in) {
+	public boolean driveSlow(boolean in) {
+		boolean ret=false;
+		if (driveSlow != in) { ret = true; }
 		driveSlow=in;
+		return(ret);
 	} 
 
     /************************************************************************
 	 ************************************************************************/
 
-	public void brakesOn() {
+	public boolean brakesOn() {
 		if (!areBrakesOn) {
 			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			areBrakesOn=true;
+            return(true);
 		}	
+		return(false);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
-	public void brakesOff() {
+	public boolean brakesOff() {
 		if (areBrakesOn) {
 			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			areBrakesOn=false;
+			return(true);
 		}	
+		return(false);
 	}
 
 	/************************************************************************
@@ -168,7 +183,7 @@ public class SwerveDrive extends SubsystemBase {
 		} else if (targetAngle > (currentAngle + 0.0005) ) {
 			speed=0.01 * reverse;
 		}
-		return(speed);
+		return(speed*currentTurnRatio);
 	}
 
 	/************************************************************************
@@ -213,7 +228,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		// Save the new speed in the class for future smoothing
 		wheelSpeed[index] = result;
-        return(result);
+        return(wheelSpeed[index]);
 	}
 
 	/************************************************************************
@@ -230,6 +245,14 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn, boolean driveStraight, double straightDegrees) { 
+		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
+			currentTurnRatio = competitionTurnRatio;
+			currentSpeedRatio = competitionSpeedRatio;
+		} else {
+			currentTurnRatio = testTurnRatio;
+			currentSpeedRatio = testSpeedRatio;
+		}
+
 		double forwardBack = forwardBackIn;
         double leftRight = leftRightIn;
 		double rotate = rotateIn;
@@ -333,19 +356,19 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft],rearLeft);
 
 			// Run the drive motors to the smoothed speed
-			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
-			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * -1);
-			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * -1);
-			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
+			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
+			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio);
+			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
+			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
 		}
 
-		     		SmartDashboard.putNumber("currentAngle", currentAngle);
+
+   		SmartDashboard.putNumber("currentAngle", currentAngle);
 
 		if (swerveDebug) { 
  		    // Log debug data to the smart dashboard
 			SmartDashboard.putNumber("forwardBack", forwardBack);
 			SmartDashboard.putNumber("leftRight", leftRight);
-
 
 			SmartDashboard.putNumber("frontRightPos", frontRightPos);
 			SmartDashboard.putNumber("frontLeftPos", frontLeftPos);

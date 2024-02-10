@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.JoystickWrapper;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class SwerveControl extends Command {
 	JoystickWrapper driveJoystick;
@@ -70,9 +71,16 @@ public class SwerveControl extends Command {
 		// Soften the rotate to 60%
 		double rotate = driveJoystick.getRightStickX() * .6;
 
+		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
+	        Robot.Leds.setMode(LEDSubsystem.LEDModes.GaelForce);
+		} else {	
+	        Robot.Leds.setMode(LEDSubsystem.LEDModes.DriveMode);
+		}
+
 		// left Trigger enables slow mode
 		if (driveJoystick.getLeftTrigger() > 0) {
 			Robot.swerveDrive.driveSlow(true);
+		    Robot.Leds.setMode(LEDSubsystem.LEDModes.SlowMode);
 		} else {
 			Robot.swerveDrive.driveSlow(false);
 		}
@@ -80,6 +88,7 @@ public class SwerveControl extends Command {
 		// Apply motor braking when the right trigger is pressed
 		if (driveJoystick.getRightTrigger() > .5) {
 			Robot.swerveDrive.brakesOn();
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.BrakeMode);
 		} else {
 			Robot.swerveDrive.brakesOff();
 		}			

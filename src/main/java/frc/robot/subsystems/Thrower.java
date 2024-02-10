@@ -26,8 +26,8 @@ import com.ctre.phoenix6.*;
  **********************************************************************************/
 
 public class Thrower extends SubsystemBase {	
-	static double throwerSpeed[] = { 0,0,0 };
-	static int targetReached[] = { 0,0,0 } ;
+	static double throwerSpeed[] = { 0,0 };
+	static int targetReached[] = { 0,0 } ;
     static int delay;
     static double P = 0.000025;
     static double I = -0.0003;
@@ -93,7 +93,7 @@ public class Thrower extends SubsystemBase {
 		}
 
         // Set the speed on the Thrower Motors
-		if (index == 1) {
+		if (index == 0) {
 			Robot.throwerTalonOne.set(throwerSpeed[index]);
 		} else {
   			Robot.throwerTalonTwo.set(throwerSpeed[index] * -1);
@@ -157,8 +157,8 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public void cancel() {
+        throwerRPM(0,0); 
         throwerRPM(1,0); 
-        throwerRPM(2,0); 
 		throwerTriggerOff();
 		moveThrower(0);
 	}
