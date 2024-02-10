@@ -68,7 +68,6 @@ public class LidarLite extends SubsystemBase {
         measureDistance();  
     }
 
-
 	/**********************************************************************************
      * Take a measurement and return the distance in cm
      * 

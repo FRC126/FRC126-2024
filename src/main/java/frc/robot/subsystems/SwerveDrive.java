@@ -341,8 +341,8 @@ public class SwerveDrive extends SubsystemBase {
 
 			// Run the drive motors to the smoothed speed
 			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
-			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * -1);
-			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * -1);
+			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft]);
+			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft]);
 			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
 		}
 
