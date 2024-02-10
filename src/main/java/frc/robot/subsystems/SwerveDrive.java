@@ -158,12 +158,12 @@ public class SwerveDrive extends SubsystemBase {
 
      	SmartDashboard.putNumber("reverse angle", reverse);
 
-		if ( targetAngle < (currentAngle) - 0.1 && !skip) {
-			speed=-0.4 * reverse;
+		if ( targetAngle < (currentAngle) - 0.1 && !skip) { // make array, go down
+			speed=-0.4 * reverse; // jumpy
 		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
 			speed=0.4 * reverse;
 		} else if ( targetAngle < (currentAngle - 0.02) ) {
-			speed=-0.1 * reverse;
+			speed=-0.1 * reverse; //jumpy
 		} else if (targetAngle > (currentAngle + 0.02) ) {
 			speed=0.1 * reverse;
 		} else if ( targetAngle < (currentAngle - 0.0010) ) {
@@ -185,14 +185,14 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.03;
+    	double softStartIncrement=0.03; //build up maybe lower
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
-			if (input > 0.25) { input=0.25; }
+			if (input > 0.25) { input=0.25; }//here
 		} else {
 			// Cap at 50 percent for now
-			if (input > 0.5 && !enableFullSpeed ) { input=0.5; }
+			if (input > 0.5 && !enableFullSpeed ) { input=0.5; }//here - limit to .75
 		}
 
         if (input > 0) {
@@ -342,8 +342,8 @@ public class SwerveDrive extends SubsystemBase {
 			// Run the drive motors to the smoothed speed
 			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight]);
 			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft]);
-			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft]);
 			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight]);
+			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft]);
 		}
 
 
