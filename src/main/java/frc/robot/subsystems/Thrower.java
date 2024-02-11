@@ -19,6 +19,8 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 
 import com.ctre.phoenix6.*;
 
@@ -33,6 +35,11 @@ public class Thrower extends SubsystemBase {
     static double I = -0.0003;
 	boolean throwerDebug=true;
 	public static double myRPM=3500;
+	
+	// Thrower Angle Control
+	PIDController throwerPID;
+	boolean reachedAngleTarget=true;
+	int reachedAngleCount=0;
 
 	/************************************************************************
 	 ************************************************************************/
@@ -42,6 +49,8 @@ public class Thrower extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
+		throwerPID = new PIDController(.1, 0, .0001);
+		throwerPID.setTolerance(2,10);
 	}
 
 	/************************************************************************
@@ -133,9 +142,41 @@ public class Thrower extends SubsystemBase {
 		}		
 
 		Robot.throwerClimberMotorLeft.set(speed);
-		Robot.throwerClimberMotorRight.set(speed*-1);
+		//Robot.throwerClimberMotorRight.set(speed*-1);
 
         return(position);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public boolean setThrowerPosition(double angle) {
+	
+		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
+		double currAngle = left / 42;
+
+		if (reachedAngleTarget) {
+			reachedAngleTarget=false;
+			throwerPID.reset();
+		}
+
+		double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.2,.2);
+
+		if (throwerPID.atSetpoint()) {
+			reachedAngleCount++;
+   		    moveThrower(0);
+			if (++reachedAngleCount>3) {
+				reachedAngleTarget=true;
+				return true;			
+			} else {
+				return false;
+			}			
+		} else {
+   		    moveThrower(speed);
+			reachedAngleCount=0;
+			reachedAngleTarget=false;
+			return false;
+		}
 	}
 
     /************************************************************************
