@@ -57,11 +57,13 @@ public class PickupCommand extends Command {
 			pickMotorSpeed = -1.0;
 		}
 
-		if (operatorJoystick.isXButton()) {
-			this.pickupSubsystem.runMotor(pickMotorSpeed);
+		if (operatorJoystick.isXButton() && !Robot.thrower.getPhotoSensor()) {
+			//this.pickupSubsystem.runMotor(pickMotorSpeed);
+			this.pickupSubsystem.runMotor(.3);
+			Robot.thrower.throwerTriggerOn();
 		} else {
-			this.pickupSubsystem.runMotor(0);
-
+			this.pickupSubsystem.cancel();
+			Robot.thrower.throwerTriggerOff();
 		}
 	}
 }

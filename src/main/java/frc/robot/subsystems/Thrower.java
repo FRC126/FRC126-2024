@@ -23,6 +23,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.MathUtil;
 
 import com.ctre.phoenix6.*;
+import com.revrobotics.CANSparkMax;
 
 /**********************************************************************************
  **********************************************************************************/
@@ -57,10 +58,16 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public void periodic() {
-        boolean here=Robot.photoSensor.get();
-		SmartDashboard.putBoolean("photoSensor",here);
 	}
 
+	/************************************************************************
+	 ************************************************************************/
+
+	public boolean getPhotoSensor() {
+        boolean here=Robot.photoSensor.get();
+		SmartDashboard.putBoolean("photoSensor",here);
+		return(here);
+	}
 	/************************************************************************
      * Run Main Thower Wheels by target RPM
 	 ************************************************************************/
@@ -70,10 +77,10 @@ public class Thrower extends SubsystemBase {
 		StatusSignal RPM;
 
 		if (index == 1) {
-		    RPM = Robot.throwerTalonOne.getVelocity();
+		    RPM = Robot.throwerMotorTalonOne.getVelocity();
  			rpm = RPM.getValueAsDouble() * 60;
 		} else {
-		    RPM = Robot.throwerTalonTwo.getVelocity();
+		    RPM = Robot.throwerMotorTalonTwo.getVelocity();
 			rpm = RPM.getValueAsDouble() * 60 * -1;
 		}	
 
@@ -103,9 +110,9 @@ public class Thrower extends SubsystemBase {
 
         // Set the speed on the Thrower Motors
 		if (index == 0) {
-			Robot.throwerTalonOne.set(throwerSpeed[index]);
+			Robot.throwerMotorTalonOne.set(throwerSpeed[index]);
 		} else {
-  			Robot.throwerTalonTwo.set(throwerSpeed[index] * -1);
+  			Robot.throwerMotorTalonTwo.set(throwerSpeed[index] * -1);
 		}	
 
 		if (throwerDebug) {
@@ -128,6 +135,8 @@ public class Thrower extends SubsystemBase {
 
     public double moveThrower(double speed) {
         double position=0;
+
+		Robot.throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
 		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
 		double right = Robot.throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
@@ -152,31 +161,45 @@ public class Thrower extends SubsystemBase {
 
 	public boolean setThrowerPosition(double angle) {
 	
-		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
-		double currAngle = left / 42;
+		double pos = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
+		double currAngle = pos / 42 / 500;
 
-		if (reachedAngleTarget) {
-			reachedAngleTarget=false;
-			throwerPID.reset();
-		}
+		boolean usePID=true;
 
-		double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.2,.2);
+		if (usePID) {
+			if (reachedAngleTarget) {
+				reachedAngleTarget=false;
+				throwerPID.reset();
+			}
 
-		if (throwerPID.atSetpoint()) {
-			reachedAngleCount++;
-   		    moveThrower(0);
-			if (++reachedAngleCount>3) {
-				reachedAngleTarget=true;
-				return true;			
+			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.2,.2);
+
+			if (throwerPID.atSetpoint()) {
+				reachedAngleCount++;
+				moveThrower(0);
 			} else {
-				return false;
-			}			
+				moveThrower(speed);
+				reachedAngleCount=0;
+				reachedAngleTarget=false;
+			}
 		} else {
-   		    moveThrower(speed);
-			reachedAngleCount=0;
-			reachedAngleTarget=false;
+			if (currAngle < angle -.5) {
+
+			} else if (currAngle > angle + .5) {
+
+			} else {
+				reachedAngleCount++;
+				moveThrower(0);
+			}		
+		}	
+
+		if (++reachedAngleCount>3) {
+			reachedAngleTarget=true;
+			return true;			
+		} else {
 			return false;
-		}
+		}			
+
 	}
 
     /************************************************************************

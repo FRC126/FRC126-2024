@@ -29,6 +29,8 @@ public class ThrowerControl extends Command {
 	boolean runThrower=false;
 	int delay=0;
 	int runCount=0;
+	final int IDLE_RPM=2000;
+	final int MAX_RPM=5700;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -60,14 +62,15 @@ public class ThrowerControl extends Command {
 		SmartDashboard.putNumber("delay", delay);
 
 		if (operatorJoystick.isBButton()) {
-            // Toggle the thrower idle
+            // Toggle the thrower idle on and off
 			if (delay <= 0) {
 				if (idleThrower) { idleThrower = false; } else { idleThrower = true; }
 				delay=150;
 			}
 		}	
+
+		// Press Y to run the thrower for 10 seconds 
 		if (operatorJoystick.isYButton()) {
-            // Toggle the thrower idle
 			if (delay <= 0) {
 				if (runThrower) { 
 					runThrower = false; 
@@ -110,8 +113,8 @@ public class ThrowerControl extends Command {
 		if (Robot.thrower.getRPM() < 0) {
 			Robot.thrower.setRPM(0);
 		}
-		if (Robot.thrower.getRPM() > 5700) {
-			Robot.thrower.setRPM(5700);
+		if (Robot.thrower.getRPM() > MAX_RPM) {
+			Robot.thrower.setRPM(MAX_RPM);
 		}
 
 		SmartDashboard.putNumber("thrower myRPM", Robot.thrower.getRPM());
@@ -125,10 +128,9 @@ public class ThrowerControl extends Command {
 
     		// Run the motors at specified rpm
 			speed=Robot.thrower.getRPM();
-
 		} else if (idleThrower) {
 			// Idle the throwers
-			speed=2000;
+			speed=IDLE_RPM;
 		} else if (runThrower) {
 			speed=Robot.thrower.getRPM();
 		} else {
@@ -147,6 +149,5 @@ public class ThrowerControl extends Command {
             Robot.thrower.throwerTriggerOff();
 		}
 	}
-
 }
 

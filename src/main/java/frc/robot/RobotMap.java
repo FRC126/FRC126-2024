@@ -42,14 +42,9 @@ public class RobotMap {
 	public static int rightDriveMotorCanID2 = 11;
 
 	///////////////////////////////////////////////////////////////////////////
-  	// Proto Motor Can ID's
-	public static int protoMotorOneCanID = 22;
-	public static int protoMotorTwoCanID = 23;
-
-	///////////////////////////////////////////////////////////////////////////
  	// Thrower Motor Can ID's
-	public static int talonMotorOneCanID = 26;
-	public static int talonMotorTwoCanID = 27;
+	public static int throwerTalonMotorOneCanID = 26;
+	public static int throwerTalonMotorTwoCanID = 27;
 	public static int throwerTriggerMotorCanID = 28;
 	public static int throwerClimberMotorLeftCanID = 24;
 	public static int throwerClimberMotorRightCanID = 25;

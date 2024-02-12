@@ -50,14 +50,6 @@ import com.ctre.phoenix6.hardware.*;
 public class Robot extends TimedRobot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-    public static final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
-    public static final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
-    public static final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
-
-    //public static JoystickWrapper driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Motors
     public static CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
@@ -71,53 +63,55 @@ public class Robot extends TimedRobot {
     public static CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
 
-    // Built in Motor Encoders
-    public static RelativeEncoder swerveFrontRightDriveRelativeEncoder = Robot.swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder swerveFrontRightTurnRelativeEncoder = Robot.swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Built in Motor Encoders for Swerve Drive
+    public static RelativeEncoder swerveFrontRightDriveRelativeEncoder = Robot.swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder swerveFrontRightTurnRelativeEncoder = Robot.swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
-    public static RelativeEncoder swerveFrontLeftDriveRelativeEncoder = Robot.swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder swerveFrontLeftTurnRelativeEncoder = Robot.swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveFrontLeftDriveRelativeEncoder = Robot.swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder swerveFrontLeftTurnRelativeEncoder = Robot.swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
-    public static RelativeEncoder swerveRearLeftDriveRelativeEncoder = Robot.swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder swerveRearLeftTurnRelativeEncoder = Robot.swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearLeftDriveRelativeEncoder = Robot.swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder swerveRearLeftTurnRelativeEncoder = Robot.swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
-    public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Drive CAN Coders
     public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
     public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
     public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 
-    // Pickup CAN Motors
-    public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
-    public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Prototype Motors
-    public static CANSparkMax ProtoMotorOne = new CANSparkMax(RobotMap.protoMotorOneCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax ProtoMotorTwo = new CANSparkMax(RobotMap.protoMotorTwoCanID, CANSparkMax.MotorType.kBrushless);
-
-    public static RelativeEncoder ProtoMotorOneRelativeEncoder = Robot.ProtoMotorOne.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder ProtoMotorTwoRelativeEncoder = Robot.ProtoMotorTwo.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    // Pickup CAN Motor
+    public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
+    public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Thrower Motors
 
-    public static TalonFX throwerTalonOne = new TalonFX(RobotMap.talonMotorOneCanID);
-    public static TalonFX throwerTalonTwo = new TalonFX(RobotMap.talonMotorTwoCanID);
+    public static TalonFX throwerMotorTalonOne = new TalonFX(RobotMap.throwerTalonMotorOneCanID);
+    public static TalonFX throwerMotorTalonTwo = new TalonFX(RobotMap.throwerTalonMotorTwoCanID);
 
     public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
 
-    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
-    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42  );
+    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thrower Limit Switches
 
     public static DigitalInput throwerBottomLimit;
     public static DigitalInput throwerTopLimit;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Thrower Photo Sensor 
+
     public static DigitalInput photoSensor;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,12 +120,8 @@ public class Robot extends TimedRobot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
-    public static double robotTurn = 0;
-	public static double robotDrive = 0;
     public static boolean shootNow = false;
-    public static boolean pickupNow = false;
     public static targetTypes targetType = Robot.targetTypes.NoTarget;
-    public static int objectId=1;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
@@ -144,34 +134,27 @@ public class Robot extends TimedRobot {
     public static Log log;
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
-    public static Prototype prototype;
     public static Thrower thrower;    
-    private static PickupSubsystem pickup;
+    public static PickupSubsystem pickup;
     public static LEDSubsystem Leds;
+    // Lidar Light Distance Measure
+    public static LidarLite distance;
+    // Lime Light
+    public static LimeLight limeLight;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
-    public static SequentialCommandGroup autonomous;
-
-    // Lidar Light Distance Measure
-    public static LidarLite distance;
-
-    // Lime Light
-    public static LimeLight limeLight;
 
     // Global Robot Variables
     public int RobotID = 0;
 
-    public static boolean ignoreEncoders=false;
-    public static boolean autoMove=false;
-
     //public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo, TargetThree, TargetFour};
     public static enum allianceColor{Red,Blue};
-	public static double voltageThreshold = 10.0;
 
-    // For use with limelight class
-    public static double ThrowerRPM=0;
+    // Autonomous related functions
+    public static SequentialCommandGroup autonomous;
+    public static boolean autoMove=false;
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
@@ -212,8 +195,7 @@ public class Robot extends TimedRobot {
         throwerTopLimit = new DigitalInput(7);
         photoSensor = new DigitalInput(2);
 
-        // Prototype SubSystem
-        prototype = new Prototype();
+        // Pickup SubSystem
         pickup = new PickupSubsystem();
 
         // LED Subsystem

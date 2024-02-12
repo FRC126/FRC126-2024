@@ -17,17 +17,22 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.PickupSubsystem;
+import frc.robot.subsystems.Thrower;
 
-public class PickupWork extends Command {
+public class ThrowerWork extends Command {
 
-    int iters;
+    int iters, speed;
+    double angle;
+    int throwingCount=0;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public PickupWork(int itersIn) {
-        iters = itersIn;
+    public ThrowerWork(int speed, double angle, int iters) {
+        this.iters = iters;
+        this.speed = speed;
+        this.angle = angle;
+        throwingCount=0;
     }
 
     /**********************************************************************************
@@ -44,10 +49,24 @@ public class PickupWork extends Command {
 
     @Override
     public void execute() {
-		//double pickupMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 0.0);
-        //Robot.pickup.runMotor(pickupMotorSpeed);
-        Robot.pickup.runMotor(0.5);
-        Robot.thrower.throwerTriggerOn();
+        boolean reachedAngle=false;
+
+		int reachedOne = Robot.thrower.throwerRPM(0,speed);
+		int reachedTwo = Robot.thrower.throwerRPM(1,speed);
+
+        if (throwingCount > 0) {
+            Robot.thrower.throwerTriggerOn();
+            throwingCount--;
+        } else {
+            reachedAngle = Robot.thrower.setThrowerPosition(angle);
+            // If we have reached the target rpm on the thrower, run the trigger and shoot the note
+            if ((reachedOne > 3 && reachedTwo > 3 && reachedAngle)) {
+                Robot.thrower.throwerTriggerOn();
+                throwingCount=100;
+            } else {
+                Robot.thrower.throwerTriggerOff();
+            }
+        }    
     }
 
     /**********************************************************************************
@@ -57,13 +76,9 @@ public class PickupWork extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        boolean haveNote=false;
 
-        haveNote=Robot.thrower.getPhotoSensor();
-
-        if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
-            Robot.pickup.cancel();
-            Robot.thrower.throwerTriggerOff();
+        if ((iters == 0 && throwingCount == 0) || throwingCount == 1 || !Robot.checkAutoCommand()) {
+            Robot.thrower.cancel();
             return true;
         }
         return false;
@@ -75,8 +90,6 @@ public class PickupWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.pickup.cancel();
-        Robot.thrower.throwerTriggerOff();
+        Robot.thrower.cancel();
     }
-
 }

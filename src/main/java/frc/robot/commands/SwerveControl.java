@@ -78,7 +78,7 @@ public class SwerveControl extends Command {
 		}
 
 		// left Trigger enables slow mode
-		if (driveJoystick.getLeftTrigger() > 0) {
+		if (driveJoystick.getLeftTrigger() > .5) {
 			Robot.swerveDrive.driveSlow(true);
 		    Robot.Leds.setMode(LEDSubsystem.LEDModes.SlowMode);
 		} else {
@@ -114,6 +114,7 @@ public class SwerveControl extends Command {
 			}	
 		}	
 
+		/* 
 		if (driveJoystick.isYButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
@@ -121,6 +122,7 @@ public class SwerveControl extends Command {
 				Robot.autoCommand.schedule();
 			}
 		}
+		*/
 
 		if (rotate == 0 && (forwardBack != 0 || leftRight != 0)) {
 			// if no rotate input specified, we are going to drive straight
