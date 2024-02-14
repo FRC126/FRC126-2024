@@ -68,7 +68,7 @@ public class ThrowerControl extends Command {
 				delay=150;
 			}
 		}	
-
+/* 
 		// Press Y to run the thrower for 10 seconds 
 		if (operatorJoystick.isYButton()) {
 			if (delay <= 0) {
@@ -85,7 +85,7 @@ public class ThrowerControl extends Command {
 		if (runCount == 0) {
 			runThrower = false;
 		}
-
+*/
 		if (operatorJoystick.getPovLeft()) {
 			if (delay <= 0) {
    			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
@@ -148,6 +148,15 @@ public class ThrowerControl extends Command {
 		} else {
             Robot.thrower.throwerTriggerOff();
 		}
+
+        // Thrower Angle Control
+		double y = operatorJoystick.getLeftStickY();
+
+		if ( y!=0 ) {
+
+		}
+
+
 	}
 }
 
