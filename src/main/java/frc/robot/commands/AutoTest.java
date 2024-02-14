@@ -15,6 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
@@ -29,7 +30,7 @@ public class AutoTest extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
-            
+            /*
             new DriveWork(.2,0,0,12,100),
             new TurnDegreesWork(90,100),
             new DriveWork(.2,0,0,12,100),
@@ -38,7 +39,7 @@ public class AutoTest extends SequentialCommandGroup {
             new TurnDegreesWork(90,100),
             new DriveWork(.2,0,0,12,100),
             new TurnDegreesWork(90,100),
-            
+            */
 
             /*
             new DriveWork(.3,.3,0,12,250),
@@ -47,21 +48,41 @@ public class AutoTest extends SequentialCommandGroup {
             new DriveWork(-.3,.3,0,12,250),
             */
 
-            /*
-            // Aim at speaker
-            // Throw Note in Speaker 
-            // Run Pickup
-            new DriveWork(-0.3,0,0,18,250),
+            
+            // TODO Aim at speaker
+            
+            // Throw the Note
+            new AutoThrow (3000,45),
+            
+            new ParallelCommandGroup(
+                // Run the Pickup
+                new PickupWork(250),
+                // Drive over the next note
+                new DriveWork(-0.3,0,0,18,250)
+            ),
+        
             new TurnDegreesWork(-20,250),
-            // Aim at speaker
+
+            // TODO Aim at speaker
+
             // Throw note in speaker
+            new AutoThrow (3000,45),
+
             new TurnDegreesWork(-70,250),
-            //Run pickup
-            new DriveWork(0,0.3,0,24,250),
+
+            new ParallelCommandGroup(
+                // Run the Pickup
+                new PickupWork(250),
+                // Drive over the next note
+                new DriveWork(-0.3,0,0,24,250)
+            ),
+
             new TurnDegreesWork(60,250),
-            // Aim at speaker
+
+            // TODO Aim at speaker
+
             // Throw note in speaker
-            */
+            new AutoThrow (3000,45),
 
             new FinishAuto()
         );

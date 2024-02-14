@@ -56,12 +56,21 @@ public class PickupCommand extends Command {
 		} else if (pickMotorSpeed < -1.0) {
 			pickMotorSpeed = -1.0;
 		}
+		//if (operatorJoystick.isXButton() && !Robot.thrower.getPhotoSensor()) {
 
 		if (operatorJoystick.isXButton()) {
 			this.pickupSubsystem.runMotor(pickMotorSpeed);
+     		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed);
+			//this.pickupSubsystem.runMotor(.3);
+			//Robot.thrower.throwerTriggerOn();
+		}else if (operatorJoystick.isYButton()) {
+			this.pickupSubsystem.runMotor(pickMotorSpeed*-1);
+     		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed*-1);
+			//this.pickupSubsystem.runMotor(.3);
+			//Robot.thrower.throwerTriggerOn();
 		} else {
-			this.pickupSubsystem.runMotor(0);
-
+			this.pickupSubsystem.cancel();
+			//Robot.thrower.throwerTriggerOff();
 		}
 	}
 }

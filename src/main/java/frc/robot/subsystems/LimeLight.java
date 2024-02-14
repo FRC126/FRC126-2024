@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class LimeLight extends SubsystemBase {
 
+    private boolean activeSeek=false;
     private boolean llTargetValid;
     private double llTargetArea;
     private double llTargetX;
@@ -33,6 +34,8 @@ public class LimeLight extends SubsystemBase {
     private int validCount;
     private int missedCount;
     private int centeredCount;
+    private double angleOffset;
+
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
     NetworkTable table;
@@ -44,13 +47,14 @@ public class LimeLight extends SubsystemBase {
     public LimeLight() {
         // Register this subsystem with command scheduler and set the default command
         CommandScheduler.getInstance().registerSubsystem(this);
-        setDefaultCommand(new LimeLightWork(this));
+        setDefaultCommand(new LimeLightControl(this));
 
         llTargetValid=false;
         llTargetArea = 0.0;
         llTargetX = 0.0;
         llTargetY = 0.0;
         turretTarget = 0;
+        angleOffset=0;
         
         validCount=0;
         missedCount=0;
@@ -66,6 +70,28 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
     }
+
+	/************************************************************************
+	 ************************************************************************/
+
+	public double getAngleOffset() {
+       return angleOffset;
+    }   
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public boolean getActiveSeek() {
+       return activeSeek;
+    }   
+
+   	/************************************************************************
+	 ************************************************************************/
+
+     public boolean setActiveSeek(boolean seek) {
+        activeSeek = seek;
+        return activeSeek;
+    }   
 
 	/************************************************************************
 	 ************************************************************************/
@@ -227,7 +253,6 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
     public void trackTarget() {
-
         if (Robot.targetType == Robot.targetTypes.NoTarget) {
             // If we are not seeking a target, then reset all target 
             // data and return
@@ -254,27 +279,25 @@ public class LimeLight extends SubsystemBase {
             if (validCount > 3) {
                 double foo = Robot.limeLight.getllTargetX();
                 if ( foo < -1.5 || foo > 1.5) {
-                    if ( Robot.doAutoCommand() ) {
+                    if ( activeSeek && Robot.doAutoCommand() ) {
                         Robot.autoMove=true;
-                        Robot.autoCommand=new AutoTurn(foo,100);
+                        Robot.autoCommand=new AutoTurn(foo,200);
                         Robot.autoCommand.schedule();
                     }	   
+                    angleOffset=foo;
                     centeredCount=0;
                     Robot.shootNow=false;
                 } else {
                     // Target is centered, don't turn the robot
+                    angleOffset=0;
                     centeredCount++;
-                    if (centeredCount > 2) {
-                        // If we have stayed centered on the target for 10 interations, 
-                        // drive forwards toward the target
-                        //if (getllTargetArea() < .25 ) {
-                        //    if ( Robot.doAutoCommand() ) {
-                        //        Robot.autoMove=true;
-                        //        Robot.autoCommand=new AutoDrive(.25,0,0,6,120);
-                        //        Robot.autoCommand.schedule();
-                        //    }
-                        //}    	   
-                        // TODO - set thrower angle based on the distance from the target
+                    if (centeredCount > 5) {
+                        if (activeSeek && Robot.doAutoCommand()) {
+                            Robot.autoMove=true;
+                            // TODO Need to calculate the angle and rpm
+                            Robot.autoCommand=new AutoThrow(2500,45);
+                            Robot.autoCommand.schedule();
+                        }	   
                         Robot.shootNow=true;
 
                     } else {
@@ -294,6 +317,7 @@ public class LimeLight extends SubsystemBase {
                 validCount=0;
                 missedCount=0;
                 centeredCount=0;
+                angleOffset=0;
             }    
         }
     }          

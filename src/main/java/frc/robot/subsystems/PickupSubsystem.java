@@ -52,8 +52,7 @@ public class PickupSubsystem extends SubsystemBase {
 		// Spark max/Neo Motors
 
 		Robot.PickupMotor.set(speed);
-
-		SmartDashboard.putNumber("Pickup runMotor called", called++);
+		//SmartDashboard.putNumber("Pickup runMotor called", called++);
 	}
 
 	/************************************************************************
