@@ -184,9 +184,9 @@ public class Thrower extends SubsystemBase {
 			}
 		} else {
 			if (currAngle < angle -.5) {
-
+				moveThrower(.3);
 			} else if (currAngle > angle + .5) {
-
+				moveThrower(-.3);
 			} else {
 				reachedAngleCount++;
 				moveThrower(0);

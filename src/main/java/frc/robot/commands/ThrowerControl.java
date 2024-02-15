@@ -153,10 +153,10 @@ public class ThrowerControl extends Command {
 		double y = operatorJoystick.getLeftStickY();
 
 		if ( y!=0 ) {
-
+			Robot.thrower.moveThrower(y);
+		} else {
+			Robot.thrower.moveThrower(0);
 		}
-
-
 	}
 }
 
