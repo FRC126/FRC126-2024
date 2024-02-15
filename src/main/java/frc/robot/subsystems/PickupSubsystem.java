@@ -52,6 +52,16 @@ public class PickupSubsystem extends SubsystemBase {
 		// Spark max/Neo Motors
 
 		Robot.PickupMotor.set(speed);
+		Robot.throwerTriggerMotor.set(speed);
+		//SmartDashboard.putNumber("Pickup runMotor called", called++);
+	}
+
+		public void runMotor2(double speed) {
+		///////////////////////////////////////////////////////////////
+		// Spark max/Neo Motors
+
+		//Robot.PickupMotor.set(speed);
+		Robot.throwerTriggerMotor.set(speed);
 		//SmartDashboard.putNumber("Pickup runMotor called", called++);
 	}
 
@@ -60,5 +70,7 @@ public class PickupSubsystem extends SubsystemBase {
 
 	public void cancel() {
 		runMotor(0);
+				runMotor2(0);
+
 	}
 }
