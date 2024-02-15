@@ -94,12 +94,13 @@ public class Robot extends TimedRobot {
 
     public static TalonFX throwerMotorTalonOne = new TalonFX(RobotMap.throwerTalonMotorOneCanID);
     public static TalonFX throwerMotorTalonTwo = new TalonFX(RobotMap.throwerTalonMotorTwoCanID);
+    public static TalonFX throwerTriggerMotor = new TalonFX(RobotMap.throwerTriggerMotorCanID);
 
-    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
+    //public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
 
-    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    //public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
@@ -244,7 +245,7 @@ public class Robot extends TimedRobot {
         autoFollow.addOption("2 note",1);
         autoFollow.addOption("3 note",2);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
-        SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,0.1);
+        SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,1);
         SmartDashboard.putBoolean(COMPETITION_ROBOT, false);
            
 

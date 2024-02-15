@@ -206,14 +206,14 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
     public void throwerTriggerOn() {
-		Robot.throwerTriggerMotor.set(.3);
+		//Robot.throwerTriggerMotor.set(.3);
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
     public void throwerTriggerOff() {
-		Robot.throwerTriggerMotor.set(0);
+		//Robot.throwerTriggerMotor.set(0);
 	}
 	
 	
