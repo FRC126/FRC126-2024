@@ -15,6 +15,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.commands.*;
+import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,17 +31,16 @@ public class LidarLite extends SubsystemBase {
     * You can also use the offset to zero out the distance between the sensor and edge of the robot.
     */
     private static final int CALIBRATION_OFFSET = -5;
-    private double[] dataSeries;
     private static final int HEIGHT_IN = 83;
     private static final int SUBHEIGHT_IN = 24;
     private Counter counter;
-    private double distanceAvg=0;
+    private Smoother smoother = new Smoother(10);
 
 	/**********************************************************************************
 	 **********************************************************************************/
 	
     public double getDistanceAvg() {
-        return distanceAvg;
+        return smoother.getAverage();
     } 
 
 	/**********************************************************************************
@@ -58,7 +58,6 @@ public class LidarLite extends SubsystemBase {
         // Configure for measuring rising to falling pulses
         counter.setSemiPeriodMode(true);
         counter.reset();
-        dataSeries = new double[10];
     }
 
 	/**********************************************************************************
@@ -88,21 +87,8 @@ public class LidarLite extends SubsystemBase {
         */
         cm = (counter.getPeriod() * 1000000.0 / 10.0) + CALIBRATION_OFFSET;
         
-        for (int x=1; x<10; x=x+1) {
-            dataSeries[x-1] = dataSeries[x];
-        }
-        dataSeries[9] = cm;
-        
-        double sum=0;
-        double count=0;
-        for (int x=0; x<10; x=x+1) {
-            if (dataSeries[x] != 0) {
-                count++;
-                sum += dataSeries[x];
-            } 
-        }
-            
-        distanceAvg = sum / count;
+        double distanceAvg = smoother.sampleAndGetAverage(cm);
+
         double distanceInch = distanceAvg*0.39370079;
         SmartDashboard.putNumber("LidarLite Distance",distanceInch);
         SmartDashboard.putNumber("Thrower Angle", calcAngle(distanceInch, HEIGHT_IN,SUBHEIGHT_IN));
