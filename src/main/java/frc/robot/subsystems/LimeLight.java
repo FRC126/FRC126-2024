@@ -16,6 +16,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.commands.*;
+import frc.robot.util.NetworkTablesSmoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +42,12 @@ public class LimeLight extends SubsystemBase {
     NetworkTable table;
     double pipelineLast=0;
 
+    static int itersToCapture = 4;
+
+    private NetworkTablesSmoother taSmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "ta");
+    private NetworkTablesSmoother txSmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "tx");
+    private NetworkTablesSmoother tySmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "ty");
+
 	/************************************************************************
 	 ************************************************************************/
 
@@ -60,9 +67,6 @@ public class LimeLight extends SubsystemBase {
         missedCount=0;
 
         centeredCount=0;
-
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-
     }
 
 	/************************************************************************
@@ -177,15 +181,10 @@ public class LimeLight extends SubsystemBase {
         int foo=getPipeline();
         SmartDashboard.putNumber("Limelight Pipe", foo);
 
-        NetworkTableEntry nttx = table.getEntry("tx");
-        NetworkTableEntry ntty = table.getEntry("ty");
-        NetworkTableEntry ntta = table.getEntry("ta");
-        NetworkTableEntry nttv = table.getEntry("tv");
-        
-        double tx = nttx.getDouble(0.0);
-        double ty = ntty.getDouble(0.0);
-        double ta = ntta.getDouble(0.0);
-        double tv = nttv.getDouble(0.0);
+        double tx = txSmoother.sampleAndGetAverage();
+        double ty = tySmoother.sampleAndGetAverage();
+        double ta = taSmoother.sampleAndGetAverage();        
+        double tv = table.getEntry("tv").getDouble(0.0);
         
         if (limeLightDebug) {
             //post to smart dashboard periodically
