@@ -59,7 +59,7 @@ public class PickupCommand extends Command {
 		//if (operatorJoystick.isXButton() && !Robot.thrower.getPhotoSensor()) {
 
 		if (operatorJoystick.isXButton()) {
-			this.pickupSubsystem.runMotor(pickMotorSpeed);
+			//this.pickupSubsystem.runMotor(pickMotorSpeed);
      		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed);
 			//this.pickupSubsystem.runMotor(.3);
 			//Robot.thrower.throwerTriggerOn();

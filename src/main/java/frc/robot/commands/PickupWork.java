@@ -46,8 +46,8 @@ public class PickupWork extends Command {
     public void execute() {
 		//double pickupMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 0.0);
         //Robot.pickup.runMotor(pickupMotorSpeed);
-        Robot.pickup.runMotor(0.5);
-        Robot.thrower.throwerTriggerOn();
+        Robot.pickup.runMotor(0.7);
+        //Robot.thrower.throwerTriggerOn();
     }
 
     /**********************************************************************************
@@ -63,7 +63,7 @@ public class PickupWork extends Command {
 
         if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
             Robot.pickup.cancel();
-            Robot.thrower.throwerTriggerOff();
+            //Robot.thrower.throwerTriggerOff();
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ public class PickupWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.pickup.cancel();
-        Robot.thrower.throwerTriggerOff();
+        //Robot.thrower.throwerTriggerOff();
     }
 
 }
