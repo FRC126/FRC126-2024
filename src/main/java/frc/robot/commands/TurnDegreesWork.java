@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  **********************************************************************************/
 
  public class TurnDegreesWork extends Command {
+    boolean turnDebug=false;
     double startAngle;
     double targetDegrees;
     int iters;
@@ -79,10 +80,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             targetReached=0;
         }
 
-        SmartDashboard.putNumber("Turn Current Degrees",currentDegrees);
-        SmartDashboard.putNumber("Turn Target Degrees",target);
-        SmartDashboard.putNumber("Turn diff",diff);
-        SmartDashboard.putNumber("Turn Target Reached",targetReached);
+        if (turnDebug) {
+            SmartDashboard.putNumber("Turn Current Degrees",currentDegrees);
+            SmartDashboard.putNumber("Turn Target Degrees",target);
+            SmartDashboard.putNumber("Turn diff",diff);
+            SmartDashboard.putNumber("Turn Target Reached",targetReached);
+        }
 
         Robot.swerveDrive.Drive(0, 0, driveRotate);
     }

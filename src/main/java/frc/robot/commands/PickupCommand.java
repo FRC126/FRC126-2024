@@ -49,28 +49,18 @@ public class PickupCommand extends Command {
 
 	@Override
 	public void execute() {
-		SmartDashboard.putBoolean("x pressed", operatorJoystick.isXButton());
 		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 1.0);
 		if (pickMotorSpeed > 1.0) {
 			pickMotorSpeed = 1.0;
 		} else if (pickMotorSpeed < -1.0) {
 			pickMotorSpeed = -1.0;
 		}
-		//if (operatorJoystick.isXButton() && !Robot.thrower.getPhotoSensor()) {
 
-		if (operatorJoystick.isXButton()) {
-			//this.pickupSubsystem.runMotor(pickMotorSpeed);
-     		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed);
-			//this.pickupSubsystem.runMotor(.3);
-			//Robot.thrower.throwerTriggerOn();
-		}else if (operatorJoystick.isYButton()) {
+		if (operatorJoystick.isYButton()) {
 			this.pickupSubsystem.runMotor(pickMotorSpeed*-1);
      		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed*-1);
-			//this.pickupSubsystem.runMotor(.3);
-			//Robot.thrower.throwerTriggerOn();
 		} else {
 			this.pickupSubsystem.cancel();
-			//Robot.thrower.throwerTriggerOff();
 		}
 	}
 }

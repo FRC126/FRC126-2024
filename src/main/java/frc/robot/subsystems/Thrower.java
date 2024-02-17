@@ -83,8 +83,10 @@ public class Thrower extends SubsystemBase {
 		    RPM = Robot.throwerMotorTalonTwo.getVelocity();
 			rpm = RPM.getValueAsDouble() * 60;
 		}	
-        String bar="Thrower " + index + " RPM Current foo";
-			SmartDashboard.putNumber(bar,rpm);
+
+        //String bar="Thrower " + index + " RPM Current foo";
+		//SmartDashboard.putNumber(bar,rpm);
+
 		/**********************************************************************
 		 * PID Loop for controlling motor RPM
 		 **********************************************************************/
@@ -147,8 +149,11 @@ public class Thrower extends SubsystemBase {
 
 		position=left+right/2.0;
 
+		double currAngle = (position / 42 / 750) * 360;		
+		SmartDashboard.putNumber("thrower angle", currAngle);
+
 		if ( speed < 0 && Robot.throwerTopLimit.get() == true ) {
-		//	speed=0;
+		// 	speed=0;
 		}		
 		if ( speed > 0 && Robot.throwerBottomLimit.get() == true ) {
 		//	speed=0;
@@ -164,7 +169,6 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public boolean setThrowerPosition(double angle) {
-	
 		double pos = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
 		double currAngle = pos / 42 / 500;
 
@@ -231,7 +235,7 @@ public class Thrower extends SubsystemBase {
 	public void cancel() {
         throwerRPM(1,0); 
         throwerRPM(2,0); 
-		throwerTriggerOff();
+			throwerTriggerOff();
 		moveThrower(0);
 	}
 

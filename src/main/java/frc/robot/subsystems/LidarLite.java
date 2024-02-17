@@ -109,8 +109,11 @@ public class LidarLite extends SubsystemBase {
 
         return distanceAvg;
     }
+
+	/**********************************************************************************
+	 **********************************************************************************/
+
     public static double calcAngle(double x, double height, double subHeight) {
-        
         return Math.toDegrees(Math.atan((height - subHeight)/(x)));
     }
 }

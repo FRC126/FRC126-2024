@@ -164,7 +164,7 @@ public class SwerveDrive extends SubsystemBase {
         if (targetAngle < -0.45 && currentAngle > .45) { skip=true; }
         if (targetAngle > .45 && currentAngle < -.45) { skip=true; }
 
-     	SmartDashboard.putNumber("reverse angle", reverse);
+     	//SmartDashboard.putNumber("reverse angle", reverse);
 
 		if ( targetAngle < (currentAngle) - 0.1 && !skip) {
 			speed=-0.4 * reverse;

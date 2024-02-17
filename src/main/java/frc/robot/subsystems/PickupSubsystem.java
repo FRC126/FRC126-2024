@@ -44,27 +44,13 @@ public class PickupSubsystem extends SubsystemBase {
 	}
 
 	/************************************************************************
-	 * Run Main Thower Wheels by target RPM
+	 * Run Main Thower Wheels by input percentage
 	 ************************************************************************/
 
 	public void runMotor(double speed) {
-		///////////////////////////////////////////////////////////////
-		// Spark max/Neo Motors
-
 		if (!Robot.triggerThrow) {
 			Robot.PickupMotor.set(speed);
 		}	
-		//Robot.throwerTriggerMotor.set(speed);
-		//SmartDashboard.putNumber("Pickup runMotor called", called++);
-	}
-
-		public void runMotor2(double speed) {
-		///////////////////////////////////////////////////////////////
-		// Spark max/Neo Motors
-
-		//Robot.PickupMotor.set(speed);
-		//Robot.throwerTriggerMotor.set(speed);
-		//SmartDashboard.putNumber("Pickup runMotor called", called++);
 	}
 
 	/************************************************************************
@@ -72,7 +58,5 @@ public class PickupSubsystem extends SubsystemBase {
 
 	public void cancel() {
 		runMotor(0);
-				runMotor2(0);
-
 	}
 }
