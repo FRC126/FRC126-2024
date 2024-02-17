@@ -29,13 +29,13 @@ import com.revrobotics.CANSparkMax;
  **********************************************************************************/
 
 public class Thrower extends SubsystemBase {	
-	static double throwerSpeed[] = { 0,0 };
-	static int targetReached[] = { 0,0 } ;
+	static double throwerSpeed[] = { 0,0,0 };
+	static int targetReached[] = { 0,0,0 } ;
     static int delay;
     static double P = 0.000025;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=3500;
+	public static double myRPM=1500;
 	
 	// Thrower Angle Control
 	PIDController throwerPID;
@@ -50,8 +50,8 @@ public class Thrower extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
-		throwerPID = new PIDController(.1, 0, .0001);
-		throwerPID.setTolerance(2,10);
+		//throwerPID = new PIDController(.1, 0, .0001);
+		//throwerPID.setTolerance(2,10);
 	}
 
 	/************************************************************************
@@ -81,9 +81,10 @@ public class Thrower extends SubsystemBase {
  			rpm = RPM.getValueAsDouble() * 60;
 		} else {
 		    RPM = Robot.throwerMotorTalonTwo.getVelocity();
-			rpm = RPM.getValueAsDouble() * 60 * -1;
+			rpm = RPM.getValueAsDouble() * 60;
 		}	
-
+        String bar="Thrower " + index + " RPM Current foo";
+			SmartDashboard.putNumber(bar,rpm);
 		/**********************************************************************
 		 * PID Loop for controlling motor RPM
 		 **********************************************************************/
@@ -102,17 +103,19 @@ public class Thrower extends SubsystemBase {
 			throwerSpeed[index] = 1;
 		}
 
-		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
+		if (targetRPM < rpm + 125 && targetRPM > rpm - 125) {
 			targetReached[index]++;
 		} else {
 			targetReached[index]=0;
 		}
 
         // Set the speed on the Thrower Motors
-		if (index == 0) {
+		if (index == 1) {
 			Robot.throwerMotorTalonOne.set(throwerSpeed[index]);
+			
+			//Robot.throwerMotorTalonOne.set(.5);
 		} else {
-  			Robot.throwerMotorTalonTwo.set(throwerSpeed[index] * -1);
+  			Robot.throwerMotorTalonTwo.set(throwerSpeed[index]);
 		}	
 
 		if (throwerDebug) {
@@ -137,6 +140,7 @@ public class Thrower extends SubsystemBase {
         double position=0;
 
 		Robot.throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
 		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
 		double right = Robot.throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
@@ -144,14 +148,14 @@ public class Thrower extends SubsystemBase {
 		position=left+right/2.0;
 
 		if ( speed < 0 && Robot.throwerTopLimit.get() == true ) {
-			speed=0;
+		//	speed=0;
 		}		
-		if ( speed > 0 && Robot.throwerTopLimit.get() == true ) {
-			speed=0;
+		if ( speed > 0 && Robot.throwerBottomLimit.get() == true ) {
+		//	speed=0;
 		}		
 
-		Robot.throwerClimberMotorLeft.set(speed);
-		//Robot.throwerClimberMotorRight.set(speed*-1);
+		Robot.throwerClimberMotorLeft.set(speed*-1);
+		Robot.throwerClimberMotorRight.set(speed);
 
         return(position);
 	}
@@ -184,9 +188,9 @@ public class Thrower extends SubsystemBase {
 			}
 		} else {
 			if (currAngle < angle -.5) {
-
+				moveThrower(.3);
 			} else if (currAngle > angle + .5) {
-
+				moveThrower(-.3);
 			} else {
 				reachedAngleCount++;
 				moveThrower(0);
@@ -206,14 +210,18 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
     public void throwerTriggerOn() {
-		//Robot.throwerTriggerMotor.set(.3);
+		Robot.throwerTriggerMotor.set(-1);
+		Robot.pickup.runMotor(-1);
+		Robot.triggerThrow=true;
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
     public void throwerTriggerOff() {
-		//Robot.throwerTriggerMotor.set(0);
+		Robot.throwerTriggerMotor.set(0);
+		Robot.pickup.runMotor(0);
+		Robot.triggerThrow=false;
 	}
 	
 	
@@ -221,8 +229,8 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public void cancel() {
-        throwerRPM(0,0); 
         throwerRPM(1,0); 
+        throwerRPM(2,0); 
 		throwerTriggerOff();
 		moveThrower(0);
 	}

@@ -31,6 +31,7 @@ public class ThrowerControl extends Command {
 	int runCount=0;
 	final int IDLE_RPM=2000;
 	final int MAX_RPM=5700;
+	boolean throwerTriggered=false;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -121,8 +122,7 @@ public class ThrowerControl extends Command {
 		SmartDashboard.putBoolean("idleThrower", idleThrower);
 
 		if (operatorJoystick.isAButton()) {
-
-			double distance=Robot.distance.getDistanceAvg();
+			// double distance=Robot.distance.getDistanceAvg();
 			// TODO set the thrower angle and speed based on the distance
 			// TODO TODO TODO
 
@@ -131,32 +131,43 @@ public class ThrowerControl extends Command {
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=IDLE_RPM;
+			throwerTriggered=false;
 		} else if (runThrower) {
 			speed=Robot.thrower.getRPM();
+			throwerTriggered=false;
 		} else {
 			speed=0;
+			throwerTriggered=false;
 		}
 
      	SmartDashboard.putNumber("speed", speed);
 
-		int reachedOne = Robot.thrower.throwerRPM(0,speed);
-		int reachedTwo = Robot.thrower.throwerRPM(1,speed);
+		int reachedOne=0, reachedTwo=0;
+		reachedOne = Robot.thrower.throwerRPM(1,speed);
+		reachedTwo = Robot.thrower.throwerRPM(2,speed);
+
+		SmartDashboard.putNumber("reachedOne", reachedOne);
+     	SmartDashboard.putNumber("reachedTwo", reachedTwo);
 
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
-		if ((reachedOne > 5 && reachedTwo > 5 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
+		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
+			throwerTriggered=true;
+
 		} else {
-            Robot.thrower.throwerTriggerOff();
+			if (!throwerTriggered) Robot.thrower.throwerTriggerOff();
 		}
 
         // Thrower Angle Control
 		double y = operatorJoystick.getLeftStickY();
 
+		SmartDashboard.putNumber("thrower tilt input", y);
+
 		if ( y!=0 ) {
-
+			Robot.thrower.moveThrower(y);
+		} else {
+			Robot.thrower.moveThrower(0);
 		}
-
-
 	}
 }
 

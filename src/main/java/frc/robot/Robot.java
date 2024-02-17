@@ -94,13 +94,13 @@ public class Robot extends TimedRobot {
 
     public static TalonFX throwerMotorTalonOne = new TalonFX(RobotMap.throwerTalonMotorOneCanID);
     public static TalonFX throwerMotorTalonTwo = new TalonFX(RobotMap.throwerTalonMotorTwoCanID);
-    public static TalonFX throwerTriggerMotor = new TalonFX(RobotMap.throwerTriggerMotorCanID);
+    //public static TalonFX throwerTriggerMotor = new TalonFX(RobotMap.throwerTriggerMotorCanID);
 
-    //public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
     public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
 
-    //public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
@@ -114,6 +114,7 @@ public class Robot extends TimedRobot {
     // Thrower Photo Sensor 
 
     public static DigitalInput photoSensor;
+    public static boolean triggerThrow=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -148,6 +149,7 @@ public class Robot extends TimedRobot {
 
     // Global Robot Variables
     public int RobotID = 0;
+
 
     //public static enum targetHeights{LowTarget,HighTarget};
     public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo, TargetThree, TargetFour};
