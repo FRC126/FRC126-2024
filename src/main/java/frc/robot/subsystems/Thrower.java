@@ -15,6 +15,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -50,8 +51,8 @@ public class Thrower extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
-		//throwerPID = new PIDController(.1, 0, .0001);
-		//throwerPID.setTolerance(2,10);
+		throwerPID = new PIDController(.1, 0, .0001);
+		throwerPID.setTolerance(2,10);
 	}
 
 	/************************************************************************
@@ -83,8 +84,10 @@ public class Thrower extends SubsystemBase {
 		    RPM = Robot.throwerMotorTalonTwo.getVelocity();
 			rpm = RPM.getValueAsDouble() * 60;
 		}	
-        String bar="Thrower " + index + " RPM Current foo";
-			SmartDashboard.putNumber(bar,rpm);
+
+        //String bar="Thrower " + index + " RPM Current foo";
+		//SmartDashboard.putNumber(bar,rpm);
+
 		/**********************************************************************
 		 * PID Loop for controlling motor RPM
 		 **********************************************************************/
@@ -136,19 +139,31 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-    public double moveThrower(double speed) {
+	public double getThrowerAngle() {
         double position=0;
-
-		Robot.throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
 		double left = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
 		double right = Robot.throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
 
 		position=left+right/2.0;
 
+		double currAngle = (position / RobotMap.NeoTicksPerRotation / RobotMap.ThrowerGearRatio) * 360;		
+		SmartDashboard.putNumber("thrower angle", currAngle);
+
+		return(currAngle);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+    public double moveThrower(double speed) {
+		double currAngle=getThrowerAngle();
+        
+		Robot.throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		Robot.throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
 		if ( speed < 0 && Robot.throwerTopLimit.get() == true ) {
-		//	speed=0;
+		// 	speed=0;
 		}		
 		if ( speed > 0 && Robot.throwerBottomLimit.get() == true ) {
 		//	speed=0;
@@ -157,16 +172,14 @@ public class Thrower extends SubsystemBase {
 		Robot.throwerClimberMotorLeft.set(speed*-1);
 		Robot.throwerClimberMotorRight.set(speed);
 
-        return(position);
+        return(currAngle);
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
 	public boolean setThrowerPosition(double angle) {
-	
-		double pos = Robot.throwerClimberMotorLeftRelativeEncoder.getPosition();
-		double currAngle = pos / 42 / 500;
+		double currAngle=getThrowerAngle();
 
 		boolean usePID=true;
 
@@ -176,7 +189,7 @@ public class Thrower extends SubsystemBase {
 				throwerPID.reset();
 			}
 
-			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.2,.2);
+			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.3,.3);
 
 			if (throwerPID.atSetpoint()) {
 				reachedAngleCount++;
