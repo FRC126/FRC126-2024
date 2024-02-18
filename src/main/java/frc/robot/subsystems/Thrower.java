@@ -65,9 +65,9 @@ public class Thrower extends SubsystemBase {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Thrower Limit Switches
 
-    public static DigitalInput throwerBottomLimit;
-    public static DigitalInput throwerTopLimit;
-    public static DigitalInput photoSensor;
+    DigitalInput throwerBottomLimit = new DigitalInput(8);
+    DigitalInput throwerTopLimit = new DigitalInput(7);
+    DigitalInput photoSensor = new DigitalInput(2);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -78,10 +78,6 @@ public class Thrower extends SubsystemBase {
 		setDefaultCommand(new ThrowerControl(this));
 		throwerPID = new PIDController(.1, 0, .0001);
 		throwerPID.setTolerance(2,10);
-
-		throwerBottomLimit = new DigitalInput(8);
-        throwerTopLimit = new DigitalInput(7);
-        photoSensor = new DigitalInput(2);
 	}
 
 	/************************************************************************
@@ -218,7 +214,7 @@ public class Thrower extends SubsystemBase {
 				throwerPID.reset();
 			}
 
-			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.3,.3);
+			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.1,.1);
 
 			if (throwerPID.atSetpoint()) {
 				reachedAngleCount++;

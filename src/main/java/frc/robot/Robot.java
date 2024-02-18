@@ -24,11 +24,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalInput;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkRelativeEncoder;
-import com.revrobotics.RelativeEncoder;
 
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -37,8 +32,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-
-import com.ctre.phoenix6.hardware.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

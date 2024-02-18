@@ -20,7 +20,6 @@ import frc.robot.commands.*;
 import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class LimeLight extends SubsystemBase {
