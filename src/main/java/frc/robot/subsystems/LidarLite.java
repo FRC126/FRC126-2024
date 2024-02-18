@@ -43,9 +43,8 @@ public class LidarLite extends SubsystemBase {
      */
     private static final int SUBHEIGHT_IN = 24;
     private static final double CM_PER_INCH = 0.39370079;
-    private Counter counter;
+    private final Counter counter;
     private Smoother smoother = new Smoother(10);
-    private DigitalSource source = new DigitalInput(RobotMap.LidarChannel);
 
 	/**********************************************************************************
      * Create an object for a LIDAR-Lite attached to some digital input on the roboRIO
@@ -53,11 +52,18 @@ public class LidarLite extends SubsystemBase {
      * @param source The DigitalInput or DigitalSource where the LIDAR-Lite is attached (ex: new DigitalInput(9))
 	 **********************************************************************************/
     public LidarLite() {
-        super();
-        setDefaultCommand(new DistanceMeasure(this));
+        this(new Counter(new DigitalInput(RobotMap.LidarChannel)));
+    }
 
-        counter = new Counter(source);
+	/**********************************************************************************
+     * Override for unit test
+     */
+    public LidarLite(Counter counter) {
+        super();
+        this.counter = counter;
+        setDefaultCommand(new DistanceMeasure(this));
         counter.setMaxPeriod(1.0);
+        
         // Configure for measuring rising to falling pulses
         counter.setSemiPeriodMode(true);
         counter.reset();
