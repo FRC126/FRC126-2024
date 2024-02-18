@@ -261,6 +261,9 @@ public class Robot extends TimedRobot {
             BuildConstants.GIT_SHA
             ));
         Log.print(0, "Robot", "Robot Init Complete");
+        // Put information above onto Smart Dashboard
+        SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
+        SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
     }
 
  	  /************************************************************************
