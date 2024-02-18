@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**********************************************************************************
  **********************************************************************************/
 
-public class PickupSubsystem extends SubsystemBase {
+public class Pickup extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
@@ -40,7 +40,7 @@ public class PickupSubsystem extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public PickupSubsystem() {
+	public Pickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new PickupCommand(this));
@@ -57,7 +57,7 @@ public class PickupSubsystem extends SubsystemBase {
 	 ************************************************************************/
 
 	public void runMotor(double speed) {
-		if (!Robot.thrower.getTriggerThrow()) {
+		if (!Robot.thrower.getThrowTriggered()) {
 			PickupMotor.set(speed);
 		}	
 	}
