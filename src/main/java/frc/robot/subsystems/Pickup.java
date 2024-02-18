@@ -43,7 +43,7 @@ public class Pickup extends SubsystemBase {
 	public Pickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new PickupCommand(this));
+		setDefaultCommand(new PickupControl(this));
 	}
 
 	/************************************************************************

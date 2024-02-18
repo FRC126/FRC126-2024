@@ -49,7 +49,7 @@ public class Climber extends SubsystemBase {
 	public Climber() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
-		setDefaultCommand(new ClimberCommand(this));
+		setDefaultCommand(new ClimberControl(this));
 	}
 
 	/************************************************************************

@@ -19,13 +19,13 @@ import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ClimberCommand extends Command {
+public class ClimberControl extends Command {
 	JoystickWrapper operatorJoystick;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public ClimberCommand(Climber subsystem) {
+	public ClimberControl(Climber subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
 	}
