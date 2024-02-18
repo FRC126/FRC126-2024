@@ -15,6 +15,9 @@
 package frc.robot;
 
 public class RobotMap {
+    public static int NeoTicksPerRotation=42;
+	public static double ThrowerGearRatio=750;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
 	public static final int lStickX = 0; // Left stick X
@@ -35,13 +38,6 @@ public class RobotMap {
 	public static final int xboxRStick = 10; // Right stick button
 
 	///////////////////////////////////////////////////////////////////////////
-   	// Driver Motor Can ID's
-	public static final int leftDriveMotorCanID1 = 12;
-	public static final int leftDriveMotorCanID2 = 13;
-	public static final int rightDriveMotorCanID1 = 10;
-	public static final int rightDriveMotorCanID2 = 11;
-
-	///////////////////////////////////////////////////////////////////////////
  	// Thrower Motor Can ID's
 	public static final int throwerTalonMotorOneCanID = 26;
 	public static final int throwerTalonMotorTwoCanID = 27;
@@ -51,57 +47,74 @@ public class RobotMap {
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
-    public static final int swerveFrontRightDriveCanID = 40;
-    public static final int swerveFrontRightTurnCanID = 41;
-    public static final int swerveFrontLeftDriveCanID = 43;
-    public static final int swerveFrontLeftTurnCanID = 42;
-    public static final int swerveRearRightDriveCanID = 46;
-    public static final int swerveRearRightTurnCanID = 47;
-    public static final int swerveRearLeftDriveCanID = 44;
-    public static final int swerveRearLeftTurnCanID = 45;
+    public static int swerveFrontRightDriveCanID = 40;
+    public static int swerveFrontRightTurnCanID = 41;
+    public static int swerveFrontLeftDriveCanID = 43;
+    public static int swerveFrontLeftTurnCanID = 42;
+    public static int swerveRearRightDriveCanID = 46;
+    public static int swerveRearRightTurnCanID = 47;
+    public static int swerveRearLeftDriveCanID = 44;
+    public static int swerveRearLeftTurnCanID = 45;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Encoders
-	public static final int SwerveFrontRightEncoderCanID = 30;
-	public static final int SwerveFrontLeftEncoderCanID = 31;
-	public static final int SwerveRearRightEncoderCanID = 33;
-	public static final int SwerveRearLeftEncoderCanID = 32;
+	public static int SwerveFrontRightEncoderCanID = 30;
+	public static int SwerveFrontLeftEncoderCanID = 31;
+	public static int SwerveRearRightEncoderCanID = 33;
+	public static int SwerveRearLeftEncoderCanID = 32;
 
 	///////////////////////////////////////////////////////////////////////////
 	//Pickup Motor Can ID's
 	public static final int PickupCanID = 50;
 
-	///////////////////////////////////////////////////////////////////////////
-	//Motor Inversions
-    public static int left1Inversion;
-	public static int left2Inversion;
-	public static int right1Inversion;
-	public static int right2Inversion;
-
-	///////////////////////////////////////////////////////////////////////////
-	public static final int LidarChannel = 5; 
-
-	///////////////////////////////////////////////////////////////////////////
 	//Position Calibrations
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 
 			// 2024 DriveBase
-			left1Inversion     = 1;
-			left2Inversion     = 1;
-			right1Inversion    = -1;
-			right2Inversion    = -1;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Motors 
+			swerveFrontRightDriveCanID = 40;
+			swerveFrontRightTurnCanID = 41;
+			swerveFrontLeftDriveCanID = 43;
+			swerveFrontLeftTurnCanID = 42;
+			swerveRearRightDriveCanID = 46;
+			swerveRearRightTurnCanID = 47;
+			swerveRearLeftDriveCanID = 44;
+			swerveRearLeftTurnCanID = 45;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Encoders
+			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontLeftEncoderCanID = 31;
+			SwerveRearRightEncoderCanID = 33;
+			SwerveRearLeftEncoderCanID = 32;
 		} else { 
-			// 2024 Breadboard
-			left1Inversion     = 1;
-			left2Inversion     = 1;
-			right1Inversion    = 1;
-			right2Inversion    = 1;
+			// 2024 Official Robot
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Motors 
+			swerveFrontRightDriveCanID = 40;
+			swerveFrontRightTurnCanID = 41;
+			swerveFrontLeftDriveCanID = 43;
+			swerveFrontLeftTurnCanID = 42;
+			swerveRearRightDriveCanID = 46;
+			swerveRearRightTurnCanID = 47;
+			swerveRearLeftDriveCanID = 44;
+			swerveRearLeftTurnCanID = 45;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Encoders
+			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontLeftEncoderCanID = 31;
+			SwerveRearRightEncoderCanID = 33;
+			SwerveRearLeftEncoderCanID = 32;
 		}
 	}
 }
 
 
-/************************************************************************************************************
+/******************************************************************************
 Controls
 
 Driver:
@@ -111,6 +124,5 @@ Operator:
 
 Auto Commands:
 X Button: Cancel any running auto routines
-
-*/
+******************************************************************************/
 

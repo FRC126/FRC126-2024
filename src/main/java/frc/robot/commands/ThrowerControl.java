@@ -22,16 +22,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.math.MathUtil;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
 	boolean idleThrower=false;
-	boolean runThrower=false;
+	boolean throwerDebug=false;
 	int delay=0;
-	int runCount=0;
 	final int IDLE_RPM=2000;
 	final int MAX_RPM=5700;
-	boolean throwerTriggered=false;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -58,9 +55,9 @@ public class ThrowerControl extends Command {
 		double speed;
 
 		if ( delay > 0) { delay--; }
-		if ( runCount > 0) { runCount--; }
 
-		SmartDashboard.putNumber("delay", delay);
+        // Thrower Angle Control
+		double y = operatorJoystick.getLeftStickY();
 
 		if (operatorJoystick.isBButton()) {
             // Toggle the thrower idle on and off
@@ -69,24 +66,7 @@ public class ThrowerControl extends Command {
 				delay=150;
 			}
 		}	
-/* 
-		// Press Y to run the thrower for 10 seconds 
-		if (operatorJoystick.isYButton()) {
-			if (delay <= 0) {
-				if (runThrower) { 
-					runThrower = false; 
-					runCount = 0;
-				} else { 
-					runThrower = true; 
-					runCount = 500;
-				}
-				delay=40;
-			}
-		}
-		if (runCount == 0) {
-			runThrower = false;
-		}
-*/
+
 		if (operatorJoystick.getPovLeft()) {
 			if (delay <= 0) {
    			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
@@ -118,11 +98,9 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setRPM(MAX_RPM);
 		}
 
-		SmartDashboard.putNumber("thrower myRPM", Robot.thrower.getRPM());
-		SmartDashboard.putBoolean("idleThrower", idleThrower);
-
 		if (operatorJoystick.isAButton()) {
 			// double distance=Robot.distance.getDistanceAvg();
+
 			// TODO set the thrower angle and speed based on the distance
 			// TODO TODO TODO
 
@@ -131,37 +109,33 @@ public class ThrowerControl extends Command {
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=IDLE_RPM;
-			throwerTriggered=false;
-		} else if (runThrower) {
-			speed=Robot.thrower.getRPM();
-			throwerTriggered=false;
+			Robot.triggerThrow=false;
 		} else {
 			speed=0;
-			throwerTriggered=false;
+			Robot.triggerThrow=false;
 		}
-
-     	SmartDashboard.putNumber("speed", speed);
 
 		int reachedOne=0, reachedTwo=0;
 		reachedOne = Robot.thrower.throwerRPM(1,speed);
 		reachedTwo = Robot.thrower.throwerRPM(2,speed);
 
-		SmartDashboard.putNumber("reachedOne", reachedOne);
-     	SmartDashboard.putNumber("reachedTwo", reachedTwo);
+		if (throwerDebug) {
+			SmartDashboard.putNumber("thrower myRPM", Robot.thrower.getRPM());
+			SmartDashboard.putBoolean("idleThrower", idleThrower);
+			SmartDashboard.putNumber("reachedOne", reachedOne);
+    	 	SmartDashboard.putNumber("reachedTwo", reachedTwo);
+	     	SmartDashboard.putNumber("speed", speed);
+			SmartDashboard.putNumber("thrower tilt input", y);
+		}
 
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
-			throwerTriggered=true;
+			Robot.triggerThrow=true;
 
 		} else {
-			if (!throwerTriggered) Robot.thrower.throwerTriggerOff();
+			if (!Robot.triggerThrow) Robot.thrower.throwerTriggerOff();
 		}
-
-        // Thrower Angle Control
-		double y = operatorJoystick.getLeftStickY();
-
-		SmartDashboard.putNumber("thrower tilt input", y);
 
 		if ( y!=0 ) {
 			Robot.thrower.moveThrower(y);
