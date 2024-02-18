@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
     public static PickupSubsystem pickup;
     public static LEDSubsystem Leds;
     // Lidar Light Distance Measure
-    public static LidarLite distance;
+    public static LidarLite lidar;
     // Lime Light
     public static LimeLight limeLight;
 
@@ -223,8 +223,8 @@ public class Robot extends TimedRobot {
         internalData.initGyro();
         internalData.resetGyro();
 
-        // create the lidarlite class on DIO 5
-        distance = new LidarLite(new DigitalInput(5));
+        // create the lidarlite class
+        lidar = new LidarLite();
 
         // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();
