@@ -14,25 +14,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Thrower;
 
 public class ThrowerWork extends Command {
 
     int iters, speed;
-    double angle;
-    int throwingCount=0;
+    int throwingIters=0;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ThrowerWork(int speed, double angle, int iters) {
+    public ThrowerWork(int speed, int iters) {
+        addRequirements(Robot.lidar);
         this.iters = iters;
         this.speed = speed;
-        this.angle = angle;
-        throwingCount=0;
+        throwingIters=0;
     }
 
     /**********************************************************************************
@@ -54,15 +51,17 @@ public class ThrowerWork extends Command {
 		int reachedOne = Robot.thrower.throwerRPM(0,speed);
 		int reachedTwo = Robot.thrower.throwerRPM(1,speed);
 
-        if (throwingCount > 0) {
+        if (throwingIters > 0) {
             Robot.thrower.throwerTriggerOn();
-            throwingCount--;
+            throwingIters--;
         } else {
-            reachedAngle = Robot.thrower.setThrowerPosition(angle);
+            // TODO: is thrower position in degrees or radians?
+            double targetAngleDegrees = Robot.lidar.getTargetAngleDegrees();
+            reachedAngle = Robot.thrower.setThrowerPosition(Math.toRadians(targetAngleDegrees));
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
             if ((reachedOne > 3 && reachedTwo > 3 && reachedAngle)) {
                 Robot.thrower.throwerTriggerOn();
-                throwingCount=100;
+                throwingIters=100;
             } else {
                 Robot.thrower.throwerTriggerOff();
             }
@@ -77,7 +76,7 @@ public class ThrowerWork extends Command {
     public boolean isFinished() {
         iters--;
 
-        if ((iters == 0 && throwingCount == 0) || throwingCount == 1 || !Robot.checkAutoCommand()) {
+        if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
             Robot.thrower.cancel();
             return true;
         }

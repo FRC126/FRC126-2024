@@ -14,12 +14,13 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.commands.*;
+import frc.robot.RobotMap;
+import frc.robot.commands.DistanceMeasure;
 import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**********************************************************************************
@@ -31,26 +32,28 @@ public class LidarLite extends SubsystemBase {
     * You can also use the offset to zero out the distance between the sensor and edge of the robot.
     */
     private static final int CALIBRATION_OFFSET = -5;
+
+    /**
+     * Distance of target from the floor.
+     */
     private static final int HEIGHT_IN = 83;
+
+    /**
+     * Height of lidar light from the floor.
+     */
     private static final int SUBHEIGHT_IN = 24;
+    private static final double CM_PER_INCH = 0.39370079;
     private Counter counter;
     private Smoother smoother = new Smoother(10);
-
-	/**********************************************************************************
-	 **********************************************************************************/
-	
-    public double getDistanceAvg() {
-        return smoother.getAverage();
-    } 
+    private DigitalSource source = new DigitalInput(RobotMap.LidarChannel);
 
 	/**********************************************************************************
      * Create an object for a LIDAR-Lite attached to some digital input on the roboRIO
      * 
      * @param source The DigitalInput or DigitalSource where the LIDAR-Lite is attached (ex: new DigitalInput(9))
 	 **********************************************************************************/
-	
-    public LidarLite (DigitalSource source) {
-        CommandScheduler.getInstance().registerSubsystem(this);
+    public LidarLite() {
+        super();
         setDefaultCommand(new DistanceMeasure(this));
 
         counter = new Counter(source);
@@ -61,6 +64,24 @@ public class LidarLite extends SubsystemBase {
     }
 
 	/**********************************************************************************
+     * Gets the average distance (cm) over several ticks.
+	 **********************************************************************************/
+    public double getDistanceAvg() {
+        return smoother.getAverage();
+    } 
+
+	/**********************************************************************************
+     * Get the target angle based on distance from the speaker.
+	 **********************************************************************************/
+    public double getTargetAngleDegrees() {
+        double distanceInch = getDistanceAvg() * CM_PER_INCH;
+        double throwerAngleDegrees = calcAngle(distanceInch, HEIGHT_IN,SUBHEIGHT_IN);
+        SmartDashboard.putNumber("Target Angle (degrees)", throwerAngleDegrees);
+        SmartDashboard.putNumber("LidarLite Distance (in)", distanceInch);
+        return throwerAngleDegrees;
+    }
+
+    /**********************************************************************************
 	 **********************************************************************************/
 
     @Override
@@ -73,9 +94,7 @@ public class LidarLite extends SubsystemBase {
      * 
      * @return Distance in cm
 	 **********************************************************************************/
-	
     public double measureDistance() {
-        double cm;
         /* If we haven't seen the first rising to falling pulse, then we have no measurement.
         * This happens when there is no LIDAR-Lite plugged in, btw.
         */
@@ -85,18 +104,14 @@ public class LidarLite extends SubsystemBase {
         /* getPeriod returns time in seconds. The hardware resolution is microseconds.
         * The LIDAR-Lite unit sends a high signal for 10 microseconds per cm of distance.
         */
-        cm = (counter.getPeriod() * 1000000.0 / 10.0) + CALIBRATION_OFFSET;
-        
-        double distanceAvg = smoother.sampleAndGetAverage(cm);
-
-        double distanceInch = distanceAvg*0.39370079;
-        SmartDashboard.putNumber("LidarLite Distance",distanceInch);
-        SmartDashboard.putNumber("Thrower Angle", calcAngle(distanceInch, HEIGHT_IN,SUBHEIGHT_IN));
-
-        return distanceAvg;
+        double cm = (counter.getPeriod() * 1000000.0 / 10.0) + CALIBRATION_OFFSET;
+        return smoother.sampleAndGetAverage(cm);
     }
-    public static double calcAngle(double x, double height, double subHeight) {
-        
-        return Math.toDegrees(Math.atan((height - subHeight)/(x)));
+
+	/**********************************************************************************
+     * Use math to calculate the angle we should shoot from.
+	 **********************************************************************************/
+    public double calcAngle(double x, double heightInches, double subHeightInchdes) {    
+        return Math.toDegrees(Math.atan((heightInches - subHeightInchdes)/(x)));
     }
 }

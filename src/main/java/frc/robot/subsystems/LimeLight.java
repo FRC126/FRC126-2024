@@ -53,7 +53,7 @@ public class LimeLight extends SubsystemBase {
 
     public LimeLight() {
         // Register this subsystem with command scheduler and set the default command
-        CommandScheduler.getInstance().registerSubsystem(this);
+        super();
         setDefaultCommand(new LimeLightControl(this));
 
         llTargetValid=false;
