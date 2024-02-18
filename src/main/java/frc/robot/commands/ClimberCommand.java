@@ -17,22 +17,17 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PickupCommand extends Command {
+public class ClimberCommand extends Command {
 	JoystickWrapper operatorJoystick;
-	Pickup pickup;
 
 	/**********************************************************************************
 	 **********************************************************************************/
 
-	public PickupCommand(Pickup subsystem) {
+	public ClimberCommand(Climber subsystem) {
 		addRequirements(subsystem);
 		operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
-		this.pickup = subsystem;
 	}
 
 	/**********************************************************************************
@@ -49,18 +44,15 @@ public class PickupCommand extends Command {
 
 	@Override
 	public void execute() {
-		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 1.0);
-		if (pickMotorSpeed > 1.0) {
-			pickMotorSpeed = 1.0;
-		} else if (pickMotorSpeed < -1.0) {
-			pickMotorSpeed = -1.0;
-		}
+    	// Climber Movement Control
+		double y = operatorJoystick.getRightStickY();
 
-		if (operatorJoystick.isYButton()) {
-			this.pickup.runMotor(pickMotorSpeed*-1);
-     		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed*-1);
+		if (y > 0) {
+	        Robot.climber.extendClimber(y);
+		} else if (	y < 0 ) {
+	        Robot.climber.retractClimber(y);
 		} else {
-			this.pickup.cancel();
+			Robot.climber.cancel();
 		}
 	}
 }

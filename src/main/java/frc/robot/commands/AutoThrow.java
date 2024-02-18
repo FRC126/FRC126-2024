@@ -25,7 +25,7 @@ public class AutoThrow extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new ThrowerWork(rpms, 250),
+            new ThrowerWork(rpms, angle, 250),
             new FinishAuto()
         );
     }       

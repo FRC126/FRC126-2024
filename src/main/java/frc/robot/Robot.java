@@ -64,7 +64,8 @@ public class Robot extends TimedRobot {
     public static InternalData internalData;
     public static SwerveDrive swerveDrive;
     public static Thrower thrower;    
-    public static PickupSubsystem pickup;
+    public static Climber climber;
+    public static Pickup pickup;
     public static LEDSubsystem Leds;
     // Lidar Light Distance Measure
     public static LidarLite lidar;
@@ -125,7 +126,7 @@ public class Robot extends TimedRobot {
         thrower = new Thrower();
   
         // Pickup SubSystem
-        pickup = new PickupSubsystem();
+        pickup = new Pickup();
 
         // LED Subsystem
         Leds = new LEDSubsystem();

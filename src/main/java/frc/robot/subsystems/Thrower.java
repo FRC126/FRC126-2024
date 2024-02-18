@@ -41,7 +41,7 @@ public class Thrower extends SubsystemBase {
     static double I = -0.0003;
 	boolean throwerDebug=true;
 	public static double myRPM=1500;
-    static boolean triggerThrow=false;
+    static boolean throwTriggered=false;
 	
 	// Thrower Angle Control
 	PIDController throwerPID;
@@ -183,15 +183,18 @@ public class Thrower extends SubsystemBase {
 
     public double moveThrower(double speed) {
 		double currAngle=getThrowerAngle();
+		boolean useLimitSwiches=false;
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-		if ( speed < 0 && throwerTopLimit.get() == true ) {
-		// 	speed=0;
+		if ( speed < 0 && throwerTopLimit.get() == true && useLimitSwiches) {
+			speed=0;
 		}		
-		if ( speed > 0 && throwerBottomLimit.get() == true ) {
-		//	speed=0;
+		if ( speed > 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
+		    speed=0;
+			throwerClimberMotorLeftRelativeEncoder.setPosition(50);
+			throwerClimberMotorRightRelativeEncoder.setPosition(50);
 		}		
 
 		throwerClimberMotorLeft.set(speed*-1);
@@ -250,7 +253,7 @@ public class Thrower extends SubsystemBase {
     public void throwerTriggerOn() {
 		throwerTriggerMotor.set(-1);
 		Robot.pickup.runMotor(-1);
-		triggerThrow=true;
+		throwTriggered=true;
 	}
 
     /************************************************************************
@@ -259,7 +262,7 @@ public class Thrower extends SubsystemBase {
     public void throwerTriggerOff() {
 		throwerTriggerMotor.set(0);
 		Robot.pickup.runMotor(0);
-		triggerThrow=false;
+		throwTriggered=false;
 	}
 	
     /************************************************************************
@@ -289,15 +292,15 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	public boolean getTriggerThrow() {
-		return triggerThrow;
+	public boolean getThrowTriggered() {
+		return throwTriggered;
 	}
 
     /************************************************************************
 	 ************************************************************************/
 
-	public void setTriggerThrow(boolean value) {
-		triggerThrow = value;
+	public void setThrowTriggered(boolean value) {
+		throwTriggered = value;
 	}
 }
 

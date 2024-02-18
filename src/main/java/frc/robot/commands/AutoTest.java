@@ -29,30 +29,11 @@ public class AutoTest extends SequentialCommandGroup {
         
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-
-            /*
-            new DriveWork(.2,0,0,12,100),
-            new TurnDegreesWork(90,100),
-            new DriveWork(.2,0,0,12,100),
-            new TurnDegreesWork(90,100),
-            new DriveWork(.2,0,0,12,100),
-            new TurnDegreesWork(90,100),
-            new DriveWork(.2,0,0,12,100),
-            new TurnDegreesWork(90,100),
-            */
-
-            /*
-            new DriveWork(.3,.3,0,12,250),
-            new DriveWork(.3,-.3,0,12,250),
-            new DriveWork(-.3,-.3,0,12,250),
-            new DriveWork(-.3,.3,0,12,250),
-            */
-
-            
+          
             // TODO Aim at speaker
             
             // Throw the Note
-            new AutoThrow (3000,45),
+            new ThrowerWork(3000, 45, 250),
             
             new ParallelCommandGroup(
                 // Run the Pickup
@@ -66,8 +47,9 @@ public class AutoTest extends SequentialCommandGroup {
             // TODO Aim at speaker
 
             // Throw note in speaker
-            new AutoThrow (3000,45),
+            new ThrowerWork(3000, 45, 250),
 
+            /*
             new TurnDegreesWork(-70,250),
 
             new ParallelCommandGroup(
@@ -82,7 +64,8 @@ public class AutoTest extends SequentialCommandGroup {
             // TODO Aim at speaker
 
             // Throw note in speaker
-            new AutoThrow (3000,45),
+            new ThrowerWork(3000, 45, 250),
+            */
 
             new FinishAuto()
         );

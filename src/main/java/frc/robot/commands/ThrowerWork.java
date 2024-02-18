@@ -20,15 +20,17 @@ import frc.robot.Robot;
 public class ThrowerWork extends Command {
 
     int iters, speed;
+    double angle;
     int throwingIters=0;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ThrowerWork(int speed, int iters) {
+    public ThrowerWork(int speed, double angle, int iters) {
         addRequirements(Robot.lidar);
         this.iters = iters;
         this.speed = speed;
+        this.angle = angle;
         throwingIters=0;
     }
 
@@ -56,8 +58,11 @@ public class ThrowerWork extends Command {
             throwingIters--;
         } else {
             // TODO: is thrower position in degrees or radians?
-            double targetAngleDegrees = Robot.lidar.getTargetAngleDegrees();
-            reachedAngle = Robot.thrower.setThrowerPosition(Math.toRadians(targetAngleDegrees));
+            //double targetAngleDegrees = Robot.lidar.getTargetAngleDegrees();
+            //reachedAngle = Robot.thrower.setThrowerPosition(Math.toRadians(targetAngleDegrees));
+
+            reachedAngle = Robot.thrower.setThrowerPosition(angle);
+
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
             if ((reachedOne > 3 && reachedTwo > 3 && reachedAngle)) {
                 Robot.thrower.throwerTriggerOn();

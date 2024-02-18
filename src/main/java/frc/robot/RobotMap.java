@@ -52,6 +52,10 @@ public class RobotMap {
 	//Pickup Motor Can ID's
 	public static final int PickupCanID = 50;
 
+    ///////////////////////////////////////////////////////////////////////////
+	//Pickup Motor Can ID's
+	public static final int ClimberCanID = 51;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
     public static int swerveFrontRightDriveCanID;
