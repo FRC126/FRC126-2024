@@ -74,7 +74,7 @@ public class Thrower extends SubsystemBase {
 
     public int throwerRPM(int index, double targetRPM) {
 		double ix, error=0.0, rpm;
-		StatusSignal RPM;
+		StatusSignal<Double> RPM;
 
 		if (index == 1) {
 		    RPM = Robot.throwerMotorTalonOne.getVelocity();
