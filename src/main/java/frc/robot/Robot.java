@@ -51,41 +51,6 @@ public class Robot extends TimedRobot {
     public int RobotID = 1;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Swerve Motors
-    public static CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
-
-    public static CANSparkMax swerveFrontLeftDriveMotor = new CANSparkMax(RobotMap.swerveFrontLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax swerveFrontLeftTurnMotor = new CANSparkMax(RobotMap.swerveFrontLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
-
-    public static CANSparkMax swerveRearLeftDriveMotor = new CANSparkMax(RobotMap.swerveRearLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax swerveRearLeftTurnMotor = new CANSparkMax(RobotMap.swerveRearLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
-
-    public static CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Built in Motor Encoders for Swerve Drive
-    public static RelativeEncoder swerveFrontRightDriveRelativeEncoder = Robot.swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder swerveFrontRightTurnRelativeEncoder = Robot.swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    public static RelativeEncoder swerveFrontLeftDriveRelativeEncoder = Robot.swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder swerveFrontLeftTurnRelativeEncoder = Robot.swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    public static RelativeEncoder swerveRearLeftDriveRelativeEncoder = Robot.swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder swerveRearLeftTurnRelativeEncoder = Robot.swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    public static RelativeEncoder swerveRearRightDriveRelativeEncoder = Robot.swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder swerveRearRightTurnRelativeEncoder = Robot.swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Swerve Drive CAN Coders
-    public static CANcoder SwerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
-    public static CANcoder SwerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
-    public static CANcoder SwerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
-    public static CANcoder SwerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
     public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
@@ -261,6 +226,9 @@ public class Robot extends TimedRobot {
             BuildConstants.GIT_SHA
             ));
         Log.print(0, "Robot", "Robot Init Complete");
+        // Put information above onto Smart Dashboard
+        SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
+        SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
     }
 
  	  /************************************************************************
