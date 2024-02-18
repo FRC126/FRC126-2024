@@ -150,9 +150,14 @@ public class Robot extends TimedRobot {
     // Global Robot Variables
     public int RobotID = 0;
 
-
-    //public static enum targetHeights{LowTarget,HighTarget};
-    public static enum targetTypes{NoTarget,TargetSeek, TargetOne, TargetTwo, TargetThree, TargetFour};
+    public static enum targetTypes{
+        NoTarget(-1),TargetSeek(0), TargetOne(1), TargetTwo(2), TargetThree(3), TargetFour(4);
+        private final int pipeline;
+        private targetTypes(int v) {pipeline = v;}
+        public int getPipeline() {
+            return pipeline;
+        }
+    };
     public static enum allianceColor{Red,Blue};
 
     // Autonomous related functions
