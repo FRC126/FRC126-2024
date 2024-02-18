@@ -47,12 +47,12 @@ public class RobotMap {
 
 	///////////////////////////////////////////////////////////////////////////
 	// Swerve Drive Motors 
-    public static int swerveFrontRightDriveCanID = 40;
-    public static int swerveFrontRightTurnCanID = 41;
-    public static int swerveFrontLeftDriveCanID = 43;
-    public static int swerveFrontLeftTurnCanID = 42;
-    public static int swerveRearRightDriveCanID = 46;
-    public static int swerveRearRightTurnCanID = 47;
+    public static int swerveFrontRightDriveCanID = 41;
+    public static int swerveFrontRightTurnCanID = 40;
+    public static int swerveFrontLeftDriveCanID = 42;
+    public static int swerveFrontLeftTurnCanID = 43;
+    public static int swerveRearRightDriveCanID = 47;
+    public static int swerveRearRightTurnCanID = 46;
     public static int swerveRearLeftDriveCanID = 44;
     public static int swerveRearLeftTurnCanID = 45;
 
@@ -60,8 +60,8 @@ public class RobotMap {
 	// Swerve Drive Encoders
 	public static int SwerveFrontRightEncoderCanID = 30;
 	public static int SwerveFrontLeftEncoderCanID = 31;
-	public static int SwerveRearRightEncoderCanID = 33;
-	public static int SwerveRearLeftEncoderCanID = 32;
+	public static int SwerveRearRightEncoderCanID = 32;
+	public static int SwerveRearLeftEncoderCanID = 33;
 
 	///////////////////////////////////////////////////////////////////////////
 	public static final int LidarChannel = 5; 
@@ -97,8 +97,8 @@ public class RobotMap {
 
 			///////////////////////////////////////////////////////////////////////////
 			// Swerve Drive Motors 
-			swerveFrontRightDriveCanID = 40;
-			swerveFrontRightTurnCanID = 41;
+			swerveFrontRightDriveCanID = 41;
+			swerveFrontRightTurnCanID = 40;
 			swerveFrontLeftDriveCanID = 43;
 			swerveFrontLeftTurnCanID = 42;
 			swerveRearRightDriveCanID = 46;
@@ -110,8 +110,8 @@ public class RobotMap {
 			// Swerve Drive Encoders
 			SwerveFrontRightEncoderCanID = 30;
 			SwerveFrontLeftEncoderCanID = 31;
-			SwerveRearRightEncoderCanID = 33;
-			SwerveRearLeftEncoderCanID = 32;
+			SwerveRearRightEncoderCanID = 32;
+			SwerveRearLeftEncoderCanID = 33;
 		}
 	}
 }

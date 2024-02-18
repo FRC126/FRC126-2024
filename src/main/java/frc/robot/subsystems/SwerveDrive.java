@@ -29,7 +29,7 @@ import com.revrobotics.CANSparkMax;
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
-    boolean swerveDebug=false;
+    boolean swerveDebug=true;
 	boolean enableFullSpeed=false;
 
 	double[] wheelSpeed = {0,0,0,0};
@@ -274,7 +274,7 @@ public class SwerveDrive extends SubsystemBase {
 			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
 		}
 
-		if (driveStraight) {
+		if (driveStraight && false) {
 			// If driveStraight is true, keep the robot facing the right direction
 			if (currentAngle < straightDegrees-1.5) {
 				rotate=.04;	
@@ -342,8 +342,8 @@ public class SwerveDrive extends SubsystemBase {
 			// Run the turning motors based on the calculated target
 			Robot.swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
 			Robot.swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
-			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			Robot.swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
+			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			
 			// Smooth the wheel speed so the robot isn't so jumpy
 			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight],frontRight);
@@ -357,7 +357,6 @@ public class SwerveDrive extends SubsystemBase {
 			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
 			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
 		}
-
 
    		SmartDashboard.putNumber("currentAngle", currentAngle);
 
