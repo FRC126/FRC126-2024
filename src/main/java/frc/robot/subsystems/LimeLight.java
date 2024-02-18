@@ -15,14 +15,13 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
+import frc.robot.Robot.targetTypes;
 import frc.robot.commands.*;
-import frc.robot.util.NetworkTablesSmoother;
+import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimeLight extends SubsystemBase {
 
@@ -39,14 +38,13 @@ public class LimeLight extends SubsystemBase {
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
-    NetworkTable table;
     double pipelineLast=0;
 
     static int itersToCapture = 4;
 
-    private NetworkTablesSmoother taSmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "ta");
-    private NetworkTablesSmoother txSmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "tx");
-    private NetworkTablesSmoother tySmoother = new NetworkTablesSmoother(itersToCapture, "limelight", "ty");
+    private Smoother taSmoother = new Smoother(itersToCapture);
+    private Smoother txSmoother = new Smoother(itersToCapture);
+    private Smoother tySmoother = new Smoother(itersToCapture);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -71,12 +69,6 @@ public class LimeLight extends SubsystemBase {
 
 	/************************************************************************
 	 ************************************************************************/
-    @Override
-    public void periodic() {
-    }
-
-	/************************************************************************
-	 ************************************************************************/
 
 	public double getAngleOffset() {
        return angleOffset;
@@ -92,9 +84,8 @@ public class LimeLight extends SubsystemBase {
    	/************************************************************************
 	 ************************************************************************/
 
-     public boolean setActiveSeek(boolean seek) {
+     public void setActiveSeek(boolean seek) {
         activeSeek = seek;
-        return activeSeek;
     }   
 
 	/************************************************************************
@@ -156,17 +147,10 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public void getCameraData() {
-        double pipeline=0;
-
-        // Set Pipeline
-        switch (Robot.targetType) {
-            case NoTarget: { return; }
-            case TargetSeek: { pipeline=0; break; }
-            case TargetOne: { pipeline=1; break; }
-            case TargetTwo: { pipeline=2; break; }
-            case TargetThree: { pipeline=3; break; }
-            case TargetFour: { pipeline=4; break; }
+        if (Robot.targetType == targetTypes.NoTarget) {
+            return;
         }
+        int pipeline=Robot.targetType.getPipeline();
 
         if (pipeline != pipelineLast) {
             validCount=0;
@@ -174,78 +158,30 @@ public class LimeLight extends SubsystemBase {
         }
         pipelineLast=pipeline;
 
-        setPipeline(pipeline);
-        setCameraMode(true);
-        setLED(false);
+        LimelightHelpers.setPipelineIndex(null, pipeline);
+        LimelightHelpers.setCameraMode_Processor(null);
+        LimelightHelpers.setLEDMode_PipelineControl(null);
 
-        int foo=getPipeline();
-        SmartDashboard.putNumber("Limelight Pipe", foo);
+        SmartDashboard.putNumber("Limelight Pipe", LimelightHelpers.getCurrentPipelineIndex(null));
 
-        double tx = txSmoother.sampleAndGetAverage();
-        double ty = tySmoother.sampleAndGetAverage();
-        double ta = taSmoother.sampleAndGetAverage();        
-        double tv = table.getEntry("tv").getDouble(0.0);
+        double tx = txSmoother.sampleAndGetAverage(LimelightHelpers.getTX(null));
+        double ty = tySmoother.sampleAndGetAverage(LimelightHelpers.getTY(null));
+        double ta = taSmoother.sampleAndGetAverage(LimelightHelpers.getTA(null));        
+        boolean tv = LimelightHelpers.getTV(null);
         
         if (limeLightDebug) {
             //post to smart dashboard periodically
             SmartDashboard.putNumber("LimelightX", tx);
             SmartDashboard.putNumber("LimelightY", ty);
             SmartDashboard.putNumber("LimelightArea", ta);
-            SmartDashboard.putNumber("LimelightValid", tv);
+            SmartDashboard.putBoolean("LimelightValid", tv);
         }    
 
-        if (tv < .9) {
-            setllTargetData(false, 0, 0, 0);
-        } else {
+        if (tv) {
             setllTargetData(true, ta, tx, ty);
+        } else {
+            setllTargetData(false, 0, 0, 0);
         }        
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-
-    public void setPipeline(double pipelineIn) {
-        double pipeline=pipelineIn;
-        if (pipeline>9) { pipeline=9; }
-        if (pipeline<0) { pipeline=0; }
-        table.getEntry("pipeline").setValue(pipeline);
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-
-    public int getPipeline() {
-        NetworkTableEntry pipeline = table.getEntry("pipeline");
-        int pipe = (int)pipeline.getDouble(0.0);
-        return(pipe);
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-
-    public void setLED(boolean onOff) {
-        getEntry("ledMode").setNumber(onOff ? 1 : 0);
-    }
-
-	/************************************************************************
-	 ************************************************************************/
-
-    public void setCameraMode(boolean vision) {
-        getEntry("camMode").setNumber(vision ? 0 : 1);
-    }
-
-	/************************************************************************
-	 ************************************************************************/
-
-    public void setStreamMode(int mode) {
-        getEntry("stream").setNumber(mode);
-    }
-
-    /************************************************************************
-	 ************************************************************************/
-
-    public NetworkTableEntry getEntry(String entry) {
-        return table.getEntry(entry);   
     }
 
    	/************************************************************************
@@ -276,14 +212,14 @@ public class LimeLight extends SubsystemBase {
             missedCount=0;
 
             if (validCount > 3) {
-                double foo = Robot.limeLight.getllTargetX();
-                if ( foo < -1.5 || foo > 1.5) {
+                double llTargetX = Robot.limeLight.getllTargetX();
+                if ( llTargetX < -1.5 || llTargetX > 1.5) {
                     if ( activeSeek && Robot.doAutoCommand() ) {
                         Robot.autoMove=true;
-                        Robot.autoCommand=new AutoTurn(foo,200);
+                        Robot.autoCommand=new AutoTurn(llTargetX,200);
                         Robot.autoCommand.schedule();
                     }	   
-                    angleOffset=foo;
+                    angleOffset=llTargetX;
                     centeredCount=0;
                     Robot.shootNow=false;
                 } else {
@@ -300,7 +236,7 @@ public class LimeLight extends SubsystemBase {
                         Robot.shootNow=true;
 
                     } else {
-                    Robot.shootNow=false;
+                        Robot.shootNow=false;
                     }
                 }
             }    
