@@ -15,6 +15,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,13 +24,51 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import com.ctre.phoenix6.*;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkRelativeEncoder;
 
 /**********************************************************************************
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
-    boolean swerveDebug=false;
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Swerve Motors
+    CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    CANSparkMax swerveFrontRightTurnMotor = new CANSparkMax(RobotMap.swerveFrontRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    CANSparkMax swerveFrontLeftDriveMotor = new CANSparkMax(RobotMap.swerveFrontLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    CANSparkMax swerveFrontLeftTurnMotor = new CANSparkMax(RobotMap.swerveFrontLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    CANSparkMax swerveRearLeftDriveMotor = new CANSparkMax(RobotMap.swerveRearLeftDriveCanID, CANSparkMax.MotorType.kBrushless);
+    CANSparkMax swerveRearLeftTurnMotor = new CANSparkMax(RobotMap.swerveRearLeftTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    CANSparkMax swerveRearRightDriveMotor = new CANSparkMax(RobotMap.swerveRearRightDriveCanID, CANSparkMax.MotorType.kBrushless);
+    CANSparkMax swerveRearRightTurnMotor = new CANSparkMax(RobotMap.swerveRearRightTurnCanID, CANSparkMax.MotorType.kBrushless);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Built in Motor Encoders for Swerve Drive
+    RelativeEncoder swerveFrontRightDriveRelativeEncoder = swerveFrontRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveFrontRightTurnRelativeEncoder = swerveFrontRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+
+    RelativeEncoder swerveFrontLeftDriveRelativeEncoder = swerveFrontLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveFrontLeftTurnRelativeEncoder = swerveFrontLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+
+    RelativeEncoder swerveRearLeftDriveRelativeEncoder = swerveRearLeftDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveRearLeftTurnRelativeEncoder = swerveRearLeftTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+
+    RelativeEncoder swerveRearRightDriveRelativeEncoder = swerveRearRightDriveMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    RelativeEncoder swerveRearRightTurnRelativeEncoder = swerveRearRightTurnMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Swerve Drive CAN Coders
+    CANcoder swerveFrontRightEncoder = new CANcoder(RobotMap.SwerveFrontRightEncoderCanID);
+    CANcoder swerveFrontLeftEncoder = new CANcoder(RobotMap.SwerveFrontLeftEncoderCanID);
+    CANcoder swerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
+    CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
+	
+	boolean swerveDebug=false;
 	boolean enableFullSpeed=false;
 
 	double[] wheelSpeed = {0,0,0,0};
@@ -74,10 +113,10 @@ public class SwerveDrive extends SubsystemBase {
 		wheelSpeed[rearLeft] = 0;
 		wheelSpeed[rearRight] = 0;
 
-		Robot.swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		Robot.swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		swerveFrontRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	/************************************************************************
@@ -119,10 +158,10 @@ public class SwerveDrive extends SubsystemBase {
 
 	public boolean brakesOn() {
 		if (!areBrakesOn) {
-			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 			areBrakesOn=true;
             return(true);
 		}	
@@ -134,10 +173,10 @@ public class SwerveDrive extends SubsystemBase {
 
 	public boolean brakesOff() {
 		if (areBrakesOn) {
-			Robot.swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-			Robot.swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			swerveFrontRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			swerveFrontLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			swerveRearLeftDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+			swerveRearRightDriveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 			areBrakesOn=false;
 			return(true);
 		}	
@@ -290,10 +329,10 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		// Get the Encoder information from each swerve drive module
-    	StatusSignal<Double> FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
-		StatusSignal<Double> FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
-		StatusSignal<Double> RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
-		StatusSignal<Double> RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
+    	StatusSignal<Double> FRPosSS = swerveFrontRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> FLPosSS = swerveFrontLeftEncoder.getAbsolutePosition();
+		StatusSignal<Double> RRPosSS = swerveRearRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> RLPosSS = swerveRearLeftEncoder.getAbsolutePosition();
 
 		double frontRightPos = FRPosSS.getValueAsDouble();
 		double frontLeftPos = FLPosSS.getValueAsDouble();
@@ -303,15 +342,15 @@ public class SwerveDrive extends SubsystemBase {
 		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
 			// If not joysticks are moved, just stop the motors, and
 			// zero the speed offsets
-            Robot.swerveFrontRightDriveMotor.set(0);
-			Robot.swerveFrontLeftDriveMotor.set(0);
-			Robot.swerveRearLeftDriveMotor.set(0);
-			Robot.swerveRearRightDriveMotor.set(0);
+            swerveFrontRightDriveMotor.set(0);
+			swerveFrontLeftDriveMotor.set(0);
+			swerveRearLeftDriveMotor.set(0);
+			swerveRearRightDriveMotor.set(0);
 
-			Robot.swerveFrontRightTurnMotor.set(0);
-   			Robot.swerveFrontLeftTurnMotor.set(0);
-   			Robot.swerveRearRightTurnMotor.set(0);
-   			Robot.swerveRearLeftTurnMotor.set(0);
+			swerveFrontRightTurnMotor.set(0);
+   			swerveFrontLeftTurnMotor.set(0);
+   			swerveRearRightTurnMotor.set(0);
+   			swerveRearLeftTurnMotor.set(0);
 
 	        newWheelSpeed[frontRight] = smoothWheelSpeed(0,frontRight);
 			newWheelSpeed[frontLeft] = smoothWheelSpeed(0,frontLeft);
@@ -340,10 +379,10 @@ public class SwerveDrive extends SubsystemBase {
 			frontLeftAngle = Math.atan2 (b, c) / pi * .49;
 
 			// Run the turning motors based on the calculated target
-			Robot.swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
-			Robot.swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
-			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
-			Robot.swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
+			swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
+			swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
+			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
+			swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
 			
 			// Smooth the wheel speed so the robot isn't so jumpy
 			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight],frontRight);
@@ -352,10 +391,10 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft],rearLeft);
 
 			// Run the drive motors to the smoothed speed
-			Robot.swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
-			Robot.swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio);
-			Robot.swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
-			Robot.swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
+			swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
+			swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio);
+			swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
+			swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
 		}
 
 
@@ -390,10 +429,10 @@ public class SwerveDrive extends SubsystemBase {
 	 ************************************************************************/
 
 	public void resetEncoders() {
-    	Robot.swerveFrontLeftDriveRelativeEncoder.setPosition(0);
-    	Robot.swerveRearLeftDriveRelativeEncoder.setPosition(0);
-    	Robot.swerveFrontRightDriveRelativeEncoder.setPosition(0);
-    	Robot.swerveRearRightDriveRelativeEncoder.setPosition(0);
+    	swerveFrontLeftDriveRelativeEncoder.setPosition(0);
+    	swerveRearLeftDriveRelativeEncoder.setPosition(0);
+    	swerveFrontRightDriveRelativeEncoder.setPosition(0);
+    	swerveRearRightDriveRelativeEncoder.setPosition(0);
 	}
 
     /************************************************************************
@@ -403,10 +442,10 @@ public class SwerveDrive extends SubsystemBase {
 		double wheelDiameter = 4;
 		double gearRatio=18;
 		
-		double left1 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
-		double left2 = Robot.swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
-		double right1 = Robot.swerveFrontRightDriveRelativeEncoder.getPosition();
-		double right2 = Robot.swerveRearRightDriveRelativeEncoder.getPosition();
+		double left1 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
+		double left2 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
+		double right1 = swerveFrontRightDriveRelativeEncoder.getPosition();
+		double right2 = swerveRearRightDriveRelativeEncoder.getPosition();
 
 		double avg = Math.abs((left1 + left2 + right1 + right2) / 4);
 	
