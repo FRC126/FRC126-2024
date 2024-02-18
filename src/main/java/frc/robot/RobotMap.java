@@ -15,6 +15,9 @@
 package frc.robot;
 
 public class RobotMap {
+    public static int NeoTicksPerRotation=42;
+	public static double ThrowerGearRatio=750;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
 	public static int lStickX = 0; // Left stick X
@@ -33,13 +36,6 @@ public class RobotMap {
 	public static int xboxStart = 8; // Start
 	public static int xboxLStick = 9; // Left stick button
 	public static int xboxRStick = 10; // Right stick button
-
-	///////////////////////////////////////////////////////////////////////////
-   	// Driver Motor Can ID's
-	public static int leftDriveMotorCanID1 = 12;
-	public static int leftDriveMotorCanID2 = 13;
-	public static int rightDriveMotorCanID1 = 10;
-	public static int rightDriveMotorCanID2 = 11;
 
 	///////////////////////////////////////////////////////////////////////////
  	// Thrower Motor Can ID's
@@ -70,26 +66,48 @@ public class RobotMap {
 	//Pickup Motor Can ID's
 	public static int PickupCanID = 50;
 
-	//Motor Inversions
-    public static int left1Inversion;
-	public static int left2Inversion;
-	public static int right1Inversion;
-	public static int right2Inversion;
-
 	//Position Calibrations
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 
 			// 2024 DriveBase
-			left1Inversion     = 1;
-			left2Inversion     = 1;
-			right1Inversion    = -1;
-			right2Inversion    = -1;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Motors 
+			swerveFrontRightDriveCanID = 40;
+			swerveFrontRightTurnCanID = 41;
+			swerveFrontLeftDriveCanID = 43;
+			swerveFrontLeftTurnCanID = 42;
+			swerveRearRightDriveCanID = 46;
+			swerveRearRightTurnCanID = 47;
+			swerveRearLeftDriveCanID = 44;
+			swerveRearLeftTurnCanID = 45;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Encoders
+			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontLeftEncoderCanID = 31;
+			SwerveRearRightEncoderCanID = 33;
+			SwerveRearLeftEncoderCanID = 32;
 		} else { 
-			// 2024 Breadboard
-			left1Inversion     = 1;
-			left2Inversion     = 1;
-			right1Inversion    = 1;
-			right2Inversion    = 1;
+			// 2024 Official Robot
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Motors 
+			swerveFrontRightDriveCanID = 40;
+			swerveFrontRightTurnCanID = 41;
+			swerveFrontLeftDriveCanID = 43;
+			swerveFrontLeftTurnCanID = 42;
+			swerveRearRightDriveCanID = 46;
+			swerveRearRightTurnCanID = 47;
+			swerveRearLeftDriveCanID = 44;
+			swerveRearLeftTurnCanID = 45;
+
+			///////////////////////////////////////////////////////////////////////////
+			// Swerve Drive Encoders
+			SwerveFrontRightEncoderCanID = 30;
+			SwerveFrontLeftEncoderCanID = 31;
+			SwerveRearRightEncoderCanID = 33;
+			SwerveRearLeftEncoderCanID = 32;
 		}
 	}
 }
@@ -105,6 +123,5 @@ Operator:
 
 Auto Commands:
 X Button: Cancel any running auto routines
-
 ******************************************************************************/
 
