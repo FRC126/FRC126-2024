@@ -25,10 +25,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import com.ctre.phoenix6.*;
 import com.revrobotics.CANSparkMax;
 
-//import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkRelativeEncoder;
-
-
 /**********************************************************************************
  **********************************************************************************/
 
@@ -294,10 +290,10 @@ public class SwerveDrive extends SubsystemBase {
 		}
 
 		// Get the Encoder information from each swerve drive module
-    	StatusSignal FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
-		StatusSignal FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
-		StatusSignal RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
-		StatusSignal RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
+    	StatusSignal<Double> FRPosSS = Robot.SwerveFrontRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> FLPosSS = Robot.SwerveFrontLeftEncoder.getAbsolutePosition();
+		StatusSignal<Double> RRPosSS = Robot.SwerveRearRightEncoder.getAbsolutePosition();
+		StatusSignal<Double> RLPosSS = Robot.SwerveRearLeftEncoder.getAbsolutePosition();
 
 		double frontRightPos = FRPosSS.getValueAsDouble();
 		double frontLeftPos = FLPosSS.getValueAsDouble();
