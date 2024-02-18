@@ -46,31 +46,34 @@ public class RobotMap {
 	public static final int throwerClimberMotorRightCanID = 25;
 
 	///////////////////////////////////////////////////////////////////////////
-	// Swerve Drive Motors 
-    public static int swerveFrontRightDriveCanID = 41;
-    public static int swerveFrontRightTurnCanID = 40;
-    public static int swerveFrontLeftDriveCanID = 42;
-    public static int swerveFrontLeftTurnCanID = 43;
-    public static int swerveRearRightDriveCanID = 47;
-    public static int swerveRearRightTurnCanID = 46;
-    public static int swerveRearLeftDriveCanID = 44;
-    public static int swerveRearLeftTurnCanID = 45;
-
-	///////////////////////////////////////////////////////////////////////////
-	// Swerve Drive Encoders
-	public static int SwerveFrontRightEncoderCanID = 30;
-	public static int SwerveFrontLeftEncoderCanID = 31;
-	public static int SwerveRearRightEncoderCanID = 32;
-	public static int SwerveRearLeftEncoderCanID = 33;
-
-	///////////////////////////////////////////////////////////////////////////
 	public static final int LidarChannel = 5; 
 
 	///////////////////////////////////////////////////////////////////////////
 	//Pickup Motor Can ID's
 	public static final int PickupCanID = 50;
 
-	//Position Calibrations
+	///////////////////////////////////////////////////////////////////////////
+	// Swerve Drive Motors 
+    public static int swerveFrontRightDriveCanID;
+    public static int swerveFrontRightTurnCanID;
+    public static int swerveFrontLeftDriveCanID;
+    public static int swerveFrontLeftTurnCanID;
+    public static int swerveRearRightDriveCanID;
+    public static int swerveRearRightTurnCanID;
+    public static int swerveRearLeftDriveCanID;
+    public static int swerveRearLeftTurnCanID;
+
+	///////////////////////////////////////////////////////////////////////////
+	// Swerve Drive Encoders
+	public static int SwerveFrontRightEncoderCanID;
+	public static int SwerveFrontLeftEncoderCanID;
+	public static int SwerveRearRightEncoderCanID;
+	public static int SwerveRearLeftEncoderCanID;
+
+	/************************************************************************
+	 * 
+	 ************************************************************************/
+	
 	public static void setRobot(double robotID){
 		if(robotID == 0) { 
 			// 2024 DriveBase
@@ -99,10 +102,10 @@ public class RobotMap {
 			// Swerve Drive Motors 
 			swerveFrontRightDriveCanID = 41;
 			swerveFrontRightTurnCanID = 40;
-			swerveFrontLeftDriveCanID = 43;
-			swerveFrontLeftTurnCanID = 42;
-			swerveRearRightDriveCanID = 46;
-			swerveRearRightTurnCanID = 47;
+			swerveFrontLeftDriveCanID = 42;
+			swerveFrontLeftTurnCanID = 43;
+			swerveRearRightDriveCanID = 47;
+			swerveRearRightTurnCanID = 46;
 			swerveRearLeftDriveCanID = 44;
 			swerveRearLeftTurnCanID = 45;
 

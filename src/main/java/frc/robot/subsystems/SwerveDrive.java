@@ -33,9 +33,6 @@ import com.revrobotics.SparkRelativeEncoder;
  **********************************************************************************/
 
 public class SwerveDrive extends SubsystemBase {
-<<<<<<< HEAD
-    boolean swerveDebug=true;
-=======
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Swerve Motors
     CANSparkMax swerveFrontRightDriveMotor = new CANSparkMax(RobotMap.swerveFrontRightDriveCanID, CANSparkMax.MotorType.kBrushless);
@@ -71,8 +68,7 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 	
-	boolean swerveDebug=false;
->>>>>>> main
+    boolean swerveDebug=true;
 	boolean enableFullSpeed=false;
 
 	double[] wheelSpeed = {0,0,0,0};
@@ -283,7 +279,8 @@ public class SwerveDrive extends SubsystemBase {
 	 * https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 	 ************************************************************************/
 
-	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn, boolean driveStraight, double straightDegrees) { 
+	public void Drive(double forwardBackIn, double leftRightIn, double rotateIn,
+	                boolean driveStraight, double straightDegrees) { 
 		if (SmartDashboard.getBoolean(Robot.COMPETITION_ROBOT, true)) {
 			currentTurnRatio = competitionTurnRatio;
 			currentSpeedRatio = competitionSpeedRatio;
@@ -317,7 +314,7 @@ public class SwerveDrive extends SubsystemBase {
 			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
 		}
 
-		if (driveStraight && false) {
+		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
 			if (currentAngle < straightDegrees-1.5) {
 				rotate=.04;	
@@ -383,17 +380,11 @@ public class SwerveDrive extends SubsystemBase {
 			frontLeftAngle = Math.atan2 (b, c) / pi * .49;
 
 			// Run the turning motors based on the calculated target
-<<<<<<< HEAD
-			Robot.swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
-			Robot.swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
-			Robot.swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
-			Robot.swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
-=======
 			swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
 			swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
 			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
->>>>>>> main
+			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			
 			// Smooth the wheel speed so the robot isn't so jumpy
 			newWheelSpeed[frontRight] = smoothWheelSpeed(newWheelSpeed[frontRight],frontRight);

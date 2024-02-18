@@ -109,10 +109,10 @@ public class ThrowerControl extends Command {
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=IDLE_RPM;
-			Robot.triggerThrow=false;
+			Robot.thrower.setTriggerThrow(false);
 		} else {
 			speed=0;
-			Robot.triggerThrow=false;
+			Robot.thrower.setTriggerThrow(false);
 		}
 
 		int reachedOne=0, reachedTwo=0;
@@ -131,10 +131,9 @@ public class ThrowerControl extends Command {
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
-			Robot.triggerThrow=true;
-
-		} else {
-			if (!Robot.triggerThrow) Robot.thrower.throwerTriggerOff();
+			Robot.thrower.setTriggerThrow(true);
+		} else if (!Robot.thrower.getTriggerThrow()) {
+			Robot.thrower.throwerTriggerOff();
 		}
 
 		if ( y!=0 ) {

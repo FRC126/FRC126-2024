@@ -15,8 +15,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkRelativeEncoder;
+
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**********************************************************************************
@@ -26,6 +32,10 @@ public class PickupSubsystem extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Pickup CAN Motor
+    CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
+    RelativeEncoder PickupMotorEncoder = PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -47,8 +57,8 @@ public class PickupSubsystem extends SubsystemBase {
 	 ************************************************************************/
 
 	public void runMotor(double speed) {
-		if (!Robot.triggerThrow) {
-			Robot.PickupMotor.set(speed);
+		if (!Robot.thrower.getTriggerThrow()) {
+			PickupMotor.set(speed);
 		}	
 	}
 

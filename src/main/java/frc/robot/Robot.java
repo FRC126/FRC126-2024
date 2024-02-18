@@ -51,38 +51,6 @@ public class Robot extends TimedRobot {
     public int RobotID = 1;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Pickup CAN Motor
-    public static CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
-    public static RelativeEncoder PickupMotorEncoder = Robot.PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Thrower Motors
-
-    public static TalonFX throwerMotorTalonOne = new TalonFX(RobotMap.throwerTalonMotorOneCanID);
-    public static TalonFX throwerMotorTalonTwo = new TalonFX(RobotMap.throwerTalonMotorTwoCanID);
-    //public static TalonFX throwerTriggerMotor = new TalonFX(RobotMap.throwerTriggerMotorCanID);
-
-    public static CANSparkMax throwerTriggerMotor = new CANSparkMax(RobotMap.throwerTriggerMotorCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax throwerClimberMotorLeft = new CANSparkMax(RobotMap.throwerClimberMotorLeftCanID, CANSparkMax.MotorType.kBrushless);
-    public static CANSparkMax throwerClimberMotorRight = new CANSparkMax(RobotMap.throwerClimberMotorRightCanID, CANSparkMax.MotorType.kBrushless);
-
-    public static RelativeEncoder throwerTriggerMotorRelativeEncoder = Robot.throwerTriggerMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder throwerClimberMotorLeftRelativeEncoder = Robot.throwerClimberMotorLeft.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-    public static RelativeEncoder throwerClimberMotorRightRelativeEncoder = Robot.throwerClimberMotorRight.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Thrower Limit Switches
-
-    public static DigitalInput throwerBottomLimit;
-    public static DigitalInput throwerTopLimit;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Thrower Photo Sensor 
-
-    public static DigitalInput photoSensor;
-    public static boolean triggerThrow=false;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
     public static AHRS navxMXP;
 
@@ -162,10 +130,7 @@ public class Robot extends TimedRobot {
 
         // Thrower Devices
         thrower = new Thrower();
-        throwerBottomLimit = new DigitalInput(8);
-        throwerTopLimit = new DigitalInput(7);
-        photoSensor = new DigitalInput(2);
-
+  
         // Pickup SubSystem
         pickup = new PickupSubsystem();
 

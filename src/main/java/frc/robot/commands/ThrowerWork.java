@@ -61,7 +61,7 @@ public class ThrowerWork extends Command {
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
             if ((reachedOne > 3 && reachedTwo > 3 && reachedAngle)) {
                 Robot.thrower.throwerTriggerOn();
-                throwingIters=100;
+                throwingIters=150;
             } else {
                 Robot.thrower.throwerTriggerOff();
             }
