@@ -41,7 +41,8 @@ import edu.wpi.first.wpilibj.SPI;
  */
 public class Robot extends TimedRobot {
     // Global Robot Variables
-    public int RobotID = 1;
+    public int RobotID = 1;  
+    public static boolean useNavx=true;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // NavX-MXP
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
     // Automation Variables
     public static boolean shootNow = false;
     public static targetTypes targetType = Robot.targetTypes.NoTarget;
+    public static boolean autoMoveThrower = false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines

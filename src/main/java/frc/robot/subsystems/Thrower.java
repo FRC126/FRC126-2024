@@ -40,7 +40,7 @@ public class Thrower extends SubsystemBase {
     static double P = 0.000025;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=1500;
+	public static double myRPM=3000;
     static boolean throwTriggered=false;
 	
 	// Thrower Angle Control
@@ -164,16 +164,28 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-	public double getThrowerAngle() {
+	public void resetEncoders() {
+        throwerClimberMotorLeftRelativeEncoder.setPosition(-20.0);
+		throwerClimberMotorRightRelativeEncoder.setPosition(20.0);
+	}
+
+	public double getPosition() {
         double position=0;
 
-		double left = throwerClimberMotorLeftRelativeEncoder.getPosition();
-		double right = throwerClimberMotorRightRelativeEncoder.getPosition()*-1;
+		double left = throwerClimberMotorLeftRelativeEncoder.getPosition()*-1;
+		double right = throwerClimberMotorRightRelativeEncoder.getPosition();
 
 		position=left+right/2.0;
 
-		double currAngle = (position / RobotMap.NeoTicksPerRotation / RobotMap.ThrowerGearRatio) * 360;		
+		return(position);
+	}
+
+	public double getThrowerAngle() {
+		double position=getPosition();
+
+		double currAngle = (position / RobotMap.NeoTicksPerRotation / 25) * 360;		
 		SmartDashboard.putNumber("thrower angle", currAngle);
+		SmartDashboard.putNumber("thrower position", position);
 
 		return(currAngle);
 	}
@@ -187,6 +199,8 @@ public class Thrower extends SubsystemBase {
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+		SmartDashboard.putNumber("thrower speed", speed);
 
 		if ( speed < 0 && throwerTopLimit.get() == true && useLimitSwiches) {
 			speed=0;
@@ -207,9 +221,10 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public boolean setThrowerPosition(double angle) {
+
 		double currAngle=getThrowerAngle();
 
-		boolean usePID=true;
+		boolean usePID=false;
 
 		if (usePID) {
 			if (reachedAngleTarget) {
@@ -228,17 +243,25 @@ public class Thrower extends SubsystemBase {
 				reachedAngleTarget=false;
 			}
 		} else {
-			if (currAngle < angle -.5) {
-				moveThrower(.3);
-			} else if (currAngle > angle + .5) {
-				moveThrower(-.3);
+			if (currAngle < angle - .4) {
+			   	    moveThrower(.05);
+			    if (currAngle < angle - 3) {
+			   	    moveThrower(.25);
+				}	
+				reachedAngleCount=0;
+			} else if (currAngle > angle + .4) {
+			   	    moveThrower(-.05);
+			    if (currAngle > angle + 3) {
+			   	    moveThrower(-.25);
+				}	
+				reachedAngleCount=0;
 			} else {
 				reachedAngleCount++;
 				moveThrower(0);
 			}		
 		}	
 
-		if (++reachedAngleCount>3) {
+		if (reachedAngleCount>0) {
 			reachedAngleTarget=true;
 			return true;			
 		} else {

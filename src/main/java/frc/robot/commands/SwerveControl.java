@@ -96,13 +96,15 @@ public class SwerveControl extends Command {
 		// reset the gyro to zero fix any drift
 		if (driveJoystick.isBButton()) {
 			Robot.swerveDrive.resetYaw();
+			straightDegrees = Robot.swerveDrive.getYaw();      
 		}
 		
 		if (driveJoystick.isAButton()) {
 			double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
-				Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
+				//Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
+				Robot.autoCommand = new AutoTest();
 				Robot.autoCommand.schedule();
 			}
 		}
@@ -128,7 +130,7 @@ public class SwerveControl extends Command {
 			// if no rotate input specified, we are going to drive straight
 			if (driveStraight != true) {
 				// If driveStraight isn't set, save the current angle
-				straightDegrees = Robot.navxMXP.getAngle();      
+				straightDegrees = Robot.swerveDrive.getYaw();      
 				driveStraight = true;
 			}	
 		} else if (rotate != 0) {

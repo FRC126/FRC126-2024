@@ -49,7 +49,7 @@ public class DriveWork extends Command {
 
     @Override
     public void initialize() {
-        startAngle = Robot.navxMXP.getAngle();
+        startAngle = Robot.swerveDrive.getYaw();
         Robot.swerveDrive.brakesOn();
         Robot.swerveDrive.resetEncoders();
         distanceReached=0;

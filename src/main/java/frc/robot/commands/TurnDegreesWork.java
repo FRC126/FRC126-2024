@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         targetDegrees = degrees_in;
         iters = iters_in;
         targetReached=0;
-        double currentDegrees = Robot.navxMXP.getAngle();      
+        double currentDegrees = Robot.swerveDrive.getYaw();      
         startAngle = currentDegrees;
     }
 
@@ -47,7 +47,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      @Override
      public void initialize() {
         // Save the starting angle for the turn
-        //double currentDegrees = Robot.navxMXP.getAngle();      
+        //double currentDegrees = Robot.swerveDrive.getYaw();      
         //startAngle = currentDegrees;
     }
 
@@ -60,12 +60,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double driveRotate=0;
 
         // get the current angle from the gyro
-        double currentDegrees = Robot.navxMXP.getAngle();      
+        double currentDegrees = Robot.swerveDrive.getYaw();      
         double target = startAngle + targetDegrees;
         double diff = Math.abs(target) - Math.abs(currentDegrees);
 
         double tmp = diff / 250;
-        tmp = Robot.boundSpeed(tmp, .15, .03 );
+        tmp = Robot.boundSpeed(tmp, .20, .045 );
 
         if (Math.abs(diff) < driftAllowance) {
             // We are at the right angle

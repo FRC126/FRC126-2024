@@ -74,6 +74,8 @@ public class RobotMap {
 	public static int SwerveRearRightEncoderCanID;
 	public static int SwerveRearLeftEncoderCanID;
 
+	public static double yawOffset;
+
 	/************************************************************************
 	 * 
 	 ************************************************************************/
@@ -99,6 +101,8 @@ public class RobotMap {
 			SwerveFrontLeftEncoderCanID = 31;
 			SwerveRearRightEncoderCanID = 33;
 			SwerveRearLeftEncoderCanID = 32;
+
+			yawOffset=0;
 		} else { 
 			// 2024 Official Robot
 
@@ -119,6 +123,8 @@ public class RobotMap {
 			SwerveFrontLeftEncoderCanID = 31;
 			SwerveRearRightEncoderCanID = 32;
 			SwerveRearLeftEncoderCanID = 33;
+
+			yawOffset=0;
 		}
 	}
 }

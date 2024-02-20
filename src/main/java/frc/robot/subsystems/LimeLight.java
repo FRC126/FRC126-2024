@@ -211,28 +211,67 @@ public class LimeLight extends SubsystemBase {
             missedCount=0;
 
             if (validCount > 3) {
-                double llTargetX = Robot.limeLight.getllTargetX();
+                double llTargetX = Robot.limeLight.getllTargetX()-10;
                 if ( llTargetX < -1.5 || llTargetX > 1.5) {
                     if ( activeSeek && Robot.doAutoCommand() ) {
                         Robot.autoMove=true;
-                        Robot.autoCommand=new AutoTurn(llTargetX,200);
+                        Robot.autoCommand=new AutoTurn(llTargetX,25);
                         Robot.autoCommand.schedule();
                     }	   
                     angleOffset=llTargetX;
                     centeredCount=0;
                     Robot.shootNow=false;
+
+                    // .41 Area 48 degress 3000rpm
+                    // .32 Area 43 dgreees 3000rpm
+                    // .24 area 38 degrees 3000rpm
+                    // .18 area 34.5 degrees 3000rpm
+                    // .137 area 32.5 degrees 3000rpm
+                    // .9 area 27.6 dgrress 3300
+
+                    double area = Robot.limeLight.getllTargetArea();
+
+                    if ( activeSeek ) {
+                        double angle= 50 - ((45 - (area*100)) *.675);
+
+                        if (angle < 20 || angle>65) { angle=30; }
+            SmartDashboard.putNumber("Limelight throwerangle", angle);
+
+                        Robot.autoMoveThrower=true;
+                        Robot.thrower.setThrowerPosition(angle);
+                    } else {
+                        Robot.autoMoveThrower=false;    
+                    }    
                 } else {
+                    double area = Robot.limeLight.getllTargetArea();
+
+                    if ( activeSeek ) {
+                        double angle=50 - ((45 - (area*100)) *.675);
+
+                        if (angle < 20 || angle>65) { angle=30; }
+            SmartDashboard.putNumber("Limelight throwerangle", angle);
+
+                        Robot.autoMoveThrower=true;
+                        if (Robot.thrower.setThrowerPosition(angle)) {
+                            Robot.shootNow=true;
+                        }        
+                    } else {
+                        Robot.autoMoveThrower=false;    
+                    }    
+
+
                     // Target is centered, don't turn the robot
                     angleOffset=0;
                     centeredCount++;
                     if (centeredCount > 5) {
-                        if (activeSeek && Robot.doAutoCommand()) {
-                            Robot.autoMove=true;
-                            // TODO Need to calculate the angle and rpm
-                            Robot.autoCommand=new AutoThrow(2500,45);
-                            Robot.autoCommand.schedule();
-                        }	   
-                        Robot.shootNow=true;
+
+                        //if (activeSeek && Robot.doAutoCommand()) {
+                        //    Robot.autoMove=true;
+                        //    // TODO Need to calculate the angle and rpm
+                        //    Robot.autoCommand=new AutoThrow(3500,45);
+                        //    Robot.autoCommand.schedule();
+                        //	   
+                        //Robot.shootNow=true;
 
                     } else {
                         Robot.shootNow=false;
@@ -252,6 +291,7 @@ public class LimeLight extends SubsystemBase {
                 missedCount=0;
                 centeredCount=0;
                 angleOffset=0;
+                Robot.autoMoveThrower=false;
             }    
         }
     }          

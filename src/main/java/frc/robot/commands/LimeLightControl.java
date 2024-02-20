@@ -63,6 +63,7 @@ public class LimeLightControl extends Command {
             Robot.targetType = Robot.targetTypes.TargetTwo;
         } else {
             Robot.limeLight.setActiveSeek(false);
+            Robot.autoMoveThrower=false;
         }     
         
         Robot.limeLight.trackTarget();

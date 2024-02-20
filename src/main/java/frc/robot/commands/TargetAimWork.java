@@ -19,8 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Robot.targetTypes;
 
-public class ThrowerWork extends Command {
-
+public class TargetAimWork extends Command {
     int iters, speed;
     double angle;
     int throwingIters=0;
@@ -29,12 +28,9 @@ public class ThrowerWork extends Command {
     /**********************************************************************************
      **********************************************************************************/
 
-    public ThrowerWork(int speed, double angle, int iters) {
+    public TargetAimWork(int iters) {
         addRequirements(Robot.lidar);
         this.iters = iters;
-        this.speed = speed;
-        this.angle = angle;
-        throwingIters=0;
     }
 
     /**********************************************************************************
@@ -51,35 +47,11 @@ public class ThrowerWork extends Command {
 
     @Override
     public void execute() {
-        boolean reachedAngle=false;
+        Robot.limeLight.setActiveSeek(true);
+        Robot.targetType = targetTypes.TargetOne;
 
-		reachedOne = Robot.thrower.throwerRPM(0,speed);
-        reachedTwo = Robot.thrower.throwerRPM(1,speed);
-
-        if (throwingIters > 0) {
-            Robot.thrower.throwerTriggerOn();
-            throwingIters--;
-        } else {
-            // TODO: is thrower position in degrees or radians?
-            //double targetAngleDegrees = Robot.lidar.getTargetAngleDegrees();
-            //reachedAngle = Robot.thrower.setThrowerPosition(Math.toRadians(targetAngleDegrees));
-
-            //reachedAngle = Robot.thrower.setThrowerPosition(angle);
-
-            SmartDashboard.putNumber("reachedOne", reachedOne);
-            SmartDashboard.putNumber("reachedTwo", reachedTwo);
-            SmartDashboard.putBoolean("reachedAngle", reachedAngle);
-
-            // If we have reached the target rpm on the thrower, run the trigger and shoot the note
-            if (reachedOne > 3 && reachedTwo > 3) {
-                Robot.thrower.throwerTriggerOn();
-                Robot.thrower.setThrowTriggered(true);
-                throwingIters=150;
-            } else {
-                Robot.thrower.throwerTriggerOff();
-                Robot.thrower.setThrowTriggered(false);
-            }
-        }    
+        Robot.limeLight.trackTarget();
+        SmartDashboard.putBoolean("ShootNow", Robot.shootNow);        
     }
 
     /**********************************************************************************
@@ -90,10 +62,8 @@ public class ThrowerWork extends Command {
     public boolean isFinished() {
         iters--;
 
-        if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
+        if (iters == 0) {
             Robot.thrower.cancel();
-            Robot.thrower.setThrowTriggered(false);
-            Robot.limeLight.setActiveSeek(false);
             return true;
         }
         return false;

@@ -25,10 +25,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
 	boolean idleThrower=false;
-	boolean throwerDebug=false;
+	boolean throwerDebug=true;
 	int delay=0;
 	final int IDLE_RPM=2000;
-	final int MAX_RPM=5700;
+	final int MAX_RPM=4800;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -56,8 +56,35 @@ public class ThrowerControl extends Command {
 
 		if ( delay > 0) { delay--; }
 
-        // Thrower Angle Control
+		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+			// Ignore user controls during Autonomous
+			return;
+		}		
+
+		// Thrower Angle Control
 		double y = operatorJoystick.getLeftStickY();
+
+		if (operatorJoystick.isStartButton()) {
+			Robot.thrower.resetEncoders();
+		};
+
+  	    if (operatorJoystick.getPovUp()) {
+   		    Robot.thrower.setThrowerPosition(30);
+		} else if (operatorJoystick.getPovRight()) {
+   		    Robot.thrower.setThrowerPosition(45);
+		} else if (operatorJoystick.getPovDown()) {
+   		    Robot.thrower.setThrowerPosition(60);
+		} else if (operatorJoystick.getPovLeft()) {
+   		    Robot.thrower.setThrowerPosition(75);
+		} else {
+			if ( y!=0 ) {
+				Robot.thrower.moveThrower(y);
+			} else {
+				if ( !Robot.autoMoveThrower) {
+				    Robot.thrower.moveThrower(0);
+				}	
+			}			
+		}
 
 		if (operatorJoystick.isBButton()) {
             // Toggle the thrower idle on and off
@@ -67,28 +94,16 @@ public class ThrowerControl extends Command {
 			}
 		}	
 
-		if (operatorJoystick.getPovLeft()) {
+		if (operatorJoystick.getRightStickY()<-.25) {
 			if (delay <= 0) {
    			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
-				delay=25;
+				delay=15;
 			}	
 		} 	
-		if (operatorJoystick.getPovRight()) {
+		if (operatorJoystick.getRightStickY()>.25) {
 			if (delay <= 0) {
                 Robot.thrower.setRPM(Robot.thrower.getRPM()+100);
-				delay=25;
-			}	
-		} 	
-		if (operatorJoystick.getPovUp()) {
-			if (delay <= 0) {
-   			    Robot.thrower.setRPM(Robot.thrower.getRPM()+1000);
-				delay=25;
-			}	
-		} 	
-		if (operatorJoystick.getPovDown()) {
-			if (delay <= 0) {
-                Robot.thrower.setRPM(Robot.thrower.getRPM()-1000);
-				delay=25;
+				delay=15;
 			}	
 		} 	
 		if (Robot.thrower.getRPM() < 0) {
@@ -134,12 +149,6 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setThrowTriggered(true);
 		} else if (!Robot.thrower.getThrowTriggered()) {
 			Robot.thrower.throwerTriggerOff();
-		}
-
-		if ( y!=0 ) {
-			Robot.thrower.moveThrower(y);
-		} else {
-			Robot.thrower.moveThrower(0);
 		}
 	}
 }

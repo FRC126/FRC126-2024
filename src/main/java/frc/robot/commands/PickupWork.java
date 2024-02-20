@@ -42,7 +42,7 @@ public class PickupWork extends Command {
 
     @Override
     public void execute() {
-        Robot.pickup.runMotor(0.7);
+        Robot.pickup.runMotor(-0.8);
     }
 
     /**********************************************************************************
@@ -54,7 +54,7 @@ public class PickupWork extends Command {
         iters--;
         boolean haveNote=false;
 
-        haveNote=Robot.thrower.getPhotoSensor();
+        //haveNote=Robot.thrower.getPhotoSensor();
 
         if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
             Robot.pickup.cancel();

@@ -33,21 +33,24 @@ public class AutoTest extends SequentialCommandGroup {
             // TODO Aim at speaker
             
             // Throw the Note
-            new ThrowerWork(3000, 45, 250),
+            new TargetAimWork(200),
+            new ThrowerWork(3000, 45, 350),
             
             new ParallelCommandGroup(
                 // Run the Pickup
                 new PickupWork(250),
                 // Drive over the next note
-                new DriveWork(-0.3,0,0,18,250)
+                new DriveWork(0.25,0,0,18,250)
             ),
         
-            new TurnDegreesWork(-20,250),
+            //new TurnDegreesWork(-20,250),
 
             // TODO Aim at speaker
 
             // Throw note in speaker
-            new ThrowerWork(3000, 45, 250),
+                        new TargetAimWork(200),
+
+            new ThrowerWork(3000, 36, 250),
 
             /*
             new TurnDegreesWork(-70,250),

@@ -138,9 +138,29 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
+	 public double getYaw() {
+        double angle=0;
+
+        if (Robot.useNavx) { 
+			angle=Robot.navxMXP.getAngle();
+		} else {
+		    angle=Robot.internalData.getGyroAngle();
+		}	
+
+		angle=angle + RobotMap.yawOffset;
+
+		return(angle);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
 	public void resetYaw() {
-		Robot.navxMXP.zeroYaw();
-		Robot.internalData.resetGyro();
+        if (Robot.useNavx) { 
+			Robot.navxMXP.zeroYaw();
+		} else {	
+		    Robot.internalData.resetGyro();
+		}	
 	} 
 
     /************************************************************************
@@ -304,7 +324,7 @@ public class SwerveDrive extends SubsystemBase {
 
 		// Get the current angle of the robot, and rotate the control inputs the oppsite 
 		// direction, and the controls are driver relative, not robot relative
-        double currentAngle = Robot.navxMXP.getAngle();
+        double currentAngle = getYaw();
 
 		if (!Robot.isAutoCommand) {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
@@ -314,7 +334,7 @@ public class SwerveDrive extends SubsystemBase {
 			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
 		}
 
-		if (driveStraight) {
+		if (driveStraight && false) {
 			// If driveStraight is true, keep the robot facing the right direction
 			if (currentAngle < straightDegrees-1.5) {
 				rotate=.04;	
@@ -362,7 +382,9 @@ public class SwerveDrive extends SubsystemBase {
 			// the joystick input
 
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
-			forwardBack *= -1;
+			//forwardBack *= -1;
+			leftRight *= -1;
+			rotate *= -1;
 		
 			double a = leftRight - rotate * (LENGTH / r);
 			double b = leftRight + rotate * (LENGTH / r);
@@ -394,8 +416,8 @@ public class SwerveDrive extends SubsystemBase {
 
 			// Run the drive motors to the smoothed speed
 			swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
-			swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio);
-			swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio);
+			swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio * -1);
+			swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio * -1);
 			swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
 		}
 

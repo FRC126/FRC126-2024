@@ -49,16 +49,14 @@ public class PickupControl extends Command {
 
 	@Override
 	public void execute() {
-		double pickMotorSpeed = SmartDashboard.getNumber(Robot.PICKUP_MOTOR_SPEED_STRING, 1.0);
-		if (pickMotorSpeed > 1.0) {
-			pickMotorSpeed = 1.0;
-		} else if (pickMotorSpeed < -1.0) {
-			pickMotorSpeed = -1.0;
-		}
+
+		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+			// Ignore user controls during Autonomous
+			return;
+		}		
 
 		if (operatorJoystick.isYButton()) {
-			this.pickup.runMotor(pickMotorSpeed*-1);
-     		SmartDashboard.putNumber("pickup run speed", pickMotorSpeed*-1);
+			this.pickup.runMotor(-.8);
 		} else {
 			this.pickup.cancel();
 		}
