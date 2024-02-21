@@ -14,10 +14,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Robot.targetTypes;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class TargetAimWork extends Command {
     int iters;
@@ -50,6 +49,12 @@ public class TargetAimWork extends Command {
         Robot.limeLight.setActiveSeek(true);
         Robot.targetType = target;
 
+        if (Robot.targetType == Robot.targetTypes.TargetOne) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
+        } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
+        }
+
         Robot.limeLight.trackTarget();
 
         aimed = Robot.limeLight.seekTarget();
@@ -78,6 +83,5 @@ public class TargetAimWork extends Command {
         Robot.thrower.cancel();
         Robot.autoMoveThrower=false;
         Robot.limeLight.setActiveSeek(false);
-        Robot.targetType = Robot.targetType.NoTarget;
     }
 }

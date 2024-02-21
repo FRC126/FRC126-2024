@@ -17,7 +17,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Robot.targetTypes;
 
 public class ThrowerWork extends Command {
 
@@ -82,7 +81,6 @@ public class ThrowerWork extends Command {
         if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
             Robot.thrower.cancel();
             Robot.thrower.setThrowTriggered(false);
-            Robot.limeLight.setActiveSeek(false);
             return true;
         }
         return false;
