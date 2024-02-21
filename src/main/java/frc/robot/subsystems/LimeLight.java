@@ -212,7 +212,7 @@ public class LimeLight extends SubsystemBase {
         // .24 area 38 degrees 3000rpm
         // .18 area 34.5 degrees 3000rpm
         // .137 area 32.5 degrees 3000rpm
-        // .9 area 27.6 dgrress 3300
+        // .09 area 27.6 dgrress 3300
 
         double angle= 50 - ((45 - (llTargetArea*100)) *.675);
 
