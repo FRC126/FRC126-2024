@@ -243,7 +243,9 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void autonomousPeriodic() {
+        Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
+        Robot.Leds.doLights();
     }
 
     /************************************************************************
