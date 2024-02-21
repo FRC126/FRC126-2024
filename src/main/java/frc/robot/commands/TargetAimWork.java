@@ -20,15 +20,17 @@ import frc.robot.Robot;
 import frc.robot.Robot.targetTypes;
 
 public class TargetAimWork extends Command {
-    int iters, speed;
+    int iters;
+    Robot.targetTypes target;
     boolean aimed=false;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public TargetAimWork(int iters) {
+    public TargetAimWork(Robot.targetTypes target, int iters) {
         addRequirements(Robot.lidar);
         this.iters = iters;
+        this.target = target;
     }
 
     /**********************************************************************************
@@ -46,7 +48,7 @@ public class TargetAimWork extends Command {
     @Override
     public void execute() {
         Robot.limeLight.setActiveSeek(true);
-        Robot.targetType = targetTypes.TargetOne;
+        Robot.targetType = target;
 
         Robot.limeLight.trackTarget();
 
@@ -62,7 +64,6 @@ public class TargetAimWork extends Command {
         iters--;
 
         if (iters == 0 || aimed) {
-            Robot.thrower.cancel();
             return true;
         }
         return false;
@@ -76,5 +77,7 @@ public class TargetAimWork extends Command {
     public void end(boolean isInteruppted) {
         Robot.thrower.cancel();
         Robot.autoMoveThrower=false;
+        Robot.limeLight.setActiveSeek(false);
+        Robot.targetType = Robot.targetType.NoTarget;
     }
 }
