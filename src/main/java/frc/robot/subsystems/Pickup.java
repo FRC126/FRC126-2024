@@ -53,19 +53,32 @@ public class Pickup extends SubsystemBase {
 	}
 
 	/************************************************************************
-	 * Run Main Thower Wheels by input percentage
 	 ************************************************************************/
-
-	public void runMotor(double speed) {
-		if (!Robot.thrower.getThrowTriggered()) {
-			PickupMotor.set(speed);
-		}	
+    
+	public void pickupMotorOn() {
+		PickupMotor.set(-1);
 	}
 
 	/************************************************************************
 	 ************************************************************************/
 
+	 public void pickupMotorReverse() {
+		PickupMotor.set(1);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void pickupMotorOff() {
+		if (!Robot.thrower.getThrowTriggered()) {
+			PickupMotor.set(0);
+		}	
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
 	public void cancel() {
-		runMotor(0);
+		pickupMotorOff();
 	}
 }

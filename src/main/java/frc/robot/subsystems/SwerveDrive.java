@@ -69,7 +69,8 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 	
     boolean swerveDebug=true;
-	boolean enableFullSpeed=false;
+
+	boolean enableFullSpeed=true;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -117,6 +118,10 @@ public class SwerveDrive extends SubsystemBase {
 		swerveFrontLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		swerveRearLeftTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		swerveRearRightTurnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+		if (RobotMap.robotID == 0) {
+			enableFullSpeed=false;
+		}		
 	}
 
 	/************************************************************************
@@ -334,16 +339,16 @@ public class SwerveDrive extends SubsystemBase {
 			forwardBack = ( forwardBackIn * Math.cos(angle) + (leftRightIn * Math.sin(angle)));
 		}
 
-		if (driveStraight && false) {
+		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
-			if (currentAngle < straightDegrees-1.5) {
-				rotate=.04;	
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.085; }
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.15; }
+			if (currentAngle < straightDegrees-1.0) {
+				rotate=.03;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.1; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.2; }
 			} else if (currentAngle > straightDegrees+1.5) {
-				rotate=-.04;	
-				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.085; }
-				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.15; }
+				rotate=-.03;	
+				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.1; }
+				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.2; }
 			} else {
 				rotate=0;
 			}
@@ -382,10 +387,10 @@ public class SwerveDrive extends SubsystemBase {
 			// the joystick input
 
 			double r = Math.sqrt ((LENGTH * LENGTH) + (WIDTH * WIDTH));
-			//forwardBack *= -1;
-			leftRight *= -1;
-			rotate *= -1;
-		
+			forwardBack *= RobotMap.frontBackInversion;
+			leftRight *= RobotMap.leftRightInversion;
+			rotate *= RobotMap.rotateInversion;
+
 			double a = leftRight - rotate * (LENGTH / r);
 			double b = leftRight + rotate * (LENGTH / r);
 			double c = forwardBack - rotate * (WIDTH / r);
@@ -415,10 +420,10 @@ public class SwerveDrive extends SubsystemBase {
 			newWheelSpeed[rearLeft] = smoothWheelSpeed(newWheelSpeed[rearLeft],rearLeft);
 
 			// Run the drive motors to the smoothed speed
-			swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio);
-			swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio * -1);
-			swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio * -1);
-			swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio);
+			swerveFrontRightDriveMotor.set(newWheelSpeed[frontRight] * currentSpeedRatio * RobotMap.SwerveFrontRightInversion);
+			swerveFrontLeftDriveMotor.set(newWheelSpeed[frontLeft] * currentSpeedRatio  * RobotMap.SwerveFrontLeftInversion);
+			swerveRearLeftDriveMotor.set(newWheelSpeed[rearLeft] * currentSpeedRatio  * RobotMap.SwerveRearLeftInversion);
+			swerveRearRightDriveMotor.set(newWheelSpeed[rearRight] * currentSpeedRatio  * RobotMap.SwerveRearRightInversion);
 		}
 
    		SmartDashboard.putNumber("currentAngle", currentAngle);

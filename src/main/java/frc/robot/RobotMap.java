@@ -15,6 +15,9 @@
 package frc.robot;
 
 public class RobotMap {
+
+	public static int robotID=1;
+
     public static int NeoTicksPerRotation=42;
 	public static double ThrowerGearRatio=750;
 
@@ -76,11 +79,22 @@ public class RobotMap {
 
 	public static double yawOffset;
 
+	public static int frontBackInversion;
+	public static int leftRightInversion;
+	public static int rotateInversion;
+
+	public static int SwerveFrontRightInversion;
+	public static int SwerveFrontLeftInversion;
+	public static int SwerveRearRightInversion;
+	public static int SwerveRearLeftInversion;
+
 	/************************************************************************
 	 * 
 	 ************************************************************************/
 	
-	public static void setRobot(double robotID){
+	public static void setRobot(int robotIDIn){
+		robotID = robotIDIn;
+
 		if(robotID == 0) { 
 			// 2024 DriveBase
 
@@ -103,6 +117,16 @@ public class RobotMap {
 			SwerveRearLeftEncoderCanID = 32;
 
 			yawOffset=0;
+
+			frontBackInversion=-1;
+			leftRightInversion=1;
+			rotateInversion=1;
+
+	        SwerveFrontRightInversion=1;
+			SwerveFrontLeftInversion=1;
+			SwerveRearRightInversion=1;
+			SwerveRearLeftInversion=1;
+
 		} else { 
 			// 2024 Official Robot
 
@@ -125,6 +149,15 @@ public class RobotMap {
 			SwerveRearLeftEncoderCanID = 33;
 
 			yawOffset=0;
+
+			frontBackInversion=1;
+			leftRightInversion=-1;
+			rotateInversion=-1;
+
+	        SwerveFrontRightInversion=1;
+			SwerveFrontLeftInversion=-1;
+			SwerveRearRightInversion=1;
+			SwerveRearLeftInversion=-1;
 		}
 	}
 }

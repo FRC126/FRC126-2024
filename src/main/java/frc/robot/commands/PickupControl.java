@@ -50,13 +50,15 @@ public class PickupControl extends Command {
 	@Override
 	public void execute() {
 
-		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}		
 
-		if (operatorJoystick.isYButton()) {
-			this.pickup.runMotor(-.8);
+		if (operatorJoystick.isLShoulderButton() || operatorJoystick.isYButton()) {
+			this.pickup.pickupMotorOn();
+		} else if (operatorJoystick.isRShoulderButton()) {
+			this.pickup.pickupMotorOff();
 		} else {
 			this.pickup.cancel();
 		}

@@ -21,9 +21,7 @@ import frc.robot.Robot.targetTypes;
 
 public class TargetAimWork extends Command {
     int iters, speed;
-    double angle;
-    int throwingIters=0;
-    int reachedOne=0, reachedTwo=0;
+    boolean aimed=false;
 
     /**********************************************************************************
      **********************************************************************************/
@@ -51,7 +49,8 @@ public class TargetAimWork extends Command {
         Robot.targetType = targetTypes.TargetOne;
 
         Robot.limeLight.trackTarget();
-        SmartDashboard.putBoolean("ShootNow", Robot.shootNow);        
+
+        aimed = Robot.limeLight.seekTarget();
     }
 
     /**********************************************************************************
@@ -62,7 +61,7 @@ public class TargetAimWork extends Command {
     public boolean isFinished() {
         iters--;
 
-        if (iters == 0) {
+        if (iters == 0 || aimed) {
             Robot.thrower.cancel();
             return true;
         }
@@ -76,5 +75,6 @@ public class TargetAimWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.thrower.cancel();
+        Robot.autoMoveThrower=false;
     }
 }
