@@ -166,6 +166,7 @@ public class LimeLight extends SubsystemBase {
             centered=0;
             aimed=0;
             Robot.autoMoveThrower=false;    
+            Robot.autoMove=false;
             return(false);
         }     
 

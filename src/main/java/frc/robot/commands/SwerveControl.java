@@ -100,7 +100,7 @@ public class SwerveControl extends Command {
 		}
 		
 		if (driveJoystick.isAButton()) {
-			double dis = SmartDashboard.getNumber("Distance", 24);
+			//double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
 				//Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
