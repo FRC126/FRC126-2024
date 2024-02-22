@@ -19,7 +19,6 @@ import frc.robot.Robot.targetTypes;
 import frc.robot.commands.*;
 import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -35,7 +34,6 @@ public class LimeLight extends SubsystemBase {
     private int missedCount;
     private int centeredCount;
     private double angleOffset;
-    private Pose2d botPose2d;
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
@@ -120,13 +118,6 @@ public class LimeLight extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-     public Pose2d getBotPose2d() {
-        return botPose2d;
-    }
-
-	/************************************************************************
-	 ************************************************************************/
-
     public double getllTurretTarget() {
         return turretTarget;
      }   
@@ -190,8 +181,6 @@ public class LimeLight extends SubsystemBase {
         } else {
             setllTargetData(false, 0, 0, 0);
         }        
-
-        botPose2d = LimelightHelpers.getBotPose2d_wpiBlue(null);
     }
 
    	/************************************************************************
