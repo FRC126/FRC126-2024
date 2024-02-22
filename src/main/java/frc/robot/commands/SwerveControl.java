@@ -99,6 +99,7 @@ public class SwerveControl extends Command {
 			straightDegrees = Robot.swerveDrive.getYaw();      
 		}
 		
+		/*
 		if (driveJoystick.isAButton()) {
 			//double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
@@ -108,6 +109,7 @@ public class SwerveControl extends Command {
 				Robot.autoCommand.schedule();
 			}
 		}
+		*/
 
     	if (driveJoystick.isStartButton()) {
 			if (delay == 0) {

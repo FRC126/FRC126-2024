@@ -160,7 +160,7 @@ public class LimeLight extends SubsystemBase {
      public boolean seekTarget() {   
         int cameraOffset = 10;    
 
-        if (activeSeek ||
+        if (!activeSeek ||
             !llTargetValid ||
             validCount <= 3) {
             centered=0;
@@ -171,7 +171,6 @@ public class LimeLight extends SubsystemBase {
         }     
 
         // We found a valid vision target.
-
         double llTargetXOffset = llTargetX - cameraOffset;
 
         if ( llTargetXOffset < -1.25 || llTargetXOffset > 1.25) {
@@ -184,7 +183,7 @@ public class LimeLight extends SubsystemBase {
             double diff = Math.abs(target) - Math.abs(startAngle);
     
             double tmp = diff / 250;
-            tmp = Robot.boundSpeed(tmp, .20, .045 );
+            tmp = Robot.boundSpeed(tmp, .20, .025 );
     
             if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
                 driveRotate=0;
@@ -216,7 +215,7 @@ public class LimeLight extends SubsystemBase {
 
         double angle= 50 - ((45 - (llTargetArea*100)) *.675);
 
-        if (angle < 20 || angle>65) { angle=30; }
+        if (angle < 20 || angle>65 ) { angle=30; }
             SmartDashboard.putNumber("Auto Thrower Angle", angle);
 
         Robot.autoMoveThrower=true;
@@ -226,7 +225,7 @@ public class LimeLight extends SubsystemBase {
             aimed=0;
         }
 
-        if ((centered) > 2 && (aimed > 1)) {
+        if ((centered) > 2 && (aimed > 3)) {
             Robot.autoMoveThrower=false;
             return(true);
         } else {

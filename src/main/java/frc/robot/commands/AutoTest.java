@@ -31,7 +31,7 @@ public class AutoTest extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
           
             // TODO Aim at speaker
-            new TargetAimWork(Robot.targetTypes.TargetOne, 100),
+            new TargetAimWork(Robot.targetTypes.TargetTwo, 250),
             
             // Throw the Note
             new ThrowerWork(3000, 150),
@@ -40,13 +40,28 @@ public class AutoTest extends SequentialCommandGroup {
                 // Run the Pickup
                 new PickupWork(200),
                 // Drive over the next note
-                new DriveWork(0.25,0,0,18,200)
+                new DriveWork(0.25,0,0,12,200)
             ),
         
             //new TurnDegreesWork(-20,250),
 
             // TODO Aim at speaker
-            new TargetAimWork(Robot.targetTypes.TargetOne, 100),
+            new TargetAimWork(Robot.targetTypes.TargetTwo, 250),
+
+            // Throw note in speaker
+            new ThrowerWork(3000, 150),
+
+            new ParallelCommandGroup(
+                // Run the Pickup
+                new PickupWork(200),
+                // Drive over the next note
+                new DriveWork(0.25,0,0,12,200)
+            ),
+        
+            //new TurnDegreesWork(-20,250),
+
+            // TODO Aim at speaker
+            new TargetAimWork(Robot.targetTypes.TargetTwo, 250),
 
             // Throw note in speaker
             new ThrowerWork(3000, 150),

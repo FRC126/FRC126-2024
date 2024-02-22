@@ -55,7 +55,7 @@ public class PickupControl extends Command {
 		if (operatorJoystick.isLShoulderButton() || operatorJoystick.isYButton()) {
 			this.pickup.pickupMotorOn();
 		} else if (operatorJoystick.isRShoulderButton()) {
-			this.pickup.pickupMotorOff();
+			this.pickup.pickupMotorReverse();
 		} else {
 			this.pickup.cancel();
 		}
