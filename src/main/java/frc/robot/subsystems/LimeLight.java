@@ -32,14 +32,11 @@ public class LimeLight extends SubsystemBase {
     private double llTargetY;
     private int validCount;
     private int missedCount;
-<<<<<<< HEAD
     private int centeredCount;
     private double angleOffset;
-    private Pose2d botPose2d;
-=======
+    //private Pose2d botPose2d;
     private int centered;
     private int aimed;    
->>>>>>> drivebase_debug
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
@@ -76,60 +73,7 @@ public class LimeLight extends SubsystemBase {
         activeSeek = seek;
     }   
 
-<<<<<<< HEAD
-	/************************************************************************
-	 ************************************************************************/
-
-	public boolean getllTargetValid() {
-       return llTargetValid;
-    }   
-
-	/************************************************************************
-	 ************************************************************************/
-
-	public double getllTargetArea() {
-        return llTargetArea;
-    }   
- 
-	/************************************************************************
-	 ************************************************************************/
-
-    public double getllTargetX() {
-        return llTargetX;
-    }   
-
-	/************************************************************************
-	 ************************************************************************/
-
-    public double getllTargetY() {
-        return llTargetY;
-    }
-    
-	/************************************************************************
-	 ************************************************************************/
-
-     public Pose2d getBotPose2d() {
-        return botPose2d;
-    }
-
-	/************************************************************************
-	 ************************************************************************/
-
-    public double getllTurretTarget() {
-        return turretTarget;
-     }   
-
-	/************************************************************************
-	 ************************************************************************/
-
-    public void setllTurretTarget(double target) {
-        turretTarget = target;
-    }   
-
-	/************************************************************************
-=======
    	/************************************************************************
->>>>>>> drivebase_debug
 	 ************************************************************************/
 
     public void setllTargetData(boolean isValid,
@@ -182,8 +126,7 @@ public class LimeLight extends SubsystemBase {
             setllTargetData(false, 0, 0, 0);
         }        
 
-        botPose2d = LimelightHelpers.getBotPose2d_wpiBlue(null);
-    }
+   }
 
    	/************************************************************************
 	 ************************************************************************/
