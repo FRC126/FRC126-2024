@@ -17,8 +17,6 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
-import frc.robot.subsystems.LEDSubsystem;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**********************************************************************************
@@ -50,6 +48,11 @@ public class LimeLightControl extends Command {
 
     @Override
     public void execute() {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
+			// Ignore user controls during Autonomous
+			return;
+		}	
+
         if (driveJoystick.getPovUp()) {
             Robot.limeLight.setActiveSeek(true);
             if (Robot.targetType == Robot.targetTypes.TargetOne) {
@@ -67,6 +70,8 @@ public class LimeLightControl extends Command {
         }     
         
         Robot.limeLight.trackTarget();
+
+        Robot.limeLight.seekTarget();
     }
 
 	/************************************************************************

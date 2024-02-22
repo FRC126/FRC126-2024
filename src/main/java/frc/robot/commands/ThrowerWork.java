@@ -17,23 +17,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Robot.targetTypes;
 
 public class ThrowerWork extends Command {
 
     int iters, speed;
-    double angle;
     int throwingIters=0;
     int reachedOne=0, reachedTwo=0;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public ThrowerWork(int speed, double angle, int iters) {
+    public ThrowerWork(int speed, int iters) {
         addRequirements(Robot.lidar);
         this.iters = iters;
         this.speed = speed;
-        this.angle = angle;
         throwingIters=0;
     }
 
@@ -51,8 +48,6 @@ public class ThrowerWork extends Command {
 
     @Override
     public void execute() {
-        boolean reachedAngle=false;
-
 		reachedOne = Robot.thrower.throwerRPM(0,speed);
         reachedTwo = Robot.thrower.throwerRPM(1,speed);
 
@@ -60,15 +55,8 @@ public class ThrowerWork extends Command {
             Robot.thrower.throwerTriggerOn();
             throwingIters--;
         } else {
-            // TODO: is thrower position in degrees or radians?
-            //double targetAngleDegrees = Robot.lidar.getTargetAngleDegrees();
-            //reachedAngle = Robot.thrower.setThrowerPosition(Math.toRadians(targetAngleDegrees));
-
-            //reachedAngle = Robot.thrower.setThrowerPosition(angle);
-
             SmartDashboard.putNumber("reachedOne", reachedOne);
             SmartDashboard.putNumber("reachedTwo", reachedTwo);
-            SmartDashboard.putBoolean("reachedAngle", reachedAngle);
 
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
             if (reachedOne > 3 && reachedTwo > 3) {
@@ -93,7 +81,6 @@ public class ThrowerWork extends Command {
         if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
             Robot.thrower.cancel();
             Robot.thrower.setThrowTriggered(false);
-            Robot.limeLight.setActiveSeek(false);
             return true;
         }
         return false;

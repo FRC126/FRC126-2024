@@ -14,23 +14,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Robot.targetTypes;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class TargetAimWork extends Command {
-    int iters, speed;
-    double angle;
-    int throwingIters=0;
-    int reachedOne=0, reachedTwo=0;
+    int iters;
+    Robot.targetTypes target;
+    boolean aimed=false;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public TargetAimWork(int iters) {
+    public TargetAimWork(Robot.targetTypes target, int iters) {
         addRequirements(Robot.lidar);
         this.iters = iters;
+        this.target = target;
     }
 
     /**********************************************************************************
@@ -48,10 +47,17 @@ public class TargetAimWork extends Command {
     @Override
     public void execute() {
         Robot.limeLight.setActiveSeek(true);
-        Robot.targetType = targetTypes.TargetOne;
+        Robot.targetType = target;
+
+        if (Robot.targetType == Robot.targetTypes.TargetOne) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
+        } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
+        }
 
         Robot.limeLight.trackTarget();
-        SmartDashboard.putBoolean("ShootNow", Robot.shootNow);        
+
+        aimed = Robot.limeLight.seekTarget();
     }
 
     /**********************************************************************************
@@ -62,8 +68,7 @@ public class TargetAimWork extends Command {
     public boolean isFinished() {
         iters--;
 
-        if (iters == 0) {
-            Robot.thrower.cancel();
+        if (iters == 0 || aimed) {
             return true;
         }
         return false;
@@ -76,5 +81,7 @@ public class TargetAimWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.thrower.cancel();
+        Robot.autoMoveThrower=false;
+        Robot.limeLight.setActiveSeek(false);
     }
 }

@@ -58,7 +58,7 @@ public class SwerveControl extends Command {
 			Robot.stopAutoCommand();
 		}
 
-		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+		if (Robot.internalData.isAuto() || Robot.autoMove || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
     		driveStraight = false;
 			return;
@@ -99,8 +99,9 @@ public class SwerveControl extends Command {
 			straightDegrees = Robot.swerveDrive.getYaw();      
 		}
 		
+		/*
 		if (driveJoystick.isAButton()) {
-			double dis = SmartDashboard.getNumber("Distance", 24);
+			//double dis = SmartDashboard.getNumber("Distance", 24);
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
 				//Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
@@ -108,6 +109,7 @@ public class SwerveControl extends Command {
 				Robot.autoCommand.schedule();
 			}
 		}
+		*/
 
     	if (driveJoystick.isStartButton()) {
 			if (delay == 0) {
@@ -115,16 +117,6 @@ public class SwerveControl extends Command {
 				delay=100;
 			}	
 		}	
-
-		/* 
-		if (driveJoystick.isYButton()) {
-			if (Robot.doAutoCommand()) {
-				Robot.autoMove = true;
-				Robot.autoCommand = new AutoTest();
-				Robot.autoCommand.schedule();
-			}
-		}
-		*/
 
 		if (rotate == 0 && (forwardBack != 0 || leftRight != 0)) {
 			// if no rotate input specified, we are going to drive straight

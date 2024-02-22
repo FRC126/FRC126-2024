@@ -273,9 +273,17 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+	 public void throwerTriggerReverse() {
+		throwerTriggerMotor.set(1);
+		Robot.pickup.pickupMotorReverse();
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
     public void throwerTriggerOn() {
 		throwerTriggerMotor.set(-1);
-		Robot.pickup.runMotor(-1);
+		Robot.pickup.pickupMotorOn();
 		throwTriggered=true;
 	}
 
@@ -283,9 +291,9 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
     public void throwerTriggerOff() {
-		throwerTriggerMotor.set(0);
-		Robot.pickup.runMotor(0);
 		throwTriggered=false;
+		throwerTriggerMotor.set(0);
+		Robot.pickup.pickupMotorOff();
 	}
 	
     /************************************************************************

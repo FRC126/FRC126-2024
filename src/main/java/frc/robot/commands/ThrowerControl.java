@@ -54,12 +54,12 @@ public class ThrowerControl extends Command {
 	public void execute() {
 		double speed;
 
-		if ( delay > 0) { delay--; }
-
-		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
-		}		
+		}	
+		
+		if ( delay > 0) { delay--; }
 
 		// Thrower Angle Control
 		double y = operatorJoystick.getLeftStickY();
@@ -143,13 +143,16 @@ public class ThrowerControl extends Command {
 			SmartDashboard.putNumber("thrower tilt input", y);
 		}
 
+
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
+		} else if (operatorJoystick.isRShoulderButton()) {
+			Robot.thrower.throwerTriggerReverse();
 		} else if (!Robot.thrower.getThrowTriggered()) {
 			Robot.thrower.throwerTriggerOff();
-		}
+		} 
 	}
 }
 

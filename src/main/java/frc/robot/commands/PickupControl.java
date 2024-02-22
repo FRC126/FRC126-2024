@@ -17,10 +17,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PickupControl extends Command {
 	JoystickWrapper operatorJoystick;
@@ -50,13 +47,15 @@ public class PickupControl extends Command {
 	@Override
 	public void execute() {
 
-		if (Robot.internalData.isAuto() || Robot.autoMove == true) {
+		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
 			return;
 		}		
 
-		if (operatorJoystick.isYButton()) {
-			this.pickup.runMotor(-.8);
+		if (operatorJoystick.isLShoulderButton() || operatorJoystick.isYButton()) {
+			this.pickup.pickupMotorOn();
+		} else if (operatorJoystick.isRShoulderButton()) {
+			this.pickup.pickupMotorReverse();
 		} else {
 			this.pickup.cancel();
 		}

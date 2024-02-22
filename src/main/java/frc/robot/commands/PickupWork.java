@@ -42,7 +42,7 @@ public class PickupWork extends Command {
 
     @Override
     public void execute() {
-        Robot.pickup.runMotor(-0.8);
+        Robot.pickup.pickupMotorOn();
     }
 
     /**********************************************************************************

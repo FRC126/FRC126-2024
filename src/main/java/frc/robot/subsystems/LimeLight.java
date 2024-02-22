@@ -30,12 +30,16 @@ public class LimeLight extends SubsystemBase {
     private double llTargetArea;
     private double llTargetX;
     private double llTargetY;
-    private double turretTarget;
     private int validCount;
     private int missedCount;
+<<<<<<< HEAD
     private int centeredCount;
     private double angleOffset;
     private Pose2d botPose2d;
+=======
+    private int centered;
+    private int aimed;    
+>>>>>>> drivebase_debug
 
     public static SequentialCommandGroup throwCommand;
     boolean limeLightDebug=true;
@@ -59,36 +63,20 @@ public class LimeLight extends SubsystemBase {
         llTargetArea = 0.0;
         llTargetX = 0.0;
         llTargetY = 0.0;
-        turretTarget = 0;
-        angleOffset=0;
-        
         validCount=0;
         missedCount=0;
-
-        centeredCount=0;
+        centered=0;
+        aimed=0;
     }
 
-	/************************************************************************
-	 ************************************************************************/
-
-	public double getAngleOffset() {
-       return angleOffset;
-    }   
-
     /************************************************************************
-	 ************************************************************************/
-
-	public boolean getActiveSeek() {
-       return activeSeek;
-    }   
-
-   	/************************************************************************
 	 ************************************************************************/
 
      public void setActiveSeek(boolean seek) {
         activeSeek = seek;
     }   
 
+<<<<<<< HEAD
 	/************************************************************************
 	 ************************************************************************/
 
@@ -139,6 +127,9 @@ public class LimeLight extends SubsystemBase {
     }   
 
 	/************************************************************************
+=======
+   	/************************************************************************
+>>>>>>> drivebase_debug
 	 ************************************************************************/
 
     public void setllTargetData(boolean isValid,
@@ -201,111 +192,107 @@ public class LimeLight extends SubsystemBase {
         if (Robot.targetType == Robot.targetTypes.NoTarget) {
             // If we are not seeking a target, then reset all target 
             // data and return
-            Robot.shootNow=false;
-
             setllTargetData(false, 0, 0, 0);
-            
-            validCount=0;
-            missedCount=0;
-            centeredCount=0;
-           
 		 	return;
         }
         
         Robot.limeLight.getCameraData();
 
-        if (Robot.limeLight.getllTargetValid()){
+        if (llTargetValid){
             // We found a valid vision target.
-
             // Keep track of the number of time we seen a valid target
             validCount++;
             missedCount=0;
-
-            if (validCount > 3) {
-                double llTargetX = Robot.limeLight.getllTargetX()-10;
-                if ( llTargetX < -1.5 || llTargetX > 1.5) {
-                    if ( activeSeek && Robot.doAutoCommand() ) {
-                        Robot.autoMove=true;
-                        Robot.autoCommand=new AutoTurn(llTargetX,25);
-                        Robot.autoCommand.schedule();
-                    }	   
-                    angleOffset=llTargetX;
-                    centeredCount=0;
-                    Robot.shootNow=false;
-
-                    // .41 Area 48 degress 3000rpm
-                    // .32 Area 43 dgreees 3000rpm
-                    // .24 area 38 degrees 3000rpm
-                    // .18 area 34.5 degrees 3000rpm
-                    // .137 area 32.5 degrees 3000rpm
-                    // .9 area 27.6 dgrress 3300
-
-                    double area = Robot.limeLight.getllTargetArea();
-
-                    if ( activeSeek ) {
-                        double angle= 50 - ((45 - (area*100)) *.675);
-
-                        if (angle < 20 || angle>65) { angle=30; }
-            SmartDashboard.putNumber("Limelight throwerangle", angle);
-
-                        Robot.autoMoveThrower=true;
-                        Robot.thrower.setThrowerPosition(angle);
-                    } else {
-                        Robot.autoMoveThrower=false;    
-                    }    
-                } else {
-                    double area = Robot.limeLight.getllTargetArea();
-
-                    if ( activeSeek ) {
-                        double angle=50 - ((45 - (area*100)) *.675);
-
-                        if (angle < 20 || angle>65) { angle=30; }
-            SmartDashboard.putNumber("Limelight throwerangle", angle);
-
-                        Robot.autoMoveThrower=true;
-                        if (Robot.thrower.setThrowerPosition(angle)) {
-                            Robot.shootNow=true;
-                        }        
-                    } else {
-                        Robot.autoMoveThrower=false;    
-                    }    
-
-
-                    // Target is centered, don't turn the robot
-                    angleOffset=0;
-                    centeredCount++;
-                    if (centeredCount > 5) {
-
-                        //if (activeSeek && Robot.doAutoCommand()) {
-                        //    Robot.autoMove=true;
-                        //    // TODO Need to calculate the angle and rpm
-                        //    Robot.autoCommand=new AutoThrow(3500,45);
-                        //    Robot.autoCommand.schedule();
-                        //	   
-                        //Robot.shootNow=true;
-
-                    } else {
-                        Robot.shootNow=false;
-                    }
-                }
-            }    
-            SmartDashboard.putNumber("Limelight Centered", centeredCount);
         } else {
             if ( missedCount < 10 ) {
-                // Don't change the old data, so we won't stop on dropping a frame or 3
+                // Don't change the old data, so we won't stop on dropping a frame or 10
                 missedCount++;
             } else {
                 // Initialize all target data
-                Robot.shootNow=false; 
-                setllTargetData(false, 0, 0, 0);
+                Robot.limeLight.setllTargetData(false, 0, 0, 0);
                 validCount=0;
                 missedCount=0;
-                centeredCount=0;
-                angleOffset=0;
-                Robot.autoMoveThrower=false;
             }    
+        }                    
+    }
+
+    /************************************************************************
+	 ************************************************************************/
+
+     public boolean seekTarget() {   
+        int cameraOffset = 10;    
+
+        if (!activeSeek ||
+            !llTargetValid ||
+            validCount <= 3) {
+            centered=0;
+            aimed=0;
+            Robot.autoMoveThrower=false;    
+            Robot.autoMove=false;
+            return(false);
+        }     
+
+        // We found a valid vision target.
+        double llTargetXOffset = llTargetX - cameraOffset;
+
+        if ( llTargetXOffset < -1.25 || llTargetXOffset > 1.25) {
+            double driveRotate=0;
+
+            // get the current angle from the gyro
+            double startAngle = Robot.swerveDrive.getYaw();      
+
+            double target = startAngle + llTargetXOffset;
+            double diff = Math.abs(target) - Math.abs(startAngle);
+    
+            double tmp = diff / 250;
+            tmp = Robot.boundSpeed(tmp, .20, .025 );
+    
+            if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
+                driveRotate=0;
+                Robot.swerveDrive.brakesOn();
+            } else if (startAngle < target) {
+                driveRotate=tmp;
+            } else {
+                driveRotate=tmp*-1;
+            }
+            
+            Robot.swerveDrive.Drive(0, 0, driveRotate);
+            if (driveRotate!=0) {
+                Robot.autoMove=true;
+            } else {
+                Robot.autoMove=false;
+            }    
+            centered=0;
+        } else {
+            Robot.swerveDrive.cancel();
+            centered++;
+        }   
+
+        // .41 Area 48 degress 3000rpm
+        // .32 Area 43 dgreees 3000rpm
+        // .24 area 38 degrees 3000rpm
+        // .18 area 34.5 degrees 3000rpm
+        // .137 area 32.5 degrees 3000rpm
+        // .09 area 27.6 dgrress 3300
+
+        double angle= 50 - ((45 - (llTargetArea*100)) *.675);
+
+        if (angle < 20 || angle>65 ) { angle=30; }
+            SmartDashboard.putNumber("Auto Thrower Angle", angle);
+
+        Robot.autoMoveThrower=true;
+        if (Robot.thrower.setThrowerPosition(angle)) {
+            aimed++;
+        } else {
+            aimed=0;
+        }
+
+        if ((centered) > 2 && (aimed > 3)) {
+            Robot.autoMoveThrower=false;
+            return(true);
+        } else {
+            return(false);
         }
     }          
-
 }
 

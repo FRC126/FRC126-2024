@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  **********************************************************************************/
 
 public class AutoThrow extends SequentialCommandGroup {
-    public AutoThrow(int rpms, double angle) {
+    public AutoThrow(int rpms) {
         /**********************************************************************************
          **********************************************************************************/
 
         addCommands(
-            new ThrowerWork(rpms, angle, 250),
+            new ThrowerWork(rpms, 250),
             new FinishAuto()
         );
     }       
