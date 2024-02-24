@@ -184,7 +184,7 @@ import frc.robot.Robot;
 
     public void updateLights() {
         rotateLED = (rotateLED + 1) % LENGTH;
-        delay=10;
+        delay=3;
 
         m_led.setData(m_ledBuffer);
     }

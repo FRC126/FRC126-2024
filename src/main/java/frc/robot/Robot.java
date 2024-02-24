@@ -272,6 +272,8 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
+
+
     }
 
     /************************************************************************
