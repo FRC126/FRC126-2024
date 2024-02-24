@@ -42,7 +42,7 @@ public class LimeLight extends SubsystemBase {
     boolean limeLightDebug=true;
     double pipelineLast=0;
 
-    static int itersToCapture = 4;
+    static int itersToCapture = 2;
 
     private Smoother taSmoother = new Smoother(itersToCapture);
     private Smoother txSmoother = new Smoother(itersToCapture);

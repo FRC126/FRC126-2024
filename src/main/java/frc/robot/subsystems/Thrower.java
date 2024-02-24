@@ -37,7 +37,8 @@ public class Thrower extends SubsystemBase {
 	static double throwerSpeed[] = { 0,0,0 };
 	static int targetReached[] = { 0,0,0 } ;
     static int delay;
-    static double P = 0.000025;
+	static double Pfast = 0.000075;
+    static double Pslow = 0.000020;
     static double I = -0.0003;
 	boolean throwerDebug=true;
 	public static double myRPM=3000;
@@ -101,6 +102,7 @@ public class Thrower extends SubsystemBase {
     public int throwerRPM(int index, double targetRPM) {
 		double ix, error=0.0, rpm;
 		StatusSignal<Double> RPM;
+		double P=Pslow;
 
 		if (index == 1) {
 		    RPM = throwerMotorTalonOne.getVelocity();
@@ -121,6 +123,9 @@ public class Thrower extends SubsystemBase {
 			throwerSpeed[index]=0;
 		} else { /** Normal operation **/
 			error = targetRPM - rpm;
+			if (Math.abs(error)>500) {
+				P=Pfast;
+			} 
 			ix = error * 0.02; /** Loop frequency **/
 			throwerSpeed[index] += P * error + I * ix;
 		}
@@ -140,8 +145,6 @@ public class Thrower extends SubsystemBase {
         // Set the speed on the Thrower Motors
 		if (index == 1) {
 			throwerMotorTalonOne.set(throwerSpeed[index]);
-			
-			//Robot.throwerMotorTalonOne.set(.5);
 		} else {
   			throwerMotorTalonTwo.set(throwerSpeed[index]);
 		}	
@@ -178,6 +181,9 @@ public class Thrower extends SubsystemBase {
 		throwerClimberMotorRightRelativeEncoder.setPosition(20.0);
 	}
 
+    /************************************************************************
+	 ************************************************************************/
+
 	public double getPosition() {
         double position=0;
 
@@ -189,7 +195,10 @@ public class Thrower extends SubsystemBase {
 		return(position);
 	}
 
-	public double getThrowerAngle() {
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getThrowerAngle() {
 		double position=getPosition();
 
 		double currAngle = (position / RobotMap.NeoTicksPerRotation / 25) * 360;		
@@ -208,14 +217,14 @@ public class Thrower extends SubsystemBase {
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
-/*
-     	if ((currAngle > 148 && speed > 0) || 
-		     (currAngle < 20 && speed < 0)) {
+
+     	if (((currAngle > 148 && speed > 0) || 
+		     (currAngle < 22 && speed < 0)) && 
+			 !Robot.overrideEncoders) {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);
 			return(currAngle);
 		}
-*/
 
 		SmartDashboard.putNumber("thrower speed", speed);
 
@@ -224,8 +233,7 @@ public class Thrower extends SubsystemBase {
 		}		
 		if ( speed > 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
 		    speed=0;
-			throwerClimberMotorLeftRelativeEncoder.setPosition(50);
-			throwerClimberMotorRightRelativeEncoder.setPosition(50);
+			resetEncoders();
 		}		
 
 		throwerClimberMotorLeft.set(speed*-1);
@@ -303,8 +311,10 @@ public class Thrower extends SubsystemBase {
 
     public void throwerTriggerOff() {
 		throwTriggered=false;
-		throwerTriggerMotor.set(0);
-		Robot.pickup.pickupMotorOff();
+		    throwerTriggerMotor.set(0);
+		if (!Robot.userRunPickup) {
+  			Robot.pickup.pickupMotorOff();
+		}		
 	}
 	
     /************************************************************************

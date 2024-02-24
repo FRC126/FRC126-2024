@@ -49,8 +49,10 @@ public class ClimberControl extends Command {
 
 		if (y > 0) {
 	        Robot.climber.extendClimber(y);
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 		} else if (	y < 0 ) {
 	        Robot.climber.retractClimber(y);
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
 		} else {
 			Robot.climber.cancel();
 		}

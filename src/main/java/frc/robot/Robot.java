@@ -48,12 +48,7 @@ public class Robot extends TimedRobot {
     // NavX-MXP
     public static AHRS navxMXP;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Automation Variables
-    public static targetTypes targetType = Robot.targetTypes.NoTarget;
-    public static boolean autoMoveThrower = false;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
+     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isAutoCommand=false;
     public static SequentialCommandGroup autoCommand;
@@ -76,6 +71,7 @@ public class Robot extends TimedRobot {
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
+    public static JoystickWrapper operatorJoystick;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetOne(1), TargetTwo(2), TargetThree(3), TargetFour(4);
@@ -87,9 +83,21 @@ public class Robot extends TimedRobot {
     };
     public static enum allianceColor{Red,Blue};
 
-    // Autonomous related functions
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Automation Variables
     public static SequentialCommandGroup autonomous;
+
+    public static targetTypes targetType = Robot.targetTypes.TargetTwo;
+    public static boolean autoMoveThrower = false;
     public static boolean autoMove=false;
+    public static boolean autoRunPickup=false;
+    public static boolean autoTriggerRun=false;
+    public static boolean userRunPickup=false;
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static boolean overrideEncoders=false;
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
@@ -275,26 +283,28 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
-
-<<<<<<< HEAD
-
-=======
         check();
     }
 
+    /************************************************************************
+    ************************************************************************/
+
     private void check() {
-        if (driveJoystick==null) {
-            driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+        if (operatorJoystick==null) {
+            operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
-		if (driveJoystick.isAButton()) {
-			//double dis = SmartDashboard.getNumber("Distance", 24);
+		if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
 				Robot.autoCommand = new AutoAmp();
 				Robot.autoCommand.schedule();
 			}
 		}
->>>>>>> main
+        if (operatorJoystick.isBackButton()) {
+            Robot.overrideEncoders=true;
+        } else {
+            Robot.overrideEncoders=false;
+        }
     }
 
     /************************************************************************

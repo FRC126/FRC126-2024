@@ -7,8 +7,9 @@ public class AutoAmp extends SequentialCommandGroup {
         // Move thrower arm to specific position
         // Eject the note
         addCommands(
+            new PickupWork(25,true),
             new ThrowerAngle(145, 250),
-            new ThrowerWork(550, 250),
+            new ThrowerWork(600, 250),
             new ThrowerAngle(45, 250),
             new FinishAuto()
         );

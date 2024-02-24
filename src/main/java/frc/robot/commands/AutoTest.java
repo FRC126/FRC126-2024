@@ -38,7 +38,7 @@ public class AutoTest extends SequentialCommandGroup {
             
             new ParallelCommandGroup(
                 // Run the Pickup
-                new PickupWork(200),
+                new PickupWork(200, false),
                 // Drive over the next note
                 new DriveWork(0.25,0,0,12,200)
             ),
@@ -53,7 +53,7 @@ public class AutoTest extends SequentialCommandGroup {
 
             new ParallelCommandGroup(
                 // Run the Pickup
-                new PickupWork(200),
+                new PickupWork(200, false),
                 // Drive over the next note
                 new DriveWork(0.25,0,0,12,200)
             ),

@@ -52,6 +52,7 @@ public class ThrowerWork extends Command {
         reachedTwo = Robot.thrower.throwerRPM(1,speed);
 
         if (throwingIters > 0) {
+            Robot.autoTriggerRun=true;
             Robot.thrower.throwerTriggerOn();
             throwingIters--;
         } else {
@@ -64,6 +65,7 @@ public class ThrowerWork extends Command {
                 Robot.thrower.setThrowTriggered(true);
                 throwingIters=150;
             } else {
+                Robot.autoTriggerRun=false;
                 Robot.thrower.throwerTriggerOff();
                 Robot.thrower.setThrowTriggered(false);
             }
@@ -79,6 +81,7 @@ public class ThrowerWork extends Command {
         iters--;
 
         if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
+            Robot.autoTriggerRun=false;
             Robot.thrower.cancel();
             Robot.thrower.setThrowTriggered(false);
             return true;
@@ -92,6 +95,7 @@ public class ThrowerWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
+        Robot.autoTriggerRun=false;
         Robot.thrower.cancel();
     }
 }

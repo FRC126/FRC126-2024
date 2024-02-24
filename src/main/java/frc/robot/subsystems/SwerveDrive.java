@@ -230,9 +230,9 @@ public class SwerveDrive extends SubsystemBase {
 			speed=-0.4 * reverse;
 		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
 			speed=0.4 * reverse;
-		} else if ( targetAngle < (currentAngle - 0.02) ) {
+		} else if ( targetAngle < (currentAngle - 0.02) && !skip ) {
 			speed=-0.1 * reverse;
-		} else if (targetAngle > (currentAngle + 0.02) ) {
+		} else if (targetAngle > (currentAngle + 0.02) && !skip) {
 			speed=0.1 * reverse;
 		} else if ( targetAngle < (currentAngle - 0.0010) ) {
 			speed=-0.025 * reverse;
@@ -253,7 +253,7 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.03;
+    	double softStartIncrement=0.04;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
@@ -500,7 +500,7 @@ public class SwerveDrive extends SubsystemBase {
 		double diff = Math.abs(target) - Math.abs(startAngle);
 
 		double tmp = diff / 250;
-		tmp = Robot.boundSpeed(tmp, .20, .03 );
+		tmp = Robot.boundSpeed(tmp, .25, .04 );
 
 		if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
 			driveRotate=0;
