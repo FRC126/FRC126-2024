@@ -25,6 +25,7 @@ import frc.robot.Robot;
  **********************************************************************************/
 
  public class LEDSubsystem extends SubsystemBase {
+    AddressableLED m_led;
     AddressableLEDBuffer m_ledBuffer;
     final int LENGTH=150;
     int m_rainbowFirstPixelHue,
@@ -41,14 +42,16 @@ import frc.robot.Robot;
      **********************************************************************************/
 
     public LEDSubsystem() {
+        m_led = new AddressableLED(9);
+
         // LED's go into PWM #9
         m_ledBuffer = new AddressableLEDBuffer(LENGTH);
 
-        Robot.LED.setLength(m_ledBuffer.getLength());
+        m_led.setLength(m_ledBuffer.getLength());
     
         // Set the data
-        Robot.LED.setData(m_ledBuffer);
-        Robot.LED.start();
+        m_led.setData(m_ledBuffer);
+        m_led.start();
 
 		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
@@ -173,7 +176,7 @@ import frc.robot.Robot;
         }
         m_rainbowFirstPixelHue += 3;
         m_rainbowFirstPixelHue %= 180;
-        Robot.LED.setData(m_ledBuffer);
+        m_led.setData(m_ledBuffer);
     }
 
     /**********************************************************************************
@@ -183,6 +186,6 @@ import frc.robot.Robot;
         rotateLED = (rotateLED + 1) % LENGTH;
         delay=3;
 
-        Robot.LED.setData(m_ledBuffer);
+        m_led.setData(m_ledBuffer);
     }
 }

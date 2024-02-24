@@ -105,7 +105,8 @@ public class SwerveControl extends Command {
 			if (Robot.doAutoCommand()) {
 				Robot.autoMove = true;
 				//Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
-				Robot.autoCommand = new AutoTest();
+				//Robot.autoCommand = new AutoTest();
+				
 				Robot.autoCommand.schedule();
 			}
 		}
