@@ -150,14 +150,7 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setThrowTriggered(true);
 		} else if (operatorJoystick.isRShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 			Robot.thrower.setThrowerSpeed(-1.0);
->>>>>>> Stashed changes
-=======
-			Robot.thrower.setThrowerSpeed(1.0);
->>>>>>> main
 		} else if (!Robot.thrower.getThrowTriggered()) {
 			Robot.thrower.throwerTriggerOff();
 		} 
