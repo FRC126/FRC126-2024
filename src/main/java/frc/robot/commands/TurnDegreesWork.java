@@ -46,9 +46,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
      @Override
      public void initialize() {
-        // Save the starting angle for the turn
-        //double currentDegrees = Robot.swerveDrive.getYaw();      
-        //startAngle = currentDegrees;
     }
 
 	/**********************************************************************************
@@ -56,38 +53,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	 **********************************************************************************/
 	
     @Override
-    public void execute() {
-        double driveRotate=0;
+    public void execute() {       
+        double driveRotate=Robot.swerveDrive.rotateToDegrees(targetDegrees);
 
-        // get the current angle from the gyro
-        double currentDegrees = Robot.swerveDrive.getYaw();      
-        double target = startAngle + targetDegrees;
-        double diff = Math.abs(target) - Math.abs(currentDegrees);
-
-        double tmp = diff / 250;
-        tmp = Robot.boundSpeed(tmp, .20, .045 );
-
-        if (Math.abs(diff) < driftAllowance) {
-            // We are at the right angle
+        if (driveRotate==0) {
             targetReached++;
-            driveRotate=0;
-            Robot.swerveDrive.brakesOn();
-        } else if (currentDegrees < target) {
-            driveRotate=tmp;
-            targetReached=0;
         } else {
-            driveRotate=tmp*-1;
             targetReached=0;
         }
 
         if (turnDebug) {
-            SmartDashboard.putNumber("Turn Current Degrees",currentDegrees);
-            SmartDashboard.putNumber("Turn Target Degrees",target);
-            SmartDashboard.putNumber("Turn diff",diff);
             SmartDashboard.putNumber("Turn Target Reached",targetReached);
         }
-
-        Robot.swerveDrive.Drive(0, 0, driveRotate);
     }
 
 	/**********************************************************************************
@@ -101,7 +78,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         if (targetReached > 3 || iters <= 0 || !Robot.checkAutoCommand()) {
             // We have reached our target angle or run out of time to do so.
             Robot.swerveDrive.brakesOff();
-            Robot.swerveDrive.Drive(0, 0, 0);
+            Robot.swerveDrive.cancel();
             return true;
         }
 
@@ -115,6 +92,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     @Override
     public void end(boolean isInteruppted) {
         Robot.swerveDrive.brakesOff();
-        Robot.swerveDrive.Drive(0, 0, 0);
+        Robot.swerveDrive.cancel();
     }
 }

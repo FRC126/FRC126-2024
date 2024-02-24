@@ -161,6 +161,15 @@ public class Thrower extends SubsystemBase {
         return(targetReached[index]);
     }
 
+	/************************************************************************
+     *push note out for amp
+	 ************************************************************************/
+
+    public void setThrowerSpeed(double speed) {
+		throwerMotorTalonOne.set(speed);
+		throwerMotorTalonTwo.set(speed);
+	}
+
     /************************************************************************
 	 ************************************************************************/
 
@@ -199,6 +208,14 @@ public class Thrower extends SubsystemBase {
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+/*
+     	if ((currAngle > 148 && speed > 0) || 
+		     (currAngle < 20 && speed < 0)) {
+		    throwerClimberMotorLeft.set(0);
+		    throwerClimberMotorRight.set(0);
+			return(currAngle);
+		}
+*/
 
 		SmartDashboard.putNumber("thrower speed", speed);
 

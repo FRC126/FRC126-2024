@@ -129,10 +129,11 @@ public class ThrowerControl extends Command {
 			speed=0;
 			Robot.thrower.setThrowTriggered(false);
 		}
-
 		int reachedOne=0, reachedTwo=0;
-		reachedOne = Robot.thrower.throwerRPM(1,speed);
-		reachedTwo = Robot.thrower.throwerRPM(2,speed);
+		if (!operatorJoystick.isRShoulderButton()){
+			reachedOne = Robot.thrower.throwerRPM(1,speed);
+			reachedTwo = Robot.thrower.throwerRPM(2,speed);
+		}
 
 		if (throwerDebug) {
 			SmartDashboard.putNumber("thrower myRPM", Robot.thrower.getRPM());
@@ -143,17 +144,20 @@ public class ThrowerControl extends Command {
 			SmartDashboard.putNumber("thrower tilt input", y);
 		}
 
-
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
 		} else if (operatorJoystick.isRShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 			Robot.thrower.setThrowerSpeed(-1.0);
 >>>>>>> Stashed changes
+=======
+			Robot.thrower.setThrowerSpeed(1.0);
+>>>>>>> main
 		} else if (!Robot.thrower.getThrowTriggered()) {
 			Robot.thrower.throwerTriggerOff();
 		} 
