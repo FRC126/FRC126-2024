@@ -161,6 +161,15 @@ public class Thrower extends SubsystemBase {
         return(targetReached[index]);
     }
 
+	/************************************************************************
+     *push note out for amp
+	 ************************************************************************/
+
+    public void setThrowerSpeed(double speed) {
+		throwerMotorTalonOne.set(speed);
+		throwerMotorTalonTwo.set(speed);
+	}
+
     /************************************************************************
 	 ************************************************************************/
 
