@@ -252,17 +252,11 @@ public class Thrower extends SubsystemBase {
 				reachedAngleTarget=false;
 			}
 		} else {
-			if (currAngle < angle - .4) {
-			   	    moveThrower(.05);
-			    if (currAngle < angle - 3) {
-			   	    moveThrower(.25);
-				}	
-				reachedAngleCount=0;
-			} else if (currAngle > angle + .4) {
-			   	    moveThrower(-.05);
-			    if (currAngle > angle + 3) {
-			   	    moveThrower(-.25);
-				}	
+			double diff = Math.abs(currAngle-angle);
+			double speed = Robot.boundSpeed(diff/12,1,0.05);
+
+			if (diff > 0.4) {
+                moveThrower(speed*  ((currAngle > angle + .4) ? -1 : 1));
 				reachedAngleCount=0;
 			} else {
 				reachedAngleCount++;

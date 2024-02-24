@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoAmp;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -74,6 +75,7 @@ public class Robot extends TimedRobot {
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
+    public static JoystickWrapper driveJoystick;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetOne(1), TargetTwo(2), TargetThree(3), TargetFour(4);
@@ -272,6 +274,22 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
+
+        check();
+    }
+
+    private void check() {
+        if (driveJoystick==null) {
+            driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+        }
+		if (driveJoystick.isAButton()) {
+			//double dis = SmartDashboard.getNumber("Distance", 24);
+			if (Robot.doAutoCommand()) {
+				Robot.autoMove = true;
+				Robot.autoCommand = new AutoAmp();
+				Robot.autoCommand.schedule();
+			}
+		}
     }
 
     /************************************************************************
