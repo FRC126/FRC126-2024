@@ -179,27 +179,7 @@ public class LimeLight extends SubsystemBase {
         double llTargetXOffset = llTargetX - cameraOffset;
 
         if ( llTargetXOffset < -1.25 || llTargetXOffset > 1.25) {
-            double driveRotate=0;
-
-            // get the current angle from the gyro
-            double startAngle = Robot.swerveDrive.getYaw();      
-
-            double target = startAngle + llTargetXOffset;
-            double diff = Math.abs(target) - Math.abs(startAngle);
-    
-            double tmp = diff / 250;
-            tmp = Robot.boundSpeed(tmp, .20, .025 );
-    
-            if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
-                driveRotate=0;
-                Robot.swerveDrive.brakesOn();
-            } else if (startAngle < target) {
-                driveRotate=tmp;
-            } else {
-                driveRotate=tmp*-1;
-            }
-            
-            Robot.swerveDrive.Drive(0, 0, driveRotate);
+            double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
             if (driveRotate!=0) {
                 Robot.autoMove=true;
             } else {
@@ -232,6 +212,7 @@ public class LimeLight extends SubsystemBase {
 
         if ((centered) > 2 && (aimed > 3)) {
             Robot.autoMoveThrower=false;
+            Robot.autoMove=false;
             return(true);
         } else {
             return(false);

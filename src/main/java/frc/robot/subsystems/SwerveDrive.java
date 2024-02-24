@@ -490,6 +490,41 @@ public class SwerveDrive extends SubsystemBase {
     /************************************************************************
 	 *************************************************************************/
 
+	public double rotateToDegrees(double offset) {
+		double driveRotate=0;
+
+		// get the current angle from the gyro
+		double startAngle = Robot.swerveDrive.getYaw();      
+
+		double target = startAngle + offset;
+		double diff = Math.abs(target) - Math.abs(startAngle);
+
+		double tmp = diff / 250;
+		tmp = Robot.boundSpeed(tmp, .20, .03 );
+
+		if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
+			driveRotate=0;
+			Robot.swerveDrive.brakesOn();
+		} else if (startAngle < target) {
+			driveRotate=tmp;
+		} else {
+			driveRotate=tmp*-1;
+		}
+
+        if (swerveDebug) {
+            SmartDashboard.putNumber("Turn Current Degrees",startAngle);
+            SmartDashboard.putNumber("Turn Target Degrees",target);
+            SmartDashboard.putNumber("Turn diff",diff);
+        }
+		
+		Robot.swerveDrive.Drive(0, 0, driveRotate);
+
+		return(driveRotate);
+	}
+
+    /************************************************************************
+	 *************************************************************************/
+	 
 	public void cancel() {
         Drive(0,0,0); 
 	}

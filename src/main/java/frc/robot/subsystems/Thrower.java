@@ -199,6 +199,14 @@ public class Thrower extends SubsystemBase {
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+/*
+     	if ((currAngle > 148 && speed > 0) || 
+		     (currAngle < 20 && speed < 0)) {
+		    throwerClimberMotorLeft.set(0);
+		    throwerClimberMotorRight.set(0);
+			return(currAngle);
+		}
+*/
 
 		SmartDashboard.putNumber("thrower speed", speed);
 

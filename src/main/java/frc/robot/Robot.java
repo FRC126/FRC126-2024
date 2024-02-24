@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
         pickup = new Pickup();
 
         // LED Subsystem
+        
         Leds = new LEDSubsystem();
 
         // Limelight subsystem
@@ -269,7 +270,7 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void teleopPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
+        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
     }
