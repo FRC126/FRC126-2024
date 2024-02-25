@@ -25,7 +25,7 @@ public class AutoPickup extends SequentialCommandGroup {
          **********************************************************************************/
 
         addCommands(
-            new PickupWork(250),
+            new PickupWork(250, false),
             new FinishAuto()
         );
     }       

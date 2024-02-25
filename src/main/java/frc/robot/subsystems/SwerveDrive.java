@@ -69,8 +69,8 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 	
     boolean swerveDebug=true;
-
 	boolean enableFullSpeed=true;
+	boolean autoMove=false;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -160,9 +160,20 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public void resetYaw() {
+	 public void resetYaw() {
+		resetYaw(0);
+	}	
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void resetYaw(double value) {
         if (Robot.useNavx) { 
-			Robot.navxMXP.zeroYaw();
+			if (value==0) {
+			    Robot.navxMXP.zeroYaw();
+			} else {
+				Robot.navxMXP.setAngleAdjustment(value);
+			}	
 		} else {	
 		    Robot.internalData.resetGyro();
 		}	
@@ -230,9 +241,9 @@ public class SwerveDrive extends SubsystemBase {
 			speed=-0.4 * reverse;
 		} else if (targetAngle > (currentAngle + 0.1) && !skip) {
 			speed=0.4 * reverse;
-		} else if ( targetAngle < (currentAngle - 0.02) ) {
+		} else if ( targetAngle < (currentAngle - 0.02) && !skip ) {
 			speed=-0.1 * reverse;
-		} else if (targetAngle > (currentAngle + 0.02) ) {
+		} else if (targetAngle > (currentAngle + 0.02) && !skip) {
 			speed=0.1 * reverse;
 		} else if ( targetAngle < (currentAngle - 0.0010) ) {
 			speed=-0.025 * reverse;
@@ -253,7 +264,7 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.03;
+    	double softStartIncrement=0.04;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
@@ -500,7 +511,7 @@ public class SwerveDrive extends SubsystemBase {
 		double diff = Math.abs(target) - Math.abs(startAngle);
 
 		double tmp = diff / 250;
-		tmp = Robot.boundSpeed(tmp, .20, .03 );
+		tmp = Robot.boundSpeed(tmp, .25, .04 );
 
 		if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
 			driveRotate=0;
@@ -528,17 +539,20 @@ public class SwerveDrive extends SubsystemBase {
 	public void cancel() {
         Drive(0,0,0); 
 	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMove(boolean value) { 
+		autoMove=value;  
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
+	public boolean getAutoMove() { 
+		return(autoMove); 
+	}
+
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Controls
-//
-// Left Joystick - Driver Relative Robot Movement
-//
-// Right Joystick - Robot Rotation
-//
-// Left Trigger - Slow Mode
-// Right Trigger - Brake Mode
-//
-// B Button - Reset Gyro to 0, do it when front of robot is facing directly away from the driver
-//

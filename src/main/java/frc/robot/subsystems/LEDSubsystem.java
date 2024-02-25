@@ -25,6 +25,7 @@ import frc.robot.Robot;
  **********************************************************************************/
 
  public class LEDSubsystem extends SubsystemBase {
+    AddressableLED m_led;
     AddressableLEDBuffer m_ledBuffer;
     final int LENGTH=150;
     int m_rainbowFirstPixelHue,
@@ -41,14 +42,16 @@ import frc.robot.Robot;
      **********************************************************************************/
 
     public LEDSubsystem() {
+        m_led = new AddressableLED(9);
+
         // LED's go into PWM #9
         m_ledBuffer = new AddressableLEDBuffer(LENGTH);
 
-        Robot.LED.setLength(m_ledBuffer.getLength());
+        m_led.setLength(m_ledBuffer.getLength());
     
         // Set the data
-        Robot.LED.setData(m_ledBuffer);
-        Robot.LED.start();
+        m_led.setData(m_ledBuffer);
+        m_led.start();
 
 		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
 
@@ -89,23 +92,23 @@ import frc.robot.Robot;
 
         switch (LEDMode) {
             case None:            { setColorSliding(0,0,0); break; }
-            case BrakeMode:       { setColorSliding(128,0,0,255,0,0); break; }
+            case BrakeMode:       { setColorSliding(64,0,0,125,0,0); break; }
             case DriveMode:       { 
                  double foo = Math.abs(driveJoystick.getLeftStickY()) + Math.abs(driveJoystick.getLeftStickX());
                  if (foo > 1) { foo=1; }
                  setColorSliding(0,(int)(128*foo),0,0,(int)(255*foo),0); break; 
             }
-            case SlowMode:        { setColorSliding(128,128,0,255,255,0); break; }
-            case AimingSpeaker:   { setColorSliding(0,255,0,0,0,128); break; }
-            case AimingAmp:       { setColorSliding(0,255,0,128,0,0); break; }
-            case ShootingSpeaker: { setColorSliding(128,0,128,0,0,128); break; }
-            case ShootingAmp:     { setColorSliding(128,0,128,128,0,0); break; }
-            case Climbing:        { break; }
-            case AutoDrive:       { setColorSliding(255,153,204,0,0,255); break; }
-            case AutoTurn:        { setColorSliding(255,153,204,255,0,0); break; }
-            case RunPickup:       { break; }
+            case SlowMode:        { setColorSliding(64,64,0,125,125,0); break; }
+            case AimingSpeaker:   { setColorSliding(0,125,0,0,0,64); break; }
+            case AimingAmp:       { setColorSliding(0,125,0,64,0,0); break; }
+            case ShootingSpeaker: { setColorSliding(64,0,64,0,0,64); break; }
+            case ShootingAmp:     { setColorSliding(64,0,64,64,0,0); break; }
+            case Climbing:        { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
+            case AutoDrive:       { setColorSliding(125,75,100,0,0,125); break; }
+            case AutoTurn:        { setColorSliding(125,75,100,125,0,0); break; }
+            case RunPickup:       { setColorSliding(0,64,0,100,100,100); break; }
             case Rainbow:         { rainbow(); break; }
-            case GaelForce:       { setColorSliding(0, 128, 0, 128, 100, 0); break; }
+            case GaelForce:       { setColorSliding(0, 64, 0, 64, 45, 0); break; }
         }
     }
 
@@ -173,7 +176,7 @@ import frc.robot.Robot;
         }
         m_rainbowFirstPixelHue += 3;
         m_rainbowFirstPixelHue %= 180;
-        Robot.LED.setData(m_ledBuffer);
+        m_led.setData(m_ledBuffer);
     }
 
     /**********************************************************************************
@@ -181,8 +184,8 @@ import frc.robot.Robot;
 
     public void updateLights() {
         rotateLED = (rotateLED + 1) % LENGTH;
-        delay=10;
+        delay=2;
 
-        Robot.LED.setData(m_ledBuffer);
+        m_led.setData(m_ledBuffer);
     }
 }

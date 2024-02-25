@@ -18,14 +18,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class PickupWork extends Command {
-
     int iters;
+    boolean runThrowerTrigger;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public PickupWork(int itersIn) {
+    public PickupWork(int itersIn, boolean runThrowerTrigger) {
         iters = itersIn;
+        this.runThrowerTrigger = runThrowerTrigger;
     }
 
     /**********************************************************************************
@@ -42,7 +43,12 @@ public class PickupWork extends Command {
 
     @Override
     public void execute() {
+        Robot.pickup.setAutoRunPickup(true);
         Robot.pickup.pickupMotorOn();
+        if (runThrowerTrigger) {
+            Robot.thrower.setAutoTriggerRun(true);
+            Robot.thrower.throwerTriggerOn();
+        }    
     }
 
     /**********************************************************************************
@@ -58,6 +64,10 @@ public class PickupWork extends Command {
 
         if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
             Robot.pickup.cancel();
+        if (runThrowerTrigger) {
+            Robot.thrower.setAutoTriggerRun(false);
+            Robot.thrower.throwerTriggerOff();
+        }    
             return true;
         }
         return false;
@@ -70,5 +80,9 @@ public class PickupWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.pickup.cancel();
+        if (runThrowerTrigger) {
+            Robot.thrower.setAutoTriggerRun(false);
+            Robot.thrower.throwerTriggerOff();
+        }    
     }
 }

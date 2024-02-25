@@ -58,8 +58,21 @@ public class JoystickWrapper {
     // Trigger Interfaces
     ////////////////////////////////////////////////////
 
+    public boolean leftTriggerPressed() {
+        if (getRawAxis(RobotMap.Ltrigger) > .25) {
+            return(true);
+        }
+        return(false);    
+    }
     public double getLeftTrigger() {
         return getRawAxis(RobotMap.Ltrigger);
+    }
+
+    public boolean rightTriggerPressed() {
+        if (getRawAxis(RobotMap.Rtrigger) > .25) {
+            return(true);
+        }
+        return(false);    
     }
     public double getRightTrigger() {
         return getRawAxis(RobotMap.Rtrigger);

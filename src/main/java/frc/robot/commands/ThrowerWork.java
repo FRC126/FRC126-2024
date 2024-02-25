@@ -52,6 +52,7 @@ public class ThrowerWork extends Command {
         reachedTwo = Robot.thrower.throwerRPM(1,speed);
 
         if (throwingIters > 0) {
+            Robot.thrower.setAutoTriggerRun(true);
             Robot.thrower.throwerTriggerOn();
             throwingIters--;
         } else {
@@ -61,10 +62,12 @@ public class ThrowerWork extends Command {
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
             if (reachedOne > 3 && reachedTwo > 3) {
                 Robot.thrower.throwerTriggerOn();
+                Robot.thrower.setAutoTriggerRun(true);
                 Robot.thrower.setThrowTriggered(true);
-                throwingIters=150;
+                throwingIters=100;
             } else {
                 Robot.thrower.throwerTriggerOff();
+                Robot.thrower.setAutoTriggerRun(false);
                 Robot.thrower.setThrowTriggered(false);
             }
         }    

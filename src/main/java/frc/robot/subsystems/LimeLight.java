@@ -42,7 +42,7 @@ public class LimeLight extends SubsystemBase {
     boolean limeLightDebug=true;
     double pipelineLast=0;
 
-    static int itersToCapture = 4;
+    static int itersToCapture = 2;
 
     private Smoother taSmoother = new Smoother(itersToCapture);
     private Smoother txSmoother = new Smoother(itersToCapture);
@@ -170,8 +170,8 @@ public class LimeLight extends SubsystemBase {
             validCount <= 3) {
             centered=0;
             aimed=0;
-            Robot.autoMoveThrower=false;    
-            Robot.autoMove=false;
+            Robot.thrower.setAutoMoveThrower(false);    
+            Robot.swerveDrive.setAutoMove(false);
             return(false);
         }     
 
@@ -181,9 +181,9 @@ public class LimeLight extends SubsystemBase {
         if ( llTargetXOffset < -1.25 || llTargetXOffset > 1.25) {
             double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
             if (driveRotate!=0) {
-                Robot.autoMove=true;
+                Robot.swerveDrive.setAutoMove(true);
             } else {
-                Robot.autoMove=false;
+                Robot.swerveDrive.setAutoMove(false);
             }    
             centered=0;
         } else {
@@ -203,7 +203,7 @@ public class LimeLight extends SubsystemBase {
         if (angle < 20 || angle>65 ) { angle=30; }
             SmartDashboard.putNumber("Auto Thrower Angle", angle);
 
-        Robot.autoMoveThrower=true;
+        Robot.thrower.setAutoMoveThrower(true);
         if (Robot.thrower.setThrowerPosition(angle)) {
             aimed++;
         } else {
@@ -211,8 +211,8 @@ public class LimeLight extends SubsystemBase {
         }
 
         if ((centered) > 2 && (aimed > 3)) {
-            Robot.autoMoveThrower=false;
-            Robot.autoMove=false;
+            Robot.thrower.setAutoMoveThrower(false);
+            Robot.swerveDrive.setAutoMove(false);
             return(true);
         } else {
             return(false);

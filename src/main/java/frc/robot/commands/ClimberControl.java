@@ -17,6 +17,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ClimberControl extends Command {
@@ -49,10 +50,16 @@ public class ClimberControl extends Command {
 
 		if (y > 0) {
 	        Robot.climber.extendClimber(y);
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
+			SmartDashboard.putString("Climbing", "Climbing");
+
 		} else if (	y < 0 ) {
 	        Robot.climber.retractClimber(y);
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.Climbing);
+			SmartDashboard.putString("Climbing", "lowering");
 		} else {
 			Robot.climber.cancel();
+			SmartDashboard.putString("Climbing", "no action");
 		}
 	}
 }

@@ -32,6 +32,9 @@ public class Pickup extends SubsystemBase {
 	boolean pickupDebug = false;
 	double pickupRPM;
 	int called = 0;
+	boolean userRunPickup=false;
+	boolean autoRunPickup=false;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
@@ -79,6 +82,36 @@ public class Pickup extends SubsystemBase {
 	 ************************************************************************/
 
 	public void cancel() {
+		setUserRunPickup(false);  
+		setAutoRunPickup(false);  
 		pickupMotorOff();
 	}
-}
+
+	/************************************************************************
+	 ************************************************************************/
+ 
+    public void setUserRunPickup(boolean value) { 
+		userRunPickup=value;  
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
+	public boolean getUserRunPickup() { 
+		return(userRunPickup); 
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+    public void setAutoRunPickup(boolean value) { 
+		autoRunPickup=value;  
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
+	public boolean getAutoRunPickup() { 
+		return(autoRunPickup); 
+	}
+	}

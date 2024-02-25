@@ -48,12 +48,7 @@ public class Robot extends TimedRobot {
     // NavX-MXP
     public static AHRS navxMXP;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Automation Variables
-    public static targetTypes targetType = Robot.targetTypes.NoTarget;
-    public static boolean autoMoveThrower = false;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
+     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto Routines
     public static boolean isAutoCommand=false;
     public static SequentialCommandGroup autoCommand;
@@ -76,6 +71,7 @@ public class Robot extends TimedRobot {
 	public static UsbCamera driveCam;
 	public static VideoSink server;
     public static JoystickWrapper driveJoystick;
+    public static JoystickWrapper operatorJoystick;
 
     public static enum targetTypes{
         NoTarget(-1),TargetSeek(0), TargetOne(1), TargetTwo(2), TargetThree(3), TargetFour(4);
@@ -87,9 +83,14 @@ public class Robot extends TimedRobot {
     };
     public static enum allianceColor{Red,Blue};
 
-    // Autonomous related functions
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Automation Variables
     public static SequentialCommandGroup autonomous;
-    public static boolean autoMove=false;
+    public static targetTypes targetType = Robot.targetTypes.TargetTwo;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static boolean overrideEncoders=false;
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
@@ -101,7 +102,6 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Integer> autoFollow = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
 
-    public static final String PICKUP_MOTOR_SPEED_STRING = "Pickup Motor Speed";
     public static final String COMPETITION_ROBOT = "Competition Robot";
     
  	  /************************************************************************
@@ -126,6 +126,9 @@ public class Robot extends TimedRobot {
 
         // Thrower Devices
         thrower = new Thrower();
+
+        climber = new Climber();
+
   
         // Pickup SubSystem
         pickup = new Pickup();
@@ -176,10 +179,10 @@ public class Robot extends TimedRobot {
         autoFollow.setDefaultOption("1 note",0);
         autoFollow.addOption("2 note",1);
         autoFollow.addOption("3 note",2);
+        autoFollow.addOption("No Notes",3);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
-        SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,1);
-        SmartDashboard.putBoolean(COMPETITION_ROBOT, false);
-           
+
+        SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
 
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
             BuildConstants.GIT_BRANCH,
@@ -275,22 +278,28 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
-
         check();
     }
 
+    /************************************************************************
+    ************************************************************************/
+
     private void check() {
-        if (driveJoystick==null) {
-            driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+        if (operatorJoystick==null) {
+            operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
-		if (driveJoystick.isAButton()) {
-			//double dis = SmartDashboard.getNumber("Distance", 24);
+		if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
-				Robot.autoMove = true;
+				Robot.swerveDrive.setAutoMove(true);
 				Robot.autoCommand = new AutoAmp();
 				Robot.autoCommand.schedule();
 			}
 		}
+        if (operatorJoystick.isBackButton()) {
+            Robot.overrideEncoders=true;
+        } else {
+            Robot.overrideEncoders=false;
+        }
     }
 
     /************************************************************************
@@ -339,7 +348,7 @@ public class Robot extends TimedRobot {
 			return false;
 		}	
 
-        if (Robot.autoMove) { 
+        if (Robot.swerveDrive.getAutoMove()) { 
     		Robot.swerveDrive.cancel();
         }
 
@@ -364,10 +373,10 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-        if (Robot.autoMove) { 
+        if (Robot.swerveDrive.getAutoMove()) { 
         	Robot.swerveDrive.cancel();
         }
-        Robot.autoMove=false;
+        Robot.swerveDrive.setAutoMove(false);
 	}		
 
     /************************************************************************

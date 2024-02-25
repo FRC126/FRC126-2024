@@ -167,11 +167,53 @@ public class RobotMap {
 Controls
 
 Driver:
-X Button: Cancel any running auto routines
- 
-Operator:
+    Left Joystick Y-Axis: Robot Forward and Backwards (LEDs light up green)
+	Left Joystick X-Axis: Robot Left and Right (LEDs light up green)
+	Right Joystick Y-Axis:
+	Right Joystick X-Axis: Robot Rotate Left and Right (LEDs light up green)
 
-Auto Commands:
-X Button: Cancel any running auto routines
+	POV-Up: Hold down for active aiming at selected target
+	POV-Down: 
+	POV-Right: Seek Target 2 (LEDs light up green and blue when targeting)
+	POV_Left: Seek Target 1 (LEDs light up green and red when targeting)
+
+	A Button:
+	B Button: Zero Drive Gyro
+	X Button: Cancel Auto Command
+	Y Button:
+
+	Left Trigger: Drive Slow (25%) (LED's light up Yellow)
+	Right Trigger: Brake Mode On (LED's light up Red)
+
+	Left Shoulder Button:
+	Right Shoulder Button:
+
+	Back Button:
+	Start Button: Toggle Full Speed (On by default)
+
+Operator:
+    Left Joystick Y-Axis: Move Thrower Up and Down
+	Left Joystick X-Axis:
+	Right Joystick Y-Axis: Climber Up and Down (LEDs light up rainbow)
+	Right Joystick X-Axis:
+
+	POV-Up: Set Thrower to Climb Position
+	POV-Down: Set Thrower to Down Position
+	POV-Right: set Thrower to 45 degrees
+	POV_Left: set Thrower to 145 degrees
+
+	A Button: Hold A button, trigger throws once wheels spin up. 
+	B Button: Toggle Thrower Idle on and off
+	X Button: Run Pick and Thrower Trigger at the same time 
+	Y Button: Pickup 
+
+	Left Trigger: Run Pickup (LEDs light up green and white)
+	Right Trigger: Hold Right Shoulder Button, trigger throws once wheels spin up (LEDs light purple and blue).
+
+	Left Shoulder Button: Reverse Pickup, Thrower Trigger and Thrower WHeels
+	Right Shoulder Button: Auto Amp Throw
+
+	Back Button: Ignore encoders (to lower thrower angle)
+	Start Button:
 ******************************************************************************/
 

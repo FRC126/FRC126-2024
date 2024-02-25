@@ -69,18 +69,18 @@ public class ThrowerControl extends Command {
 		};
 
   	    if (operatorJoystick.getPovUp()) {
-   		    Robot.thrower.setThrowerPosition(30);
+   		    Robot.thrower.setThrowerPosition(100);
 		} else if (operatorJoystick.getPovRight()) {
    		    Robot.thrower.setThrowerPosition(45);
 		} else if (operatorJoystick.getPovDown()) {
-   		    Robot.thrower.setThrowerPosition(60);
+   		    Robot.thrower.setThrowerPosition(30);
 		} else if (operatorJoystick.getPovLeft()) {
-   		    Robot.thrower.setThrowerPosition(75);
+   		    Robot.thrower.setThrowerPosition(145);
 		} else {
 			if ( y!=0 ) {
 				Robot.thrower.moveThrower(y);
 			} else {
-				if ( !Robot.autoMoveThrower) {
+				if ( !Robot.thrower.getAutoMoveThrower()) {
 				    Robot.thrower.moveThrower(0);
 				}	
 			}			
@@ -90,7 +90,7 @@ public class ThrowerControl extends Command {
             // Toggle the thrower idle on and off
 			if (delay <= 0) {
 				if (idleThrower) { idleThrower = false; } else { idleThrower = true; }
-				delay=150;
+				delay=30;
 			}
 		}	
 
@@ -113,7 +113,7 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setRPM(MAX_RPM);
 		}
 
-		if (operatorJoystick.isAButton()) {
+		if (operatorJoystick.isAButton() || operatorJoystick.rightTriggerPressed()) {
 			// double distance=Robot.distance.getDistanceAvg();
 
 			// TODO set the thrower angle and speed based on the distance
@@ -121,6 +121,7 @@ public class ThrowerControl extends Command {
 
     		// Run the motors at specified rpm
 			speed=Robot.thrower.getRPM();
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.ShootingSpeaker);
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=IDLE_RPM;
@@ -130,7 +131,7 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setThrowTriggered(false);
 		}
 		int reachedOne=0, reachedTwo=0;
-		if (!operatorJoystick.isRShoulderButton()){
+		if (!operatorJoystick.rightTriggerPressed()){
 			reachedOne = Robot.thrower.throwerRPM(1,speed);
 			reachedTwo = Robot.thrower.throwerRPM(2,speed);
 		}
@@ -145,13 +146,15 @@ public class ThrowerControl extends Command {
 		}
 
 		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
-		if ((reachedOne > 2 && reachedTwo > 2 && operatorJoystick.isAButton()) || operatorJoystick.isXButton()) {
+		if ((reachedOne > 2 && reachedTwo > 2 && 
+		      (operatorJoystick.isAButton() || operatorJoystick.rightTriggerPressed())) || 
+			  operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
-		} else if (operatorJoystick.isRShoulderButton()) {
+		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
-			Robot.thrower.setThrowerSpeed(1.0);
-		} else if (!Robot.thrower.getThrowTriggered()) {
+			Robot.thrower.setThrowerSpeed(-1.0);
+		} else if (!Robot.thrower.getThrowTriggered() && !Robot.thrower.getAutoTriggerRun()) {
 			Robot.thrower.throwerTriggerOff();
 		} 
 	}

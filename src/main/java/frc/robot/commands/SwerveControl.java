@@ -16,8 +16,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.JoystickWrapper;
 import frc.robot.Robot;
 import frc.robot.subsystems.SwerveDrive;
@@ -58,7 +56,7 @@ public class SwerveControl extends Command {
 			Robot.stopAutoCommand();
 		}
 
-		if (Robot.internalData.isAuto() || Robot.autoMove || Robot.isAutoCommand) {
+		if (Robot.internalData.isAuto() || Robot.swerveDrive.getAutoMove() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
     		driveStraight = false;
 			return;
@@ -98,18 +96,6 @@ public class SwerveControl extends Command {
 			Robot.swerveDrive.resetYaw();
 			straightDegrees = Robot.swerveDrive.getYaw();      
 		}
-		
-		/*
-		if (driveJoystick.isAButton()) {
-			//double dis = SmartDashboard.getNumber("Distance", 24);
-			if (Robot.doAutoCommand()) {
-				Robot.autoMove = true;
-				//Robot.autoCommand = new AutoDrive(.3, 0, 0, dis, 500);
-				Robot.autoCommand = new AutoTest();
-				Robot.autoCommand.schedule();
-			}
-		}
-		*/
 
     	if (driveJoystick.isStartButton()) {
 			if (delay == 0) {
@@ -133,27 +119,6 @@ public class SwerveControl extends Command {
 		SmartDashboard.putBoolean("driveStraight", driveStraight);
 		SmartDashboard.putNumber("straightDegrees", straightDegrees);
 
-		//SmartDashboard.putBoolean("A Pressed", driveJoystick.isAButton());
-
 		Robot.swerveDrive.Drive(forwardBack, leftRight, rotate, driveStraight, straightDegrees);
-
 	}
 }
-
-///////////////////////////////////////////////////////////////////////////////////////
-// Controls
-//
-// Left Joystick - Driver Relative Robot Movement
-//
-// Right Joystick - Robot Rotation
-//
-// Left Trigger - Slow Mode
-// Right Trigger - Brake Mode
-//
-// B Button - Reset Gyro to 0, do it when front of robot is facing directly away
-// A Button -  Execute AutoDrive
-//
-/////////////////////////////////////////////////////////////////////////////////////// from
-/////////////////////////////////////////////////////////////////////////////////////// the
-/////////////////////////////////////////////////////////////////////////////////////// driver
-//
