@@ -54,7 +54,7 @@ public class LimeLightControl extends Command {
 		}	
 
         if (driveJoystick.getPovUp()) {
-            Robot.limeLight.setActiveSeek(true);
+            //Robot.limeLight.setActiveSeek(true);
             if (Robot.targetType == Robot.targetTypes.TargetOne) {
                 Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
             } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {

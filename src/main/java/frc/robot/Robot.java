@@ -127,14 +127,13 @@ public class Robot extends TimedRobot {
         // Thrower Devices
         thrower = new Thrower();
 
+        // Climber
         climber = new Climber();
-
   
         // Pickup SubSystem
         pickup = new Pickup();
 
         // LED Subsystem
-        
         Leds = new LEDSubsystem();
 
         // Limelight subsystem
@@ -152,7 +151,7 @@ public class Robot extends TimedRobot {
         internalData.resetGyro();
 
         // create the lidarlite class
-        lidar = new LidarLite();
+        // lidar = new LidarLite();
 
         // Server for the drive camera
         //driveCam = CameraServer.startAutomaticCapture();

@@ -68,7 +68,7 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveRearRightEncoder = new CANcoder(RobotMap.SwerveRearRightEncoderCanID);
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 	
-    boolean swerveDebug=true;
+    boolean swerveDebug=false;
 	boolean enableFullSpeed=true;
 	boolean autoMove=false;
 
