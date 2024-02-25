@@ -32,14 +32,12 @@ public class LimeLight extends SubsystemBase {
     private double llTargetY;
     private int validCount;
     private int missedCount;
-    private int centeredCount;
-    private double angleOffset;
     //private Pose2d botPose2d;
     private int centered;
     private int aimed;    
 
     public static SequentialCommandGroup throwCommand;
-    boolean limeLightDebug=true;
+    boolean limeLightDebug=false;
     double pipelineLast=0;
 
     static int itersToCapture = 2;
@@ -105,7 +103,9 @@ public class LimeLight extends SubsystemBase {
         LimelightHelpers.setCameraMode_Processor(null);
         LimelightHelpers.setLEDMode_PipelineControl(null);
 
-        SmartDashboard.putNumber("Limelight Pipe", LimelightHelpers.getCurrentPipelineIndex(null));
+        if (limeLightDebug) {
+            SmartDashboard.putNumber("Limelight Pipe", LimelightHelpers.getCurrentPipelineIndex(null));
+        }
 
         double tx = txSmoother.sampleAndGetAverage(LimelightHelpers.getTX(null));
         double ty = tySmoother.sampleAndGetAverage(LimelightHelpers.getTY(null));
@@ -201,7 +201,10 @@ public class LimeLight extends SubsystemBase {
         double angle= 50 - ((45 - (llTargetArea*100)) *.675);
 
         if (angle < 20 || angle>65 ) { angle=30; }
+        
+        if (limeLightDebug) {
             SmartDashboard.putNumber("Auto Thrower Angle", angle);
+        }
 
         Robot.thrower.setAutoMoveThrower(true);
         if (Robot.thrower.setThrowerPosition(angle)) {
