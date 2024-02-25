@@ -43,10 +43,10 @@ public class PickupWork extends Command {
 
     @Override
     public void execute() {
-        Robot.autoRunPickup=true;
+        Robot.pickup.setAutoRunPickup(true);
         Robot.pickup.pickupMotorOn();
         if (runThrowerTrigger) {
-            Robot.autoTriggerRun=true;
+            Robot.thrower.setAutoTriggerRun(true);
             Robot.thrower.throwerTriggerOn();
         }    
     }
@@ -63,10 +63,9 @@ public class PickupWork extends Command {
         //haveNote=Robot.thrower.getPhotoSensor();
 
         if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
-            Robot.autoRunPickup=false;
             Robot.pickup.cancel();
         if (runThrowerTrigger) {
-            Robot.autoTriggerRun=false;
+            Robot.thrower.setAutoTriggerRun(false);
             Robot.thrower.throwerTriggerOff();
         }    
             return true;
@@ -80,10 +79,9 @@ public class PickupWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.autoRunPickup=false;
         Robot.pickup.cancel();
         if (runThrowerTrigger) {
-            Robot.autoTriggerRun=false;
+            Robot.thrower.setAutoTriggerRun(false);
             Robot.thrower.throwerTriggerOff();
         }    
     }

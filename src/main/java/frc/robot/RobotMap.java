@@ -213,7 +213,7 @@ Operator:
 	Left Shoulder Button: Reverse Pickup, Thrower Trigger and Thrower WHeels
 	Right Shoulder Button: Auto Amp Throw
 
-	Back Button:
+	Back Button: Ignore encoders (to lower thrower angle)
 	Start Button:
 ******************************************************************************/
 

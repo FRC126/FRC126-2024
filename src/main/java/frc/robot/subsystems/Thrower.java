@@ -43,6 +43,8 @@ public class Thrower extends SubsystemBase {
 	boolean throwerDebug=true;
 	public static double myRPM=3000;
     static boolean throwTriggered=false;
+	static boolean autoTriggerRun=false;
+	static boolean autoMoveThrower=false;
 	
 	// Thrower Angle Control
 	PIDController throwerPID;
@@ -218,13 +220,15 @@ public class Thrower extends SubsystemBase {
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-     	if (((currAngle > 148 && speed > 0) || 
+     	/*
+		if (((currAngle > 148 && speed > 0) || 
 		     (currAngle < 22 && speed < 0)) && 
 			 !Robot.overrideEncoders) {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);
 			return(currAngle);
 		}
+		*/
 
 		SmartDashboard.putNumber("thrower speed", speed);
 
@@ -312,7 +316,7 @@ public class Thrower extends SubsystemBase {
     public void throwerTriggerOff() {
 		throwTriggered=false;
 		    throwerTriggerMotor.set(0);
-		if (!Robot.userRunPickup) {
+		if (!Robot.pickup.getUserRunPickup()) {
   			Robot.pickup.pickupMotorOff();
 		}		
 	}
@@ -325,6 +329,9 @@ public class Thrower extends SubsystemBase {
         throwerRPM(2,0); 
 		throwerTriggerOff();
 		moveThrower(0);
+		setAutoTriggerRun(false);
+		setAutoMoveThrower(false);
+
 	}
 
     /************************************************************************
@@ -354,6 +361,36 @@ public class Thrower extends SubsystemBase {
 	public void setThrowTriggered(boolean value) {
 		throwTriggered = value;
 	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoTriggerRun(boolean value) {
+		autoTriggerRun = value;
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public boolean getAutoTriggerRun() {
+		return autoTriggerRun;
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMoveThrower	(boolean value) {
+		autoMoveThrower	 = value;
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	public boolean getAutoMoveThrower	() {
+		return autoMoveThrower	;
+	}
+
+		
 }
 
 

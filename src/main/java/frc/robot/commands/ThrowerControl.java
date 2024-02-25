@@ -80,7 +80,7 @@ public class ThrowerControl extends Command {
 			if ( y!=0 ) {
 				Robot.thrower.moveThrower(y);
 			} else {
-				if ( !Robot.autoMoveThrower) {
+				if ( !Robot.thrower.getAutoMoveThrower()) {
 				    Robot.thrower.moveThrower(0);
 				}	
 			}			
@@ -121,6 +121,7 @@ public class ThrowerControl extends Command {
 
     		// Run the motors at specified rpm
 			speed=Robot.thrower.getRPM();
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.ShootingSpeaker);
 		} else if (idleThrower) {
 			// Idle the throwers
 			speed=IDLE_RPM;
@@ -153,7 +154,7 @@ public class ThrowerControl extends Command {
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
 			Robot.thrower.setThrowerSpeed(-1.0);
-		} else if (!Robot.thrower.getThrowTriggered() && !Robot.autoTriggerRun) {
+		} else if (!Robot.thrower.getThrowTriggered() && !Robot.thrower.getAutoTriggerRun()) {
 			Robot.thrower.throwerTriggerOff();
 		} 
 	}

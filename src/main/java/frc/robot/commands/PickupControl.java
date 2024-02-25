@@ -49,20 +49,20 @@ public class PickupControl extends Command {
 
 		if (Robot.internalData.isAuto() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
-			Robot.userRunPickup=false;
+			Robot.pickup.setUserRunPickup(false);
 			return;
 		}		
 
 		if (operatorJoystick.leftTriggerPressed() || operatorJoystick.isYButton()) {
-			Robot.userRunPickup=true;
+			Robot.pickup.setUserRunPickup(true);
 			this.pickup.pickupMotorOn();
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);
 		} else if (operatorJoystick.isLShoulderButton()) {
-			Robot.userRunPickup=true;
+			Robot.pickup.setUserRunPickup(true);
 			this.pickup.pickupMotorReverse();
 		} else {
-			Robot.userRunPickup=false;
-			if (!Robot.autoRunPickup) {
+			Robot.pickup.setUserRunPickup(false);
+			if (!Robot.pickup.getAutoRunPickup()) {
   				this.pickup.cancel();
 			}	
 		}

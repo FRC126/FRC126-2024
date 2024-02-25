@@ -48,7 +48,7 @@ public class ThrowerAngle extends Command {
     @Override
     public void execute() {
         iters--;
-        Robot.autoMoveThrower=true;
+        Robot.thrower.setAutoMoveThrower(true);
         reachedAngle = Robot.thrower.setThrowerPosition(this.angle);
     }
 
@@ -67,7 +67,7 @@ public class ThrowerAngle extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.autoMoveThrower=false;
+        Robot.thrower.setAutoMoveThrower(false);
         Robot.thrower.moveThrower(0);
     }
 }

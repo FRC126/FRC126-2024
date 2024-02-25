@@ -56,7 +56,7 @@ public class SwerveControl extends Command {
 			Robot.stopAutoCommand();
 		}
 
-		if (Robot.internalData.isAuto() || Robot.autoMove || Robot.isAutoCommand) {
+		if (Robot.internalData.isAuto() || Robot.swerveDrive.getAutoMove() || Robot.isAutoCommand) {
 			// Ignore user controls during Autonomous
     		driveStraight = false;
 			return;

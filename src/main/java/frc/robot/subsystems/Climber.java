@@ -23,6 +23,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**********************************************************************************
@@ -33,8 +34,8 @@ public class Climber extends SubsystemBase {
 	double pickupRPM;
 	int called = 0;
 
-	static final double extendedPosition=2500;
-	static final double retractedPosition=100;
+	static final double extendedPosition=50000;
+	static final double retractedPosition=-50000;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -65,6 +66,24 @@ public class Climber extends SubsystemBase {
 		ClimberMotor.set(speed);
 	}
 
+ 	/************************************************************************
+	 ************************************************************************/
+
+	private double getPosition() {
+		double pos=ClimberMotorEncoder.getPosition();
+
+		SmartDashboard.putNumber("Climber Position",pos);
+
+		return(pos);
+	}
+
+ 	/************************************************************************
+	 ************************************************************************/
+
+	private void setPosition(double value) {
+		ClimberMotorEncoder.setPosition(value);
+	}
+
 	/************************************************************************
 	 ************************************************************************/
 
@@ -75,7 +94,7 @@ public class Climber extends SubsystemBase {
 		}
 
 		// Check Thrower Position before moving Climber
-		if (ClimberMotorEncoder.getPosition() < extendedPosition ) {
+		if (getPosition() < extendedPosition ) {
     		runMotor(speed);
 			return(false);
 		} else {
@@ -95,10 +114,10 @@ public class Climber extends SubsystemBase {
 		}
 
 		// Check Thrower Position before moving Climber
-		if (ClimberMotorEncoder.getPosition() > retractedPosition ) {
+		if (getPosition() > retractedPosition ) {
 			if (climberBottomLimit.get() == true && useLimitSwiches) {
        		    cancel();
-				ClimberMotorEncoder.setPosition(50);
+				setPosition(50);
 				return(true);
 			} else {	
      		    runMotor(speed);

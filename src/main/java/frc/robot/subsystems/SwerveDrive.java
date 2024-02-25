@@ -69,8 +69,8 @@ public class SwerveDrive extends SubsystemBase {
     CANcoder swerveRearLeftEncoder = new CANcoder(RobotMap.SwerveRearLeftEncoderCanID);
 	
     boolean swerveDebug=true;
-
 	boolean enableFullSpeed=true;
+	boolean autoMove=false;
 
 	double[] wheelSpeed = {0,0,0,0};
 
@@ -160,9 +160,20 @@ public class SwerveDrive extends SubsystemBase {
 	/************************************************************************
 	 ************************************************************************/
 
-	public void resetYaw() {
+	 public void resetYaw() {
+		resetYaw(0);
+	}	
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void resetYaw(double value) {
         if (Robot.useNavx) { 
-			Robot.navxMXP.zeroYaw();
+			if (value==0) {
+			    Robot.navxMXP.zeroYaw();
+			} else {
+				Robot.navxMXP.setAngleAdjustment(value);
+			}	
 		} else {	
 		    Robot.internalData.resetGyro();
 		}	
@@ -528,17 +539,20 @@ public class SwerveDrive extends SubsystemBase {
 	public void cancel() {
         Drive(0,0,0); 
 	}
+
+	/************************************************************************
+	 ************************************************************************/
+
+	 public void setAutoMove(boolean value) { 
+		autoMove=value;  
+	}
+	
+	/************************************************************************
+	 ************************************************************************/
+
+	public boolean getAutoMove() { 
+		return(autoMove); 
+	}
+
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Controls
-//
-// Left Joystick - Driver Relative Robot Movement
-//
-// Right Joystick - Robot Rotation
-//
-// Left Trigger - Slow Mode
-// Right Trigger - Brake Mode
-//
-// B Button - Reset Gyro to 0, do it when front of robot is facing directly away from the driver
-//

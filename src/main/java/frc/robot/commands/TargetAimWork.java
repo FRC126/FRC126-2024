@@ -81,7 +81,7 @@ public class TargetAimWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         Robot.thrower.cancel();
-        Robot.autoMoveThrower=false;
+        Robot.thrower.setAutoMoveThrower(false);
         Robot.limeLight.setActiveSeek(false);
     }
 }

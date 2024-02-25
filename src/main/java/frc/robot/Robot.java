@@ -86,14 +86,7 @@ public class Robot extends TimedRobot {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static SequentialCommandGroup autonomous;
-
     public static targetTypes targetType = Robot.targetTypes.TargetTwo;
-    public static boolean autoMoveThrower = false;
-    public static boolean autoMove=false;
-    public static boolean autoRunPickup=false;
-    public static boolean autoTriggerRun=false;
-    public static boolean userRunPickup=false;
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,7 +102,6 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Integer> autoFollow = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
 
-    public static final String PICKUP_MOTOR_SPEED_STRING = "Pickup Motor Speed";
     public static final String COMPETITION_ROBOT = "Competition Robot";
     
  	  /************************************************************************
@@ -134,6 +126,9 @@ public class Robot extends TimedRobot {
 
         // Thrower Devices
         thrower = new Thrower();
+
+        climber = new Climber();
+
   
         // Pickup SubSystem
         pickup = new Pickup();
@@ -184,10 +179,10 @@ public class Robot extends TimedRobot {
         autoFollow.setDefaultOption("1 note",0);
         autoFollow.addOption("2 note",1);
         autoFollow.addOption("3 note",2);
+        autoFollow.addOption("No Notes",3);
         SmartDashboard.putData("Auto Follow Choices",autoFollow);
-        SmartDashboard.putNumber(PICKUP_MOTOR_SPEED_STRING,1);
-        SmartDashboard.putBoolean(COMPETITION_ROBOT, false);
-           
+
+        SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
 
         Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
             BuildConstants.GIT_BRANCH,
@@ -295,7 +290,7 @@ public class Robot extends TimedRobot {
         }
 		if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
-				Robot.autoMove = true;
+				Robot.swerveDrive.setAutoMove(true);
 				Robot.autoCommand = new AutoAmp();
 				Robot.autoCommand.schedule();
 			}
@@ -353,7 +348,7 @@ public class Robot extends TimedRobot {
 			return false;
 		}	
 
-        if (Robot.autoMove) { 
+        if (Robot.swerveDrive.getAutoMove()) { 
     		Robot.swerveDrive.cancel();
         }
 
@@ -378,10 +373,10 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-        if (Robot.autoMove) { 
+        if (Robot.swerveDrive.getAutoMove()) { 
         	Robot.swerveDrive.cancel();
         }
-        Robot.autoMove=false;
+        Robot.swerveDrive.setAutoMove(false);
 	}		
 
     /************************************************************************
