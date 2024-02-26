@@ -94,12 +94,12 @@ public class Robot extends TimedRobot {
 
     int selectedAutoPosition;
 	int selectedAutoFunction;
-    int selectedautoFollow;
+    int selectedautoNext;
     int selectedAllianceColor;
 	
     private final SendableChooser<Integer> autoFunction = new SendableChooser<>();
     private final SendableChooser<Integer> autoPosition = new SendableChooser<>();
-    private final SendableChooser<Integer> autoFollow = new SendableChooser<>();
+    private final SendableChooser<Integer> autoNext = new SendableChooser<>();
     private final SendableChooser<Integer> allianceColor = new SendableChooser<>();
 
     public static final String COMPETITION_ROBOT = "Competition Robot";
@@ -159,6 +159,19 @@ public class Robot extends TimedRobot {
         //driveCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
 		//server.setSource(driveCam);
 
+        SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
+
+        Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
+            BuildConstants.GIT_BRANCH,
+            BuildConstants.BUILD_DATE,
+            BuildConstants.GIT_DATE,
+            BuildConstants.GIT_SHA
+            ));
+        Log.print(0, "Robot", "Robot Init Complete");
+        // Put information above onto Smart Dashboard
+        SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
+        SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
+
         // Dashboard Cooser for the Autonomous mode move
         autoFunction.setDefaultOption("Speaker Shot",0);
         autoFunction.addOption("Amplifier",1);
@@ -175,24 +188,11 @@ public class Robot extends TimedRobot {
         allianceColor.addOption("Blue Alliance",1);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoFollow.setDefaultOption("1 note",0);
-        autoFollow.addOption("2 note",1);
-        autoFollow.addOption("3 note",2);
-        autoFollow.addOption("No Notes",3);
-        SmartDashboard.putData("Auto Follow Choices",autoFollow);
-
-        SmartDashboard.putBoolean(COMPETITION_ROBOT, true);
-
-        Log.print(0, "Git Info", "branch: %s buildDate: %s gitDate: %s sha: %s".formatted(
-            BuildConstants.GIT_BRANCH,
-            BuildConstants.BUILD_DATE,
-            BuildConstants.GIT_DATE,
-            BuildConstants.GIT_SHA
-            ));
-        Log.print(0, "Robot", "Robot Init Complete");
-        // Put information above onto Smart Dashboard
-        SmartDashboard.putString("Git Branch", BuildConstants.GIT_BRANCH);
-        SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
+        autoNext.setDefaultOption("1 note",0);
+        //autoFollow.addOption("2 note",1);
+        //autoFollow.addOption("3 note",2);
+        autoNext.addOption("No Notes",3);
+        SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
  	  /************************************************************************
@@ -216,9 +216,9 @@ public class Robot extends TimedRobot {
 			selectedAutoFunction = 0;
 		}
 		try {
-			selectedautoFollow = (int)autoFollow.getSelected();
+			selectedautoNext = (int)autoNext.getSelected();
 		} catch(NullPointerException e) {
-			selectedautoFollow = 0;
+			selectedautoNext = 0;
 		}
 		try {
 			selectedAllianceColor = (int)allianceColor.getSelected();
@@ -277,7 +277,7 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
-        check();
+       // check();
     }
 
     /************************************************************************
