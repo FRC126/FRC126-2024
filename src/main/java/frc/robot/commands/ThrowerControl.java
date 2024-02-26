@@ -69,13 +69,13 @@ public class ThrowerControl extends Command {
 		};
 
   	    if (operatorJoystick.getPovUp()) {
-   		    Robot.thrower.setThrowerPosition(100);
+   		    //Robot.thrower.setThrowerPosition(100);
 		} else if (operatorJoystick.getPovRight()) {
-   		    Robot.thrower.setThrowerPosition(45);
+   		    //Robot.thrower.setThrowerPosition(45);
 		} else if (operatorJoystick.getPovDown()) {
-   		    Robot.thrower.setThrowerPosition(30);
+   		    //Robot.thrower.setThrowerPosition(30);
 		} else if (operatorJoystick.getPovLeft()) {
-   		    Robot.thrower.setThrowerPosition(145);
+   		    //Robot.thrower.setThrowerPosition(145);
 		} else {
 			if ( y!=0 ) {
 				Robot.thrower.moveThrower(y);
