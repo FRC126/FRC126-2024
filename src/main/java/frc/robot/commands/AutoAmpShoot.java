@@ -15,16 +15,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotMap;
+import frc.robot.Robot;
 
-public class AutoAmp extends SequentialCommandGroup {
-    public AutoAmp() {
+public class AutoAmpShoot extends SequentialCommandGroup {
+    public AutoAmpShoot(int allianceColor) {
         // Move thrower arm to specific position
         // Eject the note
+
+        if (allianceColor == Robot.redAlliance) {
+            addCommands(
+                new DriveWork(.25, -.125, 0, 18, 200) 
+            );
+        } else {
+            addCommands(
+                new DriveWork(.25, .125, 0, 18, 200) 
+            );
+        }    
+
         addCommands(
-            new PickupWork(25,true),
-            new ThrowerAngle(145, 250),
-            new ThrowerWork(600, 250),
-            new ThrowerAngle(45, 250),
+            new ThrowerAngle(RobotMap.ampAngle, 250),
+            new ThrowerWork(RobotMap.ampSpeed, 250),
+            new ThrowerAngle(30, 250)
+        );
+
+        if (allianceColor == Robot.redAlliance) {
+            addCommands(
+                new DriveWork(-.25, 0, 0, 36, 200) 
+            );
+        } else {
+            addCommands(
+                new DriveWork(.25, 0, 0, 36, 200) 
+            );
+        }    
+        
+        addCommands(
             new FinishAuto()
         );
     }

@@ -49,9 +49,9 @@ public class TargetAimWork extends Command {
         Robot.limeLight.setActiveSeek(true);
         Robot.targetType = target;
 
-        if (Robot.targetType == Robot.targetTypes.TargetOne) {
+        if (Robot.targetType == Robot.targetTypes.TargetRed) {
             Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
-        } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {
+        } else if (Robot.targetType == Robot.targetTypes.TargetBlue) {
             Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
         }
 

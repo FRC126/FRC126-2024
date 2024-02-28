@@ -15,6 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotMap;
 
 public class AutoAmp extends SequentialCommandGroup {
     public AutoAmp() {
@@ -22,8 +23,8 @@ public class AutoAmp extends SequentialCommandGroup {
         // Eject the note
         addCommands(
             new PickupWork(25,true),
-            new ThrowerAngle(145, 250),
-            new ThrowerWork(600, 250),
+            new ThrowerAngle(RobotMap.ampAngle, 250),
+            new ThrowerWork(RobotMap.ampSpeed, 250),
             new ThrowerAngle(45, 250),
             new FinishAuto()
         );
