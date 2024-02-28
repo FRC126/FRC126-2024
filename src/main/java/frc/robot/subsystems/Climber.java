@@ -14,6 +14,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,8 +35,8 @@ public class Climber extends SubsystemBase {
 	double pickupRPM;
 	int called = 0;
 
-	static final double extendedPosition=50000;
-	static final double retractedPosition=-50000;
+	static final double extendedPosition=0;
+	static final double retractedPosition=390;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -51,6 +52,7 @@ public class Climber extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ClimberControl(this));
+		setPosition(0);
 	}
 
 	/************************************************************************
@@ -63,6 +65,7 @@ public class Climber extends SubsystemBase {
 	 ************************************************************************/
 
 	private void runMotor(double speed) {
+		ClimberMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		ClimberMotor.set(speed);
 	}
 
@@ -80,7 +83,7 @@ public class Climber extends SubsystemBase {
  	/************************************************************************
 	 ************************************************************************/
 
-	private void setPosition(double value) {
+	public void setPosition(double value) {
 		ClimberMotorEncoder.setPosition(value);
 	}
 
@@ -88,14 +91,13 @@ public class Climber extends SubsystemBase {
 	 ************************************************************************/
 
 	public boolean extendClimber(double speed) {
-		
 		if (speed < 0) { 
 			return(true);
 		}
 
 		// Check Thrower Position before moving Climber
-		if (getPosition() < extendedPosition ) {
-    		runMotor(speed);
+		if (getPosition() > extendedPosition || Robot.overrideEncoders ) {
+    		runMotor(speed*-1);
 			return(false);
 		} else {
 			cancel();
@@ -114,13 +116,13 @@ public class Climber extends SubsystemBase {
 		}
 
 		// Check Thrower Position before moving Climber
-		if (getPosition() > retractedPosition ) {
+		if (getPosition() < retractedPosition || Robot.overrideEncoders ) {
 			if (climberBottomLimit.get() == true && useLimitSwiches) {
        		    cancel();
 				setPosition(50);
 				return(true);
 			} else {	
-     		    runMotor(speed);
+     		    runMotor(speed*-1);
 				return(false);
 			}	
 		} else {

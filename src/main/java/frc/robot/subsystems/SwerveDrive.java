@@ -503,6 +503,7 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double rotateToDegrees(double offset) {
 		double driveRotate=0;
+		double driftAllowance=1;
 
 		// get the current angle from the gyro
 		double startAngle = Robot.swerveDrive.getYaw();      
@@ -510,10 +511,10 @@ public class SwerveDrive extends SubsystemBase {
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(startAngle);
 
-		double tmp = diff / 250;
-		tmp = Robot.boundSpeed(tmp, .25, .04 );
+		double tmp = diff / 125;
+		tmp = Robot.boundSpeed(tmp, .25, .03 );
 
-		if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
+		if (Math.abs(diff) < driftAllowance) {
 			driveRotate=0;
 			Robot.swerveDrive.brakesOn();
 		} else if (startAngle < target) {
@@ -538,6 +539,7 @@ public class SwerveDrive extends SubsystemBase {
 	 
 	public void cancel() {
         Drive(0,0,0); 
+		Robot.swerveDrive.brakesOn();
 	}
 
 	/************************************************************************

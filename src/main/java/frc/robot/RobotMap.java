@@ -21,6 +21,9 @@ public class RobotMap {
     public static int NeoTicksPerRotation=42;
 	public static double ThrowerGearRatio=750;
 
+	public static int ampAngle=145;
+	public static int ampSpeed=600;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
 	public static final int lStickX = 0; // Left stick X
