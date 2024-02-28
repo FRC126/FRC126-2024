@@ -131,7 +131,7 @@ public class ThrowerControl extends Command {
 			Robot.thrower.setThrowTriggered(false);
 		}
 		int reachedOne=0, reachedTwo=0;
-		if (!operatorJoystick.rightTriggerPressed()){
+		if (!operatorJoystick.isRShoulderButton()){
 			reachedOne = Robot.thrower.throwerRPM(1,speed);
 			reachedTwo = Robot.thrower.throwerRPM(2,speed);
 		}
