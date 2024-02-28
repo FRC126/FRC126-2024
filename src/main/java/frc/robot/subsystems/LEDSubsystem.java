@@ -91,24 +91,27 @@ import frc.robot.Robot;
         if (--delay < 0) { delay = 0; }
 
         switch (LEDMode) {
-            case None:            { setColorSliding(0,0,0); break; }
-            case BrakeMode:       { setColorSliding(64,0,0,125,0,0); break; }
-            case DriveMode:       { 
-                 double foo = Math.abs(driveJoystick.getLeftStickY()) + Math.abs(driveJoystick.getLeftStickX());
-                 if (foo > 1) { foo=1; }
-                 setColorSliding(0,(int)(128*foo),0,0,(int)(255*foo),0); break; 
-            }
-            case SlowMode:        { setColorSliding(64,64,0,125,125,0); break; }
-            case AimingSpeaker:   { setColorSliding(0,125,0,0,0,64); break; }
-            case AimingAmp:       { setColorSliding(0,125,0,64,0,0); break; }
-            case ShootingSpeaker: { setColorSliding(64,0,64,0,0,64); break; }
-            case ShootingAmp:     { setColorSliding(64,0,64,64,0,0); break; }
-            case Climbing:        { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
-            case AutoDrive:       { setColorSliding(125,75,100,0,0,125); break; }
-            case AutoTurn:        { setColorSliding(125,75,100,125,0,0); break; }
-            case RunPickup:       { setColorSliding(0,64,0,100,100,100); break; }
-            case Rainbow:         { rainbow(); break; }
-            case GaelForce:       { setColorSliding(0, 64, 0, 64, 45, 0); break; }
+            case None:              { setColorSliding(0,0,0); break; }
+            case BrakeMode:         { setColorSliding(64,0,0,125,0,0); break; }
+            case DriveMode:         {  
+                                        double fb = Math.abs(driveJoystick.getLeftStickY());
+                                        double lr = Math.abs(driveJoystick.getLeftStickX());
+                                        double rot = Math.abs(driveJoystick.getRightStickY());            
+                                        setColorSliding((int)(64*rot),(int)(64*fb),(int)(64*lr),
+                                                        (int)(128*rot),(int)(128*fb),(int)(128*lr));
+                                        break; 
+                                    }
+            case SlowMode:          { setColorSliding(64,64,0,125,125,0); break; }
+            case AimingSpeaker:     { setColorSliding(0,125,0,0,0,64); break; }
+            case AimingAmp:         { setColorSliding(0,125,0,64,0,0); break; }
+            case ShootingSpeaker:   { setColorSliding(64,0,64,0,0,64); break; }
+            case ShootingAmp:       { setColorSliding(64,0,64,64,0,0); break; }
+            case Climbing:          { rainbow(); break; } //setColorSliding(64,64,64,64,0,0); break; }
+            case AutoDrive:         { setColorSliding(125,75,100,0,0,125); break; }
+            case AutoTurn:          { setColorSliding(125,75,100,125,0,0); break; }
+            case RunPickup:         { setColorSliding(0,64,0,100,100,100); break; }
+            case Rainbow:           { rainbow(); break; }
+            case GaelForce:         { setColorSliding(0, 64, 0, 64, 45, 0); break; }
         }
     }
 
