@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
     public static final int oneNoteAutoNoMove=0;
     public static final int oneNoteAutoBackup=1;
     public static final int twoNoteAuto=2;
+    public static final int threeNoteAuto=3;
+    public static final int oneNoteAndAmp=4;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
@@ -189,10 +191,10 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData("Auto Target",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
-        autoPosition.setDefaultOption("Position 0",0);
-        autoPosition.addOption("Position 1",1);
-        autoPosition.addOption("Position 2",2);
-        SmartDashboard.putData("Auto Robot Position",autoPosition);
+        //autoPosition.setDefaultOption("Position 0",0);
+        //autoPosition.addOption("Position 1",1);
+        //autoPosition.addOption("Position 2",2);
+        //SmartDashboard.putData("Auto Robot Position",autoPosition);
 
         // Dashboard Cooser for the Autonomous mode position
         allianceColor.setDefaultOption("No Alliance",noAlliance);
@@ -203,6 +205,8 @@ public class Robot extends TimedRobot {
         autoNext.setDefaultOption("1 note, do nothing",oneNoteAutoNoMove);
         autoNext.addOption("1 note, backup",oneNoteAutoBackup);
         autoNext.addOption("2 notes",twoNoteAuto);
+        autoNext.addOption("3 notes",threeNoteAuto);
+        autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -239,39 +243,44 @@ public class Robot extends TimedRobot {
 			selectedAllianceColor = noAlliance;
 		}
 
+        Robot.targetTypes target;
+        if (selectedAllianceColor == redAlliance) {
+            target=Robot.targetTypes.TargetRed; 
+            // target ID=4
+        } else if (selectedAllianceColor == blueAlliance) {
+            target=Robot.targetTypes.TargetBlue; 
+            // target ID=7
+        } else {
+            target=Robot.targetTypes.TargetSeek; 
+        }
+
         if (selectedAutoFunction == speakerAuto) {
             switch (selectedautoNext) {
+                case threeNoteAuto:
+                    SmartDashboard.putString("AutoCommand","Speaker Three Notes");
+                    autonomous = new AutoShootSpeakerAndTwoMore(target); 
                 case twoNoteAuto:
-                    SmartDashboard.putString("AutoCommand","Speaker - Two Note");
-                    if (selectedAllianceColor == redAlliance) {
-                        autonomous = new AutoShootSpeakerAndOneMore(Robot.targetTypes.TargetRed); 
-                        // target ID=4
-                    } else if (selectedAllianceColor == blueAlliance) {
-                        autonomous = new AutoShootSpeakerAndOneMore(Robot.targetTypes.TargetBlue);
-                        // target ID=7
-                    } else {
-                        // noAlliance
-                        autonomous = new AutoShootSpeakerAndOneMore(Robot.targetTypes.TargetSeek);
-                    }
+                    SmartDashboard.putString("AutoCommand","Speaker Two Notes");
+                    autonomous = new AutoShootSpeakerAndOneMore(target); 
                     break;   
                 case oneNoteAutoNoMove:
-                    SmartDashboard.putString("AutoCommand","Speaker - One Note, No Move");
+                    SmartDashboard.putString("AutoCommand","Speaker One Note, No Move");
                     autonomous = new AutoShootSpeakerAndStop();
                     break;
                 case oneNoteAutoBackup:
-                    SmartDashboard.putString("AutoCommand","Speaker - One Note - Backup");
+                    SmartDashboard.putString("AutoCommand","Speaker One Note - Backup");
                     autonomous = new AutoShootSpeakerAndBackup();
                     break;
+                case oneNoteAndAmp:
+                    SmartDashboard.putString("AutoCommand","Speaker One Note - Amp One Note");
+                    autonomous = new AutoShootSpeakerAndAmp(selectedAllianceColor);
+                    break;                    
             }         
         }
 
         if (selectedAutoFunction == ampAuto) {
             SmartDashboard.putString("AutoCommand","Speaker - One Note - Backup");
-            if (selectedAllianceColor == redAlliance) {
-                autonomous = new AutoAmpShoot(redAlliance); 
-            } else if (selectedAllianceColor == blueAlliance) {
-                autonomous = new AutoAmpShoot(blueAlliance); 
-            }
+            autonomous = new AutoAmpShoot(selectedAllianceColor); 
         }    
 
         if (autonomous != null) {

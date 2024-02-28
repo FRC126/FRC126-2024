@@ -41,6 +41,8 @@ public class DriveWork extends Command {
         iters = itersIn;
         distanceReached=0;
         Robot.swerveDrive.resetEncoders();
+        startAngle = Robot.swerveDrive.getYaw();
+        Robot.swerveDrive.brakesOn();
     }
 
 	/**********************************************************************************
@@ -98,7 +100,7 @@ public class DriveWork extends Command {
             SmartDashboard.putNumber("Distance Reached", distanceReached);
         }    
 
-        Robot.swerveDrive.Drive(FB, LR, 0);            
+        Robot.swerveDrive.Drive(FB, LR, 0, true, startAngle);            
      }
 
 	/**********************************************************************************
