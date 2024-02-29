@@ -490,10 +490,10 @@ public class SwerveDrive extends SubsystemBase {
 	
 		double distance = (avg / gearRatio) * (wheelDiameter * 3.1459);
 
-		//if (swerveDebug) { 
+		if (swerveDebug) { 
   			SmartDashboard.putNumber("Drive Distance",distance);
   			SmartDashboard.putNumber("Drive AVG",avg);
-		//}	
+		}	
 
 		return(distance);
 	}

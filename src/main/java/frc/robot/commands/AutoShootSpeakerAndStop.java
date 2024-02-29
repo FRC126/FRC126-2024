@@ -35,7 +35,6 @@ public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
             ),    
 
             //new TurnDegreesWork(180,250),
-
             //new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
             
             new FinishAuto()

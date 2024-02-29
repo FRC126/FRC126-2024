@@ -29,7 +29,7 @@ public class AutoShootSpeakerAndAmp extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
                     
             // Throw the Note
-            new ThrowerWork(3000, 150),
+            new ThrowerWork(RobotMap.throwerSpeed, 150),
 
             new ParallelCommandGroup(
                 // Run the Pickup
