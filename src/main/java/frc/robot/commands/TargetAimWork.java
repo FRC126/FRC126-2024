@@ -59,7 +59,7 @@ public class TargetAimWork extends Command {
 
         Robot.limeLight.trackTarget();
 
-        aimed = Robot.limeLight.seekTarget(noAngle);
+        aimed = Robot.limeLight.seekTarget(noAngle,false);
     }
 
     /**********************************************************************************

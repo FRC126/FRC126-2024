@@ -44,8 +44,10 @@ public class AutoShootSpeakerAndOneMore extends SequentialCommandGroup {
             ),
             new DriveWork(-0.30,0,0,12,150),
         
+                        new ThrowerAngle(43.9,150),
+
             // TODO Aim at speaker
-            new TargetAimWork(targetType, 150,false),
+            //new TargetAimWork(targetType, 150,false),
             // Throw note in speaker
             new ThrowerWork(RobotMap.throwerSpeed, 150),            
             

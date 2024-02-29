@@ -36,14 +36,14 @@ public class Climber extends SubsystemBase {
 	int called = 0;
 
 	static final double extendedPosition=0;
-	static final double retractedPosition=400;
+	static final double retractedPosition=450;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
     CANSparkMax ClimberMotor = new CANSparkMax(RobotMap.ClimberCanID, CANSparkMax.MotorType.kBrushless);
     RelativeEncoder ClimberMotorEncoder = ClimberMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
 
-    DigitalInput climberBottomLimit = new DigitalInput(6);
+    DigitalInput climberBottomLimit = new DigitalInput(7);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -97,6 +97,7 @@ public class Climber extends SubsystemBase {
 
 		// Check Thrower Position before moving Climber
 		if (getPosition() > extendedPosition || Robot.overrideEncoders ) {
+			if ( getPosition() > 350 ) { speed *= .5; }
     		runMotor(speed*-1);
 			return(false);
 		} else {
@@ -109,7 +110,7 @@ public class Climber extends SubsystemBase {
 	 ************************************************************************/
 
 	public boolean retractClimber(double speed) {
-		boolean useLimitSwiches=false;
+		boolean useLimitSwiches=true;
 
 		if (speed > 0) { 
 			return(true);
@@ -119,7 +120,6 @@ public class Climber extends SubsystemBase {
 		if (getPosition() < retractedPosition || Robot.overrideEncoders ) {
 			if (climberBottomLimit.get() == true && useLimitSwiches) {
        		    cancel();
-				setPosition(50);
 				return(true);
 			} else {	
      		    runMotor(speed*-1);
