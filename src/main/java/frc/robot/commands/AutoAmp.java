@@ -22,10 +22,10 @@ public class AutoAmp extends SequentialCommandGroup {
         // Move thrower arm to specific position
         // Eject the note
         addCommands(
-            new PickupWork(25,true),
+            new PickupWork(50,true),
             new ThrowerAngle(RobotMap.ampAngle, 250),
             new ThrowerWork(RobotMap.ampSpeed, 250),
-            new ThrowerAngle(45, 250),
+            //new ThrowerAngle(45, 250),
             new FinishAuto()
         );
     }

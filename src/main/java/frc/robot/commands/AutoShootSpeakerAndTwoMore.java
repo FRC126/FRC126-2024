@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
     public AutoShootSpeakerAndTwoMore(Robot.targetTypes targetType) {
@@ -28,9 +29,11 @@ public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-                    
+
+            new ThrowerAngle(RobotMap.throwerCloseAngle,150),
+            
             // Throw the Note
-            new ThrowerWork(3000, 150),
+            new ThrowerWork(RobotMap.throwerSpeed, 150),
 
             new ParallelCommandGroup(
                 // Run the Pickup
@@ -40,10 +43,10 @@ public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
             ),
         
             // TODO Aim at speaker
-            new TargetAimWork(targetType, 150),
+            new TargetAimWork(targetType, 150,false),
 
             // Throw note in speaker
-            new ThrowerWork(3000, 150),            
+            new ThrowerWork(RobotMap.throwerSpeed, 150),            
 
             new TurnDegreesWork(-70, 150),
 
@@ -57,10 +60,10 @@ public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
             new TurnDegreesWork(0, 150),
 
             // TODO Aim at speaker
-            new TargetAimWork(targetType, 150),
+            new TargetAimWork(targetType, 150,false),
 
             // Throw note in speaker
-            new ThrowerWork(3000, 150),            
+            new ThrowerWork(RobotMap.throwerSpeed, 150),            
             
             new FinishAuto()
         );

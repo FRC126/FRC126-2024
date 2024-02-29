@@ -41,7 +41,7 @@ public class Thrower extends SubsystemBase {
     static double Pslow = 0.000020;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=3000;
+	public static double myRPM=3200;
     static boolean throwTriggered=false;
 	static boolean autoTriggerRun=false;
 	static boolean autoMoveThrower=false;
@@ -227,8 +227,8 @@ public class Thrower extends SubsystemBase {
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
      	
-		if (((currAngle > 145 && speed > 0) || 
-		     (currAngle < 24 && speed < 0)) && 
+		if (((currAngle > 135 && speed > 0) || 
+		     (currAngle < 29 && speed < 0)) && 
 			 !Robot.overrideEncoders) {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);

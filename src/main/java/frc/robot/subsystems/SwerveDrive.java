@@ -342,7 +342,7 @@ public class SwerveDrive extends SubsystemBase {
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = getYaw();
 
-		if (!Robot.isAutoCommand) {
+		if (!Robot.isAutoCommand || Robot.internalData.isAuto()) {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
 			// driver relative instead of robot relative
 			double angle=Math.toRadians(currentAngle); 
@@ -511,7 +511,7 @@ public class SwerveDrive extends SubsystemBase {
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(startAngle);
 
-		double tmp = diff / 125;
+		double tmp = diff / 250;
 		tmp = Robot.boundSpeed(tmp, .25, .03 );
 
 		if (Math.abs(diff) < driftAllowance) {

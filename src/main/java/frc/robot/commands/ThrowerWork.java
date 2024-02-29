@@ -28,7 +28,7 @@ public class ThrowerWork extends Command {
      **********************************************************************************/
 
     public ThrowerWork(int speed, int iters) {
-        addRequirements(Robot.lidar);
+        //addRequirements(Robot.lidar);
         this.iters = iters;
         this.speed = speed;
         throwingIters=0;
@@ -82,7 +82,9 @@ public class ThrowerWork extends Command {
         iters--;
 
         if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
-            Robot.thrower.cancel();
+            //Robot.thrower.cancel();
+            Robot.thrower.throwerTriggerOff();
+
             Robot.thrower.setThrowTriggered(false);
             return true;
         }
@@ -95,6 +97,7 @@ public class ThrowerWork extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.thrower.cancel();
+        //Robot.thrower.cancel();
+                Robot.thrower.throwerTriggerOff();
     }
 }

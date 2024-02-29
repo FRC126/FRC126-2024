@@ -15,9 +15,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 // import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
     public AutoShootSpeakerAndStop() {
@@ -26,12 +28,15 @@ public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
           
-            // Throw the Note
-            new ThrowerWork(3000, 150),
+            new ParallelCommandGroup(
+                new ThrowerAngle(RobotMap.throwerCloseAngle,150),
+                // Throw the Note
+                new ThrowerWork(RobotMap.throwerSpeed, 150)
+            ),    
 
-            new TurnDegreesWork(180,250),
+            //new TurnDegreesWork(180,250),
 
-            new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
+            //new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
             
             new FinishAuto()
         );

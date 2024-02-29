@@ -187,7 +187,7 @@ public class Robot extends TimedRobot {
 
         // Dashboard Cooser for the Autonomous mode move
         autoFunction.setDefaultOption("Speaker Shot",speakerAuto);
-        autoFunction.addOption("Amplifier",ampAuto);
+        //autoFunction.addOption("Amplifier",ampAuto);
         SmartDashboard.putData("Auto Target",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
@@ -198,15 +198,15 @@ public class Robot extends TimedRobot {
 
         // Dashboard Cooser for the Autonomous mode position
         allianceColor.setDefaultOption("No Alliance",noAlliance);
-        allianceColor.setDefaultOption("Red Alliance",redAlliance);
+        allianceColor.addOption("Red Alliance",redAlliance);
         allianceColor.addOption("Blue Alliance",blueAlliance);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
         autoNext.setDefaultOption("1 note, do nothing",oneNoteAutoNoMove);
         autoNext.addOption("1 note, backup",oneNoteAutoBackup);
         autoNext.addOption("2 notes",twoNoteAuto);
-        autoNext.addOption("3 notes",threeNoteAuto);
-        autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
+        //autoNext.addOption("3 notes",threeNoteAuto);
+        //autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -219,8 +219,9 @@ public class Robot extends TimedRobot {
 
         Log.print(0, "Robot", "Robot Autonomous Init");
 
-        Robot.stopAutoCommand();
+        //Robot.stopAutoCommand();
 		Robot.swerveDrive.cancel();
+		Robot.swerveDrive.resetYaw();
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -333,7 +334,7 @@ public class Robot extends TimedRobot {
         if (operatorJoystick==null) {
             operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
-		/*
+		
         if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.swerveDrive.setAutoMove(true);
@@ -341,7 +342,7 @@ public class Robot extends TimedRobot {
 				Robot.autoCommand.schedule();
 			}
 		}
-        */
+        
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;

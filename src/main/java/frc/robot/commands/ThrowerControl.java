@@ -27,8 +27,8 @@ public class ThrowerControl extends Command {
 	boolean idleThrower=false;
 	boolean throwerDebug=true;
 	int delay=0;
-	final int IDLE_RPM=2000;
-	final int MAX_RPM=4800;
+	final int IDLE_RPM=2500;
+	final int MAX_RPM=4200;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -73,7 +73,7 @@ public class ThrowerControl extends Command {
 		} else if (operatorJoystick.getPovRight()) {
    		    Robot.thrower.setThrowerPosition(60);
 		} else if (operatorJoystick.getPovDown()) {
-   		    Robot.thrower.setThrowerPosition(30);
+   		    Robot.thrower.setThrowerPosition(38);
 		} else if (operatorJoystick.getPovLeft()) {
    		    Robot.thrower.setThrowerPosition(145);
 		} else {
@@ -94,6 +94,7 @@ public class ThrowerControl extends Command {
 			}
 		}	
 
+		/*
 		if (operatorJoystick.getRightStickY()<-.25) {
 			if (delay <= 0) {
    			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
@@ -106,6 +107,8 @@ public class ThrowerControl extends Command {
 				delay=15;
 			}	
 		} 	
+		*/
+		
 		if (Robot.thrower.getRPM() < 0) {
 			Robot.thrower.setRPM(0);
 		}
