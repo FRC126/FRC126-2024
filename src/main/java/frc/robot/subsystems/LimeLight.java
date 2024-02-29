@@ -19,7 +19,7 @@ import frc.robot.Robot.targetTypes;
 import frc.robot.commands.*;
 import frc.robot.util.Smoother;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.geometry.Pose2d;
+//import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -164,13 +164,13 @@ public class LimeLight extends SubsystemBase {
 	 ************************************************************************/
 
      public boolean seekTarget() {
-        return(seekTarget(false));
+        return(seekTarget(false,false));
     }   
 
     /************************************************************************
 	 ************************************************************************/
 
-     public boolean seekTarget(boolean noAngle) {   
+     public boolean seekTarget(boolean noAngle, boolean noAim) {   
         int cameraOffset = 8;    
 
         if (!activeSeek ||
@@ -186,20 +186,21 @@ public class LimeLight extends SubsystemBase {
         // We found a valid vision target.
         double llTargetXOffset = llTargetX - cameraOffset;
 
-        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
-            Robot.swerveDrive.brakesOn();
-            double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
-            if (driveRotate!=0) {
-                Robot.swerveDrive.setAutoMove(true);
+        if (!noAim) {
+            if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
+                Robot.swerveDrive.brakesOn();
+                double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
+                if (driveRotate!=0) {
+                    Robot.swerveDrive.setAutoMove(true);
+                } else {
+                    Robot.swerveDrive.setAutoMove(false);
+                }    
+                centered=0;
             } else {
-                Robot.swerveDrive.setAutoMove(false);
-            }    
-            centered=0;
-        } else {
-            Robot.swerveDrive.cancel();
-            centered++;
-        }   
-
+                Robot.swerveDrive.cancel();
+                centered++;
+            }   
+        }
         // .41 Area 48 degress 3000rpm
         // .32 Area 43 dgreees 3000rpm
         // .24 area 38 degrees 3000rpm
@@ -208,12 +209,12 @@ public class LimeLight extends SubsystemBase {
         // .09 area 27.6 dgrress 3300
 
         if (!noAngle) {
-            double angle= 47 - ((45 - (llTargetArea*100)) *.675);
+            double angle= 58.3 - ((45 - (llTargetArea*100)) *.675);
 
             if (angle < 20 || angle>65 ) {angle=30; }
             
             //if (limeLightDebug) {
-                SmartDashboard.putNumber("Auto Thrower Angle", angle);
+                SmartDashboard.putNumber("Ato Thrower Angle", angle);
             //}
 
             Robot.thrower.setAutoMoveThrower(true);

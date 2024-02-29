@@ -23,6 +23,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**********************************************************************************
@@ -39,6 +41,7 @@ public class Pickup extends SubsystemBase {
     // Pickup CAN Motor
     CANSparkMax PickupMotor = new CANSparkMax(RobotMap.PickupCanID, CANSparkMax.MotorType.kBrushless);
     RelativeEncoder PickupMotorEncoder = PickupMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, RobotMap.NeoTicksPerRotation);
+    DigitalInput photoSensor = new DigitalInput(6);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -55,11 +58,21 @@ public class Pickup extends SubsystemBase {
 	public void periodic() {
 	}
 
+	public boolean getPhotoSensor() {
+        boolean here=photoSensor.get();
+		SmartDashboard.putBoolean("photoSensor",here);
+        if (here) {
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNote);
+		}
+		return(here);
+	}
+
 	/************************************************************************
 	 ************************************************************************/
     
 	public void pickupMotorOn() {
 		PickupMotor.set(-1);
+		getPhotoSensor();
 	}
 
 	/************************************************************************

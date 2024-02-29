@@ -68,9 +68,8 @@ public class Thrower extends SubsystemBase {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Thrower Limit Switches
 
-    DigitalInput throwerBottomLimit = new DigitalInput(8);
-    DigitalInput throwerTopLimit = new DigitalInput(7);
-    DigitalInput photoSensor = new DigitalInput(2);
+    DigitalInput throwerBottomLimit = new DigitalInput(9);
+    DigitalInput throwerTopLimit = new DigitalInput(8);
 
 	/************************************************************************
 	 ************************************************************************/
@@ -89,14 +88,6 @@ public class Thrower extends SubsystemBase {
 	public void periodic() {
 	}
 
-	/************************************************************************
-	 ************************************************************************/
-
-	public boolean getPhotoSensor() {
-        boolean here=photoSensor.get();
-		SmartDashboard.putBoolean("photoSensor",here);
-		return(here);
-	}
 	/************************************************************************
      * Run Main Thower Wheels by target RPM
 	 ************************************************************************/
@@ -138,7 +129,7 @@ public class Thrower extends SubsystemBase {
 			throwerSpeed[index] = 1;
 		}
 
-		if (targetRPM < rpm + 125 && targetRPM > rpm - 125) {
+		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
 			targetReached[index]++;
 		} else {
 			targetReached[index]=0;
@@ -177,10 +168,12 @@ public class Thrower extends SubsystemBase {
 
     /************************************************************************
 	 ************************************************************************/
-
 	public void resetEncoders() {
-		double stop=82;
-        throwerClimberMotorLeftRelativeEncoder.setPosition(stop*-1);
+        resetEncoders(82);
+	}	
+
+	public void resetEncoders(double stop) {
+		throwerClimberMotorLeftRelativeEncoder.setPosition(stop*-1);
 		throwerClimberMotorRightRelativeEncoder.setPosition(stop);
 	}
 
@@ -221,14 +214,19 @@ public class Thrower extends SubsystemBase {
 
     public double moveThrower(double speed) {
 		double currAngle=getThrowerAngle();
-		boolean useLimitSwiches=false;
+		boolean useLimitSwiches=true;
         
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
      	
-		if (((currAngle > 135 && speed > 0) || 
-		     (currAngle < 29 && speed < 0)) && 
+		if (currAngle > 135 && speed > 0) { speed *= .5; }
+		if (currAngle < 30 && speed < 0) { speed *= .5; }
+		if (currAngle > 138 && speed > 0) { speed *= .5; }
+		if (currAngle < 27 && speed < 0) { speed *= .5; }
+
+		if (((currAngle > 140 && speed > 0) || 
+		     (currAngle < 23 && speed < 0)) && 
 			 !Robot.overrideEncoders) {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);
@@ -237,12 +235,13 @@ public class Thrower extends SubsystemBase {
 
 		SmartDashboard.putNumber("thrower speed", speed);
 
-		if ( speed < 0 && throwerTopLimit.get() == true && useLimitSwiches) {
+		if ( speed > 0 && throwerTopLimit.get() == true && useLimitSwiches) {
 			speed=0;
+			resetEncoders(257);
 		}		
-		if ( speed > 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
+		if ( speed < 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
 		    speed=0;
-			resetEncoders();
+			resetEncoders(8);
 		}		
 
 		throwerClimberMotorLeft.set(speed*-1);
@@ -278,10 +277,10 @@ public class Thrower extends SubsystemBase {
 			}
 		} else {
 			double diff = Math.abs(currAngle-angle);
-			double speed = Robot.boundSpeed(diff/12,1,0.05);
+			double speed = Robot.boundSpeed(diff/12,1,0.03);
 
-			if (diff > 0.4) {
-                moveThrower(speed*  ((currAngle > angle + .4) ? -1 : 1));
+			if (diff > 0.15) {
+                moveThrower(speed*  ((currAngle > angle + .15) ? -1 : 1));
 				reachedAngleCount=0;
 			} else {
 				reachedAngleCount++;
