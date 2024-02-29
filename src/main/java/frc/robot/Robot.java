@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoAmp;
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 // Navx-MXP Libraries and Connection Library
 import com.kauailabs.navx.frc.AHRS;
@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     public static JoystickWrapper operatorJoystick;
 
     public static enum targetTypes{
-        NoTarget(-1),TargetSeek(0), TargetOne(1), TargetTwo(2), TargetThree(3), TargetFour(4);
+        NoTarget(-1),TargetSeek(0), TargetRed(1), TargetBlue(2);
         private final int pipeline;
         private targetTypes(int v) {pipeline = v;}
         public int getPipeline() {
@@ -83,10 +83,23 @@ public class Robot extends TimedRobot {
     };
     public static enum allianceColor{Red,Blue};
 
+    public static final int noAlliance=-1;
+    public static final int redAlliance=0;
+    public static final int blueAlliance=1;
+
+    public static final int speakerAuto=0;
+    public static final int ampAuto=1;
+
+    public static final int oneNoteAutoNoMove=0;
+    public static final int oneNoteAutoBackup=1;
+    public static final int twoNoteAuto=2;
+    public static final int threeNoteAuto=3;
+    public static final int oneNoteAndAmp=4;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static SequentialCommandGroup autonomous;
-    public static targetTypes targetType = Robot.targetTypes.TargetTwo;
+    public static targetTypes targetType = Robot.targetTypes.TargetSeek;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -173,25 +186,27 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("Build Date", BuildConstants.BUILD_DATE);
 
         // Dashboard Cooser for the Autonomous mode move
-        autoFunction.setDefaultOption("Speaker Shot",0);
-        autoFunction.addOption("Amplifier",1);
+        autoFunction.setDefaultOption("Speaker Shot",speakerAuto);
+        //autoFunction.addOption("Amplifier",ampAuto);
         SmartDashboard.putData("Auto Target",autoFunction);
 
         // Dashboard Cooser for the Autonomous mode position
-        autoPosition.setDefaultOption("Position 0",0);
-        autoPosition.addOption("Position 1",1);
-        autoPosition.addOption("Position 2",2);
-        SmartDashboard.putData("Auto Robot Position",autoPosition);
+        //autoPosition.setDefaultOption("Position 0",0);
+        //autoPosition.addOption("Position 1",1);
+        //autoPosition.addOption("Position 2",2);
+        //SmartDashboard.putData("Auto Robot Position",autoPosition);
 
         // Dashboard Cooser for the Autonomous mode position
-        allianceColor.setDefaultOption("Red Alliance",0);
-        allianceColor.addOption("Blue Alliance",1);
+        allianceColor.setDefaultOption("No Alliance",noAlliance);
+        allianceColor.addOption("Red Alliance",redAlliance);
+        allianceColor.addOption("Blue Alliance",blueAlliance);
         SmartDashboard.putData("Alliance Color",allianceColor);
         
-        autoNext.setDefaultOption("1 note",0);
-        //autoFollow.addOption("2 note",1);
-        //autoFollow.addOption("3 note",2);
-        autoNext.addOption("No Notes",3);
+        autoNext.setDefaultOption("1 note, do nothing",oneNoteAutoNoMove);
+        autoNext.addOption("1 note, backup",oneNoteAutoBackup);
+        autoNext.addOption("2 notes",twoNoteAuto);
+        //autoNext.addOption("3 notes",threeNoteAuto);
+        //autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -200,10 +215,13 @@ public class Robot extends TimedRobot {
      ************************************************************************/
     @Override
     public void autonomousInit() {
+        autonomous=null;
+
         Log.print(0, "Robot", "Robot Autonomous Init");
 
-        Robot.stopAutoCommand();
+        //Robot.stopAutoCommand();
 		Robot.swerveDrive.cancel();
+		Robot.swerveDrive.resetYaw();
 
         try {
 			selectedAutoPosition = (int) autoPosition.getSelected();
@@ -213,33 +231,62 @@ public class Robot extends TimedRobot {
 		try {
 			selectedAutoFunction = (int)autoFunction.getSelected();
 		} catch(NullPointerException e) {
-			selectedAutoFunction = 0;
+			selectedAutoFunction = speakerAuto;
 		}
 		try {
 			selectedautoNext = (int)autoNext.getSelected();
 		} catch(NullPointerException e) {
-			selectedautoNext = 0;
+			selectedautoNext = oneNoteAutoNoMove;
 		}
 		try {
 			selectedAllianceColor = (int)allianceColor.getSelected();
 		} catch(NullPointerException e) {
-			selectedAllianceColor = 0;
+			selectedAllianceColor = noAlliance;
 		}
 
-        switch (selectedAutoFunction) {
-            case 0:
-                // Speaker Shot
-                //autonomous = new AutoShootSpeaker(selectedAutoPosition, selectedautoFollow);    
-                SmartDashboard.putString("AutoCommand","Speaker");
-                break;
-            case 1:
-                // Amplifier Shot
-                //autonomous = new AutoShootAmp(selectedAutoPosition, selectedautoFollow);    
-                SmartDashboard.putString("AutoCommand","AMP");
-                break;
+        Robot.targetTypes target;
+        if (selectedAllianceColor == redAlliance) {
+            target=Robot.targetTypes.TargetRed; 
+            // target ID=4
+        } else if (selectedAllianceColor == blueAlliance) {
+            target=Robot.targetTypes.TargetBlue; 
+            // target ID=7
+        } else {
+            target=Robot.targetTypes.TargetSeek; 
         }
 
-        autonomous.schedule();
+        if (selectedAutoFunction == speakerAuto) {
+            switch (selectedautoNext) {
+                case threeNoteAuto:
+                    SmartDashboard.putString("AutoCommand","Speaker Three Notes");
+                    autonomous = new AutoShootSpeakerAndTwoMore(target); 
+                case twoNoteAuto:
+                    SmartDashboard.putString("AutoCommand","Speaker Two Notes");
+                    autonomous = new AutoShootSpeakerAndOneMore(target); 
+                    break;   
+                case oneNoteAutoNoMove:
+                    SmartDashboard.putString("AutoCommand","Speaker One Note, No Move");
+                    autonomous = new AutoShootSpeakerAndStop();
+                    break;
+                case oneNoteAutoBackup:
+                    SmartDashboard.putString("AutoCommand","Speaker One Note - Backup");
+                    autonomous = new AutoShootSpeakerAndBackup();
+                    break;
+                case oneNoteAndAmp:
+                    SmartDashboard.putString("AutoCommand","Speaker One Note - Amp One Note");
+                    autonomous = new AutoShootSpeakerAndAmp(selectedAllianceColor);
+                    break;                    
+            }         
+        }
+
+        if (selectedAutoFunction == ampAuto) {
+            SmartDashboard.putString("AutoCommand","Speaker - One Note - Backup");
+            autonomous = new AutoAmpShoot(selectedAllianceColor); 
+        }    
+
+        if (autonomous != null) {
+            autonomous.schedule();
+        }   
     }
 
     /************************************************************************
@@ -277,7 +324,7 @@ public class Robot extends TimedRobot {
         Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
-       // check();
+        check();
     }
 
     /************************************************************************
@@ -287,15 +334,20 @@ public class Robot extends TimedRobot {
         if (operatorJoystick==null) {
             operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
-		if (operatorJoystick.isRShoulderButton()) {
+		
+        if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.swerveDrive.setAutoMove(true);
 				Robot.autoCommand = new AutoAmp();
 				Robot.autoCommand.schedule();
 			}
 		}
+        
+
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
+            Robot.climber.setPosition(0);
+            Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
         }

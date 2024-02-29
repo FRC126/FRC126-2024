@@ -22,14 +22,16 @@ public class TargetAimWork extends Command {
     int iters;
     Robot.targetTypes target;
     boolean aimed=false;
+    boolean noAngle;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public TargetAimWork(Robot.targetTypes target, int iters) {
-        addRequirements(Robot.lidar);
+    public TargetAimWork(Robot.targetTypes target, int iters, boolean noAngle) {
+        //addRequirements(Robot.lidar);
         this.iters = iters;
         this.target = target;
+        this.noAngle = noAngle;
     }
 
     /**********************************************************************************
@@ -49,15 +51,15 @@ public class TargetAimWork extends Command {
         Robot.limeLight.setActiveSeek(true);
         Robot.targetType = target;
 
-        if (Robot.targetType == Robot.targetTypes.TargetOne) {
-            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
-        } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {
-            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
+        if (Robot.targetType == Robot.targetTypes.TargetRed) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingRed);
+        } else if (Robot.targetType == Robot.targetTypes.TargetBlue) {
+            Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingBlue);
         }
 
         Robot.limeLight.trackTarget();
 
-        aimed = Robot.limeLight.seekTarget();
+        aimed = Robot.limeLight.seekTarget(noAngle);
     }
 
     /**********************************************************************************
@@ -83,5 +85,6 @@ public class TargetAimWork extends Command {
         Robot.thrower.cancel();
         Robot.thrower.setAutoMoveThrower(false);
         Robot.limeLight.setActiveSeek(false);
+        Robot.swerveDrive.cancel();
     }
 }

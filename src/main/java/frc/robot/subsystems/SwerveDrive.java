@@ -342,7 +342,7 @@ public class SwerveDrive extends SubsystemBase {
 		// direction, and the controls are driver relative, not robot relative
         double currentAngle = getYaw();
 
-		if (!Robot.isAutoCommand) {
+		if (!Robot.isAutoCommand || Robot.internalData.isAuto()) {
 			// 2 dimensional rotation of the control inputs corrected to make the motion
 			// driver relative instead of robot relative
 			double angle=Math.toRadians(currentAngle); 
@@ -503,6 +503,7 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double rotateToDegrees(double offset) {
 		double driveRotate=0;
+		double driftAllowance=1;
 
 		// get the current angle from the gyro
 		double startAngle = Robot.swerveDrive.getYaw();      
@@ -511,9 +512,9 @@ public class SwerveDrive extends SubsystemBase {
 		double diff = Math.abs(target) - Math.abs(startAngle);
 
 		double tmp = diff / 250;
-		tmp = Robot.boundSpeed(tmp, .25, .04 );
+		tmp = Robot.boundSpeed(tmp, .25, .03 );
 
-		if (Math.abs(diff) < TurnDegreesWork.driftAllowance) {
+		if (Math.abs(diff) < driftAllowance) {
 			driveRotate=0;
 			Robot.swerveDrive.brakesOn();
 		} else if (startAngle < target) {
@@ -538,6 +539,7 @@ public class SwerveDrive extends SubsystemBase {
 	 
 	public void cancel() {
         Drive(0,0,0); 
+		Robot.swerveDrive.brakesOn();
 	}
 
 	/************************************************************************

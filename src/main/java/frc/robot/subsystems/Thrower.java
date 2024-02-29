@@ -41,7 +41,7 @@ public class Thrower extends SubsystemBase {
     static double Pslow = 0.000020;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=3000;
+	public static double myRPM=3200;
     static boolean throwTriggered=false;
 	static boolean autoTriggerRun=false;
 	static boolean autoMoveThrower=false;
@@ -179,8 +179,9 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
 	public void resetEncoders() {
-        throwerClimberMotorLeftRelativeEncoder.setPosition(-20.0);
-		throwerClimberMotorRightRelativeEncoder.setPosition(20.0);
+		double stop=82;
+        throwerClimberMotorLeftRelativeEncoder.setPosition(stop*-1);
+		throwerClimberMotorRightRelativeEncoder.setPosition(stop);
 	}
 
     /************************************************************************
@@ -192,7 +193,12 @@ public class Thrower extends SubsystemBase {
 		double left = throwerClimberMotorLeftRelativeEncoder.getPosition()*-1;
 		double right = throwerClimberMotorRightRelativeEncoder.getPosition();
 
-		position=left+right/2.0;
+		SmartDashboard.putNumber("left thrower pos", left);
+		SmartDashboard.putNumber("right thrower pos", right);
+
+		position=(left+right)/2.0;
+
+		SmartDashboard.putNumber("thrower position calc", position);
 
 		return(position);
 	}
@@ -203,7 +209,7 @@ public class Thrower extends SubsystemBase {
 	 public double getThrowerAngle() {
 		double position=getPosition();
 
-		double currAngle = (position / RobotMap.NeoTicksPerRotation / 25) * 360;		
+		double currAngle = (position / 2.18) + 22;		
 		SmartDashboard.putNumber("thrower angle", currAngle);
 		SmartDashboard.putNumber("thrower position", position);
 
@@ -220,15 +226,14 @@ public class Thrower extends SubsystemBase {
 		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-     	/*
-		if (((currAngle > 148 && speed > 0) || 
-		     (currAngle < 22 && speed < 0)) && 
+     	
+		if (((currAngle > 135 && speed > 0) || 
+		     (currAngle < 29 && speed < 0)) && 
 			 !Robot.overrideEncoders) {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);
 			return(currAngle);
 		}
-		*/
 
 		SmartDashboard.putNumber("thrower speed", speed);
 

@@ -40,7 +40,7 @@ public class LimeLight extends SubsystemBase {
     boolean limeLightDebug=false;
     double pipelineLast=0;
 
-    static int itersToCapture = 2;
+    static int itersToCapture = 5;
 
     private Smoother taSmoother = new Smoother(itersToCapture);
     private Smoother txSmoother = new Smoother(itersToCapture);
@@ -91,6 +91,7 @@ public class LimeLight extends SubsystemBase {
         if (Robot.targetType == targetTypes.NoTarget) {
             return;
         }
+        
         int pipeline=Robot.targetType.getPipeline();
 
         if (pipeline != pipelineLast) {
@@ -162,8 +163,15 @@ public class LimeLight extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
-     public boolean seekTarget() {   
-        int cameraOffset = 10;    
+     public boolean seekTarget() {
+        return(seekTarget(false));
+    }   
+
+    /************************************************************************
+	 ************************************************************************/
+
+     public boolean seekTarget(boolean noAngle) {   
+        int cameraOffset = 8;    
 
         if (!activeSeek ||
             !llTargetValid ||
@@ -178,7 +186,8 @@ public class LimeLight extends SubsystemBase {
         // We found a valid vision target.
         double llTargetXOffset = llTargetX - cameraOffset;
 
-        if ( llTargetXOffset < -1.25 || llTargetXOffset > 1.25) {
+        if ( llTargetXOffset < -1.5 || llTargetXOffset > 1.5) {
+            Robot.swerveDrive.brakesOn();
             double driveRotate = Robot.swerveDrive.rotateToDegrees(llTargetXOffset);
             if (driveRotate!=0) {
                 Robot.swerveDrive.setAutoMove(true);
@@ -198,22 +207,26 @@ public class LimeLight extends SubsystemBase {
         // .137 area 32.5 degrees 3000rpm
         // .09 area 27.6 dgrress 3300
 
-        double angle= 50 - ((45 - (llTargetArea*100)) *.675);
+        if (!noAngle) {
+            double angle= 47 - ((45 - (llTargetArea*100)) *.675);
 
-        if (angle < 20 || angle>65 ) { angle=30; }
-        
-        if (limeLightDebug) {
-            SmartDashboard.putNumber("Auto Thrower Angle", angle);
-        }
+            if (angle < 20 || angle>65 ) {angle=30; }
+            
+            //if (limeLightDebug) {
+                SmartDashboard.putNumber("Auto Thrower Angle", angle);
+            //}
 
-        Robot.thrower.setAutoMoveThrower(true);
-        if (Robot.thrower.setThrowerPosition(angle)) {
-            aimed++;
+            Robot.thrower.setAutoMoveThrower(true);
+            if (Robot.thrower.setThrowerPosition(angle)) {
+                aimed++;
+            } else {
+                aimed=0;
+            }
         } else {
-            aimed=0;
-        }
+            aimed=100;
+        }    
 
-        if ((centered) > 2 && (aimed > 3)) {
+        if ((centered) > 2 && (aimed > 2)) {
             Robot.thrower.setAutoMoveThrower(false);
             Robot.swerveDrive.setAutoMove(false);
             return(true);

@@ -28,7 +28,8 @@ public class ThrowerAngle extends Command {
 
     public ThrowerAngle(double angle, int iters) {
         super();
-        addRequirements(Robot.lidar, Robot.thrower);
+        //addRequirements(Robot.lidar, Robot.thrower);
+        addRequirements(Robot.thrower);
         this.angle = angle;
         this.iters = iters;
     }

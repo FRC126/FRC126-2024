@@ -53,25 +53,30 @@ public class LimeLightControl extends Command {
 			return;
 		}	
 
-        if (driveJoystick.getPovUp()) {
-            //Robot.limeLight.setActiveSeek(true);
-            if (Robot.targetType == Robot.targetTypes.TargetOne) {
-                Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingSpeaker);
-            } else if (Robot.targetType == Robot.targetTypes.TargetTwo) {
-               Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingAmp);
+        boolean noAngle=false;
+
+        if (driveJoystick.getPovUp() || driveJoystick.getPovDown()) {
+            Robot.limeLight.setActiveSeek(true);
+            if (Robot.targetType == Robot.targetTypes.TargetRed) {
+                Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingRed);
+            } else if (Robot.targetType == Robot.targetTypes.TargetBlue) {
+               Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingBlue);
+            }
+            if (driveJoystick.getPovDown()) { 
+                noAngle=true;
             }
         } else if (driveJoystick.getPovLeft()) {
-            Robot.targetType = Robot.targetTypes.TargetOne;
+            Robot.targetType = Robot.targetTypes.TargetRed;
         } else if (driveJoystick.getPovRight()) {
-            Robot.targetType = Robot.targetTypes.TargetTwo;
-        } else {
+            Robot.targetType = Robot.targetTypes.TargetBlue;
+         } else {
             Robot.limeLight.setActiveSeek(false);
             Robot.thrower.setAutoMoveThrower(false);
         }     
         
         Robot.limeLight.trackTarget();
 
-        Robot.limeLight.seekTarget();
+        Robot.limeLight.seekTarget(noAngle);
     }
 
 	/************************************************************************
