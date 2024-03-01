@@ -64,7 +64,7 @@ public class ThrowerWork extends Command {
                 Robot.thrower.throwerTriggerOn();
                 Robot.thrower.setAutoTriggerRun(true);
                 Robot.thrower.setThrowTriggered(true);
-                throwingIters=100;
+                throwingIters=150;
             } else {
                 Robot.thrower.throwerTriggerOff();
                 Robot.thrower.setAutoTriggerRun(false);

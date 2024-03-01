@@ -95,7 +95,9 @@ public class Robot extends TimedRobot {
     public static final int twoNoteAuto=2;
     public static final int threeNoteAuto=3;
     public static final int oneNoteAndAmp=4;
-
+    public static final int oneNoteFarAutoBackup=5;
+    public static final int TwoNoteFarAuto=6;
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
     public static SequentialCommandGroup autonomous;
@@ -139,6 +141,7 @@ public class Robot extends TimedRobot {
 
         // Thrower Devices
         thrower = new Thrower();
+        thrower.resetEncoders(82);
 
         // Climber
         climber = new Climber();
@@ -207,6 +210,8 @@ public class Robot extends TimedRobot {
         autoNext.addOption("2 notes",twoNoteAuto);
         //autoNext.addOption("3 notes",threeNoteAuto);
         //autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
+        autoNext.addOption("1 note far, backup",oneNoteFarAutoBackup);
+        autoNext.addOption("2 note far",TwoNoteFarAuto);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -247,9 +252,11 @@ public class Robot extends TimedRobot {
         Robot.targetTypes target;
         if (selectedAllianceColor == redAlliance) {
             target=Robot.targetTypes.TargetRed; 
+            Robot.targetType = Robot.targetTypes.TargetRed;
             // target ID=4
         } else if (selectedAllianceColor == blueAlliance) {
             target=Robot.targetTypes.TargetBlue; 
+            Robot.targetType = Robot.targetTypes.TargetBlue;
             // target ID=7
         } else {
             target=Robot.targetTypes.TargetSeek; 
@@ -276,6 +283,14 @@ public class Robot extends TimedRobot {
                     SmartDashboard.putString("AutoCommand","Speaker One Note - Amp One Note");
                     autonomous = new AutoShootSpeakerAndAmp(selectedAllianceColor);
                     break;                    
+                case oneNoteFarAutoBackup:
+                    SmartDashboard.putString("AutoCommand","Speaker One Note Far - Backup");
+                    autonomous = new AutoShootSpeakerFarAndBackup();
+                    break;
+                case TwoNoteFarAuto:
+                    SmartDashboard.putString("AutoCommand","Speaker Two Notes Far");
+                    autonomous = new AutoShootSpeakerFarAndOneMore(); 
+                    break;   
             }         
         }
 
@@ -335,6 +350,7 @@ public class Robot extends TimedRobot {
             operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
 		
+        /*
         if (operatorJoystick.isRShoulderButton()) {
 			if (Robot.doAutoCommand()) {
 				Robot.swerveDrive.setAutoMove(true);
@@ -342,12 +358,12 @@ public class Robot extends TimedRobot {
 				Robot.autoCommand.schedule();
 			}
 		}
-        
+        */
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
             Robot.climber.setPosition(0);
-            Robot.thrower.resetEncoders(); 
+            //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
         }

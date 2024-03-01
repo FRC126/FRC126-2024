@@ -69,9 +69,9 @@ public class LimeLightControl extends Command {
                 noAim=true;
             }
         } else if (driveJoystick.getPovLeft()) {
-            Robot.targetType = Robot.targetTypes.TargetRed;
+            //Robot.targetType = Robot.targetTypes.TargetRed;
         } else if (driveJoystick.getPovRight()) {
-            Robot.targetType = Robot.targetTypes.TargetBlue;
+            //Robot.targetType = Robot.targetTypes.TargetBlue;
          } else {
             Robot.limeLight.setActiveSeek(false);
             Robot.thrower.setAutoMoveThrower(false);

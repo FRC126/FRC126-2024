@@ -129,7 +129,7 @@ public class Thrower extends SubsystemBase {
 			throwerSpeed[index] = 1;
 		}
 
-		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
+		if (targetRPM < rpm + 100 && targetRPM > rpm - 100) {
 			targetReached[index]++;
 		} else {
 			targetReached[index]=0;

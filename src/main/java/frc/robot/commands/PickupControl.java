@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class PickupControl extends Command {
 	JoystickWrapper operatorJoystick;
 	Pickup pickup;
+	static int keepRunning=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -58,7 +59,13 @@ public class PickupControl extends Command {
 		if (operatorJoystick.leftTriggerPressed() || operatorJoystick.isYButton()) {
 			Robot.pickup.setUserRunPickup(true);
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);
+			keepRunning=150;
 			this.pickup.pickupMotorOn();
+		} else if ( keepRunning > 0 ) {
+			Robot.pickup.setUserRunPickup(true);
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);
+			this.pickup.pickupMotorOn();	
+			keepRunning--;
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.pickup.setUserRunPickup(true);
 			this.pickup.pickupMotorReverse();
