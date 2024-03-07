@@ -478,7 +478,8 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
-		double gearRatio=18;
+		//double gearRatio=18;
+		double gearRatio=14;
 		
 		double left1 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
 		double left2 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;

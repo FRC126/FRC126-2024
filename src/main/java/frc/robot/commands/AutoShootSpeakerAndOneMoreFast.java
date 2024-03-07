@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
-public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
-    public AutoShootSpeakerAndTwoMore(Robot.targetTypes targetType) {
+public class AutoShootSpeakerAndOneMoreFast extends SequentialCommandGroup {
+    public AutoShootSpeakerAndOneMoreFast(Robot.targetTypes targetType) {
         // Move thrower arm to specific position
         // Eject the note
 
@@ -47,23 +47,8 @@ public class AutoShootSpeakerAndTwoMore extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new DriveWork(-0.30,0,0,12,150),     
                 // Throw note in speaker
-                new ThrowerWork(RobotMap.throwerSpeed, 100)                       
-            ), 
-            
-            new DriveWork(-0.30,-.30,0,24,150),     
-
-            new ParallelCommandGroup(
-                // Run the Pickup
-                new PickupWork(150, false),
-                new DriveWork(0.30,-.30,0,24,150)
+                new ThrowerWork(RobotMap.throwerSpeed, 150)                       
             ),    
-            
-            new ParallelCommandGroup(
-                new DriveWork(-.3,-.3,0,36,150)
-            ),
-
-            //new TurnDegreesWork(20,100);
-            new ThrowerWork(RobotMap.throwerSpeed, 100),                       
             
             new FinishAuto()
 
