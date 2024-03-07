@@ -169,7 +169,7 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 	public void resetEncoders() {
-        resetEncoders(82);
+        resetEncoders(87);
 	}	
 
 	public void resetEncoders(double stop) {
@@ -241,7 +241,7 @@ public class Thrower extends SubsystemBase {
 		}		
 		if ( speed < 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
 		    speed=0;
-			resetEncoders(8);
+			resetEncoders(4);
 		}		
 
 		throwerClimberMotorLeft.set(speed*-1);

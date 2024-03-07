@@ -24,7 +24,7 @@ public class RobotMap {
 	public static int ampAngle=140;
 	public static int ampSpeed=600;
 
-	public static int throwerSpeed=3200;
+	public static int throwerSpeed=3000;
 	public static int throwerCloseAngle=62;
 
 	///////////////////////////////////////////////////////////////////////////

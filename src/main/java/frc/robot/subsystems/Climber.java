@@ -36,7 +36,7 @@ public class Climber extends SubsystemBase {
 	int called = 0;
 
 	static final double extendedPosition=0;
-	static final double retractedPosition=450;
+	static final double retractedPosition=600;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor

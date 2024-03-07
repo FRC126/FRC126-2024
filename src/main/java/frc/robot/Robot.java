@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
 
         // Thrower Devices
         thrower = new Thrower();
-        thrower.resetEncoders(82);
+        thrower.resetEncoders();
 
         // Climber
         climber = new Climber();
@@ -212,6 +212,7 @@ public class Robot extends TimedRobot {
         //autoNext.addOption("1 note and 1 in Amp",oneNoteAndAmp);
         autoNext.addOption("1 note far, backup",oneNoteFarAutoBackup);
         autoNext.addOption("2 note far",TwoNoteFarAuto);
+        autoNext.addOption("Do Nothing Dummy",14);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
