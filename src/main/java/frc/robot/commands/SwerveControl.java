@@ -90,7 +90,7 @@ public class SwerveControl extends Command {
 		}
 
 		// left Trigger enables slow mode
-		if (driveJoystick.getLeftTrigger() > .5) {
+		if (driveJoystick.getLeftTrigger() > .25) {
 			Robot.swerveDrive.driveSlow(true);
 		    Robot.Leds.setMode(LEDSubsystem.LEDModes.SlowMode);
 		} else {
@@ -98,7 +98,7 @@ public class SwerveControl extends Command {
 		}
 
 		// Apply motor braking when the right trigger is pressed
-		if (driveJoystick.getRightTrigger() > .5) {
+		if (driveJoystick.getRightTrigger() > .25) {
 			Robot.swerveDrive.brakesOn();
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.BrakeMode);
 		} else {

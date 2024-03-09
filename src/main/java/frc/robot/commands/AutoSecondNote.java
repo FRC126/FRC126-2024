@@ -27,10 +27,10 @@ public class AutoSecondNote extends SequentialCommandGroup {
 
             new ParallelCommandGroup(
                 // Run the Pickup
-                new PickupWork(150, false),
+                new PickupWork(125, false),
                 // Drive over the next note
-                new ThrowerAngle(43.5,150),
-                new DriveWork(.35,0,0,32,150)
+                new ThrowerAngle(43.5,125),
+                new DriveWork(.35,0,0,32,125)
             ),
 
             new DriveWork(-0.30,0,0,16,150),     

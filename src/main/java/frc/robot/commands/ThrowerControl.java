@@ -24,12 +24,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
-	boolean idleThrower=false;
+	boolean idleThrower=true;
 	boolean throwerDebug=true;
 	int delay=0;
 	final int IDLE_RPM=3000;
 	final int MAX_RPM=4200;
-	static int throwerRun=0;
+	public static int throwerRun=0;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -148,17 +148,23 @@ public class ThrowerControl extends Command {
 				// || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
-			throwerRun=25;
+			throwerRun=0;
 		} else if (throwerRun > 0) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
 			throwerRun--;
+		    if (throwerRun == 0) {
+               Robot.thrower.throwerTriggerOff();
+			   Robot.thrower.setThrowTriggered(false);
+			}
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
 			Robot.thrower.setThrowerSpeed(-1.0);
-		} else if (!Robot.thrower.getThrowTriggered() && !Robot.thrower.getAutoTriggerRun()) {
+			Robot.thrower.setThrowTriggered(false);
+
+		} else if (!Robot.thrower.getAutoTriggerRun()) {
 			Robot.thrower.throwerTriggerOff();
-		} 
+		}
 	}
 }
 

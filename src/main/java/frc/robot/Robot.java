@@ -100,6 +100,8 @@ public class Robot extends TimedRobot {
     public static final int justAutoBackup=7;
     public static final int twoNoteAutoMidField=8;
     public static final int autoNothing=9;
+        public static final int sideShoot=10;
+
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Automation Variables
@@ -205,8 +207,9 @@ public class Robot extends TimedRobot {
         
         autoNext.setDefaultOption("do nothing dummy!",autoNothing);
         autoNext.addOption("just backup",justAutoBackup);
-        autoNext.addOption("1 note, do nothing",oneNoteAutoBackup);
-        autoNext.addOption("1 note, backup",oneNoteAutoBackup);
+        autoNext.addOption("1 note, do nothing",oneNoteAutoNoMove);
+        autoNext.addOption("1 note far side, backup",oneNoteAutoBackup);
+        autoNext.addOption("2 note close side, backup",sideShoot);
         autoNext.addOption("2 notes",twoNoteAuto);
         autoNext.addOption("2 notes, go midfield",twoNoteAutoMidField);
         autoNext.addOption("3 notes",threeNoteAuto);
@@ -268,11 +271,15 @@ public class Robot extends TimedRobot {
                 break;
             case oneNoteAutoBackup:
                 SmartDashboard.putString("AutoCommand","Speaker One Note - Backup");
-                autonomous = new AutoShootSpeakerAndBackup();
+                autonomous = new AutoShootSpeakerFarSideAndBackup(target);
                 break;
             case justAutoBackup:
                 SmartDashboard.putString("AutoCommand","Just Backup");
                 autonomous = new AutoJustBackup();
+                break;
+            case sideShoot:
+                SmartDashboard.putString("AutoCommand","Just Backup");
+                autonomous = new AutoSideShootBackup(target);
                 break;
             case autoNothing:
                 // Do Nothing!
@@ -290,7 +297,7 @@ public class Robot extends TimedRobot {
     ************************************************************************/
     @Override
     public void autonomousPeriodic() {
-        Robot.Leds.forceMode(LEDSubsystem.LEDModes.None);
+        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
         Robot.Leds.doLights();
     }
@@ -364,8 +371,10 @@ public class Robot extends TimedRobot {
     ************************************************************************/
    @Override
     public void testPeriodic() {
+        Robot.Leds.forceMode(LEDSubsystem.LEDModes.GaelForce);
         CommandScheduler.getInstance().run();
-    }
+        Robot.Leds.doLights();
+}
 
     /************************************************************************
 	 ************************************************************************/
@@ -420,9 +429,11 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("RobotIsAutoCommand",Robot.isAutoCommand);
 
-        if (Robot.swerveDrive.getAutoMove()) { 
-        	Robot.swerveDrive.cancel();
-        }
+      	Robot.swerveDrive.cancel();
+        Robot.thrower.cancel();
+        Robot.pickup.cancel();
+        Robot.climber.cancel();
+
         Robot.swerveDrive.setAutoMove(false);
 	}		
 
