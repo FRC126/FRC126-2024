@@ -98,6 +98,6 @@ public class ThrowerWork extends Command {
     @Override
     public void end(boolean isInteruppted) {
         //Robot.thrower.cancel();
-                Robot.thrower.throwerTriggerOff();
+        Robot.thrower.throwerTriggerOff();
     }
 }

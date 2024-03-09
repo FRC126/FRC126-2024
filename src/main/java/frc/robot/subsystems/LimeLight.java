@@ -29,7 +29,7 @@ public class LimeLight extends SubsystemBase {
     private boolean llTargetValid;
     private double llTargetArea;
     private double llTargetX;
-    private double llTargetY;
+    //private double llTargetY;
     private int validCount;
     private int missedCount;
     //private Pose2d botPose2d;
@@ -57,7 +57,7 @@ public class LimeLight extends SubsystemBase {
         llTargetValid=false;
         llTargetArea = 0.0;
         llTargetX = 0.0;
-        llTargetY = 0.0;
+        //llTargetY = 0.0;
         validCount=0;
         missedCount=0;
         centered=0;
@@ -81,7 +81,7 @@ public class LimeLight extends SubsystemBase {
         llTargetValid = isValid;
         llTargetArea = targetArea;
         llTargetX = targetX;
-        llTargetY = targetY;
+        //llTargetY = targetY;
     }    
 
 	/************************************************************************
@@ -209,7 +209,7 @@ public class LimeLight extends SubsystemBase {
         // .09 area 27.6 dgrress 3300
 
         if (!noAngle) {
-            double angle= 58.3 - ((45 - (llTargetArea*100)) *.675);
+            double angle= 54.5 - ((45 - (llTargetArea*100)) *.675);
 
             if (angle < 20 || angle>65 ) {angle=30; }
             

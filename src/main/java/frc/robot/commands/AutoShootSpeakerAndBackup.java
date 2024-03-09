@@ -15,11 +15,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 // import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+//import frc.robot.RobotMap;
 
 public class AutoShootSpeakerAndBackup extends SequentialCommandGroup {
     public AutoShootSpeakerAndBackup() {
@@ -27,17 +26,11 @@ public class AutoShootSpeakerAndBackup extends SequentialCommandGroup {
         // Eject the note
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-          
-            new ParallelCommandGroup(
-                new ThrowerAngle(RobotMap.throwerCloseAngle,150),
-                // Throw the Note
-                new ThrowerWork(RobotMap.throwerSpeed, 150)
-            ),    
+            new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new DriveWork(0.30,0,0,32,200),    
-
-            //new TurnDegreesWork(180,250),
-            //new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
+            new AutoFirstNote(),           
+            
+            new DriveWork(0.30,0,0,36,200),    
             
             new FinishAuto()
         );

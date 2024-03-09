@@ -23,9 +23,9 @@ public class AutoAmp extends SequentialCommandGroup {
         // Eject the note
         addCommands(
             new PickupWork(50,true),
-            new ThrowerAngle(RobotMap.ampAngle, 250),
-            new ThrowerWork(RobotMap.ampSpeed, 250),
-            //new ThrowerAngle(45, 250),
+            new ThrowerAngle(RobotMap.ampAngle, 200),
+            new ThrowerWork(RobotMap.ampSpeed, 200),
+            new ThrowerAngle(60, 200),
             new FinishAuto()
         );
     }

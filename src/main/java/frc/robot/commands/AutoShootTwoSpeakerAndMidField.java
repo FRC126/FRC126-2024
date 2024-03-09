@@ -20,16 +20,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 //import frc.robot.RobotMap;
 
-public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
-    public AutoShootSpeakerAndStop() {
-        // Move thrower arm to specific position
-        // Eject the note
+public class AutoShootTwoSpeakerAndMidField extends SequentialCommandGroup {
+    public AutoShootTwoSpeakerAndMidField(Robot.targetTypes targetType) {
+        Robot.targetType=targetType;
+
+        int direction = Robot.getDirection(targetType);
+
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),          
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new AutoFirstNote(),           
+            new AutoFirstNote(),
+            new AutoSecondNote(),            
+
+            new DriveWork(.4,(.3*direction),0,40,150),
+            new DriveWork(.4,0,0,40,150),
+
             new FinishAuto()
-        );
+        );    
     }
 }

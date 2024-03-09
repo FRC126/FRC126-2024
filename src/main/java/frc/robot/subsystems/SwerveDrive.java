@@ -264,7 +264,7 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.025;
+    	double softStartIncrement=0.04;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
@@ -502,11 +502,17 @@ public class SwerveDrive extends SubsystemBase {
 	 *************************************************************************/
 
 	public double rotateToDegrees(double offset) {
-		double driveRotate=0;
-		double driftAllowance=1;
+		double startAngle = Robot.swerveDrive.getYaw();    
 
-		// get the current angle from the gyro
-		double startAngle = Robot.swerveDrive.getYaw();      
+		return(rotateToDegrees(offset,startAngle));
+	}
+
+    /************************************************************************
+	 *************************************************************************/
+
+	public double rotateToDegrees(double offset, double startAngle) {
+		double driveRotate=0;
+		double driftAllowance=1.00;
 
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(startAngle);

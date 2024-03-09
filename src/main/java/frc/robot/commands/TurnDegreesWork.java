@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
  public class TurnDegreesWork extends Command {
     boolean turnDebug=false;
-    double startAngle;
+    double startAngle; 
     double targetDegrees;
     int iters;
     static public double driftAllowance=1;
@@ -54,7 +54,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     @Override
     public void execute() {       
-        double driveRotate=Robot.swerveDrive.rotateToDegrees(targetDegrees);
+        double driveRotate=Robot.swerveDrive.rotateToDegrees(targetDegrees, startAngle);
 
         if (driveRotate==0) {
             targetReached++;
@@ -75,9 +75,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 3 || iters <= 0 || !Robot.checkAutoCommand()) {
+        if (targetReached > 1 || iters <= 0 || !Robot.checkAutoCommand()) {
             // We have reached our target angle or run out of time to do so.
-            Robot.swerveDrive.brakesOff();
+            //Robot.swerveDrive.brakesOff();
             Robot.swerveDrive.cancel();
             return true;
         }
@@ -91,7 +91,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     @Override
     public void end(boolean isInteruppted) {
-        Robot.swerveDrive.brakesOff();
+        //Robot.swerveDrive.brakesOff();
         Robot.swerveDrive.cancel();
     }
 }

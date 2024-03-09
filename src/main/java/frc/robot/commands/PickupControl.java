@@ -59,7 +59,7 @@ public class PickupControl extends Command {
 		if (operatorJoystick.leftTriggerPressed() || operatorJoystick.isYButton()) {
 			Robot.pickup.setUserRunPickup(true);
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);
-			keepRunning=150;
+			keepRunning=75;
 			this.pickup.pickupMotorOn();
 		} else if ( keepRunning > 0 ) {
 			Robot.pickup.setUserRunPickup(true);

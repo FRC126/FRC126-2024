@@ -70,7 +70,7 @@ public class ThrowerControl extends Command {
 		};
 
   	    if (operatorJoystick.getPovUp()) {
-   		    Robot.thrower.setThrowerPosition(105);
+   		    Robot.thrower.setThrowerPosition(115);
 		} else if (operatorJoystick.getPovRight()) {
    		    Robot.thrower.setThrowerPosition(60);
 		} else if (operatorJoystick.getPovDown()) {
@@ -95,14 +95,6 @@ public class ThrowerControl extends Command {
 			}
 		}	
 
-		/*
-		if (operatorJoystick.getRightStickY()<-.25) {
-			if (delay <= 0) {
-   			    Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
-				delay=15;
-			}	
-		} 
-		 */	
 		if (operatorJoystick.isStartButton()) {
 			if (delay <= 0) {
                 Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
@@ -156,7 +148,7 @@ public class ThrowerControl extends Command {
 				// || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
-			throwerRun=100;
+			throwerRun=25;
 		} else if (throwerRun > 0) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);

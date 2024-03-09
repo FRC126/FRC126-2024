@@ -18,17 +18,19 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-//import frc.robot.RobotMap;
+// frc.robot.RobotMap;
 
-public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
-    public AutoShootSpeakerAndStop() {
-        // Move thrower arm to specific position
-        // Eject the note
+public class AutoShootTwoSpeaker extends SequentialCommandGroup {
+    public AutoShootTwoSpeaker(Robot.targetTypes targetType) {
+        Robot.targetType=targetType;
+
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),          
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new AutoFirstNote(),           
+            new AutoFirstNote(),
+            new AutoSecondNote(),
+
             new FinishAuto()
         );
     }

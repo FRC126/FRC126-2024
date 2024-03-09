@@ -24,8 +24,14 @@ public class RobotMap {
 	public static int ampAngle=140;
 	public static int ampSpeed=600;
 
-	public static int throwerSpeed=3000;
+	public static int throwerSpeed=3200;
 	public static int throwerCloseAngle=62;
+
+    public static int throwerSixtyTicks=87;
+	public static int throwerBottom=throwerSixtyTicks-87;
+	public static int throwerTop=throwerSixtyTicks+170;
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// Controls for Xbox 360 / Xbox One
