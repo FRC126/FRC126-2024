@@ -86,6 +86,7 @@ public class ThrowerWork extends Command {
             Robot.thrower.throwerTriggerOff();
 
             Robot.thrower.setThrowTriggered(false);
+            Robot.thrower.setAutoTriggerRun(false);
             return true;
         }
         return false;
@@ -99,5 +100,7 @@ public class ThrowerWork extends Command {
     public void end(boolean isInteruppted) {
         //Robot.thrower.cancel();
         Robot.thrower.throwerTriggerOff();
+        Robot.thrower.setThrowTriggered(false);
+        Robot.thrower.setAutoTriggerRun(false);
     }
 }

@@ -264,7 +264,7 @@ public class SwerveDrive extends SubsystemBase {
 	 public double smoothWheelSpeed(double input, int index) {
         double result=0;
 
-    	double softStartIncrement=0.04;
+    	double softStartIncrement=0.06;
 
 		if (driveSlow) {
 			// Cap at 20 percent for driveSlow
@@ -513,9 +513,12 @@ public class SwerveDrive extends SubsystemBase {
 	public double rotateToDegrees(double offset, double startAngle) {
 		double driveRotate=0;
 		double driftAllowance=1.00;
+		//double currentAngle=Robot.swerveDrive.getYaw();    
+
 
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(startAngle);
+		//double diff = Math.abs(target) - Math.abs(currentAngle);
 
 		double tmp = diff / 250;
 		tmp = Robot.boundSpeed(tmp, .25, .03 );
@@ -539,6 +542,41 @@ public class SwerveDrive extends SubsystemBase {
 
 		return(driveRotate);
 	}
+
+    /************************************************************************
+	 *************************************************************************/
+
+public double rotateToDegreesFixed(double offset, double startAngle) {
+		double driveRotate=0;
+		double driftAllowance=1.00;
+		double currentAngle=Robot.swerveDrive.getYaw();    
+
+		double target = startAngle + offset;
+		//double diff = Math.abs(target) - Math.abs(startAngle);
+		double diff = Math.abs(target) - Math.abs(currentAngle);
+
+		double tmp = diff / 250;
+		tmp = Robot.boundSpeed(tmp, .25, .03 );
+
+		if (Math.abs(diff) < driftAllowance) {
+			driveRotate=0;
+			Robot.swerveDrive.brakesOn();
+		} else if (startAngle < target) {
+			driveRotate=tmp;
+		} else {
+			driveRotate=tmp*-1;
+		}
+
+        if (swerveDebug) {
+            SmartDashboard.putNumber("Turn Current Degrees",startAngle);
+            SmartDashboard.putNumber("Turn Target Degrees",target);
+            SmartDashboard.putNumber("Turn diff",diff);
+        }
+		
+		Robot.swerveDrive.Drive(0, 0, driveRotate);
+
+		return(driveRotate);
+	}	
 
     /************************************************************************
 	 *************************************************************************/

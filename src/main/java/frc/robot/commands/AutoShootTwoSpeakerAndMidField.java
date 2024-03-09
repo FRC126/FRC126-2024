@@ -34,7 +34,7 @@ public class AutoShootTwoSpeakerAndMidField extends SequentialCommandGroup {
             new AutoSecondNote(),            
 
             new DriveWork(.4,(.3*direction),0,40,150),
-            new DriveWork(.4,0,0,40,150),
+            new DriveWork(.4,0,0,58,175),
 
             new FinishAuto()
         );    

@@ -29,16 +29,17 @@ public class AutoThirdNote extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new DriveWork(-0.5,(.25*direction),0,18,100),     
+            new TurnDegreesWorkFixed(80 * direction, 150),
 
             new ParallelCommandGroup(
+                new DriveWork(.4,0,0,30,150),     
                 // Run the Pickup
-                new PickupWork(125, false),
-                new DriveWork(0.5,(.25*direction),0,26,125)
+                new PickupWork(150, false)
             ),    
-            
+
             new ParallelCommandGroup(
-                new DriveWork(-.5,(-.65*direction),0,18,100)
+                new TurnDegreesWorkFixed(-40 * direction, 150),
+                new ThrowerAngle(33,150)
             ),
 
             new ThrowerWork(RobotMap.throwerSpeed, 75)

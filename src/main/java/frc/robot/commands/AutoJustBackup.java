@@ -26,7 +26,7 @@ public class AutoJustBackup extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
-            new DriveWork(0.30,0,0,36,200),    
+            new DriveWork(0.30,0,0,100,300),    
             
             new FinishAuto()
         );
