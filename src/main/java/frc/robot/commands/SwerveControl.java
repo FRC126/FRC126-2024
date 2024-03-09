@@ -67,7 +67,7 @@ public class SwerveControl extends Command {
 		double leftRight = driveJoystick.getLeftStickX();
 
 		// Soften the rotate to 60%
-		double rotate = driveJoystick.getRightStickX() * .6;
+		double rotate = driveJoystick.getRightStickX() * 1;
 
 		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
 	        Robot.Leds.setMode(LEDSubsystem.LEDModes.GaelForce);

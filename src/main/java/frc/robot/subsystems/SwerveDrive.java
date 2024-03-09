@@ -420,7 +420,6 @@ public class SwerveDrive extends SubsystemBase {
 			// Run the turning motors based on the calculated target
 			swerveFrontRightTurnMotor.set(CalcTurnSpeed(frontRightPos,frontRightAngle));
 			swerveFrontLeftTurnMotor.set(CalcTurnSpeed(frontLeftPos,frontLeftAngle));
-			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			swerveRearLeftTurnMotor.set(CalcTurnSpeed(rearLeftPos,rearLeftAngle));
 			swerveRearRightTurnMotor.set(CalcTurnSpeed(rearRightPos,rearRightAngle));
 			
@@ -479,7 +478,8 @@ public class SwerveDrive extends SubsystemBase {
 
 	public double getDistanceInches() {
 		double wheelDiameter = 4;
-		double gearRatio=18;
+		//double gearRatio=18;
+		double gearRatio=14;
 		
 		double left1 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
 		double left2 = swerveFrontLeftDriveRelativeEncoder.getPosition() * -1;
@@ -502,11 +502,17 @@ public class SwerveDrive extends SubsystemBase {
 	 *************************************************************************/
 
 	public double rotateToDegrees(double offset) {
-		double driveRotate=0;
-		double driftAllowance=1;
+		double startAngle = Robot.swerveDrive.getYaw();    
 
-		// get the current angle from the gyro
-		double startAngle = Robot.swerveDrive.getYaw();      
+		return(rotateToDegrees(offset,startAngle));
+	}
+
+    /************************************************************************
+	 *************************************************************************/
+
+	public double rotateToDegrees(double offset, double startAngle) {
+		double driveRotate=0;
+		double driftAllowance=1.00;
 
 		double target = startAngle + offset;
 		double diff = Math.abs(target) - Math.abs(startAngle);

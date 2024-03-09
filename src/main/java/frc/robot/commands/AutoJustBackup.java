@@ -15,20 +15,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+// import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-//import frc.robot.RobotMap;
 
-public class AutoShootSpeakerAndStop extends SequentialCommandGroup {
-    public AutoShootSpeakerAndStop() {
+public class AutoJustBackup extends SequentialCommandGroup {
+    public AutoJustBackup() {
         // Move thrower arm to specific position
         // Eject the note
         addCommands(
-            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),          
-            new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
+            new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
-            new AutoFirstNote(),           
+            new DriveWork(0.30,0,0,36,200),    
+            
             new FinishAuto()
         );
     }

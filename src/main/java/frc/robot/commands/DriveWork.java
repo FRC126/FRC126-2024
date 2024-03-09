@@ -110,9 +110,8 @@ public class DriveWork extends Command {
     // Make this return true when this Command no longer needs to run execute()
 	@Override
     public boolean isFinished() {       
-        if (iters == 0 || distanceReached > 3 || !Robot.checkAutoCommand()) {
+        if (iters == 0 || distanceReached > 1 || !Robot.checkAutoCommand()) {
             Robot.swerveDrive.Drive(0, 0, 0);
-            Robot.swerveDrive.brakesOff();
             return true;
         }
         return false;
@@ -125,7 +124,5 @@ public class DriveWork extends Command {
 	@Override
     public void end(boolean isInteruppted) {
         Robot.swerveDrive.Drive(0, 0, 0);
-        Robot.swerveDrive.brakesOff();
     }
-
 }

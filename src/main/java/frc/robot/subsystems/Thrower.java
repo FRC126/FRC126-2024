@@ -129,7 +129,7 @@ public class Thrower extends SubsystemBase {
 			throwerSpeed[index] = 1;
 		}
 
-		if (targetRPM < rpm + 75 && targetRPM > rpm - 75) {
+		if (targetRPM < rpm + 100 && targetRPM > rpm - 100) {
 			targetReached[index]++;
 		} else {
 			targetReached[index]=0;
@@ -169,7 +169,7 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 	public void resetEncoders() {
-        resetEncoders(82);
+        resetEncoders(RobotMap.throwerSixtyTicks);
 	}	
 
 	public void resetEncoders(double stop) {
@@ -237,11 +237,11 @@ public class Thrower extends SubsystemBase {
 
 		if ( speed > 0 && throwerTopLimit.get() == true && useLimitSwiches) {
 			speed=0;
-			resetEncoders(257);
+			resetEncoders(RobotMap.throwerTop);
 		}		
 		if ( speed < 0 && throwerBottomLimit.get() == true && useLimitSwiches ) {
 		    speed=0;
-			resetEncoders(8);
+			resetEncoders(RobotMap.throwerBottom);
 		}		
 
 		throwerClimberMotorLeft.set(speed*-1);

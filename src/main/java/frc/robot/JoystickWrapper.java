@@ -59,7 +59,7 @@ public class JoystickWrapper {
     ////////////////////////////////////////////////////
 
     public boolean leftTriggerPressed() {
-        if (getRawAxis(RobotMap.Ltrigger) > .25) {
+        if (getRawAxis(RobotMap.Ltrigger) > .15) {
             return(true);
         }
         return(false);    
@@ -69,7 +69,7 @@ public class JoystickWrapper {
     }
 
     public boolean rightTriggerPressed() {
-        if (getRawAxis(RobotMap.Rtrigger) > .25) {
+        if (getRawAxis(RobotMap.Rtrigger) > .15) {
             return(true);
         }
         return(false);    

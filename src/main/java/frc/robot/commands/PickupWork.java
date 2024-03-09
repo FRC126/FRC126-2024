@@ -20,6 +20,7 @@ import frc.robot.Robot;
 public class PickupWork extends Command {
     int iters;
     boolean runThrowerTrigger;
+    int seenCount=0;
 
     /**********************************************************************************
      **********************************************************************************/
@@ -27,6 +28,7 @@ public class PickupWork extends Command {
     public PickupWork(int itersIn, boolean runThrowerTrigger) {
         iters = itersIn;
         this.runThrowerTrigger = runThrowerTrigger;
+        seenCount=0;
     }
 
     /**********************************************************************************
@@ -35,6 +37,7 @@ public class PickupWork extends Command {
 
     @Override
     public void initialize() {
+        seenCount=0;
     }
 
     /**********************************************************************************
@@ -58,16 +61,17 @@ public class PickupWork extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        boolean haveNote=false;
 
-        //haveNote=Robot.thrower.getPhotoSensor();
+        if (Robot.pickup.getPhotoSensor()) {
+            seenCount++;
+        }
 
-        if (haveNote || iters == 0 || !Robot.checkAutoCommand()) {
+        if (seenCount > 10 || iters == 0 || !Robot.checkAutoCommand()) {
             Robot.pickup.cancel();
-        if (runThrowerTrigger) {
-            Robot.thrower.setAutoTriggerRun(false);
-            Robot.thrower.throwerTriggerOff();
-        }    
+            if (runThrowerTrigger) {
+                Robot.thrower.setAutoTriggerRun(false);
+                Robot.thrower.throwerTriggerOff();
+            }    
             return true;
         }
         return false;
