@@ -32,7 +32,7 @@ public class SwerveControl extends Command {
 
 	public SwerveControl(SwerveDrive subsystem) {
 		addRequirements(subsystem);
-		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.15);
+		driveJoystick = new JoystickWrapper(Robot.oi.driveController, 0.10);
 	}
 
 	/**********************************************************************************
@@ -64,10 +64,24 @@ public class SwerveControl extends Command {
 
 		// Get the driver inputs from the driver xbox controller
 		double forwardBack = driveJoystick.getLeftStickY();
+		if (forwardBack > 0) {
+			forwardBack = (forwardBack - .1) * 1.1;
+		} else if (forwardBack < 0) {
+			forwardBack = (forwardBack + .1) * 1.1;
+		}
 		double leftRight = driveJoystick.getLeftStickX();
+		if (leftRight > 0) {
+			leftRight = (leftRight - .1) * 1.1;
+		} else if (leftRight < 0) {
+			leftRight = (leftRight + .1) * 1.1;
+		}
 
-		// Soften the rotate to 60%
-		double rotate = driveJoystick.getRightStickX() * 1;
+		double rotate = driveJoystick.getRightStickX();
+		if (rotate > 0) {
+			rotate = (rotate - .1) * 1.1;
+		} else if (rotate < 0) {
+			rotate = (rotate + .1) * 1.1;
+		}
 
 		if (forwardBack == 0 && leftRight == 0 && rotate == 0) {
 	        Robot.Leds.setMode(LEDSubsystem.LEDModes.GaelForce);
