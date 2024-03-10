@@ -148,15 +148,6 @@ public class ThrowerControl extends Command {
 				// || operatorJoystick.isXButton()) {
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
-			throwerRun=0;
-		} else if (throwerRun > 0) {
-            Robot.thrower.throwerTriggerOn();
-			Robot.thrower.setThrowTriggered(true);
-			throwerRun--;
-		    if (throwerRun == 0) {
-               Robot.thrower.throwerTriggerOff();
-			   Robot.thrower.setThrowTriggered(false);
-			}
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
 			Robot.thrower.setThrowerSpeed(-1.0);

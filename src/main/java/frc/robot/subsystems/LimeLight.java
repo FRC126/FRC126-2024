@@ -209,9 +209,9 @@ public class LimeLight extends SubsystemBase {
         // .09 area 27.6 dgrress 3300
 
         if (!noAngle) {
-            double angle= 54.5 - ((45 - (llTargetArea*100)) *.675);
+            double angle= 53.5 - ((45 - (llTargetArea*100)) *.675);
 
-            if (angle < 20 || angle>65 ) {angle=30; }
+            if (angle < 20 || angle > 65 ) { angle=30; }
             
             //if (limeLightDebug) {
                 SmartDashboard.putNumber("Ato Thrower Angle", angle);
