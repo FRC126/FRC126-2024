@@ -208,11 +208,11 @@ public class Robot extends TimedRobot {
         autoNext.setDefaultOption("do nothing dummy!",autoNothing);
         autoNext.addOption("just backup",justAutoBackup);
         autoNext.addOption("1 note, do nothing",oneNoteAutoNoMove);
-        autoNext.addOption("1 note far side, backup",oneNoteAutoBackup);
-        autoNext.addOption("2 note close side, backup",sideShoot);
-        autoNext.addOption("2 notes",twoNoteAuto);
-        autoNext.addOption("2 notes, go midfield",twoNoteAutoMidField);
-        autoNext.addOption("3 notes",threeNoteAuto);
+        autoNext.addOption("1 note far side (source), backup",oneNoteAutoBackup);
+        autoNext.addOption("2 note close side (amp), backup",sideShoot);
+        autoNext.addOption("2 notes center",twoNoteAuto);
+        autoNext.addOption("2 notes center, go midfield",twoNoteAutoMidField);
+        autoNext.addOption("3 notes center",threeNoteAuto);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 

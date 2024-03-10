@@ -352,11 +352,11 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
-			if (currentAngle < straightDegrees-1.0) {
+			if (currentAngle < straightDegrees-1.5) {
 				rotate=.015;	
 				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.05; }
 				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.15; }
-			} else if (currentAngle > straightDegrees+1.0) {
+			} else if (currentAngle > straightDegrees+1.5) {
 				rotate=-.015;	
 				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.05; }
 				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.15; }
