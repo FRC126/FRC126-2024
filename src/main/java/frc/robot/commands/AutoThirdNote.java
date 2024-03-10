@@ -32,9 +32,9 @@ public class AutoThirdNote extends SequentialCommandGroup {
             new TurnDegreesWorkFixed(80 * direction, 150),
 
             new ParallelCommandGroup(
-                new DriveWork(.4,0,0,30,150),     
+                new DriveWork(.4,0,0,30,125),     
                 // Run the Pickup
-                new PickupWork(150, false)
+                new PickupWork(125, false)
             ),    
 
             new ParallelCommandGroup(

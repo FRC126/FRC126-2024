@@ -55,6 +55,10 @@ public class PickupControl extends Command {
 			return;
 		}		
 
+       	if (Robot.pickup.getPhotoSensor()) {
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);
+		}
+
 		if (operatorJoystick.leftTriggerPressed() || operatorJoystick.isYButton()) {
 			Robot.pickup.setUserRunPickup(true);
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.RunPickup);

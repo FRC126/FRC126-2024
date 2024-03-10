@@ -318,6 +318,8 @@ public class Robot extends TimedRobot {
 
 		Robot.swerveDrive.cancel();
         Robot.swerveDrive.brakesOff();
+        Robot.thrower.cancel();
+        Robot.pickup.cancel();
     }
 
     /************************************************************************

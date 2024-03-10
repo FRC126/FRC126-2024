@@ -335,7 +335,6 @@ public class Thrower extends SubsystemBase {
 		moveThrower(0);
 		setAutoTriggerRun(false);
 		setAutoMoveThrower(false);
-
 	}
 
     /************************************************************************

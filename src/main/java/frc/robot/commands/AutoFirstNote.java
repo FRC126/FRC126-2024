@@ -26,9 +26,9 @@ public class AutoFirstNote extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
             new ParallelCommandGroup(
-                new ThrowerAngle(RobotMap.throwerCloseAngle,150),
+                new ThrowerAngle(RobotMap.throwerCloseAngle,125),
                 // Throw the Note
-                new ThrowerWork(RobotMap.throwerSpeed, 150)
+                new ThrowerWork(RobotMap.throwerSpeed, 125)
             )   
         );
     }
