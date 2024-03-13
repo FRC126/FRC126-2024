@@ -21,8 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.MathUtil;
+//import edu.wpi.first.math.MathUtil;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -47,7 +46,6 @@ public class Thrower extends SubsystemBase {
 	static boolean autoMoveThrower=false;
 	
 	// Thrower Angle Control
-	PIDController throwerPID;
 	boolean reachedAngleTarget=true;
 	int reachedAngleCount=0;
 
@@ -78,8 +76,6 @@ public class Thrower extends SubsystemBase {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
 		setDefaultCommand(new ThrowerControl(this));
-		throwerPID = new PIDController(.1, 0, .0001);
-		throwerPID.setTolerance(2,10);
 	}
 
 	/************************************************************************
@@ -257,36 +253,16 @@ public class Thrower extends SubsystemBase {
 
 		double currAngle=getThrowerAngle();
 
-		boolean usePID=false;
+		double diff = Math.abs(currAngle-angle);
+		double speed = Robot.boundSpeed(diff/10,1,0.03);
 
-		if (usePID) {
-			if (reachedAngleTarget) {
-				reachedAngleTarget=false;
-				throwerPID.reset();
-			}
-
-			double speed = MathUtil.clamp(throwerPID.calculate(currAngle, angle),-0.1,.1);
-
-			if (throwerPID.atSetpoint()) {
-				reachedAngleCount++;
-				moveThrower(0);
-			} else {
-				moveThrower(speed);
-				reachedAngleCount=0;
-				reachedAngleTarget=false;
-			}
+		if (diff > 0.15) {
+			moveThrower(speed*  ((currAngle > angle + .10) ? -1 : 1));
+			reachedAngleCount=0;
 		} else {
-			double diff = Math.abs(currAngle-angle);
-			double speed = Robot.boundSpeed(diff/12,1,0.03);
-
-			if (diff > 0.15) {
-                moveThrower(speed*  ((currAngle > angle + .15) ? -1 : 1));
-				reachedAngleCount=0;
-			} else {
-				reachedAngleCount++;
-				moveThrower(0);
-			}		
-		}	
+			reachedAngleCount++;
+			moveThrower(0);
+		}		
 
 		if (reachedAngleCount>0) {
 			reachedAngleTarget=true;

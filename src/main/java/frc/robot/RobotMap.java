@@ -27,8 +27,8 @@ public class RobotMap {
 	public static int throwerSpeed=3200;
 	public static int throwerCloseAngle=62;
 
-    public static int throwerSixtyTicks=88;
-	public static int throwerBottom=throwerSixtyTicks-89;
+    public static int throwerSixtyTicks=90;
+	public static int throwerBottom=0;
 	public static int throwerTop=throwerSixtyTicks+170;
 
 
