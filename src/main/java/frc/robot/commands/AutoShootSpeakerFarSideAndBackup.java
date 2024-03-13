@@ -15,6 +15,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 // import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
@@ -33,13 +34,16 @@ public class AutoShootSpeakerFarSideAndBackup extends SequentialCommandGroup {
 
             new AutoFirstNote(),           
             
-            new DriveWork(0.30,0,0,72,250),  
+            new DriveWork(0.30,0,0,65,250),  
             
-            new TurnDegreesWorkFixed(50 * direction,100),
+            new TurnDegreesWorkFixed(47 * direction,150),
             
             new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
 
-            new DriveWork(.4,0,0,48,200),
+            new ParallelCommandGroup(
+                new DriveWork(.4,0,0,95,250),
+                new PickupWork(250,false)                   
+            ),
             
             new FinishAuto()
         );
