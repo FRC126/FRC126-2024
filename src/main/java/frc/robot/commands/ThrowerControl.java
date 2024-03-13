@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
-	boolean idleThrower=true;
+	boolean idleThrower=false;
 	boolean throwerDebug=true;
 	int delay=0;
-	final int IDLE_RPM=3000;
+	final int IDLE_RPM=0;
 	final int MAX_RPM=4200;
 	public static int throwerRun=0;
 
@@ -142,17 +142,19 @@ public class ThrowerControl extends Command {
 			SmartDashboard.putNumber("thrower tilt input", y);
 		}
 
-		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
 		if ((reachedOne > 2 && reachedTwo > 2 && 
 		      (operatorJoystick.isAButton() || operatorJoystick.rightTriggerPressed()))) {
-				// || operatorJoystick.isXButton()) {
+	     	// If we have reached the target rpm on the thrower, run the trigger and shoot the note
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
+		} else if ((operatorJoystick.isAButton() || operatorJoystick.rightTriggerPressed()) &&
+   	        Robot.thrower.getThrowTriggered()) {
+			// If the throw was already triggered, keep running while the button is pressed
+            Robot.thrower.throwerTriggerOn();
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
 			Robot.thrower.setThrowerSpeed(-1.0);
 			Robot.thrower.setThrowTriggered(false);
-
 		} else if (!Robot.thrower.getAutoTriggerRun()) {
 			Robot.thrower.throwerTriggerOff();
 		}
