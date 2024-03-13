@@ -37,7 +37,7 @@ public class Thrower extends SubsystemBase {
 	static int targetReached[] = { 0,0,0 } ;
     static int delay;
 	static double Pfast = 0.000075;
-    static double Pslow = 0.000010;
+    static double Pslow = 0.000020;
     static double I = -0.0003;
 	boolean throwerDebug=true;
 	public static double myRPM=3200;
