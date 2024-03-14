@@ -29,7 +29,7 @@ public class AutoSecondNote extends SequentialCommandGroup {
                 // Run the Pickup
                 new PickupWork(125, false),
                 // Drive over the next note
-                new ThrowerAngle(43.5,125),
+                new ThrowerAngle(42.5,125),
                 new DriveWork(.35,0,0,32,125)
             ),
 

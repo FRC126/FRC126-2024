@@ -212,7 +212,7 @@ public class Robot extends TimedRobot {
         autoNext.addOption("2 note close side (amp), backup",sideShoot);
         autoNext.addOption("2 notes center",twoNoteAuto);
         autoNext.addOption("2 notes center, go midfield",twoNoteAutoMidField);
-        autoNext.addOption("3 notes center",threeNoteAuto);
+        //autoNext.addOption("3 notes center",threeNoteAuto);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -352,7 +352,7 @@ public class Robot extends TimedRobot {
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
             Robot.climber.setPosition(0);
-            Robot.thrower.resetEncoders(); 
+            //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
         }

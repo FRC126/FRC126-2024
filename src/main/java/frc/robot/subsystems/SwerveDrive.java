@@ -555,8 +555,8 @@ public double rotateToDegreesFixed(double offset, double startAngle) {
 		//double diff = Math.abs(target) - Math.abs(startAngle);
 		double diff = Math.abs(target) - Math.abs(currentAngle);
 
-		double tmp = diff / 250;
-		tmp = Robot.boundSpeed(tmp, .25, .03 );
+		double tmp = diff / 100;
+		tmp = Robot.boundSpeed(tmp, .25, .06 );
 
 		if (Math.abs(diff) < driftAllowance) {
 			driveRotate=0;
