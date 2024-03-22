@@ -198,7 +198,7 @@ public class Thrower extends SubsystemBase {
 	 public double getThrowerAngle() {
 		double position=getPosition();
 
-		double currAngle = (position / 2.18) + 22;		
+		double currAngle = (position / 1.21) + 23;		
 		SmartDashboard.putNumber("thrower angle", currAngle);
 		SmartDashboard.putNumber("thrower position", position);
 
@@ -212,8 +212,8 @@ public class Thrower extends SubsystemBase {
 		double currAngle=getThrowerAngle();
 		boolean useLimitSwiches=true;
         
-		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		//throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		//throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
      	
 		if (currAngle > 135 && speed > 0) { speed *= .5; }
@@ -254,10 +254,10 @@ public class Thrower extends SubsystemBase {
 		double currAngle=getThrowerAngle();
 
 		double diff = Math.abs(currAngle-angle);
-		double speed = Robot.boundSpeed(diff/10,1,0.03);
+		double speed = Robot.boundSpeed(diff/20,1,0.05);
 
 		if (diff > 0.15) {
-			moveThrower(speed*  ((currAngle > angle + .10) ? -1 : 1));
+			moveThrower(speed*  ((currAngle > angle + .20) ? -1 : 1));
 			reachedAngleCount=0;
 		} else {
 			reachedAngleCount++;

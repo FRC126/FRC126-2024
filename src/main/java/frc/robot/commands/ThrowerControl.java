@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
-	boolean idleThrower=false;
+	boolean idleThrower=true;
 	boolean throwerDebug=true;
 	int delay=0;
-	final int IDLE_RPM=0;
+	final int IDLE_RPM=3200;
 	final int MAX_RPM=4200;
 	public static int throwerRun=0;
 
