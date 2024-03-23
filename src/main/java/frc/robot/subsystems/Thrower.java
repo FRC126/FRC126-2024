@@ -19,6 +19,7 @@ import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.math.controller.ImplicitModelFollower;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.math.MathUtil;
@@ -40,7 +41,7 @@ public class Thrower extends SubsystemBase {
     static double Pslow = 0.000015;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=3200;
+	public static double myRPM=RobotMap.throwerSpeed;
     static boolean throwTriggered=false;
 	static boolean autoTriggerRun=false;
 	static boolean autoMoveThrower=false;
@@ -198,7 +199,7 @@ public class Thrower extends SubsystemBase {
 	 public double getThrowerAngle() {
 		double position=getPosition();
 
-		double currAngle = (position / 1.21) + 23;		
+		double currAngle = (position / 1.71) + 23;		
 		SmartDashboard.putNumber("thrower angle", currAngle);
 		SmartDashboard.putNumber("thrower position", position);
 
@@ -212,14 +213,14 @@ public class Thrower extends SubsystemBase {
 		double currAngle=getThrowerAngle();
 		boolean useLimitSwiches=true;
         
-		//throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		//throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		throwerClimberMotorLeft.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		throwerClimberMotorRight.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
      	
-		if (currAngle > 135 && speed > 0) { speed *= .5; }
-		if (currAngle < 30 && speed < 0) { speed *= .5; }
-		if (currAngle > 138 && speed > 0) { speed *= .5; }
-		if (currAngle < 27 && speed < 0) { speed *= .5; }
+		if (currAngle > 135 && speed > 0) { speed *= .3; }
+		if (currAngle < 30 && speed < 0) { speed *= .3; }
+		if (currAngle > 138 && speed > 0) { speed *= .3; }
+		if (currAngle < 27 && speed < 0) { speed *= .3; }
 
 		if (((currAngle > 140 && speed > 0) || 
 		     (currAngle < 23 && speed < 0)) && 
@@ -227,6 +228,15 @@ public class Thrower extends SubsystemBase {
 		    throwerClimberMotorLeft.set(0);
 		    throwerClimberMotorRight.set(0);
 			return(currAngle);
+		}
+
+		if (Robot.overrideEncoders) {
+			speed*=.2;
+		} else {
+			if (currAngle > 135 && speed > 0) { speed *= .3; }
+			if (currAngle < 30 && speed < 0) { speed *= .3; }
+			if (currAngle > 138 && speed > 0) { speed *= .3; }
+			if (currAngle < 27 && speed < 0) { speed *= .3; }			
 		}
 
 		SmartDashboard.putNumber("thrower speed", speed);
@@ -254,10 +264,10 @@ public class Thrower extends SubsystemBase {
 		double currAngle=getThrowerAngle();
 
 		double diff = Math.abs(currAngle-angle);
-		double speed = Robot.boundSpeed(diff/20,1,0.05);
+		double speed = Robot.boundSpeed(diff/12,1,0.06);
 
 		if (diff > 0.15) {
-			moveThrower(speed*  ((currAngle > angle + .20) ? -1 : 1));
+			moveThrower(speed*  ((currAngle > angle + .15) ? -1 : 1));
 			reachedAngleCount=0;
 		} else {
 			reachedAngleCount++;
