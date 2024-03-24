@@ -45,7 +45,8 @@ public class Thrower extends SubsystemBase {
     static boolean throwTriggered=false;
 	static boolean autoTriggerRun=false;
 	static boolean autoMoveThrower=false;
-	
+	DigitalInput photoSensor = new DigitalInput(4);
+
 	// Thrower Angle Control
 	boolean reachedAngleTarget=true;
 	int reachedAngleCount=0;
@@ -193,18 +194,6 @@ public class Thrower extends SubsystemBase {
 		return(position);
 	}
 
-    /************************************************************************
-	 ************************************************************************/
-
-	 public double getThrowerAngle() {
-		double position=getPosition();
-
-		double currAngle = (position / 1.71) + 23;		
-		SmartDashboard.putNumber("thrower angle", currAngle);
-		SmartDashboard.putNumber("thrower position", position);
-
-		return(currAngle);
-	}
 
     /************************************************************************
 	 ************************************************************************/
@@ -231,7 +220,7 @@ public class Thrower extends SubsystemBase {
 		}
 
 		if (Robot.overrideEncoders) {
-			speed*=.2;
+			if (speed < 0) { speed = -.2;} else if (speed > 0) { speed=.2; }
 		} else {
 			if (currAngle > 135 && speed > 0) { speed *= .3; }
 			if (currAngle < 30 && speed < 0) { speed *= .3; }
@@ -254,6 +243,19 @@ public class Thrower extends SubsystemBase {
 		throwerClimberMotorRight.set(speed);
 
         return(currAngle);
+	}
+
+    /************************************************************************
+	 ************************************************************************/
+
+	 public double getThrowerAngle() {
+		double position=getPosition();
+
+		double currAngle = (position / 2.12) + 23;		
+		SmartDashboard.putNumber("thrower angle", currAngle);
+		SmartDashboard.putNumber("thrower position", position);
+
+		return(currAngle);
 	}
 
     /************************************************************************
@@ -286,8 +288,15 @@ public class Thrower extends SubsystemBase {
     /************************************************************************
 	 ************************************************************************/
 
+	public void throwerTriggerRun(double speed) {
+		throwerTriggerMotor.set(speed);
+	}
+
+	/************************************************************************
+	 ************************************************************************/
+
 	 public void throwerTriggerReverse() {
-		throwerTriggerMotor.set(1);
+		throwerTriggerRun(1);
 		Robot.pickup.pickupMotorReverse();
 	}
 
@@ -295,9 +304,10 @@ public class Thrower extends SubsystemBase {
 	 ************************************************************************/
 
     public void throwerTriggerOn() {
-		throwerTriggerMotor.set(-1);
+		throwerTriggerRun(-1);
 		Robot.pickup.pickupMotorOn();
 		throwTriggered=true;
+		getPhotoSensor();
 	}
 
     /************************************************************************
@@ -305,7 +315,7 @@ public class Thrower extends SubsystemBase {
 
     public void throwerTriggerOff() {
 		throwTriggered=false;
-		throwerTriggerMotor.set(0);
+		throwerTriggerRun(0);
 		if (!Robot.pickup.getUserRunPickup()) {
   			Robot.pickup.pickupMotorOff();
 		}		
@@ -379,7 +389,18 @@ public class Thrower extends SubsystemBase {
 		return autoMoveThrower	;
 	}
 
-		
+    /************************************************************************
+	 ************************************************************************/
+
+	 public boolean getPhotoSensor() {
+        boolean here=photoSensor.get()?false:true;
+		SmartDashboard.putBoolean("photoSensor",here);
+        if (here || Robot.pickup.getTriggerTripped()) {
+			Robot.Leds.setMode(LEDSubsystem.LEDModes.HaveNoteHigh);
+		}
+		return(here);
+	}		
+
 }
 
 

@@ -64,9 +64,9 @@ public class Robot extends TimedRobot {
     public static Pickup pickup;
     public static LEDSubsystem Leds;
     // Lidar Light Distance Measure
-    public static LidarLite lidar;
+    //public static LidarLite lidar;
     // Lime Light
-    public static LimeLight limeLight;
+    //public static LimeLight limeLight;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -157,8 +157,8 @@ public class Robot extends TimedRobot {
         // LED Subsystem
         Leds = new LEDSubsystem();
 
-        // Limelight subsystem
-        limeLight = new LimeLight();
+        // Limelight subsystem1
+        //limeLight = new LimeLight();
        
         // Navx Subsystem
         try {

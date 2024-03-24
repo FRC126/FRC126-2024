@@ -62,7 +62,7 @@ public class RobotMap {
 	public static final int throwerClimberMotorRightCanID = 25;
 
 	///////////////////////////////////////////////////////////////////////////
-	public static final int LidarChannel = 5; 
+	public static final int LidarChannel = 3; 
 
 	///////////////////////////////////////////////////////////////////////////
 	//Pickup Motor Can ID's

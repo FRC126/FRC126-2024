@@ -140,7 +140,7 @@ public class LimeLight extends SubsystemBase {
 		 	return;
         }
         
-        Robot.limeLight.getCameraData();
+        //Robot.limeLight.getCameraData();
 
         if (llTargetValid){
             // We found a valid vision target.
@@ -153,7 +153,7 @@ public class LimeLight extends SubsystemBase {
                 missedCount++;
             } else {
                 // Initialize all target data
-                Robot.limeLight.setllTargetData(false, 0, 0, 0);
+                //Robot.limeLight.setllTargetData(false, 0, 0, 0);
                 validCount=0;
                 missedCount=0;
             }    
