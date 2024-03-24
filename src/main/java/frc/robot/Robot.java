@@ -64,9 +64,9 @@ public class Robot extends TimedRobot {
     public static Pickup pickup;
     public static LEDSubsystem Leds;
     // Lidar Light Distance Measure
-    public static LidarLite lidar;
+    //public static LidarLite lidar;
     // Lime Light
-    public static LimeLight limeLight;
+    //public static LimeLight limeLight;
 
 	public static UsbCamera driveCam;
 	public static VideoSink server;
@@ -157,8 +157,8 @@ public class Robot extends TimedRobot {
         // LED Subsystem
         Leds = new LEDSubsystem();
 
-        // Limelight subsystem
-        limeLight = new LimeLight();
+        // Limelight subsystem1
+        //limeLight = new LimeLight();
        
         // Navx Subsystem
         try {
@@ -208,11 +208,11 @@ public class Robot extends TimedRobot {
         autoNext.setDefaultOption("do nothing dummy!",autoNothing);
         autoNext.addOption("just backup",justAutoBackup);
         autoNext.addOption("1 note, do nothing",oneNoteAutoNoMove);
-        autoNext.addOption("1 note far side, backup",oneNoteAutoBackup);
-        autoNext.addOption("2 note close side, backup",sideShoot);
-        autoNext.addOption("2 notes",twoNoteAuto);
-        autoNext.addOption("2 notes, go midfield",twoNoteAutoMidField);
-        autoNext.addOption("3 notes",threeNoteAuto);
+        autoNext.addOption("1 note far side (source), backup",oneNoteAutoBackup);
+        autoNext.addOption("2 note close side (amp), backup",sideShoot);
+        autoNext.addOption("2 notes center",twoNoteAuto);
+        autoNext.addOption("2 notes center, go midfield",twoNoteAutoMidField);
+        //autoNext.addOption("3 notes center",threeNoteAuto);
         SmartDashboard.putData("Auto Follow Choices",autoNext);
     }
 
@@ -318,6 +318,8 @@ public class Robot extends TimedRobot {
 
 		Robot.swerveDrive.cancel();
         Robot.swerveDrive.brakesOff();
+        Robot.thrower.cancel();
+        Robot.pickup.cancel();
     }
 
     /************************************************************************
@@ -350,7 +352,7 @@ public class Robot extends TimedRobot {
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
             Robot.climber.setPosition(0);
-            Robot.thrower.resetEncoders(); 
+            //Robot.thrower.resetEncoders(); 
         } else {
             Robot.overrideEncoders=false;
         }

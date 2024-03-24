@@ -44,7 +44,7 @@ public class DistanceMeasure extends Command {
 	
 	@Override
 	public void execute() {
-		Robot.lidar.measureDistance();
+		//Robot.lidar.measureDistance();
     }
 
 	/**********************************************************************************

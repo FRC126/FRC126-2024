@@ -35,7 +35,7 @@ import frc.robot.Robot;
 
     public static enum LEDModes{None,BrakeMode,DriveMode,SlowMode,AimingRed,AimingBlue,
                                 ShootingSpeaker,ShootingAmp,Climbing,AutoDrive,
-                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveNote};
+                                AutoTurn,RunPickup, Rainbow, GaelForce, HaveNote, HaveNoteHigh};
     LEDModes LEDMode = LEDModes.GaelForce;
 
     /**********************************************************************************
@@ -111,6 +111,7 @@ import frc.robot.Robot;
             case AutoTurn:          { setColorSliding(125,75,100,125,0,0); break; }
             case RunPickup:         { setColorSliding(0,64,0,100,100,100); break; }
             case HaveNote:          { setColorSliding(237,145,15,120,70,15); break; }
+            case HaveNoteHigh:      { setColorSliding(0,150,150,50,0,50); break; }
             case Rainbow:           { rainbow(); break; }
             case GaelForce:         { setColorSliding(0, 64, 0, 128, 90, 0); break; }
         }

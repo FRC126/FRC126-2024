@@ -60,7 +60,7 @@ public class ThrowerWork extends Command {
             SmartDashboard.putNumber("reachedTwo", reachedTwo);
 
             // If we have reached the target rpm on the thrower, run the trigger and shoot the note
-            if (reachedOne > 3 && reachedTwo > 3) {
+            if (reachedOne > 2 && reachedTwo > 2) {
                 Robot.thrower.throwerTriggerOn();
                 Robot.thrower.setAutoTriggerRun(true);
                 Robot.thrower.setThrowTriggered(true);

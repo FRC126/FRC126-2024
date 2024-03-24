@@ -31,7 +31,19 @@ public class AutoShootThreeSpeaker extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
             new AutoFirstNote(),
-            new AutoSecondNote(),
+
+            new ParallelCommandGroup(
+                // Run the Pickup
+                new PickupWork(125, false),
+                // Drive over the next note
+                new ThrowerAngle(39,125),
+                new DriveWork(.35,0,0,32,125)
+            ),
+
+            //new DriveWork(-0.30,0,0,16,150),     
+            // Throw note in speaker
+            new ThrowerWork(RobotMap.throwerSpeed, 75),      
+
             new AutoThirdNote(targetType),                      
             new FinishAuto()
         );

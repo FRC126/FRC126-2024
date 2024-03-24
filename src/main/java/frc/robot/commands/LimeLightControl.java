@@ -57,7 +57,7 @@ public class LimeLightControl extends Command {
         boolean noAim=false;
 
         if (driveJoystick.getPovUp() || driveJoystick.getPovDown()) {
-            Robot.limeLight.setActiveSeek(true);
+            //Robot.limeLight.setActiveSeek(true);
             if (Robot.targetType == Robot.targetTypes.TargetRed) {
                 Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingRed);
             } else if (Robot.targetType == Robot.targetTypes.TargetBlue) {
@@ -73,13 +73,13 @@ public class LimeLightControl extends Command {
         } else if (driveJoystick.getPovRight()) {
             //Robot.targetType = Robot.targetTypes.TargetBlue;
          } else {
-            Robot.limeLight.setActiveSeek(false);
+            //Robot.limeLight.setActiveSeek(false);
             Robot.thrower.setAutoMoveThrower(false);
         }     
         
-        Robot.limeLight.trackTarget();
+        //Robot.limeLight.trackTarget();
 
-        Robot.limeLight.seekTarget(noAngle, noAim);
+        //Robot.limeLight.seekTarget(noAngle, noAim);
     }
 
 	/************************************************************************

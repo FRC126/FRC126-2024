@@ -15,6 +15,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.*;
 import frc.robot.JoystickWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,12 +25,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ThrowerControl extends Command {
 	JoystickWrapper operatorJoystick;
-	boolean idleThrower=true;
+	boolean idleThrower=false;
 	boolean throwerDebug=true;
 	int delay=0;
-	final int IDLE_RPM=3000;
+	final int IDLE_RPM=RobotMap.idleSpeed;
 	final int MAX_RPM=4200;
 	public static int throwerRun=0;
+	boolean resetThrower=false;
 
 	/**********************************************************************************
 	 **********************************************************************************/
@@ -119,13 +121,28 @@ public class ThrowerControl extends Command {
     		// Run the motors at specified rpm
 			speed=Robot.thrower.getRPM();
 			Robot.Leds.setMode(LEDSubsystem.LEDModes.ShootingSpeaker);
+
+			if (operatorJoystick.rightTriggerPressed()) {
+				Robot.thrower.setThrowerPosition(60);
+				resetThrower=true;
+			}
 		} else if (idleThrower) {
 			// Idle the throwers
-			speed=IDLE_RPM;
+			speed=IDLE_RPM; 
 			Robot.thrower.setThrowTriggered(false);
+			if  (resetThrower) {
+				boolean foo=Robot.thrower.setThrowerPosition(30);
+				if (foo) { resetThrower=false; }
+
+			}
 		} else {
 			speed=0;
 			Robot.thrower.setThrowTriggered(false);
+			if  (resetThrower) {
+				boolean foo=Robot.thrower.setThrowerPosition(30);
+				if (foo) { resetThrower=false; }
+
+			}
 		}
 		int reachedOne=0, reachedTwo=0;
 		if (!operatorJoystick.isRShoulderButton()){
@@ -142,26 +159,21 @@ public class ThrowerControl extends Command {
 			SmartDashboard.putNumber("thrower tilt input", y);
 		}
 
-		// If we have reached the target rpm on the thrower, run the trigger and shoot the note
-		if ((reachedOne > 2 && reachedTwo > 2 && 
-		      (operatorJoystick.isAButton() || operatorJoystick.rightTriggerPressed()))) {
-				// || operatorJoystick.isXButton()) {
+		if (reachedOne > 2 && reachedTwo > 2 && 
+		    (operatorJoystick.isAButton())) {
+	     	// If we have reached the target rpm on the thrower, run the trigger and shoot the note
             Robot.thrower.throwerTriggerOn();
 			Robot.thrower.setThrowTriggered(true);
-			throwerRun=0;
-		} else if (throwerRun > 0) {
+			Robot.pickup.setTriggerTripped(false);
+		} else if ((operatorJoystick.isAButton()) &&
+   	        Robot.thrower.getThrowTriggered()) {
+			// If the throw was already triggered, keep running while the button is pressed
             Robot.thrower.throwerTriggerOn();
-			Robot.thrower.setThrowTriggered(true);
-			throwerRun--;
-		    if (throwerRun == 0) {
-               Robot.thrower.throwerTriggerOff();
-			   Robot.thrower.setThrowTriggered(false);
-			}
+			Robot.pickup.setTriggerTripped(false);
 		} else if (operatorJoystick.isLShoulderButton()) {
 			Robot.thrower.throwerTriggerReverse();
 			Robot.thrower.setThrowerSpeed(-1.0);
 			Robot.thrower.setThrowTriggered(false);
-
 		} else if (!Robot.thrower.getAutoTriggerRun()) {
 			Robot.thrower.throwerTriggerOff();
 		}

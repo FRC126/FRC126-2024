@@ -48,7 +48,7 @@ public class TargetAimWork extends Command {
 
     @Override
     public void execute() {
-        Robot.limeLight.setActiveSeek(true);
+        //Robot.limeLight.setActiveSeek(true);
         Robot.targetType = target;
 
         if (Robot.targetType == Robot.targetTypes.TargetRed) {
@@ -57,9 +57,9 @@ public class TargetAimWork extends Command {
             Robot.Leds.setMode(LEDSubsystem.LEDModes.AimingBlue);
         }
 
-        Robot.limeLight.trackTarget();
+        //Robot.limeLight.trackTarget();
 
-        aimed = Robot.limeLight.seekTarget(noAngle,false);
+        //aimed = Robot.limeLight.seekTarget(noAngle,false);
     }
 
     /**********************************************************************************
@@ -84,7 +84,7 @@ public class TargetAimWork extends Command {
     public void end(boolean isInteruppted) {
         Robot.thrower.cancel();
         Robot.thrower.setAutoMoveThrower(false);
-        Robot.limeLight.setActiveSeek(false);
+        //Robot.limeLight.setActiveSeek(false);
         Robot.swerveDrive.cancel();
     }
 }

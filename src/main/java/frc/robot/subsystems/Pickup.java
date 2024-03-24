@@ -36,6 +36,7 @@ public class Pickup extends SubsystemBase {
 	int called = 0;
 	boolean userRunPickup=false;
 	boolean autoRunPickup=false;
+	boolean triggerTripped=false;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     // Pickup CAN Motor
@@ -45,7 +46,14 @@ public class Pickup extends SubsystemBase {
 
 	/************************************************************************
 	 ************************************************************************/
+    public boolean getTriggerTripped() {
+		return triggerTripped;
+	}
 
+	public void setTriggerTripped(boolean foo) {
+		triggerTripped=foo;
+	}
+	
 	public Pickup() {
 		// Register this subsystem with command scheduler and set the default command
 		CommandScheduler.getInstance().registerSubsystem(this);
@@ -58,7 +66,10 @@ public class Pickup extends SubsystemBase {
 	public void periodic() {
 	}
 
-	public boolean getPhotoSensor() {
+	/************************************************************************
+	 ************************************************************************/
+
+	 public boolean getPhotoSensor() {
         boolean here=photoSensor.get();
 		SmartDashboard.putBoolean("photoSensor",here);
         if (here) {

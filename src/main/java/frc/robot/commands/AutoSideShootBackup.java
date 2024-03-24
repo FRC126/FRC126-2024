@@ -40,18 +40,18 @@ public class AutoSideShootBackup extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new DriveWork(.4,0,0,48,200),
                 new PickupWork(200, false),
-                new ThrowerAngle(32.5,150)
+                new ThrowerAngle(34.0,150)
             ),    
 
             new TurnDegreesWork(30 * direction, 28),
             
             new ThrowerWork(RobotMap.throwerSpeed, 75),    
 
-            new TurnDegreesWork(-35 * direction,31),
+            new TurnDegreesWork(-35 * direction,37),
 
             new InstantCommand(Robot.swerveDrive::resetYaw, Robot.swerveDrive),
 
-            new DriveWork(.4,0,0,56,200),
+            new DriveWork(.4,0,0,72,200),
 
             new FinishAuto()
         );

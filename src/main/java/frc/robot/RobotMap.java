@@ -24,11 +24,12 @@ public class RobotMap {
 	public static int ampAngle=140;
 	public static int ampSpeed=600;
 
-	public static int throwerSpeed=3200;
-	public static int throwerCloseAngle=62;
+	public static int throwerSpeed=3000;
+	public static int idleSpeed=2000;
+	public static int throwerCloseAngle=60;
 
-    public static int throwerSixtyTicks=87;
-	public static int throwerBottom=throwerSixtyTicks-87;
+    public static int throwerSixtyTicks=83;
+	public static int throwerBottom=0;
 	public static int throwerTop=throwerSixtyTicks+170;
 
 
@@ -61,7 +62,7 @@ public class RobotMap {
 	public static final int throwerClimberMotorRightCanID = 25;
 
 	///////////////////////////////////////////////////////////////////////////
-	public static final int LidarChannel = 5; 
+	public static final int LidarChannel = 3; 
 
 	///////////////////////////////////////////////////////////////////////////
 	//Pickup Motor Can ID's
