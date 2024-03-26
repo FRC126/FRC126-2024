@@ -99,8 +99,8 @@ public class ThrowerControl extends Command {
 
 		if (operatorJoystick.isStartButton()) {
 			if (delay <= 0) {
-                Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
-				delay=5;
+                                /* Robot.thrower.setRPM(Robot.thrower.getRPM()-100);
+				 delay=5; */
 			}	
 		} 	
 		
