@@ -41,7 +41,7 @@ public class Thrower extends SubsystemBase {
     static double Pslow = 0.000015;
     static double I = -0.0003;
 	boolean throwerDebug=true;
-	public static double myRPM=RobotMap.throwerSpeed;
+	public static double myRPM=3000;
     static boolean throwTriggered=false;
 	static boolean autoTriggerRun=false;
 	static boolean autoMoveThrower=false;
