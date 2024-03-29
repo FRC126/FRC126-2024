@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
  public class TurnDegreesWorkFixed extends Command {
     boolean turnDebug=false;
-    double startAngle; 
+    double startAngle=Robot.swerveDrive.getYaw();    
     double targetDegrees;
     int iters;
     static public double driftAllowance=1;
@@ -36,8 +36,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         targetDegrees = degrees_in;
         iters = iters_in;
         targetReached=0;
-        double currentDegrees = Robot.swerveDrive.getYaw();      
-        startAngle = currentDegrees;
     }
 
 	/**********************************************************************************
@@ -46,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
      @Override
      public void initialize() {
+        startAngle=Robot.swerveDrive.getYaw();    
     }
 
 	/**********************************************************************************
