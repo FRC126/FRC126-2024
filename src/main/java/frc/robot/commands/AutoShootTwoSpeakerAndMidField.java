@@ -31,14 +31,14 @@ public class AutoShootTwoSpeakerAndMidField extends SequentialCommandGroup {
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),          
             new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
 
-            new AutoFirstNote(),
-            new AutoSecondNote(),            
+            new AutoFirstNoteFast(),
+            new AutoSecondNoteFast(),            
 
-            new DriveWork(.4,(.3*direction),0,40,150),
+            new DriveWorkFast(.4,(.3*direction),40,150),
 
             new ParallelCommandGroup(
-                new DriveWork(.4,0,0,65,250),
-                new PickupWork(250,false)                   
+                new DriveWorkFast(.4,0,65,250),
+                new PickupWorkFast(250)                   
             ),
 
             new FinishAuto()

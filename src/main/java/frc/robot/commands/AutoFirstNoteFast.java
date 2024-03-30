@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
-public class AutoFirstNote extends SequentialCommandGroup {
-    public AutoFirstNote() {
+public class AutoFirstNoteFast extends SequentialCommandGroup {
+    public AutoFirstNoteFast() {
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
 
             new ParallelCommandGroup(
-                new ThrowerAngle(RobotMap.throwerCloseAngle,50),
+                new ThrowerAngle(RobotMap.throwerCloseAngle,75),
                 // Throw the Note
                 new ThrowerWorkFast(RobotMap.throwerSpeed, 125)
             )   

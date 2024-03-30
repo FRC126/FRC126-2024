@@ -14,21 +14,24 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class PickupWorkNew extends Command {
-    int iters;
-    boolean runThrowerTrigger;
-    int seenCount=0;
+public class ThrowerWorkFast extends Command {
+
+    int iters, speed;
+    int throwingIters=0;
+    int reachedOne=0, reachedTwo=0;
 
     /**********************************************************************************
      **********************************************************************************/
 
-    public PickupWorkNew(int itersIn, boolean runThrowerTrigger) {
-        iters = itersIn;
-        this.runThrowerTrigger = runThrowerTrigger;
-        seenCount=0;
+    public ThrowerWorkFast(int speed, int iters) {
+        //addRequirements(Robot.lidar);
+        this.iters = iters;
+        this.speed = speed;
+        throwingIters=0;
     }
 
     /**********************************************************************************
@@ -37,7 +40,6 @@ public class PickupWorkNew extends Command {
 
     @Override
     public void initialize() {
-        seenCount=0;
     }
 
     /**********************************************************************************
@@ -46,10 +48,32 @@ public class PickupWorkNew extends Command {
 
     @Override
     public void execute() {
-        Robot.pickup.setAutoRunPickup(true);
-        Robot.pickup.pickupMotorOn();
-        Robot.thrower.setAutoTriggerRun(true);		
-        Robot.thrower.throwerTriggerRun(-1);
+		reachedOne = Robot.thrower.throwerRPM(0,speed);
+        reachedTwo = Robot.thrower.throwerRPM(1,speed);
+
+        if (throwingIters > 0) {
+            Robot.thrower.setAutoTriggerRun(true);
+            Robot.thrower.throwerTriggerOn();
+            throwingIters--;
+            if (Robot.thrower.getPhotoSensor()) {
+                throwingIters=10;
+            }
+        } else {
+            SmartDashboard.putNumber("reachedOne", reachedOne);
+            SmartDashboard.putNumber("reachedTwo", reachedTwo);
+
+            // If we have reached the target rpm on the thrower, run the trigger and shoot the note
+            if (reachedOne > 2 && reachedTwo > 2) {
+                Robot.thrower.throwerTriggerOn();
+                Robot.thrower.setAutoTriggerRun(true);
+                Robot.thrower.setThrowTriggered(true);
+                throwingIters=150;
+            } else {
+                Robot.thrower.throwerTriggerOff();
+                Robot.thrower.setAutoTriggerRun(false);
+                Robot.thrower.setThrowTriggered(false);
+            }
+        }    
     }
 
     /**********************************************************************************
@@ -59,19 +83,13 @@ public class PickupWorkNew extends Command {
     @Override
     public boolean isFinished() {
         iters--;
-        boolean pickedUp=false;
 
-        if (Robot.pickup.getPhotoSensor()) {
-            seenCount++;
-        }
-        if (Robot.thrower.getPhotoSensor()) {
-             pickedUp=true;
-        }
-
-        if (pickedUp || iters == 0 || !Robot.checkAutoCommand()) {
-            Robot.pickup.cancel();
-            Robot.thrower.setAutoTriggerRun(false);
+        if ((iters == 0 && throwingIters == 0) || throwingIters == 1 || !Robot.checkAutoCommand()) {
+            //Robot.thrower.cancel();
             Robot.thrower.throwerTriggerOff();
+
+            Robot.thrower.setThrowTriggered(false);
+            Robot.thrower.setAutoTriggerRun(false);
             return true;
         }
         return false;
@@ -83,8 +101,9 @@ public class PickupWorkNew extends Command {
 
     @Override
     public void end(boolean isInteruppted) {
-        Robot.pickup.cancel();
-        Robot.thrower.setAutoTriggerRun(false);
+        //Robot.thrower.cancel();
         Robot.thrower.throwerTriggerOff();
+        Robot.thrower.setThrowTriggered(false);
+        Robot.thrower.setAutoTriggerRun(false);
     }
 }

@@ -352,11 +352,11 @@ public class SwerveDrive extends SubsystemBase {
 
 		if (driveStraight) {
 			// If driveStraight is true, keep the robot facing the right direction
-			if (currentAngle < straightDegrees-1.5) {
+			if (currentAngle < straightDegrees-1.0) {
 				rotate=.015;	
 				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=.05; }
 				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=.15; }
-			} else if (currentAngle > straightDegrees+1.5) {
+			} else if (currentAngle > straightDegrees+1.0) {
 				rotate=-.015;	
 				if (leftRight > .2 || leftRight < -.2 || forwardBack > .2 || forwardBack < -.2 ) { rotate=-.05; }
 				if (leftRight > .4 || leftRight < -.4 || forwardBack > .4 || forwardBack < -.4 ) { rotate=-.15; }
@@ -546,22 +546,23 @@ public class SwerveDrive extends SubsystemBase {
     /************************************************************************
 	 *************************************************************************/
 
-public double rotateToDegreesFixed(double offset, double startAngle) {
+	public double rotateToDegreesFixed(double offset, double startAngle) {
 		double driveRotate=0;
 		double driftAllowance=1.00;
 		double currentAngle=Robot.swerveDrive.getYaw();    
 
 		double target = startAngle + offset;
-		//double diff = Math.abs(target) - Math.abs(startAngle);
 		double diff = Math.abs(target) - Math.abs(currentAngle);
 
+
+
 		double tmp = diff / 100;
-		tmp = Robot.boundSpeed(tmp, .25, .06 );
+		tmp = Robot.boundSpeed(tmp, .25, .04 );
 
 		if (Math.abs(diff) < driftAllowance) {
 			driveRotate=0;
 			Robot.swerveDrive.brakesOn();
-		} else if (startAngle < target) {
+		} else if (currentAngle < target) {
 			driveRotate=tmp;
 		} else {
 			driveRotate=tmp*-1;

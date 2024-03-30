@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         targetDegrees = degrees_in;
         iters = iters_in;
         targetReached=0;
+        startAngle=Robot.swerveDrive.getYaw();    
     }
 
 	/**********************************************************************************
@@ -74,9 +75,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public boolean isFinished() {
         iters--;
 
-        if (targetReached > 1 || iters <= 0 || !Robot.checkAutoCommand()) {
+        if (targetReached >= 1 || iters <= 0 || !Robot.checkAutoCommand()) {
             // We have reached our target angle or run out of time to do so.
-            //Robot.swerveDrive.brakesOff();
             Robot.swerveDrive.cancel();
             return true;
         }
@@ -90,7 +90,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 	
     @Override
     public void end(boolean isInteruppted) {
-        //Robot.swerveDrive.brakesOff();
         Robot.swerveDrive.cancel();
     }
 }

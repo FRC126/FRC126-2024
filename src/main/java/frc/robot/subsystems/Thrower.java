@@ -251,7 +251,7 @@ public class Thrower extends SubsystemBase {
 	 public double getThrowerAngle() {
 		double position=getPosition();
 
-		double currAngle = (position / 2.12) + 23;		
+		double currAngle = (position / 2.13) + 23;		
 		SmartDashboard.putNumber("thrower angle", currAngle);
 		SmartDashboard.putNumber("thrower position", position);
 
@@ -269,14 +269,14 @@ public class Thrower extends SubsystemBase {
 		double speed = Robot.boundSpeed(diff/12,1,0.06);
 
 		if (diff > 0.15) {
-			moveThrower(speed*  ((currAngle > angle + .15) ? -1 : 1));
+			moveThrower(speed*  ((currAngle > angle + .10) ? -1 : 1));
 			reachedAngleCount=0;
 		} else {
 			reachedAngleCount++;
 			moveThrower(0);
 		}		
 
-		if (reachedAngleCount>0) {
+		if (reachedAngleCount>2) {
 			reachedAngleTarget=true;
 			return true;			
 		} else {

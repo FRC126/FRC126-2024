@@ -124,7 +124,7 @@
 		<location x="501" y="80"/>
 	</widget>
 	<widget field="Auto Follow Choices" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="794" y="97"/>
+		<location x="769" y="107"/>
 	</widget>
 	<widget field="Alliance Color" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="789" y="6"/>

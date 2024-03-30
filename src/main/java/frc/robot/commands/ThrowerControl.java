@@ -83,10 +83,10 @@ public class ThrowerControl extends Command {
 			if ( y!=0 ) {
 				Robot.thrower.moveThrower(y);
 			} else {
-				if ( !Robot.thrower.getAutoMoveThrower()) {
+				if ( !Robot.thrower.getAutoMoveThrower() && !operatorJoystick.rightTriggerPressed() && !resetThrower) {
 				    Robot.thrower.moveThrower(0);
-				}	
-			}			
+				}
+ 			}			
 		}
 
 		if (operatorJoystick.isBButton()) {

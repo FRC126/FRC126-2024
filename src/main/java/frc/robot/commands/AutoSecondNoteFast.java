@@ -20,32 +20,22 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
-public class AutoShootThreeSpeaker extends SequentialCommandGroup {
-    public AutoShootThreeSpeaker(Robot.targetTypes targetType) {
-        // Move thrower arm to specific position
-        // Eject the note
-        Robot.targetType=targetType;
-        int direction = Robot.getDirection(targetType);
-
+public class AutoSecondNoteFast extends SequentialCommandGroup {
+    public AutoSecondNoteFast() {
         addCommands(
             new InstantCommand(Robot.swerveDrive::resetEncoders, Robot.swerveDrive),
-            new InstantCommand(Robot.swerveDrive::brakesOn, Robot.swerveDrive),
-
-            new AutoFirstNote(),
 
             new ParallelCommandGroup(
                 // Run the Pickup
-                new PickupWorkFast(150),
+                new PickupWorkFast(125),
                 // Drive over the next note
-                new ThrowerAngle(39,80),
-                new DriveWorkFast(.40,0,32,125)
+                new ThrowerAngle(42.5,100),
+                new DriveWorkFast(.35,0,32,125)
             ),
 
+            new DriveWorkFast(-0.30,0,16,150),     
             // Throw note in speaker
-            new ThrowerWorkFast(RobotMap.throwerSpeed, 80),      
-
-            new AutoThirdNote(targetType),                      
-            new FinishAuto()
+            new ThrowerWorkFast(RobotMap.throwerSpeed, 75)       
         );
     }
 }

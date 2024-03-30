@@ -47,6 +47,7 @@ public class PickupWork extends Command {
     @Override
     public void execute() {
         Robot.pickup.setAutoRunPickup(true);
+        
         Robot.pickup.pickupMotorOn();
         if (runThrowerTrigger) {
             Robot.thrower.setAutoTriggerRun(true);
