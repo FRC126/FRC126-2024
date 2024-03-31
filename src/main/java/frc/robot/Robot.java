@@ -341,13 +341,13 @@ public class Robot extends TimedRobot {
             operatorJoystick = new JoystickWrapper(Robot.oi.operatorController, 0.15);
         }
 		
-        if (operatorJoystick.isRShoulderButton()) {
-			if (Robot.doAutoCommand()) {
-				Robot.swerveDrive.setAutoMove(true);
-				Robot.autoCommand = new AutoAmp();
-				Robot.autoCommand.schedule();
-			}
-		}
+        //if (operatorJoystick.isRShoulderButton()) {
+		//	if (Robot.doAutoCommand()) {
+		//		Robot.swerveDrive.setAutoMove(true);
+		//		Robot.autoCommand = new AutoAmp();
+		//		Robot.autoCommand.schedule();
+		//	}
+		//}
 
         if (operatorJoystick.isBackButton()) {
             Robot.overrideEncoders=true;
